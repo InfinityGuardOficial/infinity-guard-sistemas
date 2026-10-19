@@ -15,6 +15,7 @@ Regra que guia a ordem: **primeiro a conversa que vende, depois a prova que sust
 | 5 | Conteúdo semanal no automático | Rotina agendada no Claude (trigger) + Máquina de Reels | Toda segunda: 3 roteiros com os temas quentes (câmera invadida, offline, fechadura facial) | Depois do 4 | **Construído** (`skills/conteudo-semanal/`) + agendamento às segundas |
 | 6 | Painel de vendas | Artifact com dados da Nuvemshop | Conversas, kits indicados, carrinhos recuperados, vendas por canal | Depois das primeiras 20 vendas | **Construído** (`skills/painel-de-vendas/`); falta o CSV de pedidos |
 | 7 | Plugin "Infinity Guard" | Plugin do Claude Code no GitHub | Junta as skills num pacote só, instalável com um comando | Thread 4 do plano | **Construído** (`.claude-plugin/` no pacote do repositório); falta publicar no GitHub |
+| 8 | **Equipe Infinity Guard** | 22 agentes do plugin em 7 squads + 8 skills novas (suporte-tecnico, proposta-comercial, catalogo-e-precos, revisor-de-promessas, descricao-de-produto, plano-de-midia, radar-de-concorrentes, reuniao-semanal) | Cada trabalho tem um "funcionário" com cargo, regras e skills; o diretor-geral distribui a semana | 19/10 | **Construído** (`agents/`, organograma em `docs/organograma.md`) |
 
 ## 1. Atendente de Vendas WhatsApp (prioridade máxima)
 

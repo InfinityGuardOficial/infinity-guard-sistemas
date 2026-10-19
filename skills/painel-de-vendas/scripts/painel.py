@@ -43,7 +43,7 @@ def numero(s):
     s = str(s or "").strip().replace("R$", "").replace(" ", "")
     if not s:
         return 0.0
-    if "," in s and (s.rfind(",") > s.rfind(".")):
+    if ("," in s and (s.rfind(",") > s.rfind("."))) or re.fullmatch(r"\d{1,3}(\.\d{3})+", s):
         s = s.replace(".", "").replace(",", ".")
     else:
         s = s.replace(",", "")
