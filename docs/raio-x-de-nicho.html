@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Raio X de Nicho — Infinity Guard</title>
+<style>/* Pack NDF v3 */
+:root{--bg:#0A0E1A;--sf:#0D1B2A;--ln:#1E2A40;--tx:#F0F4F8;--mi:#C8D2E0;--si:#94A3B8;--el:#3B82F6;--el2:#60A5FA;--bio:#22D3EE;--hi:rgba(59,130,246,.13);--sans:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;--mono:ui-monospace,Menlo,Consolas,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(80% 50rem at 15% -8rem,#12253F,transparent 70%) no-repeat,var(--bg);color:var(--mi);font:17px/1.6 var(--sans);-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+@media(min-width:720px){body{font-size:18px}}
+.doc{max-width:980px;margin:auto;padding:0 22px}
+h1,h2,h3{color:var(--tx);font-weight:700;line-height:1.12;letter-spacing:-.02em;text-wrap:balance}
+h1{font-size:clamp(42px,8vw,76px);line-height:1.02;letter-spacing:-.035em}
+h2{font-size:clamp(29px,4.6vw,42px)}
+h3{font-size:clamp(20px,2.3vw,23px);margin-bottom:8px}
+p{text-wrap:pretty}
+p+p{margin-top:.75em}
+b,strong{color:var(--tx);font-weight:650}
+a{color:var(--el2)}
+.eb,.n,.sum a::before,dt{font:600 13px/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.eb{color:var(--bio)}
+.eb+*{margin-top:6px!important}
+.card>.eb:not(:first-child){margin-top:20px}
+.capa{padding:clamp(56px,10vw,104px) 0 16px}
+.capa h1{margin:20px 0 18px}
+.lead{font-size:clamp(19px,2.5vw,24px);line-height:1.45;max-width:38ch}
+.meta{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;margin-top:28px;color:var(--si);font:500 14px var(--mono)}
+.sum{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:0 28px;margin-top:44px;counter-reset:s}
+.sum a{display:block;padding:11px 0;border-top:1px solid var(--ln);color:var(--mi);text-decoration:none;font-size:16px;counter-increment:s}
+.sum a::before{content:counter(s,decimal-leading-zero);color:var(--el2);margin-right:14px}
+.sec{padding-top:clamp(64px,9vw,96px)}
+.sec>h2{margin-bottom:26px}
+.sec>h2~*+*{margin-top:14px}
+.intro{margin:-12px 0 26px;color:var(--si);max-width:60ch}
+.n{display:block;color:var(--el2);margin-bottom:12px}
+.box,.card,.cit{background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:clamp(22px,3.4vw,32px)}
+.dest{background:radial-gradient(70% 90% at 0 0,rgba(59,130,246,.2),transparent 70%),var(--sf);border:1px solid #26395A;border-radius:20px;padding:clamp(24px,4.4vw,48px)}
+.cards{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));list-style:none}
+.cn{counter-reset:c}
+.cn>li::before{counter-increment:c;content:counter(c,decimal-leading-zero);display:block;font:700 30px/1 var(--sans);color:var(--el);margin-bottom:18px}
+.hi{background:#10223C;border-color:rgba(96,165,250,.55)}
+.lin>div{display:grid;gap:4px 28px;padding:16px 0;border-top:1px solid var(--ln)}
+.lin>div:first-child{border:0;padding-top:0}
+.lin>div:last-child{padding-bottom:0}
+dt{color:var(--si)}
+dd{color:var(--tx)}
+.l2 dd,.g{color:var(--tx);font-size:clamp(19px,2.3vw,22px);line-height:1.42}
+.x dd{color:var(--el2)}
+@media(min-width:720px){.l2>div{grid-template-columns:200px 1fr}}
+.selo{display:inline-block;font:650 12px/1.35 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border:1px solid;border-radius:6px;vertical-align:.1em}
+.ok{color:#93C5FD;background:rgba(59,130,246,.14);border-color:rgba(59,130,246,.5)}
+.ind{color:#CBD5E1;background:rgba(148,163,184,.1);border-color:rgba(148,163,184,.38)}
+.nao{color:#FCA5A5;background:rgba(160,32,32,.2);border-color:rgba(160,32,32,.65)}
+.num{list-style:none;counter-reset:i}
+.num>li{counter-increment:i;position:relative;padding:20px 0 20px 68px;border-top:1px solid var(--ln)}
+.num>li:first-child{border:0}
+.num>li::before{content:counter(i);position:absolute;left:0;top:14px;font:700 44px/1 var(--sans);color:var(--el)}
+.cit blockquote{color:var(--tx);font-size:clamp(20px,2.5vw,24px);line-height:1.4;font-weight:500}
+.cit blockquote::before{content:"\201C";display:block;font:700 56px/.7 Georgia,serif;color:var(--bio);margin-bottom:6px}
+.cit figcaption{margin-top:14px;color:var(--si);font-size:15px}
+.par{display:grid;gap:12px}
+.par>span{place-self:center;color:var(--el2);font-size:34px;line-height:1;rotate:90deg}
+@media(min-width:720px){.par{grid-template-columns:1fr auto 1fr}.par>span{rotate:none}}
+.mini{font-size:15px;color:var(--si)}
+.pre{white-space:pre-line}
+.fraca p:last-child{color:var(--si)}
+.copia{-webkit-user-select:all;user-select:all}
+.marca{margin-top:clamp(64px,9vw,104px);padding:40px 0 56px;border-top:1px solid var(--ln);text-align:center;color:var(--si);font-size:15px}
+.marca p:first-child{color:var(--mi);font-weight:600}
+@media print{:root{--bg:#fff;--sf:#fff;--ln:#D3DAE4;--tx:#0B1422;--mi:#2B3A4E;--si:#5F7189;--el:#1D4ED8;--el2:#1D4ED8;--bio:#0E7490}body{background:#fff;font-size:11.5pt}.dest,.hi{background:#fff;border:1px solid var(--ln)}.selo{background:none}.ok{color:#1D4ED8}.ind{color:#475569}.nao{color:#A02020}.card,.box,.cit,.num>li,.lin>div,.marca{break-inside:avoid}h2,h3{break-after:avoid;break-inside:avoid}.sec{padding-top:28px}.marca{margin-top:24pt;padding:12pt 0 0}@page{margin:14mm}}
+th,.tab td::before{font:600 13px/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--si)}
+.tab{width:100%;border-collapse:collapse;font-size:17px}
+th{text-align:left;padding:0 12px 12px;border-bottom:1px solid var(--ln)}
+.tab td{padding:16px 12px;border-bottom:1px solid var(--ln);vertical-align:top}
+.tab td:first-child{color:var(--tx);font-weight:650}
+.voce td{background:var(--hi)}
+.voce td:first-child{color:var(--el2)}
+@media(max-width:719px){.tab thead{display:none}.tab,.tab tbody,.tab tr,.tab td{display:block}.tab tr{background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:4px 20px;margin-bottom:12px}.tab td{padding:12px 0}.tab td:last-child{border:0}.tab td::before{content:attr(data-r);display:block;margin-bottom:2px}.tab td:first-child{font-size:20px}.tab td:first-child::before{display:none}.tab tr.voce{background:var(--hi);border-color:var(--el)}.voce td{background:none}}
+.stats{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))}
+.stats b{display:block;font-size:clamp(30px,4.4vw,40px);letter-spacing:-.03em;line-height:1.1;margin:4px 0 12px}
+.lst{padding-left:1.25em}
+.lst li+li{margin-top:6px}
+@media print{.tab tr{break-inside:avoid}}
+.bbig{margin-bottom:18px;border:1px solid var(--el);background:radial-gradient(90% 120% at 0 0,color-mix(in oklab,var(--el) 22%,transparent),transparent 70%),var(--sf)}
+.bbig .bb{font-size:clamp(28px,4.2vw,46px);line-height:1.12;font-weight:750;letter-spacing:-.02em;color:var(--tx);margin:6px 0 0}
+.mapa{margin-top:36px}
+.plano{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.q{min-height:140px;background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:14px;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start}
+.q.alvo{border:2px solid var(--el);background:radial-gradient(100% 100% at 50% 0,color-mix(in oklab,var(--el) 20%,transparent),transparent 75%),var(--sf)}
+.q>small{flex-basis:100%;font:600 12px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--si)}
+.chip{font-size:15px;font-weight:650;line-height:1.2;padding:8px 12px;border-radius:999px;background:var(--hi);color:var(--tx)}
+.chip.voce{background:var(--el);color:#fff;box-shadow:0 0 0 4px color-mix(in oklab,var(--el) 30%,transparent)}
+.eixo{display:flex;justify-content:space-between;gap:12px;font-size:15px;color:var(--si)}
+.eixo b{color:var(--tx)}
+@media print{.q{break-inside:avoid}.chip.voce{color:#000;border:2px solid #000;background:none;box-shadow:none}}
+</style>
+</head>
+<body>
+<main class="doc">
+<header class="capa" data-secao="capa">
+<p class="eb">Raio X de Nicho</p>
+<h1>Segurança residencial inteligente online</h1>
+<p class="lead">Infinity Guard: loja online de câmeras Wi-Fi, alarmes e fechaduras inteligentes para casa e home office, com envio para todo o Brasil.</p>
+<p class="meta"><span class="selo ok">19 buscas reais</span><span>18/10/2026</span></p>
+<ol class="sum"><li><a href="#veredito">Veredito</a></li><li><a href="#quem-manda">Quem manda</a></li><li><a href="#precos">Preços</a></li><li><a href="#publico">O que o público sente</a></li><li><a href="#brechas">Brechas</a></li><li><a href="#angulos">Munição</a></li><li><a href="#temas">Temas quentes</a></li><li><a href="#rastro">Rastro</a></li></ol>
+</header>
+
+<section class="sec" id="veredito" data-secao="veredito">
+<h2><span class="n">Seção 01</span>Veredito</h2>
+<div class="dest bbig"><p class="eb">Sua brecha em uma frase</p><p class="bb">Câmera entregue segura, com suporte que responde.</p></div>
+<div class="dest"><dl class="lin l2">
+<div><dt>O jogo</dt><dd>Mercado grande e crescendo: cerca de R$ 14 bilhões em 2024, alta de 16,1% <span class="selo ok">Confirmado · Abese</span>. 96,2% dos brasileiros temem ser vítimas de crime <span class="selo ok">Confirmado · Datafolha/FBSP</span></dd></div>
+<div><dt>Quem manda</dt><dd>Intelbras, com fechadura facial a R$ 1.099,91 e 3 anos de garantia <span class="selo ok">Confirmado · loja Intelbras</span>, e marcas baratas de marketplace, com kit de 2 câmeras a R$ 179,97 <span class="selo ok">Confirmado · Olhar Digital</span></dd></div>
+<div><dt>Todos fazem igual</dt><dd>Vendem preço e especificação. A dor vem depois: câmera offline e SAC que não responde <span class="selo ok">Confirmado · 2 relatos no Reclame Aqui</span></dd></div>
+<div class="x"><dt>Sua brecha</dt><dd>Entregar a câmera configurada com segurança e um suporte no WhatsApp que responde. Nos 6 concorrentes que investiguei, nenhum faz disso a promessa principal <span class="selo ind">Indício · 6 concorrentes</span></dd></div>
+<div><dt>Por onde entrar</dt><dd>Seus preços estão acima da Intelbras em itens parecidos, sem prova no site. Venda o serviço que justifica o preço, ou ajuste o preço.</dd></div>
+</dl></div>
+</section>
+
+<section class="sec" id="quem-manda" data-secao="quem-manda">
+<h2><span class="n">Seção 02</span>Quem manda</h2>
+<p class="intro">Quem o seu cliente encontra antes de chegar em você.</p>
+<table class="tab">
+<thead><tr><th>Quem</th><th>Preço</th><th>Promessa</th><th>Ponto forte</th><th>Ponto fraco</th></tr></thead>
+<tbody>
+<tr><td data-r="Quem">Intelbras</td><td data-r="Preço">Câmera iM4 C R$ 591,48; fechadura facial R$ 1.099,91; instalação de 2 câmeras R$ 200 <span class="selo ok">Confirmado · Extra e loja Intelbras</span></td><td data-r="Promessa">Marca brasileira, app Mibo e instalação por parceiro.</td><td data-r="Ponto forte">Garantia de 3 anos na fechadura e Anatel na página.</td><td data-r="Ponto fraco">Controle remoto da fechadura exige hub vendido à parte.</td></tr>
+<tr><td data-r="Quem">TP-Link Tapo e Mercusys</td><td data-r="Preço">R$ 103,92 a R$ 239,90 <span class="selo ok">Confirmado · Olhar Digital, oferta</span></td><td data-r="Promessa">Câmera barata com app simples.</td><td data-r="Ponto forte">Aparece em todo guia de oferta.</td><td data-r="Ponto fraco"><span class="selo nao">Não encontrei</span></td></tr>
+<tr><td data-r="Quem">Kerui (alarmes)</td><td data-r="Preço">R$ 353,53 a R$ 719,14 no Pix <span class="selo ok">Confirmado · Magalu</span></td><td data-r="Promessa">Alarme Wi-Fi/GSM controlado pelo celular.</td><td data-r="Ponto forte">Preço baixo em varejo grande.</td><td data-r="Ponto fraco"><span class="selo nao">Não encontrei</span></td></tr>
+<tr><td data-r="Quem">Pado FDE-800</td><td data-r="Preço">R$ 4.708,20 no Pix <span class="selo ok">Confirmado · Kabum</span></td><td data-r="Promessa">Fechadura facial com Wi-Fi e Alexa.</td><td data-r="Ponto forte">Recursos completos.</td><td data-r="Ponto fraco">Garantia de 3 meses pelo vendedor.</td></tr>
+<tr class="voce"><td data-r="Quem">Você (hoje)</td><td data-r="Preço">Kit 2 câmeras R$ 392,35; alarme R$ 875,50; fechadura facial R$ 2.173,27</td><td data-r="Promessa">Segurança onde você estiver; Pix com desconto e 12x.</td><td data-r="Ponto forte">Loja própria no ar, marca e identidade definidas.</td><td data-r="Ponto fraco">Sem Anatel, avaliações, CNPJ visível nem prazo de garantia. A loja não aparece na busca pelo nome.</td></tr>
+</tbody>
+</table>
+<div class="mapa">
+<p class="eb">Mapa do jogo</p>
+<p class="eixo"><span>↑ <b>Marca conhecida</b></span></p>
+<div class="plano">
+<div class="q "><small>Conhecida, vende preço</small><span class="chip">Intelbras</span><span class="chip">Tapo</span></div>
+<div class="q "><small>Conhecida, vende serviço</small><span class="chip">Verisure</span></div>
+<div class="q "><small>Nova, vende preço</small><span class="chip">Kerui</span><span class="chip">Kits sem marca</span></div>
+<div class="q alvo"><small>Nova, vende configuração e suporte</small><span class="chip voce">Você entra aqui</span></div>
+</div>
+<p class="eixo"><span>↓ <b>Marca nova</b></span><span>← <b>Vende preço</b> · <b>Vende orientação e suporte</b> →</span></p>
+</div>
+</section>
+
+<section class="sec" id="precos" data-secao="precos">
+<h2><span class="n">Seção 03</span>Preços</h2>
+<p class="intro">Quanto se cobra hoje, com a etiqueta de onde veio cada número.</p>
+<div class="stats">
+<div class="box"><p class="eb">Mais baixo</p><b>R$ 103,92</b><span class="selo ok">Confirmado · Mercusys, oferta</span></div>
+<div class="box"><p class="eb">Mais comum</p><b>R$ 179 a R$ 240</b><span class="selo ok">Confirmado · Olhar Digital</span></div>
+<div class="box"><p class="eb">Mais alto</p><b>R$ 591,48</b><span class="selo ok">Confirmado · Intelbras iM4 C, Extra</span></div>
+</div>
+<div class="dest"><p class="eb">O que isso significa pra você</p><p>Seu kit de 2 câmeras (R$ 392,35) custa o dobro dos kits em oferta. Sua fechadura facial (R$ 2.173,27) custa quase o dobro da Intelbras facial com 3 anos de garantia. Seu alarme (R$ 875,50) fica acima dos kits Kerui do Magalu. O Posicionamento de 17/10 usou R$ 268,80 para a câmera, mas o site hoje mostra outro valor: refaça a margem produto por produto antes de anunciar.</p></div>
+</section>
+
+<section class="sec" id="publico" data-secao="publico">
+<h2><span class="n">Seção 04</span>O que o público sente</h2>
+<p class="intro">Frases reais de quem compra, com a fonte.</p>
+<div class="cards">
+<figure class="cit"><blockquote>constantemente offline, impossibilitando o acesso e utilização adequada</blockquote><figcaption>Cliente de câmera dupla lente, Reclame Aqui, 24/03/2026 <span class="selo ok">Confirmado · relato</span></figcaption></figure>
+<figure class="cit"><blockquote>Cliente esta arrependido desta aquisicao</blockquote><figcaption>Câmeras com app instável, Reclame Aqui, 17/07/2026 <span class="selo ok">Confirmado · relato</span></figcaption></figure>
+<figure class="cit"><blockquote>você nunca sabe pra onde o sinal tá indo, além de você</blockquote><figcaption>Comentário em oferta de kit de câmeras, Pelando <span class="selo ok">Confirmado · comentário</span></figcaption></figure>
+</div>
+</section>
+
+<section class="sec" id="brechas" data-secao="brechas">
+<h2><span class="n">Seção 05</span>Brechas</h2>
+<p class="intro">O fato, o que ele significa pra você e o que fazer com ele.</p>
+<ol class="cards cn">
+<li class="card"><dl class="lin"><div><dt>Fato</dt><dd>Cerca de 68 mil câmeras estão expostas na internet no Brasil, muitas com senha admin de fábrica <span class="selo ok">Confirmado · Jornal da Band</span>. Os relatos de 2026 falam de câmera offline e WhatsApp sem resposta.</dd></div><div><dt>O que significa pra você</dt><dd>O cliente compra tranquilidade e recebe um problema.</dd></div><div class="x"><dt>Ação</dt><dd>Venda a câmera entregue segura: guia para trocar senha e atualizar, vídeo curto e suporte com prazo que você cumpre.</dd></div></dl></li>
+<li class="card"><dl class="lin"><div><dt>Fato</dt><dd>Seus preços estão acima da Intelbras e das ofertas, e o site não mostra Anatel, avaliações, CNPJ nem prazo de garantia.</dd></div><div><dt>O que significa pra você</dt><dd>Marca nova e mais cara sem prova não converte, nem com anúncio.</dd></div><div class="x"><dt>Ação</dt><dd>Coloque CNPJ, garantia, código Anatel conferido e as primeiras avaliações reais. Reveja o preço do que não aguenta a comparação.</dd></div></dl></li>
+<li class="card"><dl class="lin"><div><dt>Fato</dt><dd>25% das mensagens às marcas chegam fora do horário e conversas com IA convertem igual às humanas, 9% <span class="selo ind">Indício · relatório da OmniChat, que vende a solução</span></dd></div><div><dt>O que significa pra você</dt><dd>Venda no automático é possível com o que você já tem.</dd></div><div class="x"><dt>Ação</dt><dd>Atendente de WhatsApp com IA que pergunta sobre a casa e indica o kit, mais recuperação de carrinho.</dd></div></dl></li>
+</ol>
+</section>
+
+<section class="sec" id="angulos" data-secao="angulos">
+<h2><span class="n">Seção 06</span>Munição</h2>
+<p class="intro">Três ângulos de ataque: a frase que te posiciona e uma ideia de conteúdo pra cada um.</p>
+<ol class="cards cn">
+<li class="card"><h3>Sua câmera sai daqui com a senha trocada e o passo a passo.</h3><p class="eb">Ideia de conteúdo</p><p>Reel: “Sua câmera ainda usa senha admin?”, com os 3 ajustes em 60 segundos.</p></li>
+<li class="card"><h3>Nos concorrentes que investiguei, ninguém promete suporte. Aqui o suporte responde.</h3><p class="eb">Ideia de conteúdo</p><p>Print, com permissão, de um suporte real resolvido no mesmo dia.</p></li>
+<li class="card"><h3>Qual segurança pra qual casa.</h3><p class="eb">Ideia de conteúdo</p><p>Carrossel “monte seu kit em 3 perguntas” que leva ao WhatsApp.</p></li>
+</ol>
+</section>
+
+<section class="sec" id="temas" data-secao="temas">
+<h2><span class="n">Seção 07</span>Temas quentes</h2>
+<p class="intro">O que o seu público está procurando agora. A Máquina de Reels usa esta lista.</p>
+<ol class="num">
+<li><h3>Câmera invadida e privacidade</h3><p>68 mil câmeras expostas no Brasil (Band, abril de 2026) e desconfiança de app estrangeiro nos comentários de oferta.</p></li>
+<li><h3>Câmera offline e suporte que some</h3><p>Queixa repetida no Reclame Aqui em março e julho de 2026.</p></li>
+<li><h3>Fechadura com reconhecimento facial</h3><p>Matéria de agosto de 2026 diz que virou moda; a Intelbras já vende por R$ 1.099,91.</p></li>
+<li><h3>Câmera 4G solar para sítio</h3><p>A Xiaomi lançou na China em julho de 2026, por cerca de R$ 500, sem previsão no Brasil <span class="selo ok">Confirmado · Canaltech</span></p></li>
+<li><h3>Black Friday e TikTok Shop</h3><p>Black Friday de 26 a 29/11, previsão de R$ 13,3 bilhões <span class="selo ok">Confirmado · Neotrust</span>. TikTok Shop dá R$ 100 milhões em cupons de 27/10 a 12/12 <span class="selo ok">Confirmado · Mercado &amp; Consumo</span></p></li>
+</ol>
+</section>
+
+<section class="sec" id="rastro" data-secao="rastro">
+<h2><span class="n">Seção 08</span>Rastro</h2>
+<div class="cards">
+<div class="box"><p class="eb">Buscas feitas</p><ol class="lst">
+<li>Mercado, Abese e medo da violência</li>
+<li>Câmeras Wi-Fi: Tapo, Intelbras, ofertas</li>
+<li>Fechaduras faciais e alarmes Wi-Fi/GSM</li>
+<li>Reclame Aqui e privacidade de câmeras</li>
+<li>Anatel, Black Friday e TikTok Shop</li>
+<li>WhatsApp, Nuvemshop e vendas no automático</li>
+</ol></div>
+<div class="box"><p class="eb">Fontes principais</p><ul class="lst">
+<li>infinityguard.com.br e loja.intelbras.com.br</li>
+<li>Kabum, Extra e Magalu</li>
+<li>Reclame Aqui e Pelando</li>
+<li>Jornal da Band e Datafolha/FBSP</li>
+<li>Monitor Mercantil, Teletime e Giro News</li>
+<li>Canaltech, Olhar Digital e OmniChat</li>
+</ul></div>
+</div>
+<p class="meta"><span class="selo ind">Validade</span><span>Investigação feita em 18/10/2026, 19 buscas reais e 23 páginas lidas. Preço e tema quente envelhecem em semanas; confirme antes de cravar o seu.</span></p>
+<footer class="marca"><p>Criado pela skill do Euriler Jubé — Workshop Marketing com IA Autônoma</p><p>Amostra grátis da Mentoria Arcane — Marketing Digital com IA</p></footer>
+</section>
+</main>
+</body>
+</html>

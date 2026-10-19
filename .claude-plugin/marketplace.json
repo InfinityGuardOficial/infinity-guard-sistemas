@@ -1,0 +1,16 @@
+{
+  "name": "infinity-guard-sistemas",
+  "owner": {
+    "name": "Infinity Guard",
+    "url": "https://infinityguard.com.br"
+  },
+  "description": "Skills da Infinity Guard para vender segurança residencial: atendimento, prova da loja, campanhas, conteúdo e painel.",
+  "plugins": [
+    {
+      "name": "infinity-guard",
+      "source": "./",
+      "description": "Todas as skills da Infinity Guard num pacote só.",
+      "version": "1.0.0"
+    }
+  ]
+}

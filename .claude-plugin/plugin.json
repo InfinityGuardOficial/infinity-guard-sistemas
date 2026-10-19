@@ -1,0 +1,8 @@
+{
+  "name": "infinity-guard",
+  "version": "1.0.0",
+  "description": "Sistemas da Infinity Guard (segurança residencial): atendente de WhatsApp, auditor de prova da loja, campanha 11.11 e Black Friday, conteúdo semanal e painel de vendas.",
+  "author": {"name": "Infinity Guard", "url": "https://infinityguard.com.br"},
+  "homepage": "https://infinityguard.com.br",
+  "keywords": ["seguranca", "nuvemshop", "whatsapp", "black-friday", "vendas"]
+}
