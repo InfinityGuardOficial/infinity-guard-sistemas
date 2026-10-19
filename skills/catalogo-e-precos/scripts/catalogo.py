@@ -150,7 +150,7 @@ def main():
     if a.modo == "validar":
         r = validar(cat)
         texto = [f"{'OK' if r['ok'] else 'COM ERROS'}: {r['produtos']} produtos, {r['ativos']} ativos, "
-                 f"atualizado há {r['idade_dias']} dias"] + [f"❌ {e}" for e in r["erros"]] + [f"⚠️ {x}" for x in r["avisos"]]
+                 f"atualizado há {r['idade_dias']} {'dia' if r['idade_dias'] == 1 else 'dias'}"] + [f"❌ {e}" for e in r["erros"]] + [f"⚠️ {x}" for x in r["avisos"]]
         saida(r, "\n".join(texto))
     elif a.modo == "atualizar":
         ativo = None if a.ativo is None else a.ativo == "sim"

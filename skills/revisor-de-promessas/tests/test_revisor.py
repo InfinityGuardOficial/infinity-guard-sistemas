@@ -34,6 +34,13 @@ class Revisor(unittest.TestCase):
         self.assertEqual(r["veredito"], "AJUSTAR")
         self.assertEqual(r["bloqueia"], 0)
 
+    def test_variantes_de_promessa_absoluta(self):
+        for texto in ("Câmera 100% inviolável", "Segurança total para sua casa", "Fechadura impossível de hackear",
+                      "Invulnerável a ladrão"):
+            self.assertIn("seguranca-absoluta", self.ids(texto), msg=texto)
+        self.assertIn("superlativo-sem-prova", self.ids("A melhor do Brasil"))
+        self.assertNotIn("superlativo-sem-prova", self.ids("Melhor custo-benefício para apartamento"))
+
     def test_liberar_regra_resolvida(self):
         regras = rv.carregar_regras(liberar=["anatel-sem-codigo"])
         self.assertEqual(rv.revisar("Código Anatel 12345-21-01234", regras)["veredito"], "LIBERADO")
