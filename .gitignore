@@ -1,3 +1,7 @@
 __pycache__/
 *.pyc
 .DS_Store
+custos.json
+estoque.json
+**/custos.json
+**/estoque.json
