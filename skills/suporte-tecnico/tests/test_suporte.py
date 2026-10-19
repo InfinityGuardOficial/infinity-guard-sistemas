@@ -30,6 +30,14 @@ class Diagnostico(unittest.TestCase):
         self.assertIn("1. ", m)
         self.assertNotIn("**", m)
 
+    def test_passos_passam_no_revisor(self):
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "revisor-de-promessas" / "scripts"))
+        import revisar
+        regras = revisar.carregar_regras()
+        for p in self.probs:
+            r = revisar.revisar(dg.mensagem_whatsapp(p), regras)
+            self.assertEqual(r["bloqueia"], 0, (p["id"], r["achados"]))
+
     def test_ids_unicos(self):
         ids = [p["id"] for p in self.probs]
         self.assertEqual(len(ids), len(set(ids)))

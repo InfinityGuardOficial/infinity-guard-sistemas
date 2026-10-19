@@ -6,9 +6,9 @@
      "palavras": ["não conecta", "nao conecta", "não acha", "nao acha", "não encontra", "nao encontra", "wifi", "wi-fi", "rede", "pareamento", "parear", "configurar", "adicionar"],
      "titulo": "Não conecta no Wi-Fi na primeira configuração",
      "passos": [
-       "Confirme que o celular está numa rede **2,4 GHz** (a maioria das câmeras não conecta em 5 GHz). Se o roteador tiver uma rede só, peça para separar ou ativar a rede 2,4 GHz no app da operadora.",
+       "Confirme que o celular está numa rede **2,4 GHz** (a maioria das câmeras não conecta em 5 GHz). Se o roteador tiver uma rede só, veja no app da operadora (ou ligue para ela) como separar ou ativar a rede 2,4 GHz.",
        "Deixe o aparelho a até 3 metros do roteador só para configurar; depois leve para o lugar.",
-       "Senha do Wi-Fi sem erro de maiúscula e, se possível, sem caracteres especiais no nome da rede.",
+       "Ao digitar a senha do Wi-Fi no app, confira maiúsculas e minúsculas (não precisa me mandar a senha).",
        "Resete o aparelho (botão reset por 5 a 10 segundos, até ouvir o aviso ou a luz piscar rápido) e adicione de novo no app.",
        "Permita no celular: localização ligada e permissão de rede local para o app."
      ],

@@ -19,6 +19,7 @@ python3 scripts/revisar.py --arquivo anuncio.md
 python3 scripts/revisar.py --texto "mensagem curta"
 ```
 Veredito: **LIBERADO**, **AJUSTAR** (pode sair depois de reescrever os ⚠️) ou **BLOQUEADO** (não sai com os ❌). Entregue o texto já reescrito, não só a lista.
+Quando a promessa aparece negada ("sem instalação", seção "O que não está incluso") ou é a pergunta do cliente, o script rebaixa para ⚠️: confira se fica claro que a loja não promete aquilo.
 
 ### 2. Revisar em lote
 ```bash

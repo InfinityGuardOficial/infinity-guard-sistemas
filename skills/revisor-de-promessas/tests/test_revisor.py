@@ -26,6 +26,8 @@ class Revisor(unittest.TestCase):
     def test_4g_e_cartao(self):
         self.assertIn("4g-sem-wifi", self.ids("Funciona sem Wi-Fi"))
         self.assertIn("dados-sensiveis", self.ids("me passa o número do cartão"))
+        self.assertIn("dados-sensiveis", self.ids("qual é a senha do wifi?"))
+        self.assertNotIn("dados-sensiveis", self.ids("Troque a senha do Wi-Fi se ela for a de fábrica"))
 
     def test_ajustar_nao_bloqueia(self):
         r = rv.revisar("A melhor câmera do Brasil, últimas 3 unidades!", self.regras)
@@ -35,6 +37,13 @@ class Revisor(unittest.TestCase):
     def test_liberar_regra_resolvida(self):
         regras = rv.carregar_regras(liberar=["anatel-sem-codigo"])
         self.assertEqual(rv.revisar("Código Anatel 12345-21-01234", regras)["veredito"], "LIBERADO")
+
+    def test_negacao_vira_ajustar(self):
+        r = rv.revisar("Sem instalação no local.\n## O que não está incluso\n- Instalação no local", self.regras)
+        self.assertEqual(r["bloqueia"], 0)
+        self.assertEqual(r["veredito"], "AJUSTAR")
+        self.assertEqual(rv.revisar("Instalação grátis para você!", self.regras)["veredito"], "BLOQUEADO")
+        self.assertEqual(rv.revisar('**"Essa câmera é homologada pela Anatel?"**', self.regras)["bloqueia"], 0)
 
     def test_linha_certa(self):
         a = rv.revisar("ok\nok\ninstalação grátis", self.regras)["achados"][0]

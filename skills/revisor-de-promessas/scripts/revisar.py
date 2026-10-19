@@ -18,6 +18,8 @@ import sys
 from pathlib import Path
 
 REGRAS = Path(__file__).resolve().parent.parent / "references" / "regras.json"
+NEGACAO = re.compile(r"\b(n[aã]o|nunca|sem|nem|jamais|evite|proibido)\b", re.IGNORECASE)
+JANELA = 60  # caracteres antes e depois do trecho onde uma negação muda o sentido
 
 
 def carregar_regras(caminho=REGRAS, liberar=()):
@@ -28,13 +30,27 @@ def carregar_regras(caminho=REGRAS, liberar=()):
     return regras
 
 
+def negado(linha, ini, fim, titulo):
+    """A promessa aparece negada ("não vendemos instalação", seção "O que não está incluso") ou é a pergunta do cliente?"""
+    if linha.rstrip(' *"\'').endswith("?"):
+        return True
+    return bool(NEGACAO.search(linha[max(0, ini - JANELA):ini]) or NEGACAO.search(linha[fim:fim + JANELA])
+                or NEGACAO.search(titulo))
+
+
 def revisar(texto, regras):
-    achados = []
+    achados, titulo = [], ""
     for n, linha in enumerate(texto.splitlines(), 1):
+        if linha.lstrip().startswith("#"):
+            titulo = linha
         for r in regras:
             for m in r["re"].finditer(linha):
-                achados.append({"linha": n, "trecho": m.group(0), "regra": r["id"], "gravidade": r["gravidade"],
-                                "porque": r["porque"], "reescrever": r["reescrever"]})
+                a = {"linha": n, "trecho": m.group(0), "regra": r["id"], "gravidade": r["gravidade"],
+                     "porque": r["porque"], "reescrever": r["reescrever"]}
+                if r["gravidade"] == "bloqueia" and negado(linha, m.start(), m.end(), titulo):
+                    a["gravidade"] = "ajustar"
+                    a["porque"] = "Parece negação ou pergunta do cliente; confira se fica claro que a loja não promete isso. " + r["porque"]
+                achados.append(a)
     ordem = {"bloqueia": 0, "ajustar": 1}
     achados.sort(key=lambda a: (ordem[a["gravidade"]], a["linha"]))
     bloqueia = sum(a["gravidade"] == "bloqueia" for a in achados)

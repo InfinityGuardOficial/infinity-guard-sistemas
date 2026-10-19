@@ -35,7 +35,7 @@
     {"id": "depoimento-inventado", "gravidade": "bloqueia", "padrao": "(mais de )?\\d[\\d.]* clientes (satisfeitos|felizes|atendidos)|nota \\d([,.]\\d)? (de|no) |\\d+ avalia[cç][oõ]es|cliente (disse|falou|contou):",
      "porque": "Número de clientes, nota e depoimento só com fonte real (pedido, avaliação publicada).",
      "reescrever": "Tire o número ou troque por um depoimento real autorizado pelo cliente."},
-    {"id": "dados-sensiveis", "gravidade": "bloqueia", "padrao": "(manda|envie|me passa) (o )?(n[uú]mero do )?cart[aã]o|c[oó]digo de seguran[cç]a do cart|cvv|senha do (seu )?(banco|cart[aã]o|wi-?fi)",
+    {"id": "dados-sensiveis", "gravidade": "bloqueia", "padrao": "(manda|envie|me passa) (o )?(n[uú]mero do )?cart[aã]o|c[oó]digo de seguran[cç]a do cart|cvv|(manda|mande|envie|me passa|me fala|me diz|qual [eé]|informe) (a )?(sua )?senha( do (seu )?(banco|cart[aã]o|wi-?fi|app))?",
      "porque": "Nunca pedir dado de cartão ou senha no WhatsApp (LGPD e segurança). Pagamento só pelo link da loja.",
      "reescrever": "'Te mando o link de pagamento seguro da loja.'"},
     {"id": "falar-mal-concorrente", "gravidade": "ajustar", "padrao": "\\b(intelbras|tapo|tp-?link|mercusys|positivo|xiaomi|ezviz|imou)\\b.{0,40}(ruim|lixo|porcaria|n[aã]o presta|p[eé]ssim|golpe|falsificad)",
