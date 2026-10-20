@@ -1,9 +1,9 @@
-# infinity-guard-direcao · 2.1.0
+# infinity-guard-direcao · 2.2.0
 
 Squad Direção: o diretor-geral, que decide as prioridades da semana e divide as metas entre os squads.
 
 - Funcionários: `diretor-geral`
-- Skills: `atendente-infinity-guard`, `campanha-sazonal`, `conteudo-semanal`, `painel-de-vendas`, `prova-da-loja`, `radar-de-concorrentes`, `reuniao-semanal`, `revisor-de-promessas`, `suporte-tecnico`
+- Skills: `atendente-infinity-guard`, `campanha-sazonal`, `conteudo-semanal`, `monitor-de-gestao`, `painel-de-vendas`, `prova-da-loja`, `radar-de-concorrentes`, `reuniao-semanal`, `revisor-de-promessas`, `suporte-tecnico`
 
 Instalar:
 ```

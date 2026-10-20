@@ -530,6 +530,7 @@ function viewHoje(){
      ${mi<sem?`<p><span class="tag late">atrasado ${sem-mi} ${sem-mi===1?"semana":"semanas"}</span> O plano previa o módulo ${sem+1}. Entregue este para destravar o próximo.</p>`:""}
      <div><button class="btn primary" onclick="abrirModulo(${mi})">Abrir aula e entregar</button></div></div>
   </div>`;
+  const alsH=alertasGestao().filter(a=>a.nivel!=="medio"); if(alsH.length) h+=cartaoAlertas(alsH,"Alertas da equipe · críticos e altos");
   const pg=pendenciasGestao(); const tot=pg.follow.length+pg.paraFornecedor.length+pg.semRastreio.length+pg.atrasos.length+pg.estoque.length;
   if(tot) h+=`<div class="card stack" style="border-color:var(--gold)"><div class="row" style="justify-content:space-between"><span class="eyebrow">Gestão do dia</span><button class="btn sm" onclick="irG('painel')">Abrir Gestão</button></div><div class="row">
     ${pg.follow.length?`<button class="btn sm" onclick="irG('clientes','hoje')">${pg.follow.length} follow-ups (CRM)</button>`:""}${pg.paraFornecedor.length?`<button class="btn sm" onclick="irG('pedidos','pago')">${pg.paraFornecedor.length} para o fornecedor (ERP)</button>`:""}${pg.semRastreio.length?`<button class="btn sm" onclick="irG('pedidos','fornecedor')">${pg.semRastreio.length} sem rastreio (TMS)</button>`:""}${pg.atrasos.length?`<button class="btn sm" style="border-color:var(--danger)" onclick="irG('pedidos','atrasado')">${pg.atrasos.length} atrasados (TMS)</button>`:""}${pg.estoque.length?`<button class="btn sm" onclick="irG('estoque')">${pg.estoque.length} estoque baixo (WMS)</button>`:""}</div></div>`;
@@ -1111,7 +1112,7 @@ async function carregarGestao(){ if(!dbBase) return; try{
   for(const c of Object.keys(COLS)){ const r=await dbBase.collection(c).get(); const remoto={}; r.docs.forEach(d=>remoto[d.id]=JSON.parse(JSON.stringify(d.data())));
     for(const id in COLS[c]) if(!remoto[id]){ remoto[id]=COLS[c][id]; dbBase.collection(c).doc(id).set(JSON.parse(JSON.stringify(COLS[c][id]))).catch(()=>{}) }
     COLS[c]=remoto; lsSet("rdm-"+c,remoto) }
-  render() }catch(e){} }
+  render(); avisarGestao() }catch(e){} }
 const novoId=p=>p+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,4).toUpperCase();
 const lista=c=>Object.values(COLS[c]);
 const prod=id=>CAT.produtos.find(p=>p.id===id);
@@ -1148,7 +1149,44 @@ function pendenciasGestao(){ return {
   atrasos:lista("pedidos").filter(atrasado),
   estoque:CAT.produtos.filter(c=>c.ativo&&["baixo","esgotado"].includes(statusEstoque(c))) } }
 function resumoGestao(){ const m=ymd(new Date()).slice(0,7), d=dre(m), pg=pendenciasGestao();
-  return `Gestão (mês ${m}): ${d.ps.length} pedidos, faturamento ${brl(d.receita)}, margem de contribuição ${brl(d.margem)}, resultado ${brl(d.resultado)}. Pendências: ${pg.follow.length} follow-ups vencidos, ${pg.paraFornecedor.length} pedidos pagos sem enviar ao fornecedor, ${pg.semRastreio.length} sem rastreio, ${pg.atrasos.length} entregas atrasadas, ${pg.estoque.length} produtos com estoque baixo ou esgotado.` }
+  return `Gestão (mês ${m}): ${d.ps.length} pedidos, faturamento ${brl(d.receita)}, margem de contribuição ${brl(d.margem)}, resultado ${brl(d.resultado)}. Pendências: ${pg.follow.length} follow-ups vencidos, ${pg.paraFornecedor.length} pedidos pagos sem enviar ao fornecedor, ${pg.semRastreio.length} sem rastreio, ${pg.atrasos.length} entregas atrasadas, ${pg.estoque.length} produtos com estoque baixo ou esgotado. Alertas: ${alertasGestao().filter(a=>a.nivel!=="medio").map(a=>a.regra+" ("+a.itens.length+")").join(", ")||"nenhum crítico ou alto"}.` }
+
+
+/* ----- Alertas da equipe (espelho de skills/monitor-de-gestao/references/alertas.json) ----- */
+const ALERTA_LIMITES={"dias_para_repassar": 1, "dias_sem_rastreio": 2, "dias_followup_atrasado": 1, "dias_sem_conferir_estoque": 7, "pontualidade_minima_pct": 80, "entregas_minimas_para_avaliar": 3, "anuncio_max_pct_receita": 30};
+const ALERTA_REGRAS={"tms-atraso": {"sistema": "TMS", "nivel": "critico", "responsavel": "guardiao-pos-venda", "quando": "Pedido pago, no fornecedor ou em trânsito com a previsão de entrega já vencida.", "acao": "Avisar o cliente antes que ele pergunte e cobrar o fornecedor. Sem prometer nova data que o fornecedor não confirmou."}, "wms-esgotado": {"sistema": "WMS", "nivel": "critico", "responsavel": "gestor-de-catalogo", "quando": "Produto ativo com estoque zero (fornecedor + próprio).", "acao": "Desativar no Catálogo e pausar anúncio do produto até o fornecedor confirmar reposição."}, "erp-nao-repassado": {"sistema": "ERP", "nivel": "alto", "responsavel": "lider-operacoes", "quando": "Pedido pago há mais de {dias_para_repassar} dia sem repassar ao fornecedor.", "acao": "Enviar o pedido ao fornecedor hoje (Gestão → Pedidos → Pedido p/ fornecedor)."}, "tms-sem-rastreio": {"sistema": "TMS", "nivel": "alto", "responsavel": "lider-operacoes", "quando": "Pedido repassado ao fornecedor há mais de {dias_sem_rastreio} dias sem código de rastreio.", "acao": "Cobrar o código do fornecedor e registrar em Rastreio."}, "erp-margem-negativa": {"sistema": "ERP", "nivel": "alto", "responsavel": "gestor-de-catalogo", "quando": "Pedido em que total − custo − taxa ficou negativo.", "acao": "Rever o preço ou o custo do produto antes da próxima venda."}, "fin-resultado-negativo": {"sistema": "ERP", "nivel": "alto", "responsavel": "analista-de-vendas", "quando": "Resultado do mês (margem − despesas) abaixo de zero.", "acao": "Cortar a despesa que menos traz venda e rever o CPA máximo com o analista-de-midia."}, "vmi-pontualidade": {"sistema": "VMI", "nivel": "alto", "responsavel": "gestor-de-catalogo", "quando": "Fornecedor com pelo menos {entregas_minimas_para_avaliar} entregas e menos de {pontualidade_minima_pct}% no prazo.", "acao": "Renegociar o prazo ou acionar o fornecedor reserva."}, "sac-troca-aberta": {"sistema": "ERP", "nivel": "alto", "responsavel": "tecnico-de-suporte", "quando": "Pedido em troca ou devolução.", "acao": "Responder o cliente no mesmo dia e seguir o fluxo de troca do CDC."}, "fin-anuncio-alto": {"sistema": "ERP", "nivel": "medio", "responsavel": "analista-de-midia", "quando": "Anúncios do mês acima de {anuncio_max_pct_receita}% da receita.", "acao": "Aplicar a régua escalar, manter ou pausar do plano-de-midia."}, "crm-followup-atrasado": {"sistema": "CRM", "nivel": "medio", "responsavel": "consultor-whatsapp", "quando": "Contato com a próxima ação vencida há mais de {dias_followup_atrasado} dia. Orçamento vai para o recuperador-de-carrinho e pós-venda para o guardiao-pos-venda.", "acao": "Mandar a mensagem hoje e registrar o follow-up."}, "crm-orcamento-sem-acao": {"sistema": "CRM", "nivel": "medio", "responsavel": "recuperador-de-carrinho", "quando": "Contato em orçamento sem próxima ação marcada.", "acao": "Marcar o follow-up D1, D3 ou D7."}, "wms-baixo": {"sistema": "WMS", "nivel": "medio", "responsavel": "gestor-de-catalogo", "quando": "Produto ativo com estoque igual ou abaixo do mínimo.", "acao": "Confirmar reposição com o fornecedor."}, "wms-sem-conferencia": {"sistema": "WMS", "nivel": "medio", "responsavel": "gestor-de-catalogo", "quando": "Produto ativo com fornecedor ligado e estoque não conferido há mais de {dias_sem_conferir_estoque} dias.", "acao": "Pedir a planilha de estoque ao fornecedor e importar em Integrações."}, "erp-sem-custo": {"sistema": "ERP", "nivel": "medio", "responsavel": "gestor-de-catalogo", "quando": "Produto ativo sem custo do fornecedor no Catálogo.", "acao": "Preencher custo e frete: sem isso a margem e o resultado ficam errados."}, "vmi-sem-fornecedor": {"sistema": "VMI", "nivel": "medio", "responsavel": "lider-operacoes", "quando": "Produto ativo sem fornecedor ligado.", "acao": "Cadastrar o fornecedor e ligar o produto em Gestão → Estoque."}};
+function alertasGestao(){ const L=ALERTA_LIMITES, h=ymd(new Date()), hoje=parseYmd(h); const ach={};
+  const add=(rid,item,resp)=>{ const k=rid+"|"+(resp||ALERTA_REGRAS[rid].responsavel); (ach[k]=ach[k]||{rid,resp:resp||ALERTA_REGRAS[rid].responsavel,itens:[]}).itens.push(item) };
+  const dias=s=>s?daysBetween(parseYmd(s),hoje):null;
+  lista("pedidos").forEach(p=>{ const nome=p.cliente?.nome||""; const pv=previsao(p);
+    if(["pago","fornecedor","transito"].includes(p.status)&&pv&&pv<h) add("tms-atraso",`${p.id} de ${nome}: previsão ${pv.split("-").reverse().slice(0,2).join("/")}`);
+    if(p.status==="pago"&&dias(p.dataPago||p.data)>L.dias_para_repassar) add("erp-nao-repassado",`${p.id} pago em ${(p.dataPago||p.data).split("-").reverse().slice(0,2).join("/")}`);
+    if(p.status==="fornecedor"&&!p.envio?.rastreio&&dias(p.envio?.repassadoEm||p.dataPago||p.data)>L.dias_sem_rastreio) add("tms-sem-rastreio",p.id);
+    if(valido(p)){ const c=Number(p.custo??custoPedido(p)); if(c>0&&Number(p.total||0)-c-Number(p.taxa||0)<0) add("erp-margem-negativa",`${p.id}: total ${brl2(p.total)}, custo ${brl2(c)}`) }
+    if(p.status==="troca") add("sac-troca-aberta",`${p.id} de ${nome}`) });
+  const d=dre(h.slice(0,7)); if((d.receita||d.desp)&&d.resultado<0) add("fin-resultado-negativo","resultado do mês "+brl(d.resultado));
+  const anun=lista("lancamentos").filter(l=>mesDe(l.data)===h.slice(0,7)&&l.categoria==="anuncios"&&l.tipo!=="receita").reduce((a,l)=>a+Number(l.valor||0),0);
+  if(d.receita&&anun/d.receita*100>L.anuncio_max_pct_receita) add("fin-anuncio-alto",`anúncios ${brl(anun)} = ${Math.round(anun/d.receita*100)}% da receita`);
+  lista("clientes").forEach(c=>{ if(c.etapa==="perdido") return; const dp=c.proxima?.data;
+    if(dp&&dias(dp)>L.dias_followup_atrasado) add("crm-followup-atrasado",`${c.nome}: ${c.proxima.acao||"follow-up"}`,{orcamento:"recuperador-de-carrinho",pos:"guardiao-pos-venda"}[c.etapa]);
+    if(c.etapa==="orcamento"&&!dp) add("crm-orcamento-sem-acao",c.nome) });
+  CAT.produtos.filter(c=>c.ativo).forEach(c=>{ const e=estoqueDe(c), n=c.nome.slice(0,50);
+    if(e!==null&&e<=0) add("wms-esgotado",n); else if(e!==null&&c.minimo&&e<=Number(c.minimo)) add("wms-baixo",`${n}: ${e} un.`);
+    if(c.fornecedorId){ if(!c.conferidoEm||dias(c.conferidoEm)>L.dias_sem_conferir_estoque) add("wms-sem-conferencia",n) } else add("vmi-sem-fornecedor",n);
+    if(!Number(c.custo)) add("erp-sem-custo",n) });
+  lista("fornecedores").forEach(f=>{ const s=scoreForn(f); if(s.entregues>=L.entregas_minimas_para_avaliar&&s.pct!==null&&s.pct<L.pontualidade_minima_pct) add("vmi-pontualidade",`${f.nome}: ${s.pct}% no prazo`) });
+  const ordem={critico:0,alto:1,medio:2};
+  return Object.values(ach).map(a=>Object.assign({},ALERTA_REGRAS[a.rid],{regra:a.rid,responsavel:a.resp,itens:a.itens,quando:ALERTA_REGRAS[a.rid].quando.replace(/\{(\w+)\}/g,(_,k)=>L[k])})).sort((a,b)=>ordem[a.nivel]-ordem[b.nivel]||a.sistema.localeCompare(b.sistema)) }
+const NIVEL_NOME={critico:"crítico",alto:"alto",medio:"médio"};
+function cartaoAlertas(als,titulo){ if(!als.length) return `<div class="card flat"><span class="eyebrow">${titulo}</span><p class="muted">Sem alertas. A gestão está em dia.</p></div>`;
+  return `<div class="card stack" style="border-color:${als.some(a=>a.nivel==="critico")?"var(--danger)":"var(--signal)"}"><span class="eyebrow">${titulo}</span>
+   ${als.map(a=>`<div class="stack" style="gap:4px;border-top:1px solid var(--line);padding-top:8px"><div class="row"><span class="pill ${a.nivel==="critico"?"bad":a.nivel==="alto"?"warn":""}">${NIVEL_NOME[a.nivel]}</span><span class="tag">${esc(a.sistema)}</span><span class="muted num" style="font-size:.78rem">${esc(a.responsavel)}</span></div>
+    <span style="font-size:.92rem">${esc(a.quando)} <b>(${a.itens.length})</b></span><span class="muted" style="font-size:.85rem">${a.itens.slice(0,4).map(esc).join(" · ")}${a.itens.length>4?" · e mais "+(a.itens.length-4):""}</span>
+    <div class="row"><button class="btn sm primary" onclick="trabalhar('${esc(a.responsavel)}',${esc(jsq("Alerta "+a.regra+" ("+a.sistema+", "+NIVEL_NOME[a.nivel]+"): "+a.quando+" Casos: "+a.itens.join("; ")+". Regra: "+a.acao+" Diga o que fazer hoje e escreva as mensagens prontas."))})">Pôr o ${esc(a.responsavel)} nisso</button><button class="btn sm ghost" onclick="irG(${esc(jsq({TMS:"pedidos",ERP:a.regra.startsWith("fin")?"financeiro":a.regra.startsWith("erp-sem")?"estoque":"pedidos",CRM:"clientes",WMS:"estoque",VMI:a.regra==="vmi-sem-fornecedor"?"estoque":"fornecedores"}[a.sistema]||"painel"))})">Abrir</button></div></div>`).join("")}</div>` }
+let alarmeGestaoDia="";
+function avisarGestao(){ const crit=alertasGestao().filter(a=>a.nivel==="critico"); const k=ymd(new Date()); if(!crit.length||alarmeGestaoDia===k) return; alarmeGestaoDia=k; try{ if(localStorage.getItem("rdm-alarme-gestao")===k) return; localStorage.setItem("rdm-alarme-gestao",k) }catch(e){}
+  $("#layer").innerHTML=`<div class="alarm" role="alertdialog" aria-label="Alerta da gestão"><div class="card" style="border-color:var(--danger)"><span class="eyebrow" style="color:var(--danger)">Alerta crítico da equipe</span><h2>Algo saiu errado</h2>${crit.map(a=>`<p><b>${esc(a.sistema)} · ${esc(a.responsavel)}:</b> ${esc(a.quando)} (${a.itens.length})</p>`).join("")}<div class="row"><button class="btn primary" onclick="fecharSheet();irG('painel')">Ver e resolver</button><button class="btn ghost" onclick="fecharSheet()">Depois</button></div></div></div>`;
+  beep(); try{ if("Notification" in window&&Notification.permission==="granted") new Notification("Rota do Milhão: alerta crítico",{body:crit.map(a=>a.sistema+": "+a.quando).join(" · ")}) }catch(e){} }
 
 /* ----- tela principal da Gestão ----- */
 let gAba="painel", gFiltro="", gMes=ymd(new Date()).slice(0,7);
@@ -1160,9 +1198,9 @@ function viewGestao(){
   return topo+f();
 }
 function irG(a,f){ view="gestao"; gAba=a; gFiltro=f||""; render(); window.scrollTo(0,0) }
-function gPainel(){ const m=ymd(new Date()).slice(0,7), d=dre(m), pg=pendenciasGestao();
+function gPainel(){ const m=ymd(new Date()).slice(0,7), d=dre(m), pg=pendenciasGestao(); const als=alertasGestao();
   const card=(n,v,s,a,f,tom)=>`<button class="kpi" style="text-align:left;cursor:pointer;font:inherit;color:inherit" onclick="irG('${a}','${f||""}')"><span class="eyebrow">${n}</span><span class="v" style="${tom?`color:var(--${tom})`:""}">${v}</span><span class="s">${s}</span></button>`;
-  return `<div class="kpis">
+  return cartaoAlertas(als,"Alertas da equipe · "+als.length)+`<div class="kpis">
    ${card("Faturamento do mês",brl(d.receita),d.ps.length+" pedidos · ticket "+brl(d.ticket),"financeiro")}
    ${card("Resultado do mês",brl(d.resultado),"margem "+brl(d.margem)+" − despesas "+brl(d.desp),"financeiro","",d.resultado<0?"danger":"")}
    ${card("Follow-ups vencidos",pg.follow.length,"CRM · clientes para chamar hoje","clientes","hoje",pg.follow.length?"signal":"")}
@@ -1467,7 +1505,7 @@ function testarAlarme(){ try{ if("Notification" in window && Notification.permis
 const avisados = new Set();
 setInterval(()=>{ const n=new Date(), k=ymd(n), nm=nowMin(n);
   slotKeyFor(n).forEach(s=>{ const ini=hm(S.slots[s].ini); if(nm>=ini && nm<ini+3 && !avisados.has(k+s)){ avisados.add(k+s); alarme(s) } });
-  renderStatus();
+  renderStatus(); if(n.getMinutes()%30===0&&n.getSeconds()<20) avisarGestao();
 },20000);
 
 /* ============ RENDER ============ */

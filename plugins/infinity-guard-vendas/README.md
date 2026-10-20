@@ -1,9 +1,9 @@
-# infinity-guard-vendas · 2.1.0
+# infinity-guard-vendas · 2.2.0
 
 Squad Vendas: consultor de WhatsApp, recuperador de carrinho, vendedor B2B e o líder de vendas.
 
 - Funcionários: `consultor-whatsapp`, `lider-vendas`, `recuperador-de-carrinho`, `vendedor-b2b`
-- Skills: `atendente-infinity-guard`, `campanha-sazonal`, `painel-de-vendas`, `proposta-comercial`, `revisor-de-promessas`
+- Skills: `atendente-infinity-guard`, `campanha-sazonal`, `monitor-de-gestao`, `painel-de-vendas`, `proposta-comercial`, `revisor-de-promessas`
 
 Instalar:
 ```

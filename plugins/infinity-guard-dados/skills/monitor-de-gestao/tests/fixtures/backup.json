@@ -1,0 +1,19 @@
+{"app":"rota-do-milhao","versao":1,
+ "catalogo":{"pix_pct":10,"parcelas":12,"prazo_padrao":"7 a 15 dias","produtos":[
+  {"id":"kit-cam-2","nome":"Kit 2 câmeras","preco":392.35,"custo":180,"frete":25,"ativo":true,"fornecedorId":"F1","estoqueFornecedor":0,"conferidoEm":"2026-10-20"},
+  {"id":"alarme-ikerui","nome":"Alarme IKerui","preco":875.5,"custo":0,"ativo":true,"estoqueFornecedor":4,"minimo":5},
+  {"id":"pasta","nome":"Pasta","preco":56,"ativo":false}]},
+ "fornecedores":{"F1":{"id":"F1","nome":"Fornecedor SP","prazoMax":10}},
+ "pedidos":{
+  "P1":{"id":"P1","data":"2026-10-01","status":"transito","dataPago":"2026-10-01","fornecedorId":"F1","itens":[{"id":"kit-cam-2","qtd":1}],"total":353.12,"cliente":{"nome":"Ana"},"envio":{"enviadoEm":"2026-10-02","rastreio":"AB1"}},
+  "P2":{"id":"P2","data":"2026-10-18","status":"pago","dataPago":"2026-10-18","itens":[{"id":"kit-cam-2","qtd":1}],"total":150,"cliente":{"nome":"Bia"}},
+  "P3":{"id":"P3","data":"2026-10-15","status":"fornecedor","dataPago":"2026-10-15","fornecedorId":"F1","itens":[{"id":"kit-cam-2","qtd":1}],"total":392.35,"envio":{"repassadoEm":"2026-10-16"}},
+  "P4":{"id":"P4","data":"2026-10-19","status":"troca","itens":[{"id":"kit-cam-2","qtd":1}],"total":392.35,"cliente":{"nome":"Caio"}},
+  "P5":{"id":"P5","data":"2026-10-19","status":"cancelado","itens":[{"id":"kit-cam-2","qtd":1}],"total":1}},
+ "clientes":{
+  "C1":{"id":"C1","nome":"Dani","etapa":"orcamento","proxima":{"acao":"D3","data":"2026-10-17"}},
+  "C2":{"id":"C2","nome":"Edu","etapa":"orcamento","proxima":{"acao":"","data":""}},
+  "C3":{"id":"C3","nome":"Fábio","etapa":"perdido","proxima":{"acao":"x","data":"2026-10-01"}},
+  "C4":{"id":"C4","nome":"Gil","etapa":"conversa","proxima":{"acao":"retomar","data":"2026-10-20"}}},
+ "lancamentos":{"L1":{"id":"L1","data":"2026-10-05","tipo":"despesa","categoria":"anuncios","valor":2000}}
+}

@@ -26,7 +26,7 @@ Digite `/agents` no Claude Code para ver a equipe instalada.
 
 **Regras que valem para todos:** preço só sai de script (catálogo único), nada de Anatel, garantia, CNPJ ou depoimento inventado, nada de instalação ou câmera 4G, todo texto para a rua passa pelo `revisor-de-promessas`, e gasto, publicação ou mensagem para cliente real só com o seu "pode".
 
-## As skills (13)
+## As skills (14)
 
 | Pasta | O que é | Quem usa |
 |---|---|---|
@@ -42,6 +42,7 @@ Digite `/agents` no Claude Code para ver a equipe instalada.
 | `skills/plano-de-midia/` | CPA máximo, ROAS de equilíbrio, orçamento, divisão do funil e régua escalar/manter/pausar. | Tráfego |
 | `skills/painel-de-vendas/` | Painel HTML da exportação de pedidos da Nuvemshop. | Dados, Vendas |
 | `skills/radar-de-concorrentes/` | Preços de concorrentes com fonte e a nossa posição por produto. | Dados |
+| `skills/monitor-de-gestao/` | Vigia da gestão: aplica as regras de alerta aos dados do app (entrega atrasada, pedido não repassado, sem rastreio, margem negativa, mês no vermelho, follow-up vencido, estoque esgotado, fornecedor impontual) e diz quem cuida. As mesmas regras rodam no app e na notificação "Vigia da gestão". | Todos os líderes, Operações, Sucesso, Vendas, Dados |
 | `skills/reuniao-semanal/` | Pauta da semana por squad, com top 3 e a fonte de cada linha. | Direção |
 | `skills/*.zip` | Cada skill compactada, para enviar no claude.ai. | |
 
@@ -69,7 +70,7 @@ No Claude Code, em qualquer pasta (por exemplo a pasta do projeto "Workshop IA a
 /plugin marketplace add InfinityGuardOficial/infinity-guard-sistemas
 /plugin install infinity-guard@infinity-guard-sistemas
 ```
-Isso instala os 22 funcionários e as 13 skills. Se o repositório estiver privado, o Claude Code precisa estar logado no GitHub com uma conta que tenha acesso (`gh auth login`). Para atualizar depois: `/plugin marketplace update infinity-guard-sistemas`.
+Isso instala os 22 funcionários e as 14 skills. Se o repositório estiver privado, o Claude Code precisa estar logado no GitHub com uma conta que tenha acesso (`gh auth login`). Para atualizar depois: `/plugin marketplace update infinity-guard-sistemas`.
 
 Para instalar só num projeto (e quem abrir a pasta também ter), rode os comandos acima e escolha "project" quando o Claude Code perguntar o escopo.
 
