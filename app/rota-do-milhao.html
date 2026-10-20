@@ -1088,10 +1088,10 @@ function viewInstalar(){ return `<div class="card stack"><span class="eyebrow">I
   <p style="font-size:.92rem">O app instalado abre esta mesma página privada, com o seu login do Claude. Quem baixar o instalador sem a sua conta não vê nada: os dados e a IA ficam presos ao seu login.</p>
   <ul style="margin:0;padding-left:20px;font-size:.9rem;display:flex;flex-direction:column;gap:4px">
    <li><b>Windows x64:</b> em <a href="${REPO_URL}/actions/workflows/apps.yml" target="_blank" rel="noopener">GitHub → Actions → Apps</a>, abra a última execução verde e baixe "rota-do-milhao-windows-x64". Tem instalador e versão portátil. Ele avisa nos seus turnos mesmo minimizado e pode iniciar com o Windows.</li>
-   <li><b>Android:</b> na mesma página, baixe "rota-do-milhao-android", abra o APK no celular e permita instalar de fonte desconhecida. Ele também avisa nos seus turnos.</li>
+   <li><b>Android:</b> na mesma página, baixe "rota-do-milhao-android", abra o APK no celular e permita instalar de fonte desconhecida. Ele abre o app numa aba do Chrome (o login é o do Chrome, inclusive com o Google) e avisa nos seus turnos.</li>
    <li><b>iPhone:</b> a Apple não permite instalar fora da App Store sem conta de desenvolvedor. Abra este link no Safari → Compartilhar → Adicionar à Tela de Início.</li>
    <li><b>Sem baixar nada:</b> no Chrome ou no Edge, abra este link → menu → Instalar como app.</li></ul>
-  <p class="muted" style="font-size:.85rem">No primeiro acesso, entre no Claude com o seu e-mail (código por e-mail). Login com o Google pode ser bloqueado dentro de apps instalados.</p></div>` }
+  <p class="muted" style="font-size:.85rem">No Windows, entre no Claude com o seu e-mail (código por e-mail): o login com o Google pode ser bloqueado dentro do app. No Android, qualquer login funciona, porque é o do Chrome.</p></div>` }
 
 /* ============ AÇÕES ============ */
 function sheet(html){ $("#layer").innerHTML=`<div class="sheet" onclick="if(event.target===this)fecharSheet()"><div class="panel" role="dialog" aria-modal="true">${html}</div></div>` }
