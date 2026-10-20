@@ -1,0 +1,717 @@
+<title>Rota do Milhão</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: painel de turno de vigilância — faixa de status no topo, missão do horário em destaque, abas embaixo no celular */
+:root{
+  --bg:#EEF2F4; --surface:#FFFFFF; --sunken:#E2E8EC; --line:#C9D3DA;
+  --fg:#13212B; --muted:#4F606C;
+  --accent:#0A6B6B; --accent-fg:#FFFFFF; --accent-soft:#D3EBE9;
+  --signal:#B85F12; --signal-soft:#FBE8D3;
+  --danger:#B42318; --danger-soft:#FBE1DE;
+  --ok:#287A46; --ok-soft:#DAF0E1;
+  --f-display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D151B; --surface:#15212A; --sunken:#0A1116; --line:#2A3A46;
+  --fg:#E4ECF1; --muted:#97A8B4;
+  --accent:#3DBDB3; --accent-fg:#06221F; --accent-soft:#123A38;
+  --signal:#F2A257; --signal-soft:#3A2614;
+  --danger:#FF7A6B; --danger-soft:#3D1A17;
+  --ok:#5CCB86; --ok-soft:#143322; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D151B; --surface:#15212A; --sunken:#0A1116; --line:#2A3A46;
+  --fg:#E4ECF1; --muted:#97A8B4;
+  --accent:#3DBDB3; --accent-fg:#06221F; --accent-soft:#123A38;
+  --signal:#F2A257; --signal-soft:#3A2614;
+  --danger:#FF7A6B; --danger-soft:#3D1A17;
+  --ok:#5CCB86; --ok-soft:#143322; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:980px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 96px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+h2{font-size:1.45rem;font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.08rem;font-weight:700}
+p{margin:0}
+a{color:var(--accent)}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:600}
+.muted{color:var(--muted)}
+.stack{display:flex;flex-direction:column;gap:12px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.grid2>*{min-width:0}
+
+/* topo */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
+header.top .in{max-width:980px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{font-family:var(--f-display);font-weight:800;font-size:1.15rem;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+.brand svg{flex:none}
+.brand small{font-family:var(--f-body);font-weight:500;font-size:.75rem;color:var(--muted)}
+.status{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:.78rem;font-weight:600;background:var(--sunken);color:var(--fg);white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.warn{background:var(--signal-soft);color:var(--signal)}
+.pill.bad{background:var(--danger-soft);color:var(--danger)}
+.pill.acc{background:var(--accent-soft);color:var(--accent)}
+
+nav.tabs{display:flex;gap:4px;max-width:980px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 8px;overflow-x:auto}
+nav.tabs button{background:none;border:0;color:var(--muted);font:600 .9rem var(--f-body);padding:8px 12px;border-radius:8px;cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
+@media (max-width:720px){
+  nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:9;background:var(--surface);border-top:1px solid var(--line);margin:0;max-width:none;justify-content:space-between;padding-block:6px calc(6px + env(safe-area-inset-bottom,0px))}
+  nav.tabs button{flex:1;padding:8px 4px;font-size:.74rem;display:flex;flex-direction:column;align-items:center;gap:2px}
+}
+nav.tabs svg{width:18px;height:18px}
+@media (min-width:721px){nav.tabs svg{display:none}}
+
+section.view{padding-top:20px;display:flex;flex-direction:column;gap:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.card.flat{background:transparent;border-style:dashed}
+
+/* bloco da missão do horário */
+.shift{border-radius:var(--r);background:var(--surface);border:1px solid var(--line);overflow:hidden}
+.shift-head{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--line);background:var(--sunken)}
+.shift-head .clock{font-family:var(--f-mono);font-size:1.6rem;font-weight:500}
+.shift-body{padding:6px 16px 14px}
+.mission{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.mission:last-child{border-bottom:0}
+.mission .box{width:22px;height:22px;border-radius:6px;border:2px solid var(--line);margin-top:2px;display:grid;place-items:center}
+.mission.done .box{background:var(--ok);border-color:var(--ok)}
+.mission.late .box{border-color:var(--danger)}
+.mission .t{font-weight:600}
+.mission.done .t{color:var(--muted);text-decoration:line-through}
+.mission .d{grid-column:2;color:var(--muted);font-size:.9rem}
+.mission .act{grid-column:2;display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.mission .proof{grid-column:2;font-size:.85rem;background:var(--ok-soft);color:var(--fg);border-radius:6px;padding:6px 8px;overflow-wrap:anywhere}
+.tag{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:4px;background:var(--sunken);color:var(--muted)}
+.tag.late{background:var(--danger-soft);color:var(--danger)}
+.tag.now{background:var(--signal-soft);color:var(--signal)}
+
+button.btn,.btn{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:600 .88rem var(--f-body);padding:8px 14px;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.btn.signal{background:var(--signal);border-color:var(--signal);color:#fff}
+.btn.ghost{background:transparent}
+.btn.sm{padding:5px 10px;font-size:.8rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.84rem;font-weight:600;color:var(--muted)}
+input,textarea,select{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+textarea{min-height:84px;resize:vertical}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+
+/* cobrança */
+.debt{border:2px solid var(--danger);background:var(--danger-soft);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.debt h3{color:var(--danger)}
+
+/* medidor */
+.meter{height:12px;background:var(--sunken);border-radius:999px;overflow:hidden;position:relative}
+.meter>i{display:block;height:100%;background:var(--accent);border-radius:999px}
+.meter>b{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--signal)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.kpi .v{font-family:var(--f-mono);font-size:1.3rem;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.kpi .s{font-size:.8rem;color:var(--muted)}
+
+/* trilha */
+.phase{display:flex;flex-direction:column;gap:8px}
+.phase-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.mods{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden}
+.mod{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;text-align:left;font:inherit;color:inherit;width:100%}
+.mod:last-child{border-bottom:0}
+.mod .wk{font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+.mod.locked{opacity:.55}
+.mod.current{background:var(--accent-soft)}
+.lesson{display:flex;flex-direction:column;gap:12px}
+.lesson .block{border-left:3px solid var(--line);padding-left:12px}
+.lesson .block.task{border-color:var(--signal)}
+.lesson .block.proofb{border-color:var(--ok)}
+
+/* gráfico */
+.chart{width:100%;overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto}
+.chart text{fill:var(--muted);font:11px var(--f-body)}
+
+/* IA */
+.out{white-space:pre-wrap;background:var(--sunken);border-radius:8px;padding:12px;min-height:60px;font-size:.92rem;overflow-wrap:anywhere}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:6px 12px;font:600 .82rem var(--f-body);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+
+/* biblioteca */
+.lib{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.lib .card{display:flex;flex-direction:column;gap:6px}
+
+/* alarme */
+.alarm{position:fixed;inset:0;z-index:20;background:color-mix(in srgb,var(--bg) 70%,transparent);backdrop-filter:blur(3px);display:grid;place-items:center;padding:16px}
+.alarm .card{max-width:440px;width:100%;border:2px solid var(--signal);display:flex;flex-direction:column;gap:12px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:21;background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:8px;font-weight:600;font-size:.9rem;max-width:calc(100% - 32px)}
+.sheet{position:fixed;inset:0;z-index:19;background:color-mix(in srgb,var(--bg) 60%,transparent);display:flex;align-items:flex-end;justify-content:center}
+.sheet .panel{background:var(--surface);border:1px solid var(--line);border-radius:14px 14px 0 0;width:100%;max-width:640px;max-height:88%;overflow:auto;padding:18px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:12px}
+table.t{border-collapse:collapse;width:100%;font-size:.88rem}
+table.t th,table.t td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;white-space:nowrap}
+table.t td.n,table.t th.n{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto}
+@media (prefers-reduced-motion:no-preference){.pulse{animation:p 1.4s ease-in-out infinite}@keyframes p{50%{opacity:.55}}}
+</style>
+
+<header class="top">
+  <div class="in">
+    <div class="brand">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 12.5c1.2-1.6 2.6-1.6 4 0s2.8 1.6 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>Rota do Milhão <small>Infinity Guard</small></span>
+    </div>
+    <div class="status" id="status"></div>
+  </div>
+  <nav class="tabs" id="tabs" aria-label="Seções">
+    <button data-v="hoje"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Hoje</button>
+    <button data-v="trilha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19h16M6 15l4-4 3 3 5-6"/></svg>Trilha</button>
+    <button data-v="placar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Placar</button>
+    <button data-v="ia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Estúdio IA</button>
+    <button data-v="agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Agenda</button>
+    <button data-v="biblioteca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h4v16H5zM10 4h4v16h-4zM15 5l4 1-3 14-4-1z"/></svg>Materiais</button>
+  </nav>
+</header>
+
+<main class="wrap" id="app"></main>
+<div id="layer"></div>
+
+<script>
+/* ============ DADOS: catálogo (catalogo.json de 18/10/2026) ============ */
+const CATALOGO = [
+  ["Kit 2 câmeras Wi-Fi dupla lente", 392.35],
+  ["Câmera ASECAM PTZ zoom 8x", 407.17],
+  ["Alarme IKerui Wi-Fi/GSM", 875.50],
+  ["Fechadura facial 3D", 2173.27],
+  ["Fechadura biometria", 1218.54],
+  ["Sensor de presença", 71.98],
+];
+const REGRAS = "Regras que não podem ser quebradas: nunca prometer '100% seguro' ou 'à prova de invasão'; a loja NÃO faz instalação e NÃO vende câmera 4G; nunca inventar código Anatel, prazo de garantia, CNPJ, avaliação ou depoimento; nada de 'de/por' com preço antigo inventado; preço só os do catálogo; pedir permissão antes de mostrar conversa de cliente.";
+const CONTEXTO = `Marca: Infinity Guard (infinityguard.com.br), loja online na Nuvemshop de câmeras Wi-Fi, alarmes e fechaduras inteligentes para casa, comércio e home office. Envio para todo o Brasil, atendimento por WhatsApp (31) 98667-9178. Lema: "Segurança onde você estiver". Posicionamento: marca nova que vende orientação, câmera entregue configurada com segurança (senha trocada, firmware atualizado, rede 2,4 GHz) e suporte no WhatsApp que responde. Dores do público: medo de crime (96,2% dos brasileiros, Datafolha/FBSP 2026), câmera que fica offline, app instável, SAC que some, câmeras invadidas por senha 'admin' de fábrica (cerca de 68 mil expostas no Brasil, Band abr/2026). Catálogo: ${CATALOGO.map(c=>c[0]+" R$ "+c[1].toFixed(2).replace(".",",")).join("; ")}. Pix com 10% de desconto e até 12x no cartão. ${REGRAS}`;
+
+/* ============ DADOS: trilha de 48 semanas ============ */
+const FASES = [
+ {n:"Fundação e prova", meta:"Uma loja e perfis que passam confiança antes de qualquer anúncio."},
+ {n:"Oferta irresistível", meta:"Uma oferta que faz o preço mais alto parecer óbvio."},
+ {n:"Conteúdo com IA", meta:"3 a 5 Reels por semana sem travar."},
+ {n:"WhatsApp que fecha", meta:"Toda conversa recebe resposta rápida, perguntas certas e follow-up."},
+ {n:"Prova social", meta:"Avaliações e depoimentos reais que vendem por você."},
+ {n:"Tráfego pago inicial", meta:"Primeiras campanhas com o CPA sob controle."},
+ {n:"Vendas para empresas", meta:"Pedidos maiores: comércio, condomínio, escritório e parceiros."},
+ {n:"Escala de anúncios", meta:"Mais verba só onde o número prova que dá lucro."},
+ {n:"Novos canais", meta:"TikTok, marketplaces e Google trazendo venda extra."},
+ {n:"Recorrência e indicação", meta:"Cada cliente compra de novo e traz outro."},
+ {n:"Pico sazonal", meta:"Datas fortes planejadas com estoque, oferta e mensagens."},
+ {n:"Sistema e equipe", meta:"O negócio roda sem depender do seu horário livre."},
+];
+const M = (f,t,aula,tarefa,prova,ferramenta,link) => ({f,t,aula,tarefa,prova,ferramenta,link});
+const MODULOS = [
+ M(0,"Loja que passa confiança","Cliente que não conhece a marca compra de quem prova que existe. O Raio X de Nicho mostrou que o site não exibe CNPJ, prazo de garantia, código Anatel nem avaliações. Sem isso, anúncio só queima dinheiro.","Rode a skill prova-da-loja (ou o auditor-da-loja) e corrija 3 itens hoje: CNPJ no rodapé, prazo de garantia escrito (a garantia legal do CDC é de 90 dias para produto durável) e página de troca e devolução.","Cole o link da página corrigida e quais 3 itens você arrumou.","Skill prova-da-loja · Use o auditor-da-loja","https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm"),
+ M(0,"Instagram que vende em 5 segundos","Quem cai no perfil decide em segundos. A bio precisa dizer para quem é, o que resolve e onde clicar. Os destaques respondem as perguntas antes do WhatsApp.","Reescreva a bio (promessa + prova + chamada para o WhatsApp) e crie 5 destaques: Kits, Como configurar, Suporte, Avaliações, Entrega. Peça 3 versões de bio no Estúdio IA.","Cole a bio nova e o nome dos 5 destaques.","Estúdio IA · Use o social-media","https://www.facebook.com/business/learn"),
+ M(0,"WhatsApp Business montado","O WhatsApp é seu caixa. Catálogo, respostas rápidas e etiquetas fazem você responder em 30 segundos do celular, no ônibus ou no almoço.","Monte o catálogo com os 6 produtos, a mensagem de saudação e de ausência, 4 respostas rápidas (/kit, /pix, /frete, /garantia) e as etiquetas Novo, Orçamento, Pagou, Pós-venda.","Cole o texto das 4 respostas rápidas.","Skill atendente-infinity-guard","https://faq.whatsapp.com/"),
+ M(0,"Os seus números-guia","Faturamento sem margem é ilusão. Você precisa saber quanto sobra por kit e quanto pode pagar por venda em anúncio (CPA máximo). Esse número decide tudo da fase 6 em diante.","Rode catalogo-e-precos para a margem de cada produto e plano-de-midia para o CPA máximo. Depois atualize ticket médio e margem em Agenda → Configurações.","Cole a margem dos 3 produtos principais e o seu CPA máximo.","Skills catalogo-e-precos e plano-de-midia",""),
+
+ M(1,"Equação de valor","Alex Hormozi resume assim: valor = resultado sonhado × chance percebida de dar certo ÷ (tempo × esforço). Para vender acima da Intelbras, aumente a chance percebida (configuração guiada, suporte) e diminua o esforço (passo a passo pronto).","Escreva a oferta \"Câmera Entregue Segura\": o kit, a configuração guiada por vídeo, o guia anti-invasão e o suporte no WhatsApp com prazo de resposta que você consegue cumprir no CLT.","Cole o texto completo da oferta.","Livro $100M Offers · Estúdio IA","https://www.acquisition.com/books"),
+ M(1,"Garantia que você consegue cumprir","Garantia forte reduz o medo, mas só vale se você cumprir. Na loja online o cliente já tem 7 dias de arrependimento por lei (CDC art. 49). Use isso como argumento, sem inventar prazo de fábrica.","Escreva a sua garantia de suporte (ex.: resposta no WhatsApp até 20h do mesmo dia útil) e passe pelo revisor-de-promessas.","Cole a garantia aprovada pelo revisor.","Skill revisor-de-promessas","https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm"),
+ M(1,"Kits por tipo de casa","Ninguém compra \"câmera\", compra a solução para a casa dele. Kits por situação aumentam o ticket e encurtam a conversa.","Monte 3 kits com o script recomendar_kit.py: apartamento, casa com portão e pequeno comércio. Sítio sem Wi-Fi fica fora, porque a loja não vende câmera 4G.","Cole os 3 kits com o preço cheio e no Pix.","Script recomendar_kit.py",""),
+ M(1,"Preço que aguenta comparação","Seus preços estão acima das ofertas de marketplace. Ou o serviço justifica, ou o preço muda. Decida produto por produto, com fonte.","Rode o radar-de-concorrentes e escreva a decisão para cada produto: manter (com qual argumento) ou ajustar (para quanto).","Cole a decisão de cada produto.","Skill radar-de-concorrentes",""),
+
+ M(2,"Ganchos de 3 segundos","O Reel vive ou morre nos 3 primeiros segundos. Use os 5 formatos: a sua tese, a dor de quem assiste, passo a passo, o que eu nunca faço, se você é...","Gere 10 ganchos no Estúdio IA com os temas quentes (câmera invadida, câmera offline, fechadura facial) e escolha os 3 melhores.","Cole os 3 ganchos escolhidos.","Estúdio IA · Use o roteirista-de-reels",""),
+ M(2,"Gravar sem travar","Celular, luz da janela, 30 a 45 segundos, legenda automática. Feito vale mais que perfeito. Grave em lote no sábado e publique na semana.","Grave e publique 3 Reels nesta semana. Edite no CapCut com legenda automática.","Cole os 3 links publicados.","CapCut · skill conteudo-semanal","https://www.capcut.com/"),
+ M(2,"Funil de conteúdo","Topo atrai pelo medo e pela notícia, meio ensina a escolher, fundo mostra a oferta e a prova. Sem fundo de funil, o perfil cresce e não vende.","Monte o calendário das próximas 4 semanas: 2 posts de topo, 2 de meio e 1 de fundo por semana. Peça as ideias no Estúdio IA.","Cole o calendário das 4 semanas.","Estúdio IA · Meta Business Suite","https://business.facebook.com/"),
+ M(2,"Métrica que importa","Curtida não paga boleto. Olhe retenção nos 3 segundos, compartilhamentos, salvamentos e quantas pessoas chamaram no WhatsApp.","Abra os Insights dos 3 Reels e anote retenção, compartilhamentos e conversas geradas. Repita o formato que mais gerou conversa.","Cole os números dos 3 Reels e o formato vencedor.","Instagram Insights",""),
+
+ M(3,"5 perguntas que vendem","Quem pergunta conduz. Situação (casa ou apartamento?), problema (o que te preocupa?), consequência (o que acontece se...?), ideal (como seria estar tranquilo?) e só então o kit. É o SPIN Selling simplificado.","Escreva o seu roteiro de 5 perguntas e use em 10 conversas desta semana.","Quantas das 10 conversas viraram orçamento?","Livro Alcançando Excelência em Vendas (SPIN) · skill atendente",""),
+ M(3,"Velocidade de resposta","Lead respondido em minutos fecha muito mais que lead respondido no dia seguinte. No CLT você não consegue estar sempre online, então a IA cobre a lacuna.","Gere o prompt do robô com exportar_prompt.py e ligue um atendente com IA no WhatsApp (app da Nuvemshop ou outro). Se ainda não der, use mensagem de ausência com o link do kit.","Qual foi o seu tempo médio de resposta nesta semana?","Script exportar_prompt.py","https://www.nuvemshop.com.br/loja-aplicativos-nuvem"),
+ M(3,"Follow-up D1, D3, D7","A maior parte das vendas sai no segundo ou terceiro contato. Orçamento sem follow-up é venda dada ao concorrente.","Faça follow-up de todos os orçamentos abertos com a sequência D1, D3 e D7 (o recuperador-de-carrinho escreve as mensagens).","Quantos orçamentos foram retomados e quantos fecharam?","Use o recuperador-de-carrinho",""),
+ M(3,"Objeções sem medo","As 3 de sempre: \"tá caro\", \"vou pensar\" e \"isso é seguro?\". Resposta pronta e ensaiada vira reflexo.","Gere no Estúdio IA as respostas para as 5 objeções mais comuns e salve como resposta rápida no WhatsApp.","Cole as 5 respostas.","Estúdio IA → Objeção",""),
+
+ M(4,"As 10 primeiras avaliações","Avaliação real é o que separa marca nova de loja suspeita. Peça no 7º dia de uso, quando o cliente já está satisfeito.","Mande o pedido de avaliação (com link direto) para todos os clientes com mais de 7 dias. Meta: 10 avaliações.","Quantas avaliações você tem hoje?","Use o guardiao-pos-venda",""),
+ M(4,"Depoimento em vídeo","Um cliente real mostrando a câmera no celular vale mais que 10 anúncios. Sempre com permissão por escrito.","Peça a 3 clientes satisfeitos um vídeo de 20 segundos. Ofereça um brinde pequeno pelo tempo, não pela opinião.","Cole o link do depoimento publicado (com permissão).","Use o social-media",""),
+ M(4,"Bastidores que provam","Mostrar a embalagem, a configuração e o suporte respondendo prova que existe gente de verdade por trás.","Publique 3 conteúdos de bastidores: separação do pedido, configuração segura e um suporte resolvido (com permissão).","Cole os 3 links.","Estúdio IA → Roteiro",""),
+ M(4,"Reclame Aqui e Google","Quem pesquisa a marca antes de comprar precisa encontrar você. Perfil reivindicado e respostas rápidas viram prova.","Crie ou reivindique o perfil no Reclame Aqui e no Perfil da Empresa no Google. Responda tudo o que houver.","Cole os 2 links.","","https://www.google.com/business/"),
+
+ M(5,"Pixel e eventos","Sem pixel, a Meta não sabe quem compra e o anúncio fica cego. Instale e confira os eventos antes de gastar 1 real.","Conecte o pixel da Meta (ou a API de Conversões) na Nuvemshop e confira PageView, AddToCart e Purchase no Gerenciador de Eventos.","Quais eventos aparecem como ativos?","Meta Blueprint · Use o analista-de-midia","https://www.facebook.com/business/learn"),
+ M(5,"Primeira campanha","Comece pequeno: R$ 30 por dia, campanha de vendas ou de mensagens para o WhatsApp, 3 criativos diferentes. Deixe rodar 7 dias sem mexer.","Gere os criativos com a maquina-de-anuncios, passe no revisor-de-promessas e suba a campanha. Gasto real só com o seu ok.","Cole o nome da campanha e o orçamento diário.","Skill maquina-de-anuncios · Use o criativos-de-anuncio",""),
+ M(5,"Ler os números","Custo por conversa, custo por venda (CPA) e ROAS contra o seu CPA máximo. Acima do máximo, pausa. Abaixo, mantém. Bem abaixo, escala.","Preencha a régua escalar, manter ou pausar com os 7 dias de dados (o plano-de-midia faz a conta).","Cole o CPA de cada criativo e a decisão.","Skill plano-de-midia",""),
+ M(5,"Remarketing","Quem já visitou ou chamou no WhatsApp compra mais barato. Público de 30 dias com prova social no criativo.","Crie o público de quem engajou ou visitou nos últimos 30 dias e uma campanha com o depoimento.","Cole o tamanho do público e o CPA da semana.","Meta Ads",""),
+
+ M(6,"Lista de 50 empresas","Um condomínio ou comércio compra o equivalente a 5 a 10 clientes de casa. Comece pelo seu bairro e pelo caminho do trabalho.","Liste 50 alvos: padarias, farmácias, oficinas, escritórios, condomínios, com nome, contato e quem decide.","Quantos alvos estão na lista?","Use o vendedor-b2b","https://www.google.com/maps"),
+ M(6,"Abordagem de 10 por semana","Mensagem curta, uma pergunta, nada de catálogo no primeiro contato. Sábado de manhã vale para visitas.","Faça 10 abordagens nesta semana com o roteiro do vendedor-b2b.","Quantas responderam e quantas pediram proposta?","Use o vendedor-b2b · livro Receita Previsível",""),
+ M(6,"Proposta que fecha","Proposta com problema, solução, preço, Pix, parcelas e validade de 7 dias. Desconto só dentro do limite da margem.","Envie pelo menos 2 propostas com a skill proposta-comercial e marque o follow-up.","Cole o valor das propostas enviadas.","Skill proposta-comercial",""),
+ M(6,"Parceiros que indicam","Eletricistas, síndicos, corretores e instaladores falam com o seu cliente toda semana. Comissão de 5 a 10% sobre venda paga.","Feche acordo com 3 parceiros e dê a cada um um cupom com o nome dele, para medir quem indica.","Cole o nome dos parceiros e os cupons.","",""),
+
+ M(7,"Teste de criativos 3x3","3 ganchos × 3 formatos (vídeo, carrossel, imagem). O mercado escolhe o vencedor, não a sua opinião.","Suba 9 variações com o mesmo orçamento total e deixe 7 dias.","Qual criativo ganhou e por quanto?","Use o criativos-de-anuncio",""),
+ M(7,"Escalar sem quebrar","Aumente a verba aos poucos (cerca de 20% a cada 3 dias) só nos conjuntos com CPA abaixo do máximo. Aumento brusco costuma piorar o custo.","Aplique a régua do plano-de-midia por 2 semanas e registre cada aumento.","Cole verba antes e depois e o CPA.","Skill plano-de-midia",""),
+ M(7,"Públicos amplos e Advantage+","As campanhas automáticas da Meta acham comprador quando o pixel já tem compras. Compare com a campanha manual.","Rode uma campanha Advantage+ de vendas ao lado da melhor manual por 7 dias.","Qual teve o menor CPA?","Meta Blueprint","https://www.facebook.com/business/learn"),
+ M(7,"Criadores de conteúdo","Vídeo feito por cliente ou criador converte melhor que vídeo de marca. Pague por vídeo, com autorização de uso em anúncio.","Contrate 2 vídeos de criadores pequenos do nicho casa ou segurança e use nos anúncios.","Cole o link dos 2 vídeos.","",""),
+
+ M(8,"TikTok com o que já existe","Os mesmos Reels rodam no TikTok. Custo zero, alcance extra.","Publique os 5 melhores Reels no TikTok com legenda adaptada.","Cole o @ e as visualizações.","TikTok",""),
+ M(8,"TikTok Shop","Vender dentro do vídeo. Confira na Central do Vendedor as regras atuais, que mudam com frequência.","Abra a conta de vendedor, cadastre o kit principal e convide 3 afiliados.","Status da loja e número de afiliados.","TikTok Shop","https://seller-br.tiktok.com/"),
+ M(8,"Marketplace para giro","Mercado Livre e Shopee trazem volume, mas cobram comissão. Só entre com produto que aguenta a taxa.","Calcule a margem de cada produto com a taxa do marketplace e anuncie só os que sobram acima de 15%.","Quais produtos passaram na conta?","Skill catalogo-e-precos","https://www.mercadolivre.com.br/"),
+ M(8,"Google: quem já procura","Quem pesquisa \"câmera wi-fi para casa\" já quer comprar. Comece com o Perfil da Empresa e o Google Shopping gratuito.","Ligue o Google Merchant Center à Nuvemshop e confira os produtos aprovados.","Quantos produtos aprovados?","Google Skillshop","https://skillshop.withgoogle.com/"),
+
+ M(9,"Venda para quem já comprou","Vender de novo para um cliente custa muito menos que conquistar outro. Cartão de memória e sensor são o complemento natural.","Monte a oferta de complemento para o D7 do pós-venda e mande para todos os clientes.","Quantos compraram o complemento?","Use o guardiao-pos-venda",""),
+ M(9,"Programa de indicação","Cliente satisfeito indica se você pedir e der motivo. Cupom para quem indica e para quem chega.","Crie o cupom de indicação e mande para todos os clientes satisfeitos.","Quantas indicações chegaram?","",""),
+ M(9,"Lista VIP","Um canal ou lista de transmissão no WhatsApp com quem já comprou ou quase comprou. Ofertas primeiro para eles.","Crie o canal VIP e convide todos os clientes e orçamentos dos últimos 90 dias.","Quantos membros?","WhatsApp",""),
+ M(9,"Calendário de datas","Viagem de férias, Dia dos Pais, mudança de casa: cada data tem um motivo para comprar segurança.","Monte o calendário de 12 meses com 1 campanha por mês.","Cole o calendário.","Skill campanha-sazonal",""),
+
+ M(10,"Planejar o pico","11.11, Black Friday e Natal concentram vendas do ano. Quem planeja com 30 dias vende; quem improvisa queima margem.","Rode a campanha-sazonal para a próxima data forte: kits, preço, cupom e calendário.","Cole o plano da campanha.","Skill campanha-sazonal",""),
+ M(10,"Oferta de pico","Desconto real, com o preço que já estava no site. Kit com bônus costuma preservar a margem melhor que desconto puro.","Defina a oferta e passe pelo revisor-de-promessas (nada de de/por maquiado).","Cole a oferta aprovada.","Skill revisor-de-promessas",""),
+ M(10,"Estoque e entrega","Venda sem estoque vira reclamação. Confirme com o fornecedor o estoque e o prazo antes de anunciar.","Confirme estoque e prazo de cada item da oferta e ajuste a página.","Cole estoque e prazo por item.","Use o gestor-de-catalogo",""),
+ M(10,"Depois do pico","O pico traz muitos clientes novos. Pós-venda bem feito transforma isso em avaliação e recompra.","Mande o pós-venda de 7 dias e o pedido de avaliação para todos os pedidos do pico.","Quantas avaliações novas?","Use o guardiao-pos-venda",""),
+
+ M(11,"Processos escritos","O que está só na sua cabeça não pode ser delegado. Escreva o passo a passo das 5 tarefas que mais se repetem.","Escreva 5 procedimentos: atender, enviar pedido, pós-venda, publicar Reel e subir anúncio.","Cole os 5 títulos e onde estão salvos.","",""),
+ M(11,"Primeira ajuda","Quando a rotina não cabe no horário livre, contrate por tarefa: edição de vídeo ou atendimento em meio período.","Contrate 1 freelancer para a tarefa que mais toma seu tempo.","Qual tarefa e quanto custa por mês?","",""),
+ M(11,"Painel semanal","Decisão por número, toda semana, em 15 minutos.","Gere o painel com a exportação de pedidos da Nuvemshop e faça a reunião semanal.","Cole as 3 decisões da semana.","Skills painel-de-vendas e reuniao-semanal",""),
+ M(11,"Plano do ano 2","Sair do CLT é decisão de número, não de vontade. Critério sugerido: 6 meses seguidos com lucro acima de 2 vezes o seu salário e 6 meses de reserva.","Escreva o plano do ano 2 e a regra objetiva para sair do CLT.","Cole a sua regra de saída.","Use o diretor-geral",""),
+];
+
+/* rampa mensal que soma R$ 1.000.000 em 12 meses */
+const RAMPA = [10000,20000,35000,50000,65000,80000,90000,100000,110000,120000,150000,170000];
+
+/* ============ MATERIAIS ============ */
+const MATERIAIS = [
+ {g:"Livros", t:"$100M Offers — Alex Hormozi", d:"Como montar uma oferta que vale mais que o preço. Base da fase 2.", l:"https://www.acquisition.com/books"},
+ {g:"Livros", t:"$100M Leads — Alex Hormozi", d:"Como gerar contatos: conteúdo, abordagem, anúncio e indicação. Base das fases 3, 6 e 7.", l:"https://www.acquisition.com/books"},
+ {g:"Livros", t:"Alcançando Excelência em Vendas (SPIN Selling) — Neil Rackham", d:"As perguntas que conduzem a venda. Base da fase 4.", l:""},
+ {g:"Livros", t:"As Armas da Persuasão — Robert Cialdini", d:"Prova social, autoridade, escassez real. Base da fase 5.", l:""},
+ {g:"Livros", t:"Receita Previsível — Aaron Ross", d:"Venda para empresas com processo. Base da fase 7.", l:""},
+ {g:"Livros", t:"Hábitos Atômicos — James Clear", d:"Como manter a rotina nos horários livres do CLT sem depender de motivação.", l:""},
+ {g:"Cursos gratuitos", t:"Meta Blueprint", d:"Cursos oficiais da Meta sobre anúncios, pixel e Advantage+. Há conteúdo em português.", l:"https://www.facebook.com/business/learn"},
+ {g:"Cursos gratuitos", t:"Sebrae: cursos online e UP Digital", d:"Marketing digital e IA para pequeno negócio. O UP Digital estava 100% subsidiado em 2026; confira as vagas.", l:"https://sebrae.com.br/sites/PortalSebrae/cursosonline"},
+ {g:"Cursos gratuitos", t:"Google Skillshop", d:"Google Ads e Merchant Center (fase 9).", l:"https://skillshop.withgoogle.com/"},
+ {g:"Cursos gratuitos", t:"HubSpot Academy", d:"Vendas e marketing de conteúdo, com certificado.", l:"https://academy.hubspot.com/courses"},
+ {g:"Plataformas", t:"Cursos da Nuvemshop (Ecommerce na Prática)", d:"Mais de 40 cursos dentro do painel nos planos pagos: tráfego, WhatsApp, SEO e marketplaces.", l:"https://www.nuvemshop.com.br/cursos"},
+ {g:"Plataformas", t:"Central do Vendedor TikTok Shop", d:"Regras atuais de vendedor e afiliados. Em 2026 o criador precisa de 1.000 seguidores para vender como afiliado.", l:"https://seller-br.tiktok.com/"},
+ {g:"Ferramentas de IA", t:"Estúdio IA deste app", d:"Roteiros, legendas, objeções e revisão de promessas com o contexto da Infinity Guard.", l:"#ia"},
+ {g:"Ferramentas de IA", t:"CapCut", d:"Edição no celular com legenda automática.", l:"https://www.capcut.com/"},
+ {g:"Ferramentas de IA", t:"Canva", d:"Carrosséis e artes com recursos de IA.", l:"https://www.canva.com/"},
+ {g:"Ferramentas de IA", t:"Meta Business Suite", d:"Agende os posts da semana no sábado e publique no automático.", l:"https://business.facebook.com/"},
+ {g:"Seus sistemas", t:"Plugin Infinity Guard (22 funcionários)", d:"Cada módulo da trilha diz qual skill ou funcionário usar. Ex.: \"Use o roteirista-de-reels: 3 roteiros sobre câmera invadida\".", l:""},
+];
+
+/* ============ ROTINA DIÁRIA ============ */
+const SLOTS_PADRAO = {
+  manha:{nome:"Antes do trabalho", ini:"06:00", fim:"06:30"},
+  almoco:{nome:"Almoço", ini:"12:10", fim:"12:40"},
+  noite:{nome:"Noite", ini:"20:00", fim:"21:00"},
+  sabado:{nome:"Bloco de sábado", ini:"09:00", fim:"12:00"},
+  domingo:{nome:"Revisão de domingo", ini:"19:00", fim:"19:30"},
+};
+function missoesDoDia(date, mod, faseIdx){
+  const wd = date.getDay(); // 0 dom
+  const L = [];
+  const add=(slot,k,t,d)=>L.push({id:slot+"-"+k,slot,t,d});
+  if (wd>=1 && wd<=5){
+    add("manha","wpp","Zerar o WhatsApp","Responda todas as conversas da noite e faça o follow-up dos orçamentos de ontem. Prova: quantas respondeu.");
+    add("manha","story","1 story de bastidor","Foto ou vídeo curto: embalagem, configuração, dica de segurança. Prova: o tema.");
+    const almoco = {
+      1:["Roteiro do dia com IA","Gere no Estúdio IA o roteiro do Reel da semana e salve. Prova: o gancho."],
+      2:["Publicar 1 Reel","Publique o Reel gravado no sábado com legenda e chamada para o WhatsApp. Prova: o link."],
+      3: faseIdx>=6 ? ["5 abordagens B2B ou parceiros","Mensagem curta para 5 alvos da sua lista. Prova: quantos responderam."] : ["Responder comentários e DMs","Todos os comentários e directs, chamando para o WhatsApp quem perguntar preço. Prova: quantos."],
+      4:["Publicar 1 Reel","Segundo Reel da semana. Prova: o link."],
+      5:["Post de prova social","Avaliação, depoimento ou suporte resolvido (com permissão). Prova: o link."],
+    }[wd];
+    add("almoco","a",almoco[0],almoco[1]);
+    if (wd<=4) add("noite","mod","Módulo da semana: "+mod.t,"Leia a aula na Trilha e avance a tarefa. Prova: o que você fez hoje nela.");
+    else add("noite","leitura","Leitura de 20 páginas","Livro da fase (veja Materiais). Prova: 1 ideia que vai aplicar.");
+    add("noite","numeros","Registrar os números do dia","Posts, conversas, orçamentos, vendas e faturamento no Placar. Prova: o faturamento do dia.");
+  } else if (wd===6){
+    add("sabado","gravar","Gravar os Reels da semana","Grave 3 a 5 vídeos de 30 a 45 s com os roteiros do Estúdio IA e agende no Meta Business Suite. Prova: quantos gravou.");
+    add("sabado","mod","Fechar a tarefa do módulo","Termine e entregue a prova do módulo \""+mod.t+"\" na Trilha. Prova: entregue ou o que falta.");
+    if (faseIdx>=6) add("sabado","b2b","Visitas ou ligações B2B","2 visitas ou 5 ligações para empresas da lista. Prova: com quem falou.");
+  } else {
+    add("domingo","rev","Revisão semanal (15 min)","Olhe o Placar: execução da semana, faturamento contra a meta e o que vai mudar. Prova: 1 decisão para a semana.");
+  }
+  return L;
+}
+
+/* ============ UTIL ============ */
+const $ = s=>document.querySelector(s);
+const esc = s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const brl = v=>"R$ "+Number(v||0).toLocaleString("pt-BR",{minimumFractionDigits:0,maximumFractionDigits:0});
+const brl2 = v=>"R$ "+Number(v||0).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2});
+const pad = n=>String(n).padStart(2,"0");
+const ymd = d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const parseYmd = s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
+const daysBetween=(a,b)=>Math.round((parseYmd(ymd(b))-parseYmd(ymd(a)))/864e5);
+const hm = s=>{const [h,m]=s.split(":").map(Number);return h*60+m};
+const nowMin = d=>d.getHours()*60+d.getMinutes();
+const DIAS=["domingo","segunda","terça","quarta","quinta","sexta","sábado"];
+function slotKeyFor(date){const wd=date.getDay();return wd===0?["domingo"]:wd===6?["sabado"]:["manha","almoco","noite"]}
+function toast(msg){document.querySelectorAll(".toast").forEach(x=>x.remove());const t=document.createElement("div");t.className="toast";t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+function lsGet(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+
+/* ============ ESTADO E ARMAZENAMENTO ============ */
+const HOJE0 = new Date();
+let S = Object.assign({
+  v:1, inicio: ymd(HOJE0), criado: HOJE0.getTime(), meta:1000000, ticket:620, margem:30, conv:15,
+  slots: JSON.parse(JSON.stringify(SLOTS_PADRAO)),
+  contrato:{assinado:false, compromisso:"", multa:"", data:""},
+  modulos:{}, ideias:[], som:true
+}, lsGet("rdm-estado")||{});
+let DIAS_DB = lsGet("rdm-dias")||{};   // {ymd:{missoes:{id:{prova,hora}}, log:{}, motivos:{}}}
+let backend = "local"; let dbBase=null; let sampleFn=null; let downloadsCap=null;
+const saveQ = {};
+function persistEstado(){ lsSet("rdm-estado",S); queue("estado",()=>dbBase&&dbBase.set(JSON.parse(JSON.stringify(S)))) }
+function persistDia(k){ lsSet("rdm-dias",DIAS_DB); queue("dia-"+k,()=>dbBase&&dbBase.collection("dias").doc(k).set(JSON.parse(JSON.stringify(DIAS_DB[k])))) }
+function queue(key,fn){ clearTimeout(saveQ[key]?.t); const q=saveQ[key]||(saveQ[key]={p:Promise.resolve()}); q.t=setTimeout(()=>{q.p=q.p.then(fn).catch(e=>{ if(e&&e.code==="quota_exceeded") toast("Espaço do app cheio. Os dados ficaram salvos neste aparelho."); })},700) }
+function dia(k){ return DIAS_DB[k] || (DIAS_DB[k]={data:k,missoes:{},log:{},motivos:{}}) }
+
+async function conectar(){
+  if(!window.claude||!window.claude.use) return;
+  try{
+    const [db,user] = await Promise.all([claude.use("db"),claude.use("user")]);
+    const uid = user ? await user.id() : null;
+    if(db && uid){
+      dbBase = db.doc("data/users/"+uid+"/estado");
+      const [e, ds] = await Promise.all([dbBase.get(), dbBase.collection("dias").get()]);
+      if(e.exists){ S = Object.assign(S, e.data()); S.slots = Object.assign(JSON.parse(JSON.stringify(SLOTS_PADRAO)), S.slots||{}); }
+      else { await dbBase.set(JSON.parse(JSON.stringify(S))); }
+      const remoto = {}; ds.docs.forEach(d=>{ remoto[d.id]=JSON.parse(JSON.stringify(d.data())) });
+      for(const k in DIAS_DB){ if(!remoto[k]) { remoto[k]=DIAS_DB[k]; persistDiaLater.push(k) } }
+      DIAS_DB = remoto; lsSet("rdm-estado",S); lsSet("rdm-dias",DIAS_DB);
+      persistDiaLater.forEach(persistDia);
+      backend="nuvem"; render();
+    }
+  }catch(e){ backend="local"; }
+  claude.use("sample").then(s=>{sampleFn=s; if(view==="ia") render()});
+  claude.use("downloads").then(d=>{downloadsCap=d; if(view==="agenda") render()});
+}
+const persistDiaLater=[];
+
+/* ============ CÁLCULOS ============ */
+function moduloAtualIdx(){ for(let i=0;i<MODULOS.length;i++) if(!S.modulos[i]) return i; return MODULOS.length-1 }
+function semanaDoPlano(){ return Math.max(0,Math.floor(daysBetween(parseYmd(S.inicio),new Date())/7)) }
+function mesDoPlano(dStr){ const a=parseYmd(S.inicio), d=parseYmd(dStr); return (d.getFullYear()-a.getFullYear())*12+(d.getMonth()-a.getMonth())-(d.getDate()<a.getDate()?1:0) }
+function fatTotal(){ let t=0; for(const k in DIAS_DB) t+=Number(DIAS_DB[k].log?.faturamento||0); return t }
+function fatMes(m){ let t=0; for(const k in DIAS_DB) if(mesDoPlano(k)===m) t+=Number(DIAS_DB[k].log?.faturamento||0); return t }
+function metaMes(m){ return Math.round(RAMPA[Math.min(11,Math.max(0,m))]*S.meta/1000000) }
+function slotStatus(date,slot){ // antes | agora | depois
+  const s=S.slots[slot]; const today=ymd(date)===ymd(new Date());
+  if(!today) return ymd(date)<ymd(new Date())?"depois":"antes";
+  const n=nowMin(new Date()); if(n<hm(s.ini)) return "antes"; if(n<=hm(s.fim)) return "agora"; return "depois";
+}
+function missoesDe(date){ const mi=moduloAtualIdx(); return missoesDoDia(date,MODULOS[mi],MODULOS[mi].f) }
+function conta(d,m){ // missão de um turno que já tinha acabado quando o app foi criado não conta
+  if(ymd(d)!==S.inicio||!S.criado) return true; const c=new Date(S.criado); if(ymd(c)!==S.inicio) return true;
+  return hm(S.slots[m.slot].fim) > nowMin(c);
+}
+function execucao(diasAtras){ // % feitas em dias passados/presentes já vencidos
+  let total=0, feitas=0; const hoje=new Date(); const ini=parseYmd(S.inicio);
+  for(let i=0;i<diasAtras;i++){
+    const d=new Date(hoje); d.setDate(hoje.getDate()-i); if(d<ini) break;
+    const k=ymd(d); missoesDe(d).forEach(m=>{
+      if(!conta(d,m)) return;
+      const done=!!DIAS_DB[k]?.missoes?.[m.id]; const vencida = slotStatus(d,m.slot)==="depois";
+      if(done||vencida){ total++; if(done) feitas++; }
+    });
+  }
+  return {total,feitas,pct: total?Math.round(feitas/total*100):null};
+}
+function dividas(){ // missões vencidas sem prova nem motivo nos últimos 7 dias
+  const out=[]; const hoje=new Date(); const ini=parseYmd(S.inicio);
+  for(let i=0;i<7;i++){ const d=new Date(hoje); d.setDate(hoje.getDate()-i); if(d<ini) break; const k=ymd(d);
+    missoesDe(d).forEach(m=>{ if(conta(d,m) && slotStatus(d,m.slot)==="depois" && !DIAS_DB[k]?.missoes?.[m.id] && !DIAS_DB[k]?.motivos?.[m.id]) out.push({k,d,m}) }) }
+  return out;
+}
+function sequencia(){ // dias seguidos com 80% ou mais das missões feitas (hoje conta só se já bateu)
+  const okDia=d=>{const k=ymd(d);const ms=missoesDe(d).filter(m=>conta(d,m));return ms.length>0&&ms.filter(m=>DIAS_DB[k]?.missoes?.[m.id]).length/ms.length>=0.8};
+  const hoje=new Date(), ini=parseYmd(S.inicio); let n=okDia(hoje)?1:0;
+  for(let i=1;i<400;i++){ const d=new Date(hoje); d.setDate(hoje.getDate()-i); if(d<ini) break; if(okDia(d)) n++; else break }
+  return n }
+
+/* ============ VIEWS ============ */
+let view = (location.hash||"#hoje").slice(1); if(!["hoje","trilha","placar","ia","agenda","biblioteca"].includes(view)) view="hoje";
+document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>{view=b.dataset.v;render();window.scrollTo(0,0)});
+
+function renderStatus(){
+  const e7=execucao(7), dv=dividas().length, sq=sequencia();
+  const pct=e7.pct;
+  $("#status").innerHTML =
+    `<span class="pill ${pct===null?"":pct>=80?"ok":pct>=50?"warn":"bad"}" title="Missões cumpridas nos últimos 7 dias">Execução 7d <b class="num">${pct===null?"–":pct+"%"}</b></span>`+
+    (dv?`<span class="pill bad">${dv} em atraso</span>`:`<span class="pill ok">em dia</span>`)+
+    `<span class="pill acc">${sq} ${sq===1?"dia":"dias"} seguidos</span>`;
+  document.querySelectorAll("#tabs button").forEach(b=>b.setAttribute("aria-current",b.dataset.v===view?"page":"false"));
+}
+
+function viewHoje(){
+  const agora=new Date(), k=ymd(agora), ms=missoesDe(agora), d=dia(k);
+  const mi=moduloAtualIdx(), mod=MODULOS[mi], sem=semanaDoPlano();
+  const dv=dividas();
+  const slots=slotKeyFor(agora);
+  const atual=slots.find(s=>slotStatus(agora,s)==="agora");
+  const prox=slots.find(s=>slotStatus(agora,s)==="antes");
+  const m=mesDoPlano(k), fm=fatMes(m), mm=metaMes(m);
+  const diasMes=30, diaNoMes=Math.min(diasMes,Math.max(1,daysBetween(addMonths(parseYmd(S.inicio),m),agora)+1));
+  const ritmo=mm*diaNoMes/diasMes;
+  const falta=Math.max(0,mm-fm), restam=Math.max(1,diasMes-diaNoMes+1);
+  const porDia=falta/restam, vendasDia=porDia/S.ticket, conversasDia=vendasDia/(S.conv/100);
+  let h="";
+  if(!S.contrato.assinado) h+=`<div class="card stack" style="border:2px solid var(--accent)">
+    <span class="eyebrow">Antes de começar</span><h2>Assine o seu contrato</h2>
+    <p>Este app cobra você todos os dias. Para a cobrança valer, escreva o seu compromisso e a consequência se a semana fechar abaixo de 80% de execução.</p>
+    <button class="btn primary" onclick="abrirContrato()">Escrever e assinar</button></div>`;
+  if(dv.length) h+=`<div class="debt"><h3>Cobrança: ${dv.length} ${dv.length===1?"missão vencida":"missões vencidas"} sem prova</h3>
+    <p>Missão vencida só sai daqui de dois jeitos: você faz agora e coloca a prova, ou registra o motivo verdadeiro. O motivo fica no histórico e entra na revisão de domingo.</p>
+    <div class="stack">${dv.slice(0,6).map(x=>`<div class="row" style="justify-content:space-between"><span><b>${esc(x.m.t)}</b> <span class="muted">· ${DIAS[x.d.getDay()]} ${x.d.getDate()}/${x.d.getMonth()+1}, ${esc(S.slots[x.m.slot].nome.toLowerCase())}</span></span>
+      <span class="row"><button class="btn sm primary" onclick="provar('${x.k}','${x.m.id}')">Fiz, colocar prova</button><button class="btn sm ghost" onclick="motivo('${x.k}','${x.m.id}')">Registrar motivo</button></span></div>`).join("")}</div>
+    ${S.contrato.multa?`<p class="muted">Lembrete do seu contrato: <b>${esc(S.contrato.multa)}</b> se a semana fechar abaixo de 80%.</p>`:""}</div>`;
+
+  // bloco do turno
+  const slotHead = atual? `<span class="tag now pulse">agora</span><h3>${esc(S.slots[atual].nome)}</h3><span class="clock num">${S.slots[atual].ini}–${S.slots[atual].fim}</span>`
+    : prox? `<span class="tag">próximo</span><h3>${esc(S.slots[prox].nome)}</h3><span class="clock num">${S.slots[prox].ini}</span>`
+    : `<span class="tag">dia encerrado</span><h3>Amanhã: ${DIAS[(agora.getDay()+1)%7]}</h3>`;
+  h+=`<div class="shift"><div class="shift-head">${slotHead}<span style="margin-left:auto" class="muted">${DIAS[agora.getDay()]}, ${agora.getDate()}/${agora.getMonth()+1} · semana ${sem+1} do plano</span></div><div class="shift-body">`;
+  slots.forEach(s=>{
+    const list=ms.filter(x=>x.slot===s); if(!list.length) return;
+    const st=slotStatus(agora,s);
+    h+=`<div class="row" style="margin-top:10px"><span class="eyebrow">${esc(S.slots[s].nome)} · <span class="num">${S.slots[s].ini}–${S.slots[s].fim}</span></span>${st==="agora"?`<span class="tag now">agora</span>`:""}</div>`;
+    list.forEach(x=>{ const done=d.missoes[x.id]; const late=!done&&st==="depois"&&conta(agora,x); const mot=d.motivos?.[x.id];
+      h+=`<div class="mission ${done?"done":""} ${late?"late":""}"><span class="box">${done?`<svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10" stroke="#fff" stroke-width="3" fill="none"/></svg>`:""}</span>
+      <div class="row"><span class="t">${esc(x.t)}</span>${late&&!mot?`<span class="tag late">vencida</span>`:""}</div>
+      <span class="d">${esc(x.d)}</span>
+      ${done?`<span class="proof"><b>Prova:</b> ${esc(done.prova)}</span>`:mot?`<span class="proof" style="background:var(--signal-soft)"><b>Motivo:</b> ${esc(mot)}</span>`:`<span class="act"><button class="btn sm primary" onclick="provar('${k}','${x.id}')">Concluir com prova</button>${x.id.endsWith("numeros")?`<button class="btn sm" onclick="view='placar';render()">Abrir Placar</button>`:""}${x.id.endsWith("mod")?`<button class="btn sm" onclick="abrirModulo(${mi})">Abrir aula</button>`:""}${x.id.includes("almoco-a")&&/IA/.test(x.t)?`<button class="btn sm" onclick="view='ia';render()">Estúdio IA</button>`:""}</span>`}
+      </div>`;});
+  });
+  h+=`</div></div>`;
+
+  // meta do dia
+  h+=`<div class="grid2">
+   <div class="card stack"><span class="eyebrow">Para bater a meta deste mês</span>
+     <div class="kpis" style="grid-template-columns:repeat(3,1fr)">
+       <div><div class="v num" style="font-size:1.25rem">${brl(porDia)}</div><div class="s muted">por dia</div></div>
+       <div><div class="v num" style="font-size:1.25rem">${vendasDia.toFixed(1).replace(".",",")}</div><div class="s muted">vendas/dia</div></div>
+       <div><div class="v num" style="font-size:1.25rem">${Math.ceil(conversasDia)}</div><div class="s muted">conversas/dia</div></div>
+     </div>
+     <div class="meter" aria-label="Faturamento do mês"><i style="width:${Math.min(100,fm/mm*100)}%"></i><b style="left:${Math.min(100,ritmo/mm*100)}%"></b></div>
+     <p class="muted" style="font-size:.85rem">Mês ${m+1}: <b class="num">${brl(fm)}</b> de <b class="num">${brl(mm)}</b>. O traço laranja é onde você deveria estar hoje. Conta com ticket de ${brl(S.ticket)} e ${S.conv}% das conversas virando venda.</p>
+   </div>
+   <div class="card stack"><span class="eyebrow">Módulo da semana · fase ${mod.f+1}: ${esc(FASES[mod.f].n)}</span>
+     <h3>${esc(mod.t)}</h3><p class="muted">${esc(mod.tarefa)}</p>
+     ${mi<sem?`<p><span class="tag late">atrasado ${sem-mi} ${sem-mi===1?"semana":"semanas"}</span> O plano previa o módulo ${sem+1}. Entregue este para destravar o próximo.</p>`:""}
+     <div><button class="btn primary" onclick="abrirModulo(${mi})">Abrir aula e entregar</button></div></div>
+  </div>`;
+  const alerta=alertaSazonal(agora); if(alerta) h+=`<div class="card" style="border-color:var(--signal)"><span class="eyebrow" style="color:var(--signal)">Data forte chegando</span><p>${alerta}</p></div>`;
+  return h;
+}
+function addMonths(d,n){const x=new Date(d);x.setMonth(x.getMonth()+n);return x}
+function alertaSazonal(d){
+  const y=d.getFullYear(); const datas=[[new Date(y,10,11),"11.11"],[blackFriday(y),"Black Friday"],[new Date(y,11,25),"Natal"],[new Date(y,1,14),"Volta das férias"],[diaDosPais(y),"Dia dos Pais"]];
+  for(const [dt,n] of datas){ const dd=daysBetween(d,dt); if(dd>=0&&dd<=30) return `<b>${n}</b> em ${dd} ${dd===1?"dia":"dias"} (${dt.getDate()}/${dt.getMonth()+1}). Rode a skill campanha-sazonal agora e prepare kit, preço e mensagens. Quem planeja com antecedência vende mais sem queimar margem.` }
+  return "";
+}
+function blackFriday(y){const d=new Date(y,10,1);let c=0;while(true){if(d.getDay()===4){c++;if(c===4){d.setDate(d.getDate()+1);return d}}d.setDate(d.getDate()+1)}}
+function diaDosPais(y){const d=new Date(y,7,1);let c=0;while(true){if(d.getDay()===0){c++;if(c===2)return d}d.setDate(d.getDate()+1)}}
+
+function viewTrilha(){
+  const mi=moduloAtualIdx(), sem=semanaDoPlano();
+  const feitos=Object.keys(S.modulos).length;
+  let h=`<div class="stack"><h2>Trilha de 48 semanas</h2><p class="muted">Um módulo por semana: aula curta, tarefa prática e prova. O próximo só abre quando você entrega a prova do atual. Você entregou <b>${feitos}</b> de 48.</p>
+  <div class="meter"><i style="width:${feitos/48*100}%"></i><b style="left:${Math.min(100,(sem+1)/48*100)}%"></b></div></div>`;
+  FASES.forEach((f,fi)=>{
+    h+=`<div class="phase"><div class="phase-h"><span class="eyebrow">Fase ${fi+1} · semanas ${fi*4+1}–${fi*4+4}</span><h3>${esc(f.n)}</h3></div><p class="muted" style="font-size:.9rem">${esc(f.meta)}</p><div class="mods">`;
+    MODULOS.forEach((m,i)=>{ if(m.f!==fi) return; const done=!!S.modulos[i], locked=i>mi, cur=i===mi;
+      h+=`<button class="mod ${locked?"locked":""} ${cur?"current":""}" onclick="abrirModulo(${i})" ${locked?'aria-disabled="true"':""}><span class="wk">S${pad(i+1)}</span><span><b>${esc(m.t)}</b></span><span>${done?`<span class="pill ok">entregue</span>`:cur?`<span class="pill acc">agora</span>`:locked?`<span class="pill">bloqueado</span>`:""}</span></button>`});
+    h+=`</div></div>`;
+  });
+  return h;
+}
+
+function viewPlacar(){
+  const agora=new Date(), k=ymd(agora), d=dia(k), L=d.log||{};
+  const tot=fatTotal(), m=mesDoPlano(k);
+  let vendas=0,conv=0,orc=0,posts=0; for(const x in DIAS_DB){const l=DIAS_DB[x].log||{};vendas+=+l.vendas||0;conv+=+l.conversas||0;orc+=+l.orcamentos||0;posts+=+l.posts||0}
+  const taxa=conv?vendas/conv*100:null, ticket=vendas?tot/vendas:null, fech=orc?vendas/orc*100:null;
+  let h=`<div class="stack"><h2>Placar</h2><p class="muted">Anote os números do dia todas as noites. É daqui que sai a cobrança e o ajuste da meta.</p></div>
+  <div class="card stack"><span class="eyebrow">Números de hoje · ${agora.getDate()}/${agora.getMonth()+1}</span>
+   <form class="fields" id="flog" onsubmit="salvarLog(event)">
+    ${[["posts","Posts e Reels"],["conversas","Conversas novas"],["orcamentos","Orçamentos"],["vendas","Vendas"],["faturamento","Faturamento (R$)"]].map(([id,l])=>`<label class="f">${l}<input id="log-${id}" type="number" min="0" step="${id==="faturamento"?"0.01":"1"}" inputmode="decimal" value="${L[id]??""}"></label>`).join("")}
+    <div style="display:flex;align-items:flex-end"><button class="btn primary" type="submit">Salvar o dia</button></div>
+   </form></div>
+  <div class="kpis">
+   <div class="kpi"><span class="eyebrow">Acumulado</span><span class="v">${brl(tot)}</span><span class="s">de ${brl(S.meta)} · ${(tot/S.meta*100).toFixed(1).replace(".",",")}%</span></div>
+   <div class="kpi"><span class="eyebrow">Mês ${m+1}</span><span class="v">${brl(fatMes(m))}</span><span class="s">meta ${brl(metaMes(m))}</span></div>
+   <div class="kpi"><span class="eyebrow">Conversa → venda</span><span class="v">${taxa===null?"–":taxa.toFixed(1).replace(".",",")+"%"}</span><span class="s">sua meta: ${S.conv}% · mercado ~9%</span></div>
+   <div class="kpi"><span class="eyebrow">Orçamento → venda</span><span class="v">${fech===null?"–":fech.toFixed(0)+"%"}</span><span class="s">alvo de excelência: 30–50%</span></div>
+   <div class="kpi"><span class="eyebrow">Ticket médio real</span><span class="v">${ticket===null?"–":brl(ticket)}</span><span class="s">usado na conta: ${brl(S.ticket)}</span></div>
+   <div class="kpi"><span class="eyebrow">Posts publicados</span><span class="v">${posts}</span><span class="s">${vendas} vendas no total</span></div>
+  </div>`;
+  // gráfico 14 dias
+  const W=640,H=200,P=34, n=14; const pts=[]; for(let i=n-1;i>=0;i--){const x=new Date(agora);x.setDate(agora.getDate()-i);pts.push({d:x,v:+(DIAS_DB[ymd(x)]?.log?.faturamento||0)})}
+  const alvo=metaMes(m)/30; const max=Math.max(alvo*1.2,...pts.map(p=>p.v),1); const bw=(W-P-10)/n;
+  const y=v=>H-24-(v/max)*(H-40);
+  let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Faturamento dos últimos 14 dias contra a meta diária">`;
+  [0,.5,1].forEach(t=>{const v=max*t;svg+=`<line x1="${P}" x2="${W-6}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${P-4}" y="${y(v)+4}" text-anchor="end">${v>=1000?Math.round(v/1000)+"k":Math.round(v)}</text>`});
+  pts.forEach((p,i)=>{const x=P+i*bw+3;svg+=`<rect x="${x}" y="${y(p.v)}" width="${bw-6}" height="${Math.max(0,H-24-y(p.v))}" rx="3" fill="${p.v>=alvo?"var(--ok)":"var(--accent)"}"/>${i%2===(n-1)%2?`<text x="${x+(bw-6)/2}" y="${H-8}" text-anchor="middle">${p.d.getDate()}/${p.d.getMonth()+1}</text>`:""}`});
+  svg+=`<line x1="${P}" x2="${W-6}" y1="${y(alvo)}" y2="${y(alvo)}" stroke="var(--signal)" stroke-width="2" stroke-dasharray="5 4"/><text x="${W-8}" y="${y(alvo)-6}" text-anchor="end" style="fill:var(--signal)">meta/dia ${brl(alvo)}</text></svg>`;
+  h+=`<div class="card stack"><span class="eyebrow">Faturamento dos últimos 14 dias</span><div class="chart">${svg}</div></div>`;
+  // rampa
+  h+=`<div class="card stack"><span class="eyebrow">Rampa até ${brl(S.meta)} em 12 meses</span><p class="muted" style="font-size:.88rem">Ninguém começa vendendo R$ 83 mil por mês. A meta sobe mês a mês, conforme cada fase entra no ar. Ajuste a meta anual em Agenda → Configurações.</p>
+   <div class="scroll"><table class="t"><thead><tr><th>Mês</th><th>Fase principal</th><th class="n">Meta</th><th class="n">Feito</th><th class="n">Vendas/dia*</th></tr></thead><tbody>
+   ${RAMPA.map((_,i)=>{const mm=metaMes(i),f=fatMes(i);return `<tr${i===m?' style="background:var(--accent-soft)"':""}><td>${i+1}</td><td>${esc(FASES[i].n)}</td><td class="n">${brl(mm)}</td><td class="n" style="color:${f>=mm&&f>0?"var(--ok)":"inherit"}">${brl(f)}</td><td class="n">${(mm/30/S.ticket).toFixed(1).replace(".",",")}</td></tr>`}).join("")}
+   </tbody></table></div><p class="muted" style="font-size:.8rem">*com ticket de ${brl(S.ticket)}. Vender para empresas (fase 7) sobe o ticket e reduz o número de vendas por dia.</p></div>`;
+  return h;
+}
+
+const IA_MODOS = {
+  roteiro:{n:"Roteiro de Reel", ph:"Tema. Ex.: sua câmera ainda usa a senha admin?", p:t=>`Escreva 1 roteiro de Reel de 30 a 45 segundos para o Instagram da marca abaixo. Formato: GANCHO (até 3 s, falado e na tela) · FALA (frases curtas, numeradas por cena) · TEXTO NA TELA · LEGENDA (até 600 caracteres, termina com chamada para o WhatsApp) · 5 HASHTAGS. Tema: ${t}`},
+  ganchos:{n:"10 ganchos", ph:"Tema ou dor. Ex.: câmera offline", p:t=>`Escreva 10 ganchos de até 12 palavras para Reels, 2 de cada formato: a tese da marca, a dor de quem assiste, passo a passo, o que eu nunca faço, "se você é...". Numere e indique o formato. Tema: ${t}`},
+  legenda:{n:"Legenda", ph:"Do que é o post", p:t=>`Escreva 2 opções de legenda para Instagram (até 500 caracteres cada), com primeira linha forte, uma prova concreta e chamada para o WhatsApp. Post: ${t}`},
+  objecao:{n:"Objeção no WhatsApp", ph:"O que o cliente disse. Ex.: tá caro, na Shopee é metade", p:t=>`Um cliente disse no WhatsApp: "${t}". Escreva 3 respostas curtas (até 3 linhas cada, tom humano, sem pressão), cada uma terminando com uma pergunta que avança a venda. Use só os preços do catálogo.`},
+  carrossel:{n:"Carrossel", ph:"Tema. Ex.: qual kit para qual casa", p:t=>`Crie um carrossel de 7 slides para Instagram: título de cada slide (até 8 palavras) e texto de apoio (até 25 palavras). Slide 1 é gancho, slide 7 é chamada para o WhatsApp. Tema: ${t}`},
+  semana:{n:"Ideias da semana", ph:"Opcional: foco da semana", p:t=>`Monte o plano de conteúdo de 7 dias (segunda a domingo): para cada dia, formato (Reel, carrossel, story), tema, gancho e objetivo (atrair, ensinar ou vender). Equilibre 3 de atrair, 2 de ensinar e 2 de vender. Foco: ${t||"temas quentes de segurança residencial"}`},
+  revisar:{n:"Revisar promessa", ph:"Cole o texto que vai publicar", p:t=>`Revise o texto abaixo contra as regras da marca. Liste cada problema (trecho, por que é problema, como reescrever) e entregue a versão corrigida no fim. Se não houver problema, diga "Aprovado". Texto:\n${t}`},
+};
+let iaModo="roteiro", iaOut="", iaBusy=false, iaCtl=null;
+function viewIA(){
+  const m=IA_MODOS[iaModo];
+  let h=`<div class="stack"><h2>Estúdio IA</h2><p class="muted">A IA já conhece a Infinity Guard, o catálogo e as regras do revisor de promessas. Você só diz o tema. Revise sempre antes de publicar: quem assina é você.</p></div>
+  <div class="chips" role="group" aria-label="O que criar">${Object.entries(IA_MODOS).map(([k,v])=>`<button class="chip" aria-pressed="${k===iaModo}" onclick="iaModo='${k}';iaOut='';render()">${v.n}</button>`).join("")}</div>
+  <div class="card stack"><label class="f" for="ia-in">${esc(m.n)}</label><textarea id="ia-in" placeholder="${esc(m.ph)}"></textarea>
+   <div class="row">${sampleFn?`<button class="btn primary" id="ia-go" onclick="gerarIA()" ${iaBusy?"disabled":""}>${iaBusy?"Gerando…":"Gerar"}</button>${iaBusy?`<button class="btn" onclick="iaCtl&&iaCtl.abort()">Parar</button>`:""}`:`<span class="muted" style="font-size:.88rem">A IA embutida não está disponível nesta visualização. Use "Copiar prompt" e cole no Claude.</span>`}
+   <button class="btn" onclick="copiarPrompt()">Copiar prompt</button></div>
+   <div class="out" id="ia-out" aria-live="polite">${iaOut?esc(iaOut):`<span class="muted">O resultado aparece aqui.</span>`}</div>
+   ${iaOut&&!iaBusy?`<div class="row"><button class="btn sm" onclick="copiar(iaOut)">Copiar resultado</button><button class="btn sm" onclick="salvarIdeia()">Guardar nas ideias</button></div>`:""}
+  </div>`;
+  if(S.ideias.length) h+=`<div class="stack"><h3>Ideias guardadas</h3>${S.ideias.slice().reverse().map((x,i)=>`<details class="card"><summary><b>${esc(x.modo)}</b> · ${esc(x.tema).slice(0,60)} <span class="muted">· ${esc(x.data)}</span></summary><div class="out" style="margin-top:10px">${esc(x.texto)}</div><div class="row" style="margin-top:8px"><button class="btn sm" onclick="copiar(S.ideias[${S.ideias.length-1-i}].texto)">Copiar</button><button class="btn sm ghost" onclick="S.ideias.splice(${S.ideias.length-1-i},1);persistEstado();render()">Apagar</button></div></details>`).join("")}</div>`;
+  return h;
+}
+function promptCompleto(){ const t=($("#ia-in")?.value||"").trim(); return `Você é o estrategista de marketing e vendas da marca abaixo. Escreva em português do Brasil, frases curtas, sem emoji em excesso.\n\n${CONTEXTO}\n\nPedido: ${IA_MODOS[iaModo].p(t)}` }
+async function gerarIA(){
+  const t=($("#ia-in")?.value||"").trim(); if(!t && iaModo!=="semana"){toast("Escreva o tema primeiro.");return}
+  iaBusy=true; iaOut=""; iaCtl=new AbortController(); const keep=t; render(); $("#ia-in").value=keep;
+  try{ const r=await sampleFn(promptCompleto(),{signal:iaCtl.signal,cache:false,onText:({text})=>{iaOut=text;const o=$("#ia-out");if(o)o.textContent=text}}); iaOut=r.text; }
+  catch(e){ iaOut = e?.text || ({not_granted:"Você não liberou a IA para este app. Libere no menu de permissões do artifact ou use Copiar prompt.",rate_limited:"Muitos pedidos seguidos. Espere um minuto e tente de novo.",cancelled:""}[e?.code] ?? "Não consegui gerar agora. Tente de novo em instantes ou use Copiar prompt."); }
+  iaBusy=false; iaTema=keep; render(); const i=$("#ia-in"); if(i) i.value=keep;
+}
+let iaTema="";
+function salvarIdeia(){ S.ideias.push({modo:IA_MODOS[iaModo].n,tema:iaTema||"(sem tema)",texto:iaOut.slice(0,5000),data:ymd(new Date())}); while(S.ideias.length>30)S.ideias.shift(); persistEstado(); toast("Guardado nas ideias."); render() }
+function copiarPrompt(){ copiar(promptCompleto()) }
+function copiar(t){ try{ navigator.clipboard.writeText(t).then(()=>toast("Copiado."),()=>mostrarTexto(t)) }catch(e){ mostrarTexto(t) } }
+function mostrarTexto(t){ sheet(`<h3>Selecione e copie</h3><textarea id="cp" style="min-height:220px">${esc(t)}</textarea><button class="btn" onclick="fecharSheet()">Fechar</button>`); setTimeout(()=>{$("#cp")?.select()},50) }
+
+function viewAgenda(){
+  const ordem=["manha","almoco","noite","sabado","domingo"];
+  let h=`<div class="stack"><h2>Agenda e alertas</h2><p class="muted">Os horários livres do seu CLT viram turnos fixos. Com o app aberto, ele toca e mostra a missão na hora. Para ser avisado com o app fechado, coloque a agenda no calendário do celular.</p></div>
+  <div class="card stack"><span class="eyebrow">Seus turnos</span>
+   ${ordem.map(s=>`<div class="fields" style="align-items:end"><label class="f">${esc(S.slots[s].nome)} <span class="muted" style="font-weight:400">${s==="sabado"?"sábado":s==="domingo"?"domingo":"segunda a sexta"}</span><input id="sl-${s}-ini" type="time" value="${S.slots[s].ini}"></label><label class="f">até<input id="sl-${s}-fim" type="time" value="${S.slots[s].fim}"></label></div>`).join("")}
+   <div class="row"><button class="btn primary" onclick="salvarSlots()">Salvar horários</button></div></div>
+  <div class="card stack"><span class="eyebrow">Avisos no celular com o app fechado</span>
+   <p>Baixe a agenda e abra o arquivo no celular. Ela cria os turnos no seu calendário (Google Agenda ou Calendário do iPhone) com alarme 5 minutos antes e na hora de começar.</p>
+   <div class="row">${downloadsCap?`<button class="btn primary" onclick="baixarICS()">Baixar agenda (.ics)</button>`:""}<button class="btn" onclick="mostrarTexto(gerarICS())">Ver o arquivo para copiar</button></div>
+   <p class="muted" style="font-size:.85rem">Além disso, o Claude manda uma cobrança no seu celular de manhã e à noite, lendo o que você entregou aqui. Para receber, deixe as notificações do app Claude ligadas.</p></div>
+  <div class="card stack"><span class="eyebrow">Alerta com o app aberto</span>
+   <label class="row" style="gap:8px"><input type="checkbox" id="som" style="width:auto" ${S.som?"checked":""} onchange="S.som=this.checked;persistEstado()"> Tocar som no começo de cada turno</label>
+   <div class="row"><button class="btn" onclick="testarAlarme()">Testar alerta agora</button></div></div>
+  <div class="card stack"><span class="eyebrow">Configurações da meta</span>
+   <div class="fields">
+    <label class="f">Meta anual (R$)<input id="cf-meta" type="number" min="10000" step="1000" value="${S.meta}"></label>
+    <label class="f">Ticket médio (R$)<input id="cf-ticket" type="number" min="50" step="1" value="${S.ticket}"></label>
+    <label class="f">Margem média (%)<input id="cf-margem" type="number" min="1" max="90" value="${S.margem}"></label>
+    <label class="f">Conversa → venda (%)<input id="cf-conv" type="number" min="1" max="80" value="${S.conv}"></label>
+    <label class="f">Início do plano<input id="cf-inicio" type="date" value="${S.inicio}"></label>
+   </div>
+   <p class="muted" style="font-size:.85rem">Referência de mercado: atendimento por WhatsApp no Brasil converte perto de 9% das conversas recebidas (OmniChat, 2026). 15% já exige atendimento muito bom. Lucro estimado no ano com a sua margem: <b class="num">${brl(S.meta*S.margem/100)}</b>.</p>
+   <div class="row"><button class="btn primary" onclick="salvarCfg()">Salvar</button><button class="btn ghost" onclick="abrirContrato()">${S.contrato.assinado?"Ver contrato":"Assinar contrato"}</button></div></div>
+  <p class="muted" style="font-size:.82rem">Seus dados ficam ${backend==="nuvem"?"na sua área privada deste app, que só você acessa, e sincronizam entre os seus aparelhos":"neste aparelho (a sincronização entre aparelhos liga quando o app abre pelo link do Claude com você conectado)"}.</p>`;
+  return h;
+}
+function viewBiblioteca(){
+  const grupos=[...new Set(MATERIAIS.map(m=>m.g))];
+  return `<div class="stack"><h2>Materiais</h2><p class="muted">Selecionados para cada fase da trilha. Comece pelo livro da fase em que você está: 20 páginas por noite na sexta, o resto vira tarefa na Trilha. Cursos gratuitos mudam de vagas e de preço: confira na página antes de se inscrever.</p></div>`+
+  grupos.map(g=>`<div class="stack"><h3>${esc(g)}</h3><div class="lib">${MATERIAIS.filter(m=>m.g===g).map(m=>`<div class="card"><b>${esc(m.t)}</b><span class="muted" style="font-size:.9rem">${esc(m.d)}</span>${m.l?(m.l.startsWith("#")?`<button class="btn sm" style="align-self:flex-start" onclick="view='ia';render()">Abrir</button>`:`<a href="${esc(m.l)}" target="_blank" rel="noopener" style="font-size:.88rem">Abrir site</a>`):""}</div>`).join("")}</div></div>`).join("")+
+  `<div class="card flat stack"><h3>Sobre os 80%</h3><p>Nenhum método sério garante que 80% das pessoas que veem a marca comprem: loja virtual costuma converter entre 1% e 3% das visitas, e WhatsApp perto de 9% das conversas. O 80% que este app cobra é outro: <b>80% das missões cumpridas toda semana</b>. Além disso, com as perguntas certas e follow-up, é realista fechar de 30% a 50% dos orçamentos quentes. É essa disciplina, somada mês a mês, que leva ao número.</p></div>`;
+}
+
+/* ============ AÇÕES ============ */
+function sheet(html){ $("#layer").innerHTML=`<div class="sheet" onclick="if(event.target===this)fecharSheet()"><div class="panel" role="dialog" aria-modal="true">${html}</div></div>` }
+function fecharSheet(){ $("#layer").innerHTML="" }
+function provar(k,id){
+  const d=new Date(parseYmd(k)); const m=missoesDe(d).find(x=>x.id===id);
+  sheet(`<span class="eyebrow">Concluir missão</span><h3>${esc(m?.t||"")}</h3><p class="muted">${esc(m?.d||"")}</p>
+   <label class="f" for="pv">Prova (link, número ou o que você fez — mínimo 8 caracteres)</label><textarea id="pv"></textarea>
+   <div class="row"><button class="btn primary" onclick="confirmarProva('${k}','${id}')">Concluir</button><button class="btn ghost" onclick="fecharSheet()">Cancelar</button></div><p id="pv-err" class="muted"></p>`);
+  setTimeout(()=>$("#pv")?.focus(),50);
+}
+function confirmarProva(k,id){ const v=($("#pv").value||"").trim(); if(v.length<8){ $("#pv-err").textContent="Prova curta demais. Escreva o link, o número ou o que você fez."; return }
+  const d=dia(k); d.missoes[id]={prova:v,hora:new Date().toISOString()}; if(d.motivos) delete d.motivos[id]; persistDia(k); fecharSheet(); toast("Missão concluída."); render() }
+function motivo(k,id){ sheet(`<span class="eyebrow">Missão não feita</span><h3>Qual foi o motivo real?</h3><p class="muted">Seja honesto. Na revisão de domingo você vai ver o padrão dos motivos.</p><textarea id="mt"></textarea><div class="row"><button class="btn primary" onclick="confirmarMotivo('${k}','${id}')">Registrar</button><button class="btn ghost" onclick="fecharSheet()">Cancelar</button></div>`) }
+function confirmarMotivo(k,id){ const v=($("#mt").value||"").trim(); if(v.length<5){toast("Escreva o motivo.");return} const d=dia(k); d.motivos=d.motivos||{}; d.motivos[id]=v; persistDia(k); fecharSheet(); render() }
+function abrirModulo(i){
+  const mi=moduloAtualIdx(); const m=MODULOS[i]; if(i>mi){ toast("Entregue a prova do módulo atual para abrir este."); return }
+  const done=S.modulos[i];
+  sheet(`<div class="lesson"><span class="eyebrow">Semana ${i+1} · fase ${m.f+1}: ${esc(FASES[m.f].n)}</span><h2>${esc(m.t)}</h2>
+   <div class="block"><span class="eyebrow">Aula</span><p>${esc(m.aula)}</p></div>
+   <div class="block task"><span class="eyebrow">Mão na massa</span><p>${esc(m.tarefa)}</p>${m.ferramenta?`<p class="muted" style="font-size:.88rem">Ferramenta: ${esc(m.ferramenta)}</p>`:""}${m.link?`<a href="${esc(m.link)}" target="_blank" rel="noopener" style="font-size:.88rem">Material de apoio</a>`:""}</div>
+   <div class="block proofb"><span class="eyebrow">Prova de entrega</span><p>${esc(m.prova)}</p>
+    ${done?`<div class="out">${esc(done.prova)}</div><p class="muted" style="font-size:.85rem">Entregue em ${esc(done.data)}.</p>`:`<textarea id="mp" placeholder="Cole aqui a prova"></textarea><p id="mp-err" class="muted"></p>`}</div>
+   <div class="row">${done?"":`<button class="btn primary" onclick="entregarModulo(${i})">Entregar e destravar a próxima semana</button>`}<button class="btn ghost" onclick="fecharSheet()">Fechar</button></div></div>`);
+}
+function entregarModulo(i){ const v=($("#mp").value||"").trim(); if(v.length<20){ $("#mp-err").textContent="A prova precisa mostrar o trabalho feito (pelo menos 20 caracteres)."; return }
+  S.modulos[i]={prova:v,data:ymd(new Date())}; persistEstado(); fecharSheet(); toast(i<47?"Entregue. Próxima semana destravada.":"Trilha completa."); render() }
+function salvarLog(e){ e.preventDefault(); const k=ymd(new Date()); const d=dia(k); d.log={}; ["posts","conversas","orcamentos","vendas","faturamento"].forEach(id=>{const v=$("#log-"+id).value; if(v!=="") d.log[id]=Number(v)});
+  if(d.log.faturamento!==undefined && !d.missoes["noite-numeros"] && new Date().getDay()>=1 && new Date().getDay()<=5) d.missoes["noite-numeros"]={prova:"Faturamento do dia: "+brl2(d.log.faturamento),hora:new Date().toISOString()};
+  persistDia(k); toast("Dia salvo."); render() }
+function salvarSlots(){ for(const s in S.slots){ const a=$("#sl-"+s+"-ini").value, b=$("#sl-"+s+"-fim").value; if(a&&b&&hm(b)>hm(a)){S.slots[s].ini=a;S.slots[s].fim=b} } persistEstado(); toast("Horários salvos. Baixe a agenda de novo para atualizar o calendário."); render() }
+function salvarCfg(){ const n=id=>Number($("#cf-"+id).value); if(n("meta")>0)S.meta=n("meta"); if(n("ticket")>0)S.ticket=n("ticket"); if(n("margem")>0)S.margem=n("margem"); if(n("conv")>0)S.conv=n("conv"); const i=$("#cf-inicio").value; if(i)S.inicio=i; persistEstado(); toast("Configurações salvas."); render() }
+function abrirContrato(){ const c=S.contrato;
+  sheet(`<span class="eyebrow">Contrato comigo mesmo</span><h3>Compromisso de execução</h3>
+  <label class="f">Eu me comprometo a…<textarea id="ct-c" placeholder="Ex.: cumprir 80% das missões toda semana nos meus horários livres por 12 meses, até chegar a R$ 1 milhão por ano.">${esc(c.compromisso)}</textarea></label>
+  <label class="f">Se a semana fechar abaixo de 80%, eu…<input id="ct-m" placeholder="Ex.: fico sem streaming no fim de semana e faço o bloco de sábado em dobro" value="${esc(c.multa)}"></label>
+  ${c.assinado?`<p class="muted">Assinado em ${esc(c.data)}.</p>`:""}
+  <div class="row"><button class="btn primary" onclick="assinar()">${c.assinado?"Atualizar":"Assinar"}</button><button class="btn ghost" onclick="fecharSheet()">Fechar</button></div>`) }
+function assinar(){ const c=$("#ct-c").value.trim(), m=$("#ct-m").value.trim(); if(c.length<15||m.length<5){toast("Escreva o compromisso e a consequência.");return} S.contrato={assinado:true,compromisso:c,multa:m,data:S.contrato.data||ymd(new Date())}; persistEstado(); fecharSheet(); toast("Contrato assinado."); render() }
+
+/* ============ AGENDA .ICS ============ */
+function gerarICS(){
+  const st=new Date(); const dt=ymd(st).replace(/-/g,"");
+  const ev=(slot,byday,titulo,desc)=>{const s=S.slots[slot];const a=s.ini.replace(":","")+"00",b=s.fim.replace(":","")+"00";
+   return ["BEGIN:VEVENT","UID:rdm-"+slot+"@infinityguard","DTSTAMP:"+dt+"T000000Z","DTSTART;TZID=America/Sao_Paulo:"+dt+"T"+a,"DTEND;TZID=America/Sao_Paulo:"+dt+"T"+b,"RRULE:FREQ=WEEKLY;BYDAY="+byday,"SUMMARY:"+titulo,"DESCRIPTION:"+desc,
+     "BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:"+titulo+" em 5 min","TRIGGER:-PT5M","END:VALARM","BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:Começou: "+titulo,"TRIGGER:PT0M","END:VALARM","END:VEVENT"].join("\r\n")};
+  return ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Infinity Guard//Rota do Milhao//PT","CALSCALE:GREGORIAN","X-WR-CALNAME:Rota do Milhão",
+   "BEGIN:VTIMEZONE","TZID:America/Sao_Paulo","BEGIN:STANDARD","DTSTART:19700101T000000","TZOFFSETFROM:-0300","TZOFFSETTO:-0300","TZNAME:-03","END:STANDARD","END:VTIMEZONE",
+   ev("manha","MO,TU,WE,TH,FR","Rota do Milhão: turno da manhã","Zerar o WhatsApp e 1 story. Abra o app e coloque a prova."),
+   ev("almoco","MO,TU,WE,TH,FR","Rota do Milhão: turno do almoço","Missão de conteúdo do dia. Abra o app."),
+   ev("noite","MO,TU,WE,TH,FR","Rota do Milhão: módulo da semana","Aula e tarefa da Trilha + registrar os números no Placar."),
+   ev("sabado","SA","Rota do Milhão: bloco de sábado","Gravar os Reels da semana e entregar a prova do módulo."),
+   ev("domingo","SU","Rota do Milhão: revisão semanal","15 minutos no Placar: execução, meta e 1 decisão."),
+   "END:VCALENDAR"].join("\r\n");
+}
+async function baixarICS(){ try{ const r=await downloadsCap.save({filename:"rota-do-milhao.ics",data:new Blob([gerarICS()],{type:"text/calendar"})}); if(r?.status==="saved") toast("Agenda baixada. Abra o arquivo no celular.") }catch(e){ if(e?.code!=="cancelled"&&e?.code!=="declined") mostrarTexto(gerarICS()) } }
+
+/* ============ ALARME ============ */
+let audioCtx=null;
+function beep(){ if(!S.som) return; try{ audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)(); const t=audioCtx.currentTime; [0,.35,.7].forEach(o=>{const g=audioCtx.createGain(),os=audioCtx.createOscillator();os.frequency.value=880;os.connect(g);g.connect(audioCtx.destination);g.gain.setValueAtTime(.0001,t+o);g.gain.exponentialRampToValueAtTime(.25,t+o+.02);g.gain.exponentialRampToValueAtTime(.0001,t+o+.25);os.start(t+o);os.stop(t+o+.3)}) }catch(e){} }
+function alarme(slot){
+  const ms=missoesDe(new Date()).filter(m=>m.slot===slot);
+  $("#layer").innerHTML=`<div class="alarm" role="alertdialog" aria-label="Hora do turno"><div class="card"><span class="eyebrow" style="color:var(--signal)">Hora do turno · ${S.slots[slot].ini}–${S.slots[slot].fim}</span><h2>${esc(S.slots[slot].nome)}</h2>
+  <ul style="margin:0;padding-left:18px">${ms.map(m=>`<li><b>${esc(m.t)}</b></li>`).join("")}</ul><p class="muted">Celular na mão, cronômetro ligado. Cada missão termina com prova.</p>
+  <div class="row"><button class="btn primary" onclick="fecharSheet();view='hoje';render()">Começar agora</button><button class="btn ghost" onclick="fecharSheet()">Fechar</button></div></div></div>`;
+  beep(); let n=0; const orig="Rota do Milhão"; const iv=setInterval(()=>{document.title=(n++%2?orig:"● Hora do turno");if(n>20){clearInterval(iv);document.title=orig}},800);
+  try{ if("Notification" in window && Notification.permission==="granted") new Notification("Rota do Milhão: "+S.slots[slot].nome,{body:ms.map(m=>m.t).join(" · ")}) }catch(e){}
+}
+function testarAlarme(){ try{ if("Notification" in window && Notification.permission==="default") Notification.requestPermission().catch(()=>{}) }catch(e){} const s=slotKeyFor(new Date())[0]; alarme(s) }
+const avisados = new Set();
+setInterval(()=>{ const n=new Date(), k=ymd(n), nm=nowMin(n);
+  slotKeyFor(n).forEach(s=>{ const ini=hm(S.slots[s].ini); if(nm>=ini && nm<ini+3 && !avisados.has(k+s)){ avisados.add(k+s); alarme(s) } });
+  renderStatus();
+},20000);
+
+/* ============ RENDER ============ */
+function render(){
+  renderStatus();
+  const v={hoje:viewHoje,trilha:viewTrilha,placar:viewPlacar,ia:viewIA,agenda:viewAgenda,biblioteca:viewBiblioteca}[view];
+  $("#app").innerHTML=`<section class="view">${v()}</section>`;
+}
+render();
+conectar();
+</script>

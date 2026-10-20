@@ -51,6 +51,7 @@ Digite `/agents` no Claude Code para ver a equipe instalada.
 |---|---|
 | `agents/` | Os 22 funcionários. |
 | `.claude-plugin/` | Plugin "infinity-guard" com a equipe e as skills (instala com um comando, veja abaixo). |
+| `app/rota-do-milhao.html` | **Rota do Milhão**: app pessoal com a trilha de 48 semanas até R$ 1 milhão/ano, missões nos horários livres do CLT com prova, cobrança, placar, Estúdio IA e agenda com alarmes (.ics). Publicado como página privada no claude.ai. |
 | `docs/organograma.md` | Quem é quem e quando chamar cada funcionário. |
 | `docs/raio-x-de-nicho.md` / `.html` | Raio X do mercado de segurança residencial (18/10/2026): concorrentes, preços, brechas. |
 | `docs/mapa-de-sistemas.md` | A ordem dos sistemas. |
