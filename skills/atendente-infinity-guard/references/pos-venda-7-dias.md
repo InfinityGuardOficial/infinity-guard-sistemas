@@ -1,10 +1,10 @@
-# Pós-venda: câmera entregue segura + 7 dias de acompanhamento
+# Pós-venda: configuração segura guiada + 7 dias de acompanhamento
 
 Envie no WhatsApp, uma mensagem por dia. Ajuste o nome do app conforme o produto (as fechaduras usam Tuya Smart Life; confirme o app da câmera na caixa).
 
-**Dia 0 (pedido pago):** "Pedido confirmado, {nome}! Assim que sair para entrega te mando o rastreio. Enquanto isso, já baixa o app que vem indicado na caixa e cria sua conta com um e-mail que você usa."
+**Dia 0 (pedido pago):** "Pedido confirmado, {nome}! O envio é feito direto pelo nosso parceiro, no prazo informado na página. Assim que sair te mando o rastreio. Enquanto isso, já baixa o app que vem indicado na caixa e cria sua conta com um e-mail que você usa."
 
-**Dia da entrega — os 3 ajustes que deixam sua câmera segura:**
+**Dia da entrega (chame o cliente para configurar junto, por vídeo) — os 3 ajustes que deixam sua câmera segura:**
 1. Ligue a câmera perto do roteador e conecte na rede **2,4 GHz** (a maioria das câmeras Wi-Fi não conecta na 5 GHz).
 2. **Troque a senha** da conta e do dispositivo por uma senha forte, só sua. Nunca deixe a senha de fábrica.
 3. **Atualize** o firmware pelo app e ative a verificação em duas etapas, se o app oferecer.

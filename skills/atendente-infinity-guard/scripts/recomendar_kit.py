@@ -187,11 +187,11 @@ def mensagem(res):
         partes.append(res["avisos"][0])
     tem_camera = any(i["id"].startswith(("kit-cam", "cam-")) for i in res["ideal"]["itens"])
     if tem_camera:
-        partes.append("E aqui tem uma diferença: sua câmera sai daqui com o passo a passo para trocar a senha "
-                      "de fábrica e deixar tudo seguro, e eu te acompanho no WhatsApp nos primeiros 7 dias.")
+        partes.append("E aqui tem uma diferença: quando a câmera chegar, eu configuro com você por vídeo no WhatsApp, "
+                      "trocando a senha de fábrica e deixando tudo seguro, e te acompanho nos primeiros 7 dias.")
     else:
-        partes.append("E você não fica sozinho: vai com o passo a passo de configuração e eu te acompanho "
-                      "no WhatsApp nos primeiros 7 dias.")
+        partes.append("E você não fica sozinho: quando chegar, eu te passo a configuração por vídeo no WhatsApp "
+                      "e te acompanho nos primeiros 7 dias.")
     partes.append("Quer que eu separe esse kit para você?")
     return "\n\n".join(partes)
 
