@@ -1,0 +1,13 @@
+{
+  "nota": "Preços de concorrentes, um registro por leitura. 'equivale' liga ao id do nosso catálogo. 'fonte' e 'data' são obrigatórios; 'oferta' marca preço promocional de marketplace. Leituras iniciais: Raio X de Nicho de 18/10/2026 (todas [CONFIRMADO] no Raio X).",
+  "leituras": [
+    {"data": "2026-10-18", "concorrente": "Intelbras", "produto": "Câmera iM4 C", "equivale": "cam-asecam-ptz", "preco": 591.48, "pix": false, "oferta": false, "fonte": "Extra", "garantia": null, "anatel": true, "instalacao": "parceiro (R$ 200 por 2 câmeras)"},
+    {"data": "2026-10-18", "concorrente": "TP-Link Tapo", "produto": "Tapo C206", "equivale": "cam-asecam-ptz", "preco": 239.90, "pix": false, "oferta": true, "fonte": "Olhar Digital (jun/2026)", "garantia": null, "anatel": null, "instalacao": null},
+    {"data": "2026-10-18", "concorrente": "Mercusys", "produto": "MC210", "equivale": "cam-asecam-ptz", "preco": 103.92, "pix": false, "oferta": true, "fonte": "Olhar Digital (jun/2026), Mercado Livre", "garantia": null, "anatel": null, "instalacao": null},
+    {"data": "2026-10-18", "concorrente": "Kits sem marca", "produto": "Kit 2 câmeras Wi-Fi", "equivale": "kit-cam-2", "preco": 179.97, "pix": false, "oferta": true, "fonte": "Pelando/Amazon e Olhar Digital", "garantia": null, "anatel": null, "instalacao": null},
+    {"data": "2026-10-18", "concorrente": "Kerui", "produto": "Kit alarme Wi-Fi/GSM (maior)", "equivale": "alarme-ikerui", "preco": 719.14, "pix": true, "oferta": false, "fonte": "Magalu", "garantia": null, "anatel": null, "instalacao": null},
+    {"data": "2026-10-18", "concorrente": "Intelbras", "produto": "AMT 8000 Pro (kit)", "equivale": "alarme-ikerui", "preco": 1559.68, "pix": true, "oferta": false, "fonte": "Kabum", "garantia": null, "anatel": true, "instalacao": "instalador"},
+    {"data": "2026-10-18", "concorrente": "Intelbras", "produto": "Fechadura facial MFR 2030", "equivale": "fechadura-facial", "preco": 1099.91, "pix": false, "oferta": false, "fonte": "loja Intelbras", "garantia": "3 anos", "anatel": true, "instalacao": "parceiro"},
+    {"data": "2026-10-18", "concorrente": "Pado", "produto": "FDE-800", "equivale": "fechadura-facial", "preco": 4708.20, "pix": true, "oferta": false, "fonte": "Kabum", "garantia": "3 meses (vendedor)", "anatel": null, "instalacao": null}
+  ]
+}

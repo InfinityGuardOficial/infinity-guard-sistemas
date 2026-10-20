@@ -60,6 +60,7 @@ Digite `/agents` no Claude Code para ver a equipe instalada.
 | `docs/mapa-de-sistemas.md` | A ordem dos sistemas. |
 | `docs/mapa-de-dados.md` | Onde mora cada dado, qual é a fonte da verdade, quem cuida e como atualizar. |
 | `scripts/empacotar-skills.sh` | Testa todas as skills e refaz os .zip. |
+| `plugins/` e `scripts/gerar-plugins.py` | Um plugin por squad, gerado a partir de `agents/` e `skills/`. |
 
 ## Instalar tudo de uma vez (plugin, recomendado)
 
@@ -71,6 +72,28 @@ No Claude Code, em qualquer pasta (por exemplo a pasta do projeto "Workshop IA a
 Isso instala os 22 funcionários e as 13 skills. Se o repositório estiver privado, o Claude Code precisa estar logado no GitHub com uma conta que tenha acesso (`gh auth login`). Para atualizar depois: `/plugin marketplace update infinity-guard-sistemas`.
 
 Para instalar só num projeto (e quem abrir a pasta também ter), rode os comandos acima e escolha "project" quando o Claude Code perguntar o escopo.
+
+### Um plugin por squad
+
+Prefere levar só uma parte da equipe? Cada squad é um plugin separado, com os funcionários dele, as skills que eles usam, o catálogo de preços (`atendente-infinity-guard`) e o `revisor-de-promessas`:
+
+| Plugin | Funcionários |
+|---|---|
+| `infinity-guard-direcao` | diretor-geral (com as skills que a reunião semanal lê) |
+| `infinity-guard-vendas` | lider-vendas, consultor-whatsapp, recuperador-de-carrinho, vendedor-b2b |
+| `infinity-guard-sucesso-cliente` | lider-sucesso-cliente, tecnico-de-suporte, guardiao-pos-venda |
+| `infinity-guard-marketing` | lider-marketing, roteirista-de-reels, copywriter-de-loja, social-media |
+| `infinity-guard-trafego` | lider-trafego, criativos-de-anuncio, analista-de-midia |
+| `infinity-guard-operacoes` | lider-operacoes, auditor-da-loja, gestor-de-catalogo, guardiao-de-conformidade |
+| `infinity-guard-dados` | lider-dados, analista-de-vendas, detetive-de-mercado |
+
+```
+/plugin marketplace add InfinityGuardOficial/infinity-guard-sistemas
+/plugin install infinity-guard-vendas@infinity-guard-sistemas
+```
+Troque `vendas` pelo squad que quiser; dá para instalar vários. Não instale o `infinity-guard` completo junto com os de squad no mesmo projeto, para não ter funcionário repetido.
+
+As pastas `plugins/` são geradas: edite sempre `agents/` e `skills/` da raiz e rode `python3 scripts/gerar-plugins.py`.
 
 ## Como instalar uma skill solta no Claude Code
 

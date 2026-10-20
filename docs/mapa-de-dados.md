@@ -62,3 +62,4 @@ Recomendação: usar **uma** conta dentro do Business, com pagamento e com o Ins
 | 19:48 todo dia | cobrança da noite no celular | só lê |
 | push em `desktop/` ou `android/` | gera os instaladores (Actions → Apps) | GitHub Actions |
 | `bash scripts/empacotar-skills.sh` | testa as skills e refaz os .zip | `skills/*.zip` |
+| `python3 scripts/gerar-plugins.py` | refaz os 7 plugins de squad a partir de `agents/` e `skills/` | `plugins/`, `.claude-plugin/marketplace.json` |

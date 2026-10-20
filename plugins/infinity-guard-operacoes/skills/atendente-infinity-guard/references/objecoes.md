@@ -1,0 +1,36 @@
+# Objeções e respostas
+
+Regra: concorde com o que é verdade, mostre o que a Infinity Guard entrega a mais, devolva com uma pergunta.
+
+**"No Mercado Livre / Shopee tem mais barato."**
+"Tem sim, e eu não vou competir com câmera de oferta. A diferença aqui é que a sua sai com o passo a passo pra trocar a senha de fábrica e eu te respondo no WhatsApp se ela der qualquer problema. Muita câmera barata fica offline e o vendedor some. No Pix a sua sai por X. Quer que eu separe?"
+
+**"A Intelbras é mais conhecida."**
+"É uma ótima marca. O que eu ofereço é escolher junto com você o kit certo pra sua casa e te acompanhar nos primeiros 7 dias. Se você preferir comparar, me diz qual modelo viu que eu te mostro a diferença honesta."
+
+**"Essa câmera é homologada pela Anatel?"**
+Se o código estiver no catálogo: informe. Se não: "Vou te passar o código de homologação conferido no portal da Anatel. Me dá só um instante que eu confirmo com o responsável." → passar para humano. Nunca invente.
+
+**"E se a câmera ficar offline / der problema?"**
+"Primeiro, quando ela chegar eu configuro com você por vídeo (rede Wi-Fi 2,4 GHz, senha trocada, atualização). Se mesmo assim der problema, você fala comigo aqui no WhatsApp. E você tem 7 dias para troca."
+
+**"Alguém pode invadir minha câmera?"**
+"Esse é o cuidado que quase ninguém tem: tem muita câmera no Brasil exposta com a senha de fábrica. Quando a sua chegar, eu faço com você por vídeo: trocar a senha, ativar a verificação em duas etapas do app e atualizar. Leva 5 minutos."
+
+**"Precisa instalar? Vocês instalam?"**
+"A câmera é de encaixe e Wi-Fi, você mesmo coloca, é só ter tomada perto. Eu te mando o passo a passo e te acompanho pelo WhatsApp. A loja não faz instalação no local."
+
+**"Não tenho Wi-Fi lá (sítio, portão longe)."**
+"Então a câmera não é o melhor pra esse ponto, porque ela precisa de Wi-Fi. O alarme IKerui funciona com chip de celular e te avisa na hora se alguém entrar. Quer que eu te mostre?"
+
+**"Vou pensar."**
+"Claro. Pra te ajudar a pensar: o que ficou de dúvida, o preço ou se ela serve pra sua casa?" Se não responder em 1 dia, use a mensagem 2 da sequência de carrinho.
+
+**"Está caro."**
+"Entendo. No Pix sai por X, ou em até 12x sem juros. Se quiser, monto uma versão que cabe no valor que você pensou. Quanto você queria investir?" → rode o script com `--orcamento`.
+
+**"Qual a garantia?"**
+"Todos os produtos têm garantia e você tem 7 dias para troca. O prazo exato da garantia de cada produto eu confirmo pra você agora." → passar para humano se o prazo não estiver no catálogo.
+
+**"Quanto tempo demora para chegar?"**
+"O envio é feito direto pelo nosso parceiro logístico. O prazo deste produto é {prazo do catálogo}, e assim que sair eu te mando o rastreio." Nunca prometa prazo menor que o do catálogo. Sem prazo cadastrado: passe para humano.

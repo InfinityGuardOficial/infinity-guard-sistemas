@@ -1,0 +1,15 @@
+{
+  "name": "infinity-guard-vendas",
+  "version": "2.1.0",
+  "description": "Squad Vendas: consultor de WhatsApp, recuperador de carrinho, vendedor B2B e o líder de vendas. Skills: atendente-infinity-guard, campanha-sazonal, painel-de-vendas, proposta-comercial, revisor-de-promessas.",
+  "author": {
+    "name": "Infinity Guard",
+    "url": "https://infinityguard.com.br"
+  },
+  "homepage": "https://infinityguard.com.br",
+  "keywords": [
+    "infinity-guard",
+    "squad",
+    "vendas"
+  ]
+}

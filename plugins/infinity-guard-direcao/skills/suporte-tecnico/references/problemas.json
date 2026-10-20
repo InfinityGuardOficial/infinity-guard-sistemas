@@ -1,0 +1,91 @@
+{
+  "atualizado_em": "2026-10-19",
+  "nota": "Base de suporte dos produtos do catálogo de 18/10/2026. Câmeras e fechaduras usam app de celular (o kit e as fechaduras usam o app Tuya/Smart Life; confirme no manual do modelo recebido). Passos genéricos e seguros: nada aqui abre o aparelho nem anula garantia.",
+  "problemas": [
+    {"id": "nao-conecta-wifi", "produtos": ["camera", "fechadura", "alarme"],
+     "palavras": ["não conecta", "nao conecta", "não acha", "nao acha", "não encontra", "nao encontra", "wifi", "wi-fi", "rede", "pareamento", "parear", "configurar", "adicionar"],
+     "titulo": "Não conecta no Wi-Fi na primeira configuração",
+     "passos": [
+       "Confirme que o celular está numa rede **2,4 GHz** (a maioria das câmeras não conecta em 5 GHz). Se o roteador tiver uma rede só, veja no app da operadora (ou ligue para ela) como separar ou ativar a rede 2,4 GHz.",
+       "Deixe o aparelho a até 3 metros do roteador só para configurar; depois leve para o lugar.",
+       "Ao digitar a senha do Wi-Fi no app, confira maiúsculas e minúsculas (não precisa me mandar a senha).",
+       "Resete o aparelho (botão reset por 5 a 10 segundos, até ouvir o aviso ou a luz piscar rápido) e adicione de novo no app.",
+       "Permita no celular: localização ligada e permissão de rede local para o app."
+     ],
+     "escalar_se": "Depois do reset e em 2,4 GHz ainda não conecta: pode ser defeito. Passe para o dono (caso de troca)."},
+    {"id": "offline", "produtos": ["camera", "fechadura", "alarme"],
+     "palavras": ["offline", "desconectada", "desconecta", "caiu", "sem sinal", "fica fora", "não aparece", "nao aparece", "parou"],
+     "titulo": "Aparelho fica offline depois de funcionando",
+     "passos": [
+       "Veja se o Wi-Fi chega bem no ponto: com o celular no lugar da câmera, abra um vídeo. Se travar, o sinal é fraco: aproxime o roteador ou use um repetidor.",
+       "Desligue a câmera da tomada por 30 segundos e ligue de novo.",
+       "Reinicie o roteador. Se a operadora trocou o roteador ou a senha, o aparelho precisa ser adicionado de novo no app.",
+       "Confira a fonte original: carregador de celular comum pode não dar corrente suficiente.",
+       "Atualize o app e o firmware (no app: configurações do aparelho, atualização)."
+     ],
+     "escalar_se": "Offline mesmo perto do roteador e com a fonte original: passe para o dono."},
+    {"id": "senha-fabrica", "produtos": ["camera", "fechadura", "alarme"],
+     "palavras": ["senha", "invadida", "invadiram", "hacker", "alguém vendo", "alguem vendo", "segurança da conta", "privacidade"],
+     "titulo": "Medo de câmera invadida / proteger a conta",
+     "passos": [
+       "Troque a senha da conta do app por uma forte e única (não use a mesma do e-mail).",
+       "Ative a verificação em duas etapas no app, se o app oferecer.",
+       "Veja no app em 'compartilhar dispositivo' se só as pessoas da casa têm acesso; remova quem não deve.",
+       "Atualize o firmware do aparelho e o app.",
+       "Troque a senha do Wi-Fi se ela for a que veio no roteador."
+     ],
+     "escalar_se": "Cliente diz que alguém estranho controlou o aparelho: passe para o dono na hora."},
+    {"id": "visao-noturna", "produtos": ["camera"],
+     "palavras": ["noite", "escuro", "noturna", "imagem branca", "embaçada", "embacada", "reflexo", "borrada"],
+     "titulo": "Imagem ruim à noite ou embaçada",
+     "passos": [
+       "Câmera atrás de vidro reflete o infravermelho: a imagem fica branca. Coloque do lado de fora do vidro (área coberta) ou encostada no vidro.",
+       "Limpe a lente com pano macio seco.",
+       "Tire a película de proteção da lente, se ainda estiver.",
+       "No app, confira se a visão noturna está em automático."
+     ],
+     "escalar_se": "Imagem ruim de dia com lente limpa: passe para o dono."},
+    {"id": "gravacao", "produtos": ["camera"],
+     "palavras": ["gravar", "gravação", "gravacao", "gravou", "cartão", "cartao", "memória", "memoria", "nuvem", "histórico", "historico", "replay"],
+     "titulo": "Não grava / não acha a gravação",
+     "passos": [
+       "Para gravar sem nuvem paga, a câmera precisa de cartão microSD (até a capacidade que o manual indica). Coloque com a câmera desligada.",
+       "No app, formate o cartão pela própria câmera (configurações, armazenamento).",
+       "Escolha o modo: gravação contínua ou só quando detectar movimento.",
+       "A nuvem do app é um serviço do fabricante, cobrado à parte. A loja não vende nem garante a nuvem."
+     ],
+     "escalar_se": "Cartão formatado pela câmera e mesmo assim não grava: passe para o dono."},
+    {"id": "notificacao", "produtos": ["camera", "alarme", "fechadura"],
+     "palavras": ["notificação", "notificacao", "aviso", "alerta", "não avisa", "nao avisa", "muito alerta", "toda hora", "não chega", "nao chega"],
+     "titulo": "Não avisa no celular (ou avisa demais)",
+     "passos": [
+       "No celular: permita notificações do app e desligue a economia de bateria para ele.",
+       "No app: ligue a detecção de movimento e o envio de alerta.",
+       "Se avisa demais: diminua a sensibilidade e desenhe a área de detecção para fora da rua ou da árvore.",
+       "Alarme: confira se o modo está 'armado' e se o sensor está pareado (teste abrindo a porta)."
+     ],
+     "escalar_se": "Tudo ligado e mesmo assim não chega nenhum alerta: passe para o dono."},
+    {"id": "alarme-gsm", "produtos": ["alarme"],
+     "palavras": ["chip", "gsm", "sms", "ligação", "ligacao", "operadora", "sirene", "sensor", "controle remoto", "controle"],
+     "titulo": "Alarme: chip, sirene, sensores e controle",
+     "passos": [
+       "Chip: use chip de operadora com sinal no local, sem PIN, com crédito ou plano para SMS e ligação. Coloque com a central desligada.",
+       "Cadastre no app (ou por SMS, conforme o manual) os números que recebem o aviso.",
+       "Sensor de porta: as duas partes alinhadas e a no máximo 1 cm uma da outra quando a porta fecha.",
+       "Troque a bateria do sensor ou do controle se a luz não acende.",
+       "Teste com a casa armada abrindo uma porta; avise os vizinhos antes do teste da sirene."
+     ],
+     "escalar_se": "Sensor novo que não pareia ou central que não liga na tomada: passe para o dono."},
+    {"id": "fechadura", "produtos": ["fechadura"],
+     "palavras": ["fechadura", "digital", "biometria", "facial", "rosto", "não abre", "nao abre", "pilha", "bateria", "trancou", "senha da porta", "porta"],
+     "titulo": "Fechadura: não reconhece, pilha, ficou trancado",
+     "passos": [
+       "Ficou trancado com pilha fraca: use a chave de emergência que vem na caixa ou a entrada USB de energia de emergência (veja o manual do modelo).",
+       "Troque todas as pilhas de uma vez, por pilhas alcalinas novas.",
+       "Digital: cadastre o mesmo dedo 2 ou 3 vezes em posições diferentes; dedo limpo e seco.",
+       "Facial: cadastre com boa luz, sem óculos escuros; evite sol direto batendo no leitor.",
+       "Antes de comprar e de instalar: confirme a espessura da porta e o tipo de máquina (fechadura) com as medidas do manual."
+     ],
+     "escalar_se": "Não aceita nenhuma digital com pilha nova, ou não cabe na porta: passe para o dono."}
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "atualizado_em": "2026-10-18",
+  "nota": "Kits montados com os produtos ativos do catálogo da atendente-infinity-guard. Preço 'de' = soma dos preços atuais, nunca o preco_de da vitrine.",
+  "kits": [
+    {
+      "id": "kit-apto",
+      "nome": "Kit Apartamento Tranquilo",
+      "para": "apartamento ou casa pequena, quem trabalha fora",
+      "itens": {
+        "kit-cam-2": 1
+      },
+      "gancho": "ver sua casa de qualquer lugar, com 2 câmeras configuradas com segurança"
+    },
+    {
+      "id": "kit-casa-vigiada",
+      "nome": "Kit Casa Vigiada",
+      "para": "casa que fica vazia de dia ou em viagem",
+      "itens": {
+        "kit-cam-2": 1,
+        "alarme-ikerui": 1
+      },
+      "gancho": "câmera para ver e alarme para avisar na hora"
+    },
+    {
+      "id": "kit-porta",
+      "nome": "Kit Porta Inteligente",
+      "para": "quem quer acabar com chave copiada ou perdida",
+      "itens": {
+        "kit-cam-2": 1,
+        "fechadura-bio": 1
+      },
+      "gancho": "entrar com a digital e ver quem chegou"
+    },
+    {
+      "id": "kit-completo",
+      "nome": "Kit Casa Completa",
+      "para": "casa grande, sítio com Wi-Fi ou quem viaja muito",
+      "itens": {
+        "cam-asecam-ptz": 1,
+        "kit-cam-2": 1,
+        "alarme-ikerui": 1,
+        "fechadura-bio": 1,
+        "sensor-presenca": 1
+      },
+      "gancho": "a casa inteira protegida, montada para você"
+    }
+  ],
+  "eventos": {
+    "1111": {
+      "nome": "11.11",
+      "inicio": "2026-11-11",
+      "fim": "2026-11-11",
+      "cupom_sugerido": "IG1111",
+      "fonte": "11.11 com previsão de R$ 3,17 bilhões no e-commerce [Neotrust/Confi, Raio X 18/10]",
+      "artigo": "o"
+    },
+    "blackfriday": {
+      "nome": "Black Friday",
+      "inicio": "2026-11-26",
+      "fim": "2026-11-29",
+      "cupom_sugerido": "IGBLACK",
+      "fonte": "Black Friday 26 a 29/11/2026, previsão de R$ 13,3 bilhões [Neotrust/Confi, Raio X 18/10]",
+      "artigo": "a"
+    }
+  },
+  "nomes_curtos": {
+    "kit-cam-2": "Kit 2 câmeras Wi-Fi dupla lente",
+    "cam-asecam-ptz": "Câmera ASECAM com rastreamento",
+    "alarme-ikerui": "Alarme IKerui Wi-Fi/GSM",
+    "fechadura-bio": "Fechadura com biometria",
+    "fechadura-facial": "Fechadura facial 3D",
+    "sensor-presenca": "Lâmpada com sensor de presença"
+  }
+}
