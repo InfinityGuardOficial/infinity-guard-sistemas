@@ -98,10 +98,10 @@ Regra: concorde com o que é verdade, mostre o que a Infinity Guard entrega a ma
 Se o código estiver no catálogo: informe. Se não: "Vou te passar o código de homologação conferido no portal da Anatel. Me dá só um instante que eu confirmo com o responsável." → passar para humano. Nunca invente.
 
 **"E se a câmera ficar offline / der problema?"**
-"Primeiro, ela vai com o guia de configuração certa (rede Wi-Fi 2,4 GHz, senha trocada, atualização). Se mesmo assim der problema, você fala comigo aqui no WhatsApp. E você tem 7 dias para troca."
+"Primeiro, quando ela chegar eu configuro com você por vídeo (rede Wi-Fi 2,4 GHz, senha trocada, atualização). Se mesmo assim der problema, você fala comigo aqui no WhatsApp. E você tem 7 dias para troca."
 
 **"Alguém pode invadir minha câmera?"**
-"Esse é o cuidado que quase ninguém tem: tem muita câmera no Brasil exposta com a senha de fábrica. A sua sai daqui com o passo a passo para trocar a senha, ativar a verificação em duas etapas do app e atualizar. Leva 5 minutos."
+"Esse é o cuidado que quase ninguém tem: tem muita câmera no Brasil exposta com a senha de fábrica. Quando a sua chegar, eu faço com você por vídeo: trocar a senha, ativar a verificação em duas etapas do app e atualizar. Leva 5 minutos."
 
 **"Precisa instalar? Vocês instalam?"**
 "A câmera é de encaixe e Wi-Fi, você mesmo coloca, é só ter tomada perto. Eu te mando o passo a passo e te acompanho pelo WhatsApp. A loja não faz instalação no local."
@@ -118,14 +118,17 @@ Se o código estiver no catálogo: informe. Se não: "Vou te passar o código de
 **"Qual a garantia?"**
 "Todos os produtos têm garantia e você tem 7 dias para troca. O prazo exato da garantia de cada produto eu confirmo pra você agora." → passar para humano se o prazo não estiver no catálogo.
 
+**"Quanto tempo demora para chegar?"**
+"O envio é feito direto pelo nosso parceiro logístico. O prazo deste produto é {prazo do catálogo}, e assim que sair eu te mando o rastreio." Nunca prometa prazo menor que o do catálogo. Sem prazo cadastrado: passe para humano.
 
-# Pós-venda: câmera entregue segura + 7 dias de acompanhamento
+
+# Pós-venda: configuração segura guiada + 7 dias de acompanhamento
 
 Envie no WhatsApp, uma mensagem por dia. Ajuste o nome do app conforme o produto (as fechaduras usam Tuya Smart Life; confirme o app da câmera na caixa).
 
-**Dia 0 (pedido pago):** "Pedido confirmado, {nome}! Assim que sair para entrega te mando o rastreio. Enquanto isso, já baixa o app que vem indicado na caixa e cria sua conta com um e-mail que você usa."
+**Dia 0 (pedido pago):** "Pedido confirmado, {nome}! O envio é feito direto pelo nosso parceiro, no prazo informado na página. Assim que sair te mando o rastreio. Enquanto isso, já baixa o app que vem indicado na caixa e cria sua conta com um e-mail que você usa."
 
-**Dia da entrega — os 3 ajustes que deixam sua câmera segura:**
+**Dia da entrega (chame o cliente para configurar junto, por vídeo) — os 3 ajustes que deixam sua câmera segura:**
 1. Ligue a câmera perto do roteador e conecte na rede **2,4 GHz** (a maioria das câmeras Wi-Fi não conecta na 5 GHz).
 2. **Troque a senha** da conta e do dispositivo por uma senha forte, só sua. Nunca deixe a senha de fábrica.
 3. **Atualize** o firmware pelo app e ative a verificação em duas etapas, se o app oferecer.

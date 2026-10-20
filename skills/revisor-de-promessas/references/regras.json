@@ -1,5 +1,5 @@
 {
-  "atualizado_em": "2026-10-19",
+  "atualizado_em": "2026-10-20",
   "nota": "Cada regra: padrão (regex, sem diferença de maiúscula), gravidade (bloqueia | ajustar), por quê e como reescrever. Base: CDC (arts. 30, 31, 37, 26, 49), Decreto 7.962/2013, regras de anúncio da Meta, LGPD e o que a loja de fato oferece em 19/10/2026.",
   "regras": [
     {"id": "seguranca-absoluta", "gravidade": "bloqueia", "padrao": "100\\s*%\\s*(seguro|segura|protegid[oa]|garantid[oa]|invi[oó]l[aá]vel|à prova)|invi[oó]l[aá]vel|invulner[aá]vel|seguran[cç]a (total|absoluta)|totalmente (segur[oa]|protegid[oa])|nunca mais (ser[aá] )?(roubad|assaltad|invadid)|imposs[ií]vel (de )?(invadir|roubar|arrombar|hackear)|ningu[eé]m (entra|invade)|à prova de (invas|roubo|ladr|hacker)",
@@ -40,6 +40,12 @@
      "reescrever": "'Te mando o link de pagamento seguro da loja.'"},
     {"id": "falar-mal-concorrente", "gravidade": "ajustar", "padrao": "\\b(intelbras|tapo|tp-?link|mercusys|positivo|xiaomi|ezviz|imou)\\b.{0,40}(ruim|lixo|porcaria|n[aã]o presta|p[eé]ssim|golpe|falsificad)",
      "porque": "Não falar mal de concorrente pelo nome (regra da marca e risco de propaganda comparativa abusiva).",
-     "reescrever": "Fale do critério, não da marca: 'antes de comprar qualquer câmera, confira se tem código Anatel e suporte em português'."}
+     "reescrever": "Fale do critério, não da marca: 'antes de comprar qualquer câmera, confira se tem código Anatel e suporte em português'."},
+    {"id": "produto-ja-configurado", "gravidade": "bloqueia", "padrao": "(sai|vai|chega|segue|entregue|enviad[oa])\\s+(daqui\\s+)?(j[aá]\\s+)?configurad|j[aá] (vem|chega) configurad|senha j[aá] (vem )?trocad",
+     "porque": "A loja trabalha com dropshipping: o produto vai do fornecedor direto para o cliente e não passa pela loja. Prometer que ele chega configurado é publicidade enganosa (CDC art. 37).",
+     "reescrever": "Prometa o que a loja faz: 'quando chegar, a gente configura junto com você por vídeo no WhatsApp'."},
+    {"id": "prazo-de-entrega", "gravidade": "bloqueia", "padrao": "entrega (em )?(24|48)\\s*h|chega amanh[ãa]|entrega imediata|envio imediato|pronta entrega|entrega expressa",
+     "porque": "No dropshipping o prazo é o do fornecedor. Prometer entrega mais rápida que a real descumpre a oferta (CDC arts. 30 e 35).",
+     "reescrever": "Use o prazo do catálogo: 'entrega em {prazo} com rastreio'."}
   ]
 }

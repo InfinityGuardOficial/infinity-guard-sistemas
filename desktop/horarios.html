@@ -1,0 +1,20 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Horários dos turnos</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
+<style>
+:root{--bg:#EEF2F4;--fg:#13212B;--muted:#4F606C;--line:#C9D3DA;--accent:#0A6B6B}
+@media (prefers-color-scheme:dark){:root{--bg:#0D151B;--fg:#E4ECF1;--muted:#97A8B4;--line:#2A3A46;--accent:#3DBDB3}}
+body{margin:0;padding:20px;background:var(--bg);color:var(--fg);font:15px system-ui,"Segoe UI",sans-serif}
+h1{font-size:1.2rem;margin:0 0 4px} p{color:var(--muted);margin:0 0 16px;font-size:.9rem}
+.row{display:grid;grid-template-columns:1fr 110px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+input{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--fg)}
+button{margin-top:16px;font:600 .95rem system-ui;padding:10px 16px;border:0;border-radius:8px;background:var(--accent);color:#fff;cursor:pointer}
+small{color:var(--muted)}
+</style></head><body>
+<h1>Horários dos turnos</h1><p>Use os mesmos horários da aba Mais do app. O aviso chega 5 minutos antes e na hora de começar, mesmo com a janela fechada.</p>
+<div id="lista"></div><button id="salvar">Salvar</button> <small id="ok"></small>
+<script>
+const DIAS={manha:"segunda a sexta",almoco:"segunda a sexta",noite:"segunda a sexta",sabado:"sábado",domingo:"domingo"};
+let cfg={};
+window.cfg.ler().then(c=>{cfg=c;document.getElementById("lista").innerHTML=Object.entries(c).map(([id,s])=>`<label class="row"><span>${s.nome}<br><small>${DIAS[id]||""}</small></span><input type="time" id="t-${id}" value="${s.ini}"></label>`).join("")});
+document.getElementById("salvar").onclick=async()=>{for(const id in cfg){const v=document.getElementById("t-"+id).value;if(v)cfg[id].ini=v}await window.cfg.gravar(cfg);document.getElementById("ok").textContent="Salvo."};
+</script></body></html>

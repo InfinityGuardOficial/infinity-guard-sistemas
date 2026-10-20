@@ -1,0 +1,1177 @@
+<title>Rota do Milhão</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: painel de turno de vigilância — faixa de status no topo, missão do horário em destaque, abas embaixo no celular */
+:root{
+  --bg:#EEF2F4; --surface:#FFFFFF; --sunken:#E2E8EC; --line:#C9D3DA;
+  --fg:#13212B; --muted:#4F606C;
+  --accent:#0A6B6B; --accent-fg:#FFFFFF; --accent-soft:#D3EBE9;
+  --signal:#B85F12; --signal-soft:#FBE8D3;
+  --danger:#B42318; --danger-soft:#FBE1DE;
+  --ok:#287A46; --ok-soft:#DAF0E1;
+  --f-display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D151B; --surface:#15212A; --sunken:#0A1116; --line:#2A3A46;
+  --fg:#E4ECF1; --muted:#97A8B4;
+  --accent:#3DBDB3; --accent-fg:#06221F; --accent-soft:#123A38;
+  --signal:#F2A257; --signal-soft:#3A2614;
+  --danger:#FF7A6B; --danger-soft:#3D1A17;
+  --ok:#5CCB86; --ok-soft:#143322; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D151B; --surface:#15212A; --sunken:#0A1116; --line:#2A3A46;
+  --fg:#E4ECF1; --muted:#97A8B4;
+  --accent:#3DBDB3; --accent-fg:#06221F; --accent-soft:#123A38;
+  --signal:#F2A257; --signal-soft:#3A2614;
+  --danger:#FF7A6B; --danger-soft:#3D1A17;
+  --ok:#5CCB86; --ok-soft:#143322; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:980px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 96px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+h2{font-size:1.45rem;font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.08rem;font-weight:700}
+p{margin:0}
+a{color:var(--accent)}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:600}
+.muted{color:var(--muted)}
+.stack{display:flex;flex-direction:column;gap:12px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.grid2>*{min-width:0}
+
+/* topo */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
+header.top .in{max-width:980px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{font-family:var(--f-display);font-weight:800;font-size:1.15rem;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+.brand svg{flex:none}
+.brand small{font-family:var(--f-body);font-weight:500;font-size:.75rem;color:var(--muted)}
+.status{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:.78rem;font-weight:600;background:var(--sunken);color:var(--fg);white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.warn{background:var(--signal-soft);color:var(--signal)}
+.pill.bad{background:var(--danger-soft);color:var(--danger)}
+.pill.acc{background:var(--accent-soft);color:var(--accent)}
+
+nav.tabs{display:flex;gap:4px;max-width:980px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 8px;overflow-x:auto}
+nav.tabs button{background:none;border:0;color:var(--muted);font:600 .9rem var(--f-body);padding:8px 12px;border-radius:8px;cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
+@media (max-width:720px){
+  nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:9;background:var(--surface);border-top:1px solid var(--line);margin:0;max-width:none;justify-content:space-between;padding-block:6px calc(6px + env(safe-area-inset-bottom,0px))}
+  nav.tabs{gap:0}
+  nav.tabs button{flex:1;min-width:0;padding:8px 2px;font-size:.7rem;display:flex;flex-direction:column;align-items:center;gap:2px}
+}
+nav.tabs svg{width:18px;height:18px}
+@media (min-width:721px){nav.tabs svg{display:none}}
+
+section.view{padding-top:20px;display:flex;flex-direction:column;gap:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.card.flat{background:transparent;border-style:dashed}
+
+/* bloco da missão do horário */
+.shift{border-radius:var(--r);background:var(--surface);border:1px solid var(--line);overflow:hidden}
+.shift-head{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--line);background:var(--sunken)}
+.shift-head .clock{font-family:var(--f-mono);font-size:1.6rem;font-weight:500}
+.shift-body{padding:6px 16px 14px}
+.mission{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.mission:last-child{border-bottom:0}
+.mission .box{width:22px;height:22px;border-radius:6px;border:2px solid var(--line);margin-top:2px;display:grid;place-items:center}
+.mission.done .box{background:var(--ok);border-color:var(--ok)}
+.mission.late .box{border-color:var(--danger)}
+.mission .t{font-weight:600}
+.mission.done .t{color:var(--muted);text-decoration:line-through}
+.mission .d{grid-column:2;color:var(--muted);font-size:.9rem}
+.mission .act{grid-column:2;display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.mission .proof{grid-column:2;font-size:.85rem;background:var(--ok-soft);color:var(--fg);border-radius:6px;padding:6px 8px;overflow-wrap:anywhere}
+.tag{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:4px;background:var(--sunken);color:var(--muted)}
+.tag.late{background:var(--danger-soft);color:var(--danger)}
+.tag.now{background:var(--signal-soft);color:var(--signal)}
+
+button.btn,.btn{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:600 .88rem var(--f-body);padding:8px 14px;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.btn.signal{background:var(--signal);border-color:var(--signal);color:#fff}
+.btn.ghost{background:transparent}
+.btn.sm{padding:5px 10px;font-size:.8rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.84rem;font-weight:600;color:var(--muted)}
+input,textarea,select{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+textarea{min-height:84px;resize:vertical}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+
+/* cobrança */
+.debt{border:2px solid var(--danger);background:var(--danger-soft);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.debt h3{color:var(--danger)}
+
+/* medidor */
+.meter{height:12px;background:var(--sunken);border-radius:999px;overflow:hidden;position:relative}
+.meter>i{display:block;height:100%;background:var(--accent);border-radius:999px}
+.meter>b{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--signal)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.kpi .v{font-family:var(--f-mono);font-size:1.3rem;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.kpi .s{font-size:.8rem;color:var(--muted)}
+
+/* trilha */
+.phase{display:flex;flex-direction:column;gap:8px}
+.phase-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.mods{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden}
+.mod{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;text-align:left;font:inherit;color:inherit;width:100%}
+.mod:last-child{border-bottom:0}
+.mod .wk{font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+.mod.locked{opacity:.55}
+.mod.current{background:var(--accent-soft)}
+.lesson{display:flex;flex-direction:column;gap:12px}
+.lesson .block{border-left:3px solid var(--line);padding-left:12px}
+.lesson .block.task{border-color:var(--signal)}
+.lesson .block.proofb{border-color:var(--ok)}
+
+/* gráfico */
+.chart{width:100%;overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto}
+.chart text{fill:var(--muted);font:11px var(--f-body)}
+
+/* IA */
+.out{white-space:pre-wrap;background:var(--sunken);border-radius:8px;padding:12px;min-height:60px;font-size:.92rem;overflow-wrap:anywhere}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:6px 12px;font:600 .82rem var(--f-body);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+
+/* biblioteca */
+.lib{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.lib .card{display:flex;flex-direction:column;gap:6px}
+
+/* alarme */
+.alarm{position:fixed;inset:0;z-index:20;background:color-mix(in srgb,var(--bg) 70%,transparent);backdrop-filter:blur(3px);display:grid;place-items:center;padding:16px}
+.alarm .card{max-width:440px;width:100%;border:2px solid var(--signal);display:flex;flex-direction:column;gap:12px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:21;background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:8px;font-weight:600;font-size:.9rem;max-width:calc(100% - 32px)}
+.sheet{position:fixed;inset:0;z-index:19;background:color-mix(in srgb,var(--bg) 60%,transparent);display:flex;align-items:flex-end;justify-content:center}
+.sheet .panel{background:var(--surface);border:1px solid var(--line);border-radius:14px 14px 0 0;width:100%;max-width:640px;max-height:88%;overflow:auto;padding:18px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:12px}
+table.t{border-collapse:collapse;width:100%;font-size:.88rem}
+table.t th,table.t td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;white-space:nowrap}
+table.t td.n,table.t th.n{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto}
+@media (prefers-reduced-motion:no-preference){.pulse{animation:p 1.4s ease-in-out infinite}@keyframes p{50%{opacity:.55}}}
+</style>
+
+<header class="top">
+  <div class="in">
+    <div class="brand">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 12.5c1.2-1.6 2.6-1.6 4 0s2.8 1.6 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>Rota do Milhão <small>Infinity Guard</small></span>
+    </div>
+    <div class="status" id="status"></div>
+  </div>
+  <nav class="tabs" id="tabs" aria-label="Seções">
+    <button data-v="hoje"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Hoje</button>
+    <button data-v="trilha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19h16M6 15l4-4 3 3 5-6"/></svg>Trilha</button>
+    <button data-v="equipe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.5c3 0 6 2 6 5.5"/></svg>Equipe</button>
+    <button data-v="ia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Estúdio</button>
+    <button data-v="publicar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l16-8-6 16-3-7z"/></svg>Publicar</button>
+    <button data-v="placar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Placar</button>
+    <button data-v="mais"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>Mais</button>
+  </nav>
+</header>
+
+<main class="wrap" id="app"></main>
+<div id="layer"></div>
+
+<script>
+/* ============ DADOS: catálogo (catalogo.json de 18/10/2026) ============ */
+/* Catálogo editável (aba Mais → Catálogo e preços). Semente: skills/atendente-infinity-guard/references/catalogo.json de 2026-10-18 */
+const CAT_SEMENTE = {pix_pct:10, parcelas:12, prazo_padrao:"", atualizado_em:"2026-10-18", produtos:[{"id": "kit-cam-2", "nome": "Câmera Wi-Fi Infinity Guard — Kit com 2 Unidades, Dupla Lente e Visão Noturna", "preco": 392.35, "custo": 0, "frete": 0, "prazo": "", "anatel": "", "ativo": true, "categoria": "camera"}, {"id": "cam-asecam-ptz", "nome": "Câmera de Segurança Wi-Fi ASECAM — Monitoramento Duplo, Zoom Digital 8X e Rastreamento Inteligente", "preco": 407.17, "custo": 0, "frete": 0, "prazo": "", "anatel": "", "ativo": true, "categoria": "camera"}, {"id": "alarme-ikerui", "nome": "Sistema de Alarme IKerui — Kit Completo Wi-Fi/GSM com Sensores e Controle por App", "preco": 875.5, "custo": 0, "frete": 0, "prazo": "", "anatel": "", "ativo": true, "categoria": "alarme"}, {"id": "fechadura-facial", "nome": "Fechadura Inteligente Infinity Guard — Reconhecimento Facial 3D e Biometria App Tuya Smart Life", "preco": 2173.27, "custo": 0, "frete": 0, "prazo": "", "anatel": "", "ativo": true, "categoria": "fechadura"}, {"id": "fechadura-bio", "nome": "Fechadura Inteligente Infinity Guard — Bluetooth, App e Impressão Digital", "preco": 1218.54, "custo": 0, "frete": 0, "prazo": "", "anatel": "", "ativo": true, "categoria": "fechadura"}, {"id": "sensor-presenca", "nome": "Sensor de Presença Infinity Guard — Acionamento Automático para Lâmpada", "preco": 71.98, "custo": 0, "frete": 0, "prazo": "", "anatel": "", "ativo": true, "categoria": "complemento"}, {"id": "cartao-64", "nome": "Cartão de Memória SanDisk Ultra 64GB — Ideal para Câmeras de Segurança", "preco": 202.01, "custo": 0, "frete": 0, "prazo": "", "anatel": "", "ativo": false, "categoria": "complemento"}, {"id": "suporte-monitor", "nome": "Suporte Articulado Infinity Guard — Monitor + Notebook 2 em 1", "preco": 205.18, "custo": 0, "frete": 0, "prazo": "", "anatel": "", "ativo": true, "categoria": "home_office"}, {"id": "hub-7em1", "nome": "Hub USB-C Infinity Guard 7 em 1 — HDMI 4K, USB e Leitor SD/TF", "preco": 95.56, "custo": 0, "frete": 0, "prazo": "", "anatel": "", "ativo": true, "categoria": "home_office"}, {"id": "luminaria", "nome": "Luminária de Leitura Infinity Guard — Recarregável, 16 LEDs e Toque", "preco": 172.43, "custo": 0, "frete": 0, "prazo": "", "anatel": "", "ativo": true, "categoria": "home_office"}, {"id": "organizador", "nome": "Organizador de Mesa Infinity Guard — Porta-Canetas com 2 Gavetas Giratório", "preco": 172.42, "custo": 0, "frete": 0, "prazo": "", "anatel": "", "ativo": true, "categoria": "home_office"}, {"id": "dock-acasis", "nome": "Estação de Acoplamento Acasis Magnética USB-C — HDMI 4K e Slot SSD M.2", "preco": 529.72, "custo": 0, "frete": 0, "prazo": "", "anatel": "", "ativo": true, "categoria": "home_office"}, {"id": "hub-acasis-16", "nome": "Hub Acasis USB-C 16 Portas — Splitter para Teclado, Mouse e Impressora", "preco": 488.99, "custo": 0, "frete": 0, "prazo": "", "anatel": "", "ativo": true, "categoria": "home_office"}, {"id": "cabo-usbc", "nome": "Cabo USB-C Infinity Guard — Carregamento Rápido 20W", "preco": 48.64, "custo": 0, "frete": 0, "prazo": "", "anatel": "", "ativo": true, "categoria": "home_office"}, {"id": "pasta", "nome": "Pasta Sanfonada Infinity Guard — 13 Divisórias A4 para Documentos", "preco": 56.0, "custo": 0, "frete": 0, "prazo": "", "anatel": "", "ativo": true, "categoria": "home_office"}]};
+let CAT = (()=>{ const c=lsGet("rdm-catalogo"); return c&&Array.isArray(c.produtos)?c:JSON.parse(JSON.stringify(CAT_SEMENTE)) })();
+let CATALOGO = [];  // [nome, preço, id, prazo] só dos ativos
+function refreshCatalogo(){ CATALOGO = CAT.produtos.filter(p=>p.ativo&&Number(p.preco)>0).map(p=>[p.nome, Number(p.preco), p.id, p.prazo||CAT.prazo_padrao||""]) }
+refreshCatalogo();
+const precoPix = v=>Math.round(Number(v)*(100-Number(CAT.pix_pct||0)))/100;
+const REGRAS = "Regras que não podem ser quebradas: nunca prometer '100% seguro' ou 'à prova de invasão'; a loja NÃO faz instalação e NÃO vende câmera 4G; a loja trabalha com dropshipping, então nunca dizer que o produto 'sai daqui configurado' ou 'já vem configurado' (a configuração é guiada por vídeo depois que chega) e nunca prometer prazo de entrega menor que o do catálogo; nunca inventar código Anatel, prazo de garantia, CNPJ, avaliação ou depoimento; nada de 'de/por' com preço antigo inventado; preço só os do catálogo; pedir permissão antes de mostrar conversa de cliente.";
+function contexto(){ return `Marca: Infinity Guard (infinityguard.com.br), loja online na Nuvemshop de câmeras Wi-Fi, alarmes e fechaduras inteligentes para casa, comércio e home office. Vende por dropshipping: o fornecedor envia direto para o cliente, para todo o Brasil. Atendimento por WhatsApp (31) 98667-9178. Lema: "Segurança onde você estiver". Posicionamento: marca nova que vende orientação na escolha, configuração guiada junto com o cliente por vídeo no WhatsApp quando o produto chega (senha trocada, firmware atualizado, rede 2,4 GHz) e suporte que responde. Dores do público: medo de crime (96,2% dos brasileiros, Datafolha/FBSP 2026), câmera que fica offline, app instável, SAC que some, câmeras invadidas por senha 'admin' de fábrica (cerca de 68 mil expostas no Brasil, Band abr/2026). Catálogo atual: ${CATALOGO.map(c=>c[0]+" R$ "+c[1].toFixed(2).replace(".",",")+" (Pix R$ "+precoPix(c[1]).toFixed(2).replace(".",",")+")"+(c[3]?", entrega em "+c[3]:"")).join("; ")}. ${CAT.pix_pct}% de desconto no Pix e até ${CAT.parcelas}x no cartão. ${REGRAS}` }
+
+/* ============ DADOS: trilha de 48 semanas ============ */
+const FASES = [
+ {n:"Fundação e prova", meta:"Uma loja e perfis que passam confiança antes de qualquer anúncio."},
+ {n:"Oferta irresistível", meta:"Uma oferta que faz o preço mais alto parecer óbvio."},
+ {n:"Conteúdo com IA", meta:"3 a 5 Reels por semana sem travar."},
+ {n:"WhatsApp que fecha", meta:"Toda conversa recebe resposta rápida, perguntas certas e follow-up."},
+ {n:"Prova social", meta:"Avaliações e depoimentos reais que vendem por você."},
+ {n:"Tráfego pago inicial", meta:"Primeiras campanhas com o CPA sob controle."},
+ {n:"Vendas para empresas", meta:"Pedidos maiores: comércio, condomínio, escritório e parceiros."},
+ {n:"Escala de anúncios", meta:"Mais verba só onde o número prova que dá lucro."},
+ {n:"Novos canais", meta:"TikTok, marketplaces e Google trazendo venda extra."},
+ {n:"Recorrência e indicação", meta:"Cada cliente compra de novo e traz outro."},
+ {n:"Pico sazonal", meta:"Datas fortes planejadas com estoque, oferta e mensagens."},
+ {n:"Sistema e equipe", meta:"O negócio roda sem depender do seu horário livre."},
+];
+const M = (f,t,aula,tarefa,prova,ferramenta,link) => ({f,t,aula,tarefa,prova,ferramenta,link});
+const MODULOS = [
+ M(0,"Loja que passa confiança","Cliente que não conhece a marca compra de quem prova que existe. O Raio X de Nicho mostrou que o site não exibe CNPJ, prazo de garantia, código Anatel nem avaliações. Sem isso, anúncio só queima dinheiro.","Rode a skill prova-da-loja (ou o auditor-da-loja) e corrija 4 itens hoje: CNPJ no rodapé, prazo de garantia escrito (a garantia legal do CDC é de 90 dias para produto durável), página de troca e devolução e o prazo de entrega real do fornecedor em cada produto (no dropshipping, é a primeira dúvida do cliente).","Cole o link da página corrigida e quais 4 itens você arrumou.","Skill prova-da-loja · Use o auditor-da-loja","https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm"),
+ M(0,"Instagram que vende em 5 segundos","Quem cai no perfil decide em segundos. A bio precisa dizer para quem é, o que resolve e onde clicar. Os destaques respondem as perguntas antes do WhatsApp.","Reescreva a bio (promessa + prova + chamada para o WhatsApp) e crie 5 destaques: Kits, Como configurar, Suporte, Avaliações, Entrega. Peça 3 versões de bio no Estúdio IA.","Cole a bio nova e o nome dos 5 destaques.","Estúdio IA · Use o social-media","https://www.facebook.com/business/learn"),
+ M(0,"WhatsApp Business montado","O WhatsApp é seu caixa. Catálogo, respostas rápidas e etiquetas fazem você responder em 30 segundos do celular, no ônibus ou no almoço.","Monte o catálogo com os 6 produtos, a mensagem de saudação e de ausência, 4 respostas rápidas (/kit, /pix, /frete, /garantia) e as etiquetas Novo, Orçamento, Pagou, Pós-venda.","Cole o texto das 4 respostas rápidas.","Skill atendente-infinity-guard","https://faq.whatsapp.com/"),
+ M(0,"Os seus números-guia","Faturamento sem margem é ilusão, ainda mais no dropshipping, onde o custo do fornecedor e o frete mudam. Você precisa saber quanto sobra por kit e quanto pode pagar por venda em anúncio (CPA máximo). Esse número decide tudo da fase 6 em diante.","Preencha custo do fornecedor, frete e prazo de cada produto em Mais → Catálogo e preços, rode o plano-de-midia para o CPA máximo e atualize ticket médio e margem em Mais → Configurações.","Cole a margem dos 3 produtos principais e o seu CPA máximo.","Skills catalogo-e-precos e plano-de-midia",""),
+
+ M(1,"Equação de valor","Alex Hormozi resume assim: valor = resultado sonhado × chance percebida de dar certo ÷ (tempo × esforço). Para vender acima da Intelbras, aumente a chance percebida (configuração guiada, suporte) e diminua o esforço (passo a passo pronto).","Escreva a oferta \"Câmera Configurada com Você\": o kit, a configuração guiada por vídeo no WhatsApp quando o produto chega, o guia anti-invasão e o suporte com prazo de resposta que você consegue cumprir no CLT. No dropshipping o produto não passa por você: prometa só o que você faz.","Cole o texto completo da oferta.","Livro $100M Offers · Estúdio IA","https://www.acquisition.com/books"),
+ M(1,"Garantia que você consegue cumprir","Garantia forte reduz o medo, mas só vale se você cumprir. Na loja online o cliente já tem 7 dias de arrependimento por lei (CDC art. 49). Use isso como argumento, sem inventar prazo de fábrica.","Escreva a sua garantia de suporte (ex.: resposta no WhatsApp até 20h do mesmo dia útil) e passe pelo revisor-de-promessas.","Cole a garantia aprovada pelo revisor.","Skill revisor-de-promessas","https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm"),
+ M(1,"Kits por tipo de casa","Ninguém compra \"câmera\", compra a solução para a casa dele. Kits por situação aumentam o ticket e encurtam a conversa.","Monte 3 kits com o script recomendar_kit.py: apartamento, casa com portão e pequeno comércio. Sítio sem Wi-Fi fica fora, porque a loja não vende câmera 4G.","Cole os 3 kits com o preço cheio e no Pix.","Script recomendar_kit.py",""),
+ M(1,"Preço que aguenta comparação","Seus preços estão acima das ofertas de marketplace. Ou o serviço justifica, ou o preço muda. Decida produto por produto, com fonte.","Rode o radar-de-concorrentes e escreva a decisão para cada produto: manter (com qual argumento) ou ajustar (para quanto).","Cole a decisão de cada produto.","Skill radar-de-concorrentes",""),
+
+ M(2,"Ganchos de 3 segundos","O Reel vive ou morre nos 3 primeiros segundos. Use os 5 formatos: a sua tese, a dor de quem assiste, passo a passo, o que eu nunca faço, se você é...","Gere 10 ganchos no Estúdio IA com os temas quentes (câmera invadida, câmera offline, fechadura facial) e escolha os 3 melhores.","Cole os 3 ganchos escolhidos.","Estúdio IA · Use o roteirista-de-reels",""),
+ M(2,"Gravar sem travar","Celular, luz da janela, 30 a 45 segundos, legenda automática. Feito vale mais que perfeito. Grave em lote no sábado e publique na semana.","Grave e publique 3 Reels nesta semana. Edite no CapCut com legenda automática.","Cole os 3 links publicados.","CapCut · skill conteudo-semanal","https://www.capcut.com/"),
+ M(2,"Funil de conteúdo","Topo atrai pelo medo e pela notícia, meio ensina a escolher, fundo mostra a oferta e a prova. Sem fundo de funil, o perfil cresce e não vende.","Monte o calendário das próximas 4 semanas: 2 posts de topo, 2 de meio e 1 de fundo por semana. Peça as ideias no Estúdio IA.","Cole o calendário das 4 semanas.","Estúdio IA · Meta Business Suite","https://business.facebook.com/"),
+ M(2,"Métrica que importa","Curtida não paga boleto. Olhe retenção nos 3 segundos, compartilhamentos, salvamentos e quantas pessoas chamaram no WhatsApp.","Abra os Insights dos 3 Reels e anote retenção, compartilhamentos e conversas geradas. Repita o formato que mais gerou conversa.","Cole os números dos 3 Reels e o formato vencedor.","Instagram Insights",""),
+
+ M(3,"5 perguntas que vendem","Quem pergunta conduz. Situação (casa ou apartamento?), problema (o que te preocupa?), consequência (o que acontece se...?), ideal (como seria estar tranquilo?) e só então o kit. É o SPIN Selling simplificado.","Escreva o seu roteiro de 5 perguntas e use em 10 conversas desta semana.","Quantas das 10 conversas viraram orçamento?","Livro Alcançando Excelência em Vendas (SPIN) · skill atendente",""),
+ M(3,"Velocidade de resposta","Lead respondido em minutos fecha muito mais que lead respondido no dia seguinte. No CLT você não consegue estar sempre online, então a IA cobre a lacuna.","Gere o prompt do robô com exportar_prompt.py e ligue um atendente com IA no WhatsApp (app da Nuvemshop ou outro). Se ainda não der, use mensagem de ausência com o link do kit.","Qual foi o seu tempo médio de resposta nesta semana?","Script exportar_prompt.py","https://www.nuvemshop.com.br/loja-aplicativos-nuvem"),
+ M(3,"Follow-up D1, D3, D7","A maior parte das vendas sai no segundo ou terceiro contato. Orçamento sem follow-up é venda dada ao concorrente.","Faça follow-up de todos os orçamentos abertos com a sequência D1, D3 e D7 (o recuperador-de-carrinho escreve as mensagens).","Quantos orçamentos foram retomados e quantos fecharam?","Use o recuperador-de-carrinho",""),
+ M(3,"Objeções sem medo","As 3 de sempre: \"tá caro\", \"vou pensar\" e \"isso é seguro?\". Resposta pronta e ensaiada vira reflexo.","Gere no Estúdio IA as respostas para as 5 objeções mais comuns e salve como resposta rápida no WhatsApp.","Cole as 5 respostas.","Estúdio IA → Objeção",""),
+
+ M(4,"As 10 primeiras avaliações","Avaliação real é o que separa marca nova de loja suspeita. Peça no 7º dia de uso, quando o cliente já está satisfeito.","Mande o pedido de avaliação (com link direto) para todos os clientes com mais de 7 dias. Meta: 10 avaliações.","Quantas avaliações você tem hoje?","Use o guardiao-pos-venda",""),
+ M(4,"Depoimento em vídeo","Um cliente real mostrando a câmera no celular vale mais que 10 anúncios. Sempre com permissão por escrito.","Peça a 3 clientes satisfeitos um vídeo de 20 segundos. Ofereça um brinde pequeno pelo tempo, não pela opinião.","Cole o link do depoimento publicado (com permissão).","Use o social-media",""),
+ M(4,"Bastidores que provam","Mostrar a embalagem, a configuração e o suporte respondendo prova que existe gente de verdade por trás.","Publique 3 conteúdos de bastidores: separação do pedido, configuração segura e um suporte resolvido (com permissão).","Cole os 3 links.","Estúdio IA → Roteiro",""),
+ M(4,"Reclame Aqui e Google","Quem pesquisa a marca antes de comprar precisa encontrar você. Perfil reivindicado e respostas rápidas viram prova.","Crie ou reivindique o perfil no Reclame Aqui e no Perfil da Empresa no Google. Responda tudo o que houver.","Cole os 2 links.","","https://www.google.com/business/"),
+
+ M(5,"Pixel e eventos","Sem pixel, a Meta não sabe quem compra e o anúncio fica cego. Instale e confira os eventos antes de gastar 1 real.","Conecte o pixel da Meta (ou a API de Conversões) na Nuvemshop e confira PageView, AddToCart e Purchase no Gerenciador de Eventos.","Quais eventos aparecem como ativos?","Meta Blueprint · Use o analista-de-midia","https://www.facebook.com/business/learn"),
+ M(5,"Primeira campanha","Comece pequeno: R$ 30 por dia, campanha de vendas ou de mensagens para o WhatsApp, 3 criativos diferentes. Deixe rodar 7 dias sem mexer.","Gere os criativos com a maquina-de-anuncios, passe no revisor-de-promessas e suba a campanha. Gasto real só com o seu ok.","Cole o nome da campanha e o orçamento diário.","Skill maquina-de-anuncios · Use o criativos-de-anuncio",""),
+ M(5,"Ler os números","Custo por conversa, custo por venda (CPA) e ROAS contra o seu CPA máximo. Acima do máximo, pausa. Abaixo, mantém. Bem abaixo, escala.","Preencha a régua escalar, manter ou pausar com os 7 dias de dados (o plano-de-midia faz a conta).","Cole o CPA de cada criativo e a decisão.","Skill plano-de-midia",""),
+ M(5,"Remarketing","Quem já visitou ou chamou no WhatsApp compra mais barato. Público de 30 dias com prova social no criativo.","Crie o público de quem engajou ou visitou nos últimos 30 dias e uma campanha com o depoimento.","Cole o tamanho do público e o CPA da semana.","Meta Ads",""),
+
+ M(6,"Lista de 50 empresas","Um condomínio ou comércio compra o equivalente a 5 a 10 clientes de casa. Comece pelo seu bairro e pelo caminho do trabalho.","Liste 50 alvos: padarias, farmácias, oficinas, escritórios, condomínios, com nome, contato e quem decide.","Quantos alvos estão na lista?","Use o vendedor-b2b","https://www.google.com/maps"),
+ M(6,"Abordagem de 10 por semana","Mensagem curta, uma pergunta, nada de catálogo no primeiro contato. Sábado de manhã vale para visitas.","Faça 10 abordagens nesta semana com o roteiro do vendedor-b2b.","Quantas responderam e quantas pediram proposta?","Use o vendedor-b2b · livro Receita Previsível",""),
+ M(6,"Proposta que fecha","Proposta com problema, solução, preço, Pix, parcelas e validade de 7 dias. Desconto só dentro do limite da margem.","Envie pelo menos 2 propostas com a skill proposta-comercial e marque o follow-up.","Cole o valor das propostas enviadas.","Skill proposta-comercial",""),
+ M(6,"Parceiros que indicam","Eletricistas, síndicos, corretores e instaladores falam com o seu cliente toda semana. Comissão de 5 a 10% sobre venda paga.","Feche acordo com 3 parceiros e dê a cada um um cupom com o nome dele, para medir quem indica.","Cole o nome dos parceiros e os cupons.","",""),
+
+ M(7,"Teste de criativos 3x3","3 ganchos × 3 formatos (vídeo, carrossel, imagem). O mercado escolhe o vencedor, não a sua opinião.","Suba 9 variações com o mesmo orçamento total e deixe 7 dias.","Qual criativo ganhou e por quanto?","Use o criativos-de-anuncio",""),
+ M(7,"Escalar sem quebrar","Aumente a verba aos poucos (cerca de 20% a cada 3 dias) só nos conjuntos com CPA abaixo do máximo. Aumento brusco costuma piorar o custo.","Aplique a régua do plano-de-midia por 2 semanas e registre cada aumento.","Cole verba antes e depois e o CPA.","Skill plano-de-midia",""),
+ M(7,"Públicos amplos e Advantage+","As campanhas automáticas da Meta acham comprador quando o pixel já tem compras. Compare com a campanha manual.","Rode uma campanha Advantage+ de vendas ao lado da melhor manual por 7 dias.","Qual teve o menor CPA?","Meta Blueprint","https://www.facebook.com/business/learn"),
+ M(7,"Criadores de conteúdo","Vídeo feito por cliente ou criador converte melhor que vídeo de marca. Pague por vídeo, com autorização de uso em anúncio.","Contrate 2 vídeos de criadores pequenos do nicho casa ou segurança e use nos anúncios.","Cole o link dos 2 vídeos.","",""),
+
+ M(8,"TikTok com o que já existe","Os mesmos Reels rodam no TikTok. Custo zero, alcance extra.","Publique os 5 melhores Reels no TikTok com legenda adaptada.","Cole o @ e as visualizações.","TikTok",""),
+ M(8,"TikTok Shop","Vender dentro do vídeo. Confira na Central do Vendedor as regras atuais, que mudam com frequência.","Abra a conta de vendedor, cadastre o kit principal e convide 3 afiliados.","Status da loja e número de afiliados.","TikTok Shop","https://seller-br.tiktok.com/"),
+ M(8,"Marketplace para giro","Mercado Livre e Shopee trazem volume, mas cobram comissão. Só entre com produto que aguenta a taxa.","Calcule a margem de cada produto com a taxa do marketplace e anuncie só os que sobram acima de 15%.","Quais produtos passaram na conta?","Skill catalogo-e-precos","https://www.mercadolivre.com.br/"),
+ M(8,"Google: quem já procura","Quem pesquisa \"câmera wi-fi para casa\" já quer comprar. Comece com o Perfil da Empresa e o Google Shopping gratuito.","Ligue o Google Merchant Center à Nuvemshop e confira os produtos aprovados.","Quantos produtos aprovados?","Google Skillshop","https://skillshop.withgoogle.com/"),
+
+ M(9,"Venda para quem já comprou","Vender de novo para um cliente custa muito menos que conquistar outro. Cartão de memória e sensor são o complemento natural.","Monte a oferta de complemento para o D7 do pós-venda e mande para todos os clientes.","Quantos compraram o complemento?","Use o guardiao-pos-venda",""),
+ M(9,"Programa de indicação","Cliente satisfeito indica se você pedir e der motivo. Cupom para quem indica e para quem chega.","Crie o cupom de indicação e mande para todos os clientes satisfeitos.","Quantas indicações chegaram?","",""),
+ M(9,"Lista VIP","Um canal ou lista de transmissão no WhatsApp com quem já comprou ou quase comprou. Ofertas primeiro para eles.","Crie o canal VIP e convide todos os clientes e orçamentos dos últimos 90 dias.","Quantos membros?","WhatsApp",""),
+ M(9,"Calendário de datas","Viagem de férias, Dia dos Pais, mudança de casa: cada data tem um motivo para comprar segurança.","Monte o calendário de 12 meses com 1 campanha por mês.","Cole o calendário.","Skill campanha-sazonal",""),
+
+ M(10,"Planejar o pico","11.11, Black Friday e Natal concentram vendas do ano. Quem planeja com 30 dias vende; quem improvisa queima margem.","Rode a campanha-sazonal para a próxima data forte: kits, preço, cupom e calendário.","Cole o plano da campanha.","Skill campanha-sazonal",""),
+ M(10,"Oferta de pico","Desconto real, com o preço que já estava no site. Kit com bônus costuma preservar a margem melhor que desconto puro.","Defina a oferta e passe pelo revisor-de-promessas (nada de de/por maquiado).","Cole a oferta aprovada.","Skill revisor-de-promessas",""),
+ M(10,"Estoque e entrega","Venda sem estoque vira reclamação, e no dropshipping o estoque é do fornecedor. Confirme estoque e prazo com ele antes de anunciar e tenha um fornecedor reserva para os itens principais.","Confirme estoque e prazo de cada item da oferta com o fornecedor e atualize no Catálogo do app e na página.","Cole estoque e prazo por item.","Use o gestor-de-catalogo",""),
+ M(10,"Depois do pico","O pico traz muitos clientes novos. Pós-venda bem feito transforma isso em avaliação e recompra.","Mande o pós-venda de 7 dias e o pedido de avaliação para todos os pedidos do pico.","Quantas avaliações novas?","Use o guardiao-pos-venda",""),
+
+ M(11,"Processos escritos","O que está só na sua cabeça não pode ser delegado. Escreva o passo a passo das 5 tarefas que mais se repetem.","Escreva 5 procedimentos: atender, enviar pedido, pós-venda, publicar Reel e subir anúncio.","Cole os 5 títulos e onde estão salvos.","",""),
+ M(11,"Primeira ajuda","Quando a rotina não cabe no horário livre, contrate por tarefa: edição de vídeo ou atendimento em meio período.","Contrate 1 freelancer para a tarefa que mais toma seu tempo.","Qual tarefa e quanto custa por mês?","",""),
+ M(11,"Painel semanal","Decisão por número, toda semana, em 15 minutos.","Gere o painel com a exportação de pedidos da Nuvemshop e faça a reunião semanal.","Cole as 3 decisões da semana.","Skills painel-de-vendas e reuniao-semanal",""),
+ M(11,"Plano do ano 2","Sair do CLT é decisão de número, não de vontade. Critério sugerido: 6 meses seguidos com lucro acima de 2 vezes o seu salário e 6 meses de reserva.","Escreva o plano do ano 2 e a regra objetiva para sair do CLT.","Cole a sua regra de saída.","Use o diretor-geral",""),
+];
+
+/* rampa mensal que soma R$ 1.000.000 em 12 meses */
+const RAMPA = [10000,20000,35000,50000,65000,80000,90000,100000,110000,120000,150000,170000];
+
+/* ============ MATERIAIS ============ */
+const MATERIAIS = [
+ {g:"Livros", t:"$100M Offers — Alex Hormozi", d:"Como montar uma oferta que vale mais que o preço. Base da fase 2.", l:"https://www.acquisition.com/books"},
+ {g:"Livros", t:"$100M Leads — Alex Hormozi", d:"Como gerar contatos: conteúdo, abordagem, anúncio e indicação. Base das fases 3, 6 e 7.", l:"https://www.acquisition.com/books"},
+ {g:"Livros", t:"Alcançando Excelência em Vendas (SPIN Selling) — Neil Rackham", d:"As perguntas que conduzem a venda. Base da fase 4.", l:""},
+ {g:"Livros", t:"As Armas da Persuasão — Robert Cialdini", d:"Prova social, autoridade, escassez real. Base da fase 5.", l:""},
+ {g:"Livros", t:"Receita Previsível — Aaron Ross", d:"Venda para empresas com processo. Base da fase 7.", l:""},
+ {g:"Livros", t:"Hábitos Atômicos — James Clear", d:"Como manter a rotina nos horários livres do CLT sem depender de motivação.", l:""},
+ {g:"Cursos gratuitos", t:"Meta Blueprint", d:"Cursos oficiais da Meta sobre anúncios, pixel e Advantage+. Há conteúdo em português.", l:"https://www.facebook.com/business/learn"},
+ {g:"Cursos gratuitos", t:"Sebrae: cursos online e UP Digital", d:"Marketing digital e IA para pequeno negócio. O UP Digital estava 100% subsidiado em 2026; confira as vagas.", l:"https://sebrae.com.br/sites/PortalSebrae/cursosonline"},
+ {g:"Cursos gratuitos", t:"Google Skillshop", d:"Google Ads e Merchant Center (fase 9).", l:"https://skillshop.withgoogle.com/"},
+ {g:"Cursos gratuitos", t:"HubSpot Academy", d:"Vendas e marketing de conteúdo, com certificado.", l:"https://academy.hubspot.com/courses"},
+ {g:"Plataformas", t:"Cursos da Nuvemshop (Ecommerce na Prática)", d:"Mais de 40 cursos dentro do painel nos planos pagos: tráfego, WhatsApp, SEO e marketplaces.", l:"https://www.nuvemshop.com.br/cursos"},
+ {g:"Plataformas", t:"Central do Vendedor TikTok Shop", d:"Regras atuais de vendedor e afiliados. Em 2026 o criador precisa de 1.000 seguidores para vender como afiliado.", l:"https://seller-br.tiktok.com/"},
+ {g:"Ferramentas de IA", t:"Estúdio deste app", d:"Roteiros, vídeos de Reels, artes de anúncio e revisão de promessas com o Kit da marca.", l:"#ia"},
+ {g:"Ferramentas de IA", t:"CapCut", d:"Edição no celular com legenda automática.", l:"https://www.capcut.com/"},
+ {g:"Ferramentas de IA", t:"Canva", d:"Carrosséis e artes com recursos de IA.", l:"https://www.canva.com/"},
+ {g:"Ferramentas de IA", t:"Meta Business Suite", d:"Agende os posts da semana no sábado e publique no automático.", l:"https://business.facebook.com/"},
+ {g:"Seus sistemas", t:"Plugin Infinity Guard (22 funcionários)", d:"Cada módulo da trilha diz qual skill ou funcionário usar. Ex.: \"Use o roteirista-de-reels: 3 roteiros sobre câmera invadida\".", l:""},
+];
+
+/* ============ EQUIPE: 22 funcionários (gerado de agents/*.md) ============ */
+const EQUIPE = [{"id": "diretor-geral", "cargo": "Diretor Geral (CEO de operação)", "squad": "Direção", "desc": "Diretor Geral da Infinity Guard. Use para planejar a semana, decidir prioridades, saber o status da empresa, dividir um objetivo grande (ex.: bater a meta da Black Friday) entre os squads ou quando o pedido não tem dono claro.", "missao": "Fazer a Infinity Guard crescer com a ordem certa: primeiro a conversa que vende, depois a prova que sustenta o preço, só então o tráfego. Transformar o objetivo do dono em 3 prioridades por semana, cada uma com um líder responsável.", "entrega": "Top 3 da semana (squad, entrega, prazo), a lista do que só o dono faz, e uma linha de risco se houver.", "faz": "- Roda a `reuniao-semanal` e lê o mapa em `docs/mapa-de-sistemas.md` e o Raio X em `docs/raio-x-de-nicho.md`. - Escolhe as 3 prioridades da semana (P1 primeiro: o que trava venda ou expõe a loja). - Distribui cada prioridade para o líder do squad dono do resultado (organograma abaixo). - Junta numa lista única tudo que só o dono pode fazer (documento, senha, aprovação de gasto). - Na sexta, cobra de cada líder o que entregou e o que travou.", "tarefas": ["Quais são as 3 prioridades desta semana para chegar mais perto da meta do mês?", "Divida a meta deste mês entre os squads, com uma entrega por squad e prazo."]}, {"id": "lider-vendas", "cargo": "Head de Vendas", "squad": "Vendas", "desc": "Líder do squad de Vendas da Infinity Guard. Use para metas de venda, organizar o atendimento no WhatsApp, revisar conversas que não fecharam, montar o roteiro de vendas de uma campanha ou distribuir trabalho entre consultor, recuperador de carrinho e vendedor B2B.", "missao": "Transformar conversa em venda. Meta inicial do mapa: as primeiras 20 vendas, com o WhatsApp respondendo em minutos.", "entrega": "Diagnóstico em 3 linhas (número, gargalo, ação) e a lista de tarefas por funcionário.", "faz": "- Define a meta da semana e acompanha no `painel-de-vendas` (conversas, kits indicados, carrinhos recuperados). - Revisa conversas perdidas e ajusta `references/roteiro.md` e `objecoes.md` da atendente. - Distribui: cliente pessoa física → consultor-whatsapp; carrinho parado → recuperador-de-carrinho; empresa, condomínio ou quantidade → vendedor-b2b. - Garante que todo pedido acima de R$ 3.000, reclamação ou troca chegue ao dono.", "tarefas": ["Monte o roteiro de vendas da semana no WhatsApp para a fase em que estou.", "Onde estou perdendo vendas? Me diga o que medir e o que mudar nas conversas."]}, {"id": "consultor-whatsapp", "cargo": "Consultor de Vendas WhatsApp", "squad": "Vendas", "desc": "Consultor de vendas da Infinity Guard no WhatsApp. Use quando o dono colar a mensagem de um cliente, pedir a próxima resposta, indicar kit de câmera, alarme ou fechadura para a casa de alguém, ou responder uma objeção (está caro, vou pensar, é confiável?).", "missao": "Ser o consultor da casa certa: descobrir como é a casa do cliente em 3 a 5 perguntas e indicar a proteção certa, vendendo tranquilidade, configuração segura e suporte que responde.", "entrega": "A mensagem de WhatsApp pronta e, em uma linha separada, o que o dono precisa saber.", "faz": "- Escreve só a próxima mensagem, pronta para colar, uma pergunta por vez. - Monta o kit com `scripts/recomendar_kit.py` (nunca de cabeça). - Quebra objeção com `references/objecoes.md`. - Fecha com link e Pix e manda o guia da câmera segura depois da compra.", "tarefas": ["Cliente: 'moro em casa com portão, viajo muito, tenho Wi-Fi'. Qual a próxima resposta?", "Escreva a abordagem de primeira mensagem para quem chama pelo anúncio."]}, {"id": "recuperador-de-carrinho", "cargo": "Especialista em Recuperação de Carrinho e Follow-up", "squad": "Vendas", "desc": "Especialista em recuperar carrinho abandonado e cliente que parou de responder na Infinity Guard. Use para gerar as mensagens de carrinho (30-60 min, dia seguinte, 3 dias), follow-up de orçamento sem resposta e reativar a lista de quem já conversou antes de campanha.", "missao": "Trazer de volta quem quase comprou, sem insistência chata: 3 toques e para.", "entrega": "As mensagens prontas, com quando mandar cada uma.", "faz": "- Gera a sequência com `scripts/carrinho.py` da atendente. - Em campanha, usa o cupom do evento (só se já existe na Nuvemshop). - Monta a mensagem de reativação da lista VIP com as ofertas da `campanha-sazonal`. - Registra cada recuperação no `conversas.csv` do painel (resultado `recuperado`).", "tarefas": ["Escreva as 3 mensagens de carrinho abandonado (30-60 min, dia seguinte, 3 dias) para o kit de 2 câmeras.", "Escreva o follow-up D1, D3 e D7 para orçamento sem resposta."]}, {"id": "vendedor-b2b", "cargo": "Executivo de Vendas B2B (comércio, escritório e condomínio)", "squad": "Vendas", "desc": "Vendedor B2B da Infinity Guard. Use quando um comércio, escritório, condomínio ou alguém comprando várias unidades pedir orçamento, cotação, proposta formal ou condição para quantidade.", "missao": "Abrir o canal de empresas: ticket maior, compra repetida e indicação.", "entrega": "A proposta em Markdown (pronta para PDF) e a mensagem de envio.", "faz": "- Qualifica com as 5 perguntas de `references/qualificacao-b2b.md`. - Monta a proposta com `scripts/proposta.py` (preço, Pix, parcelas, validade). - Faz o follow-up em 2 dias e antes de vencer a validade. - Mapeia comércios do bairro e condomínios como lista de prospecção (só com dado público).", "tarefas": ["Escreva a primeira abordagem para uma padaria do bairro e para um síndico de condomínio.", "Monte a lista de 10 tipos de empresa que mais compram câmera e alarme e por quê."]}, {"id": "lider-sucesso-cliente", "cargo": "Head de Sucesso do Cliente", "squad": "Sucesso do Cliente", "desc": "Líder do squad de Sucesso do Cliente da Infinity Guard. Use para organizar suporte, trocas e pós-venda, tratar reclamação (inclusive Reclame Aqui), medir chamados e transformar cliente atendido em avaliação e indicação.", "missao": "Cumprir a brecha número 1 da marca: configuração guiada por vídeo quando o produto chega e suporte que responde. Cliente que resolve vira avaliação.", "entrega": "Status dos casos abertos (cliente sem nome completo, problema, próximo passo, quem faz).", "faz": "- Distribui: problema técnico → tecnico-de-suporte; dias 1 a 7 depois da entrega e avaliação → guardiao-pos-venda. - Reclamação, Procon ou Reclame Aqui: escreve a resposta pública com o dono, rápida e sem briga. - Toda semana: chamados por tipo e o que mudar no produto, na página ou no guia para não repetir.", "tarefas": ["Monte o padrão de atendimento de suporte que cabe no meu horário livre do CLT.", "Como transformar cada cliente atendido em avaliação e indicação?"]}, {"id": "guardiao-pos-venda", "cargo": "Guardião do Pós-venda e das Avaliações", "squad": "Sucesso do Cliente", "desc": "Guardião do pós-venda da Infinity Guard. Use para mandar o guia da câmera segura no dia da entrega, as mensagens dos 7 dias, pedir avaliação, pedir indicação e montar a base de clientes para campanhas.", "missao": "Fazer cada comprador terminar a primeira semana com o aparelho seguro, funcionando e disposto a avaliar a loja.", "entrega": "As mensagens do dia por cliente e quantas avaliações foram pedidas e recebidas.", "faz": "- Dia da entrega: os 3 ajustes (rede 2,4 GHz, trocar a senha, atualizar). - Dias 1 a 7: mensagens de `references/pos-venda-7-dias.md`. - Dia 7: pedido de avaliação com o modelo da `prova-da-loja` (avaliação real, nunca comprada ou escrita pela loja). - Pede indicação a quem avaliou bem.", "tarefas": ["Escreva as mensagens dos 7 dias de pós-venda, com o pedido de avaliação no D7.", "Escreva o pedido de indicação com cupom para clientes satisfeitos."]}, {"id": "tecnico-de-suporte", "cargo": "Técnico de Suporte (câmera, alarme e fechadura)", "squad": "Sucesso do Cliente", "desc": "Técnico de suporte da Infinity Guard. Use quando o cliente disser que a câmera não conecta, fica offline, não grava, não avisa, imagem ruim à noite, medo de câmera invadida, problema com chip ou sensor do alarme, fechadura que não abre, ou pedir troca, devolução ou garantia.", "missao": "Resolver no WhatsApp, passo a passo, o que o mercado inteiro deixa sem resposta.", "entrega": "A mensagem para o cliente e, separado, o que o dono precisa decidir.", "faz": "- Acha o problema com `scripts/diagnostico.py --mensagem` e manda o passo a passo numerado. - Um problema e um passo por vez; pede vídeo curto quando não resolve. - Troca e devolução: `--troca --recebido` diz o caso pelo CDC; monta o resumo e passa para o dono. - Problema novo resolvido vira entrada em `references/problemas.json`.", "tarefas": ["Cliente diz que a câmera fica offline à noite. Passo a passo para o WhatsApp.", "Escreva o roteiro da configuração guiada por vídeo quando o produto chega: senha, atualização e rede 2,4 GHz."]}, {"id": "lider-marketing", "cargo": "Head de Marketing e Marca", "squad": "Marketing e Conteúdo", "desc": "Líder do squad de Marketing e Conteúdo da Infinity Guard. Use para estratégia de marca, campanhas (11.11, Black Friday, datas), calendário de conteúdo, posicionamento, briefing de criativos e para coordenar roteirista, copywriter e social media.", "missao": "Fazer a Infinity Guard ser lembrada como a loja que entrega a câmera segura e responde, e levar gente para o WhatsApp.", "entrega": "Plano da campanha ou da semana com peças, responsáveis e datas.", "faz": "- Monta campanhas com a `campanha-sazonal` (ofertas, calendário, mensagens) e o portão de prova. - Garante a tese em tudo: \"segurança boa começa pela casa de quem vai usar, não pela vitrine\". - Faz o briefing para roteirista, copywriter, social media e criativos de anúncio. - Cuida da identidade: tom, slogan, cores e o que a marca nunca diz.", "tarefas": ["Monte o calendário de conteúdo das próximas 2 semanas com objetivo de cada post.", "Qual campanha devo rodar este mês e com que mensagem principal?"]}, {"id": "copywriter-de-loja", "cargo": "Copywriter de Loja e SEO", "squad": "Marketing e Conteúdo", "desc": "Copywriter da loja Infinity Guard. Use para escrever ou melhorar descrição de produto, título SEO, meta description, página Sobre, página de trocas, banners, coleções e textos do site na Nuvemshop.", "missao": "Página que responde a dúvida antes do WhatsApp e mostra a prova que sustenta o preço.", "entrega": "Título SEO, meta, descrição curta e HTML, mais a lista de pendências.", "faz": "- Gera páginas com `scripts/descrever.py` (título até 60, meta até 155, HTML pronto). - Escreve rodapé, Sobre e Trocas com os modelos da `prova-da-loja` (só com dado do dono). - Tira rastro de fornecedor das páginas. - Mede: depois de publicar, o auditor-da-loja confere.", "tarefas": ["Reescreva a descrição do kit de 2 câmeras com título SEO e meta description.", "Escreva a página Sobre da Infinity Guard (sem inventar CNPJ, prazo ou depoimento)."]}, {"id": "roteirista-de-reels", "cargo": "Roteirista de Reels e Vídeos Curtos", "squad": "Marketing e Conteúdo", "desc": "Roteirista de Reels da Infinity Guard. Use para a pauta da semana, roteiros de Reels, TikTok e Shorts com gancho, fala, texto na tela e legenda, e para variar um roteiro que já existe.", "missao": "Três vídeos por semana que ensinam a proteger a casa e terminam no WhatsApp.", "entrega": "A pauta inteira e uma linha com o primeiro a gravar.", "faz": "- Roda `scripts/pauta_semana.py` (3 temas, sem repetir as últimas 2 semanas). - Nas semanas de 11.11 e Black Friday, o tema da campanha vem primeiro. - Variações: usa a Máquina de Reels se instalada, mantendo os fatos da `fonte`. - Kit de gravação: ordem, local, luz e teleprompter.", "tarefas": ["3 roteiros de Reels sobre câmera invadida por senha de fábrica.", "3 roteiros de Reels no formato 'se você é...' para apartamento, casa e comércio."]}, {"id": "social-media", "cargo": "Social Media (Instagram, Facebook e TikTok)", "squad": "Marketing e Conteúdo", "desc": "Social media da Infinity Guard. Use para calendário de posts e Stories, legendas, respostas a comentários e directs, bio, destaques e para transformar a pauta e a campanha em publicações do dia.", "missao": "Presença constante e confiável nas redes, sempre puxando a conversa para o WhatsApp.", "entrega": "Calendário (dia, formato, texto, chamada) e respostas prontas.", "faz": "- Transforma a pauta da semana e o calendário da campanha em posts e Stories por dia. - Responde comentário e direct com a mesma regra da atendente e convida para o WhatsApp. - Monta bio, destaques (Compra segura, Como instalar, Avaliações) e posts fixados. - Aproveita tendências só quando cabem na tese da marca.", "tarefas": ["Monte os posts e stories de amanhã com legenda pronta.", "Escreva 3 versões de bio para o Instagram com chamada para o WhatsApp."]}, {"id": "lider-trafego", "cargo": "Head de Tráfego Pago (Performance)", "squad": "Tráfego Pago", "desc": "Líder do squad de Tráfego Pago da Infinity Guard. Use para decidir se é hora de anunciar, quanto investir, estrutura de campanha na Meta, metas de CPA e ROAS, e para coordenar criativos e análise de mídia.", "missao": "Anúncio que se paga: comprar conversa e venda abaixo do CPA máximo, sem queimar verba antes da prova da loja.", "entrega": "Plano (orçamento, CPA alvo, divisão do funil) e a decisão que o dono precisa tomar.", "faz": "- Confere o portão: prova da loja, pixel na Nuvemshop e atendente pronto. - Faz o plano com `scripts/midia.py plano` (pede a margem ao dono). - Define estrutura (quente, morno, frio) com `references/estrutura-de-campanha.md`. - Pede criativos e acompanha a régua com o analista.", "tarefas": ["Já é hora de anunciar? Diga o que falta e quanto investir para começar.", "Monte a estrutura da primeira campanha na Meta com orçamento diário."]}, {"id": "analista-de-midia", "cargo": "Analista de Mídia", "squad": "Tráfego Pago", "desc": "Analista de mídia paga da Infinity Guard. Use para ler resultados do Gerenciador de Anúncios, calcular CPA e ROAS, decidir o que escalar, manter ou pausar e explicar por que uma campanha piorou.", "missao": "Decidir com número: cada real em anúncio tem que voltar como conversa que vira venda.", "entrega": "Tabela por conjunto (gasto, compras, CPA, ROAS, decisão) e 3 ações.", "faz": "- Roda `scripts/midia.py avaliar` com o CSV do Gerenciador. - Se o conector da Meta estiver ligado, lê os números de lá (só leitura). - Cruza com o `painel-de-vendas`: conversa iniciada no WhatsApp vira venda? - Segunda-feira: relatório de CPA, ROAS, frequência e o que trocar.", "tarefas": ["Explique como ler CPA, ROAS e custo por conversa e qual a régua de escalar, manter e pausar.", "Minha campanha tem CPC alto e poucas conversas. O que verificar primeiro?"]}, {"id": "criativos-de-anuncio", "cargo": "Estrategista de Criativos de Anúncio", "squad": "Tráfego Pago", "desc": "Estrategista de criativos da Infinity Guard. Use para criar anúncios para Meta (Instagram e Facebook): ganchos, roteiros de vídeo, artes, textos, títulos e variações para teste A/B, a partir do kit e do ângulo da vez.", "missao": "Criativos que param o dedo com uma dor real e levam para o WhatsApp, sem nenhuma promessa que reprove na Meta.", "entrega": "Cada anúncio com gancho, texto, título, chamada, destino e o veredito do revisor.", "faz": "- Usa os 5 ângulos do Raio X (senha de fábrica, offline, casa vazia, antes de comprar, suporte que responde). - Um criativo por etapa: frio com dor, frio com valor, morno com demonstração, morno com oferta, quente com prova. - Usa a Máquina de Anúncios se instalada; sem ela, escreve no mesmo formato. - Toda peça passa no revisor (`--estrito`).", "tarefas": ["5 anúncios para o kit de 2 câmeras: frio com dor, frio com valor, morno, oferta e prova.", "3 variações de gancho para teste A/B do anúncio da fechadura facial."]}, {"id": "lider-operacoes", "cargo": "Head de Operações e E-commerce", "squad": "Operações e Loja", "desc": "Líder do squad de Operações e Loja da Infinity Guard. Use para cuidar do site na Nuvemshop, catálogo, preços, estoque, fornecedores, prova da loja (CNPJ, Anatel, garantia) e conformidade.", "missao": "Uma loja que prova quem é e um catálogo sempre certo. \"Não dá para ser caro e anônimo ao mesmo tempo.\"", "entrega": "Nota de prova atual, o que mudou e a lista do que só o dono faz.", "faz": "- Segue a lista de correção da última auditoria, em ordem. - Cobra do fornecedor código Anatel e garantia por escrito (modelos da `prova-da-loja`). - Mantém catálogo, preço e estoque certos com a `catalogo-e-precos`. - Garante que tudo publicado passou na conformidade.", "tarefas": ["Liste o que falta na loja para passar confiança antes de anunciar.", "Monte o checklist semanal de operação (site, estoque, pedidos) de 15 minutos."]}, {"id": "auditor-da-loja", "cargo": "Auditor de Prova da Loja", "squad": "Operações e Loja", "desc": "Auditor da loja Infinity Guard. Use para conferir se o site mostra CNPJ, código Anatel, garantia com prazo, avaliações, troca, endereço e contato, achar rastro de fornecedor nas páginas e comparar com a última auditoria.", "missao": "Saber, página por página, o que falta para a loja merecer o preço que cobra.", "entrega": "Relatório em `auditorias/AAAA-MM-DD.md` com nota, lista em ordem e o que só o dono faz.", "faz": "- Roda `scripts/auditar.py --catalogo` (ou páginas soltas). - Se o script não alcança o site, lê as páginas pela ferramenta web e monta o relatório no mesmo formato. - Compara com `auditorias/` e mostra o que melhorou. - Antes de campanha: diz se o anúncio pode ou deve esperar.", "tarefas": ["Faça o checklist de prova da loja: CNPJ, Anatel, garantia, avaliações, troca e contato.", "Quais rastros de fornecedor costumam aparecer em páginas de produto e como limpar?"]}, {"id": "gestor-de-catalogo", "cargo": "Gestor de Catálogo, Preços e Estoque", "squad": "Operações e Loja", "desc": "Gestor de catálogo da Infinity Guard. Use quando mudar preço, ativar ou desativar produto, conferir margem no Pix e no cartão, estoque baixo, reposição com fornecedor ou validar o catálogo antes de campanha.", "missao": "Um preço só, certo em todo lugar: site, atendente, campanha, proposta e anúncio.", "entrega": "O que mudou (antes → depois) e quem precisa saber.", "faz": "- `catalogo.py validar` toda segunda e antes de campanha. - `atualizar` simula, mostra ao dono e grava com `--gravar` só depois do ok. - Depois de gravar: exporta de novo o prompt do robô de WhatsApp e roda os testes. - Margem e estoque com os arquivos do dono (fora do GitHub).", "tarefas": ["Como conferir a margem de cada produto no Pix e no cartão? Monte a tabela para eu preencher.", "Quais produtos devo destacar e quais tirar da vitrine principal?"]}, {"id": "guardiao-de-conformidade", "cargo": "Guardião de Conformidade (CDC, LGPD, Anatel e regras da Meta)", "squad": "Operações e Loja", "desc": "Guardião de conformidade da Infinity Guard. Use para revisar qualquer texto antes de publicar (anúncio, post, página, proposta, mensagem), tirar dúvida sobre troca, garantia, arrependimento, LGPD, Anatel ou regra de anúncio.", "missao": "Nada sai da Infinity Guard prometendo o que a loja não cumpre ou não prova.", "entrega": "Veredito, os trechos com problema e o texto reescrito.", "faz": "- Roda `scripts/revisar.py` e devolve o texto reescrito. - Explica direitos do cliente com `references/trocas-e-garantia.md` (CDC arts. 18, 26 e 49). - Cuida da LGPD prática: dado de cliente fora de lugar compartilhado, autorização para usar imagem. - Atualiza `regras.json` quando a loja resolve uma pendência (ex.: Anatel publicada).", "tarefas": ["Revise este texto antes de publicar: 'Câmera 100% segura, instalação grátis!'", "Quais regras do CDC e da Meta preciso seguir nos anúncios de segurança?"]}, {"id": "lider-dados", "cargo": "Head de Dados e Inteligência de Mercado", "squad": "Dados e Inteligência", "desc": "Líder do squad de Dados e Inteligência da Infinity Guard. Use para relatório de resultados, metas, leitura do mercado e da concorrência, e para responder \\\"está funcionando?\\\" com número.", "missao": "Toda decisão da Infinity Guard com número e fonte.", "entrega": "Resposta em 3 linhas (número, período, o que fazer) e o arquivo do painel.", "faz": "- Painel semanal com o analista-de-vendas. - Radar mensal de concorrentes com o detetive-de-mercado. - Alimenta a `reuniao-semanal` e responde perguntas do dono com o que os arquivos mostram.", "tarefas": ["Quais 5 números eu devo olhar toda semana e qual a meta de cada um?", "Leia a minha situação atual e diga se está funcionando, com número."]}, {"id": "analista-de-vendas", "cargo": "Analista de Vendas e BI", "squad": "Dados e Inteligência", "desc": "Analista de vendas da Infinity Guard. Use para gerar o painel a partir da exportação de pedidos da Nuvemshop, faturamento, ticket médio, Pix, cupons, produtos mais vendidos e resultado do atendimento no WhatsApp.", "missao": "Mostrar, toda semana, quanto vendeu, por onde e o que funcionou.", "entrega": "Painel HTML em `paineis/` e o resumo.", "faz": "- Roda `scripts/painel.py --pedidos` (com `--conversas` se houver). - Responde perguntas com `--json`, sempre com o período. - Mostra a meta das primeiras 20 vendas e a conversão das conversas.", "tarefas": ["Monte o modelo de painel semanal: faturamento, ticket, Pix, conversas e conversão.", "Com os meus números atuais, onde está o gargalo do funil?"]}, {"id": "detetive-de-mercado", "cargo": "Detetive de Mercado e Concorrência", "squad": "Dados e Inteligência", "desc": "Detetive de mercado da Infinity Guard. Use para pesquisar e registrar preços de concorrentes (Intelbras, Tapo, Kerui, Pado, marketplace), ver onde a loja está acima ou abaixo, achar temas quentes e renovar o Raio X de Nicho.", "missao": "Saber o que o mercado cobra, promete e esquece, com fonte em cada número.", "entrega": "Tabela de comparação com fonte e 3 conclusões.", "faz": "- Pesquisa na web e registra cada preço lido com `radar.py registrar` (fonte obrigatória). - Roda `radar.py comparar` e diz onde a loja precisa de prova ou de revisão de preço. - Renova os temas de conteúdo quando o banco passa de 45 dias (com o Detetive de Nicho, se instalado). - Atualiza `docs/raio-x-de-nicho.md` quando há mudança grande.", "tarefas": ["Quais temas quentes de segurança residencial e tecnologia devo usar no conteúdo deste mês?", "Como os concorrentes (Intelbras, Tapo, Kerui) se posicionam e onde está a minha brecha?"]}];
+const REGRAS_CASA = "Regras da casa: preço, Pix e parcela só do catálogo; nunca inventar código Anatel, prazo de garantia, CNPJ, depoimento, avaliação ou número sem fonte; nunca prometer instalação, câmera 4G ou funcionar sem Wi-Fi; todo texto para a rua passa pelo revisor-de-promessas; gasto, publicação, mensagem para cliente real ou mudança no site só com o 'pode' do dono. Português do Brasil, frases curtas, tom de tranquilidade, nunca medo.";
+
+/* ============ ROTINA DIÁRIA ============ */
+const SLOTS_PADRAO = {
+  manha:{nome:"Antes do trabalho", ini:"06:00", fim:"06:30"},
+  almoco:{nome:"Almoço", ini:"12:10", fim:"12:40"},
+  noite:{nome:"Noite", ini:"20:00", fim:"21:00"},
+  sabado:{nome:"Bloco de sábado", ini:"09:00", fim:"12:00"},
+  domingo:{nome:"Revisão de domingo", ini:"19:00", fim:"19:30"},
+};
+function missoesDoDia(date, mod, faseIdx){
+  const wd = date.getDay(); // 0 dom
+  const L = [];
+  const add=(slot,k,t,d)=>L.push({id:slot+"-"+k,slot,t,d});
+  if (wd>=1 && wd<=5){
+    add("manha","wpp","Zerar o WhatsApp","Responda todas as conversas da noite e faça o follow-up dos orçamentos de ontem. Prova: quantas respondeu.");
+    add("manha","radar","Ler o radar da equipe","Abra a aba Equipe, leia o radar do dia e ponha 1 funcionário para trabalhar numa ordem. Prova: qual ordem e o que ele entregou.");
+    add("manha","story","1 story de bastidor","Foto ou vídeo curto: embalagem, configuração, dica de segurança. Prova: o tema.");
+    const almoco = {
+      1:["Roteiro do dia com IA","Gere no Estúdio IA o roteiro do Reel da semana e salve. Prova: o gancho."],
+      2:["Publicar 1 Reel","Publique o Reel gravado no sábado com legenda e chamada para o WhatsApp. Prova: o link."],
+      3: faseIdx>=6 ? ["5 abordagens B2B ou parceiros","Mensagem curta para 5 alvos da sua lista. Prova: quantos responderam."] : ["Responder comentários e DMs","Todos os comentários e directs, chamando para o WhatsApp quem perguntar preço. Prova: quantos."],
+      4:["Publicar 1 Reel","Segundo Reel da semana. Prova: o link."],
+      5:["Post de prova social","Avaliação, depoimento ou suporte resolvido (com permissão). Prova: o link."],
+    }[wd];
+    add("almoco","a",almoco[0],almoco[1]);
+    if (wd<=4) add("noite","mod","Módulo da semana: "+mod.t,"Leia a aula na Trilha e avance a tarefa. Prova: o que você fez hoje nela.");
+    else add("noite","leitura","Leitura de 20 páginas","Livro da fase (veja Materiais). Prova: 1 ideia que vai aplicar.");
+    add("noite","numeros","Registrar os números do dia","Posts, conversas, orçamentos, vendas e faturamento no Placar. Prova: o faturamento do dia.");
+  } else if (wd===6){
+    add("sabado","gravar","Pacote da semana no Planejador","Em Publicar → Pauta e vídeos, gere o pacote da semana (ou grave você mesmo com os roteiros) e agende um vídeo por dia no Planejador do Meta Business Suite. Prova: quantos ficaram agendados.");
+    add("sabado","mod","Fechar a tarefa do módulo","Termine e entregue a prova do módulo \""+mod.t+"\" na Trilha. Prova: entregue ou o que falta.");
+    if (faseIdx>=6) add("sabado","b2b","Visitas ou ligações B2B","2 visitas ou 5 ligações para empresas da lista. Prova: com quem falou.");
+  } else {
+    add("domingo","rev","Revisão semanal (15 min)","Olhe o Placar: execução da semana, faturamento contra a meta e o que vai mudar. Prova: 1 decisão para a semana.");
+  }
+  return L;
+}
+
+/* ============ UTIL ============ */
+const $ = s=>document.querySelector(s);
+const jsq = s=>"'"+String(s??"").replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/[\r\n]+/g," ")+"'";
+const esc = s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const brl = v=>"R$ "+Number(v||0).toLocaleString("pt-BR",{minimumFractionDigits:0,maximumFractionDigits:0});
+const brl2 = v=>"R$ "+Number(v||0).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2});
+const pad = n=>String(n).padStart(2,"0");
+const ymd = d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const parseYmd = s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
+const daysBetween=(a,b)=>Math.round((parseYmd(ymd(b))-parseYmd(ymd(a)))/864e5);
+const hm = s=>{const [h,m]=s.split(":").map(Number);return h*60+m};
+const nowMin = d=>d.getHours()*60+d.getMinutes();
+const DIAS=["domingo","segunda","terça","quarta","quinta","sexta","sábado"];
+function slotKeyFor(date){const wd=date.getDay();return wd===0?["domingo"]:wd===6?["sabado"]:["manha","almoco","noite"]}
+function toast(msg){document.querySelectorAll(".toast").forEach(x=>x.remove());const t=document.createElement("div");t.className="toast";t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+function lsGet(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+
+/* ============ ESTADO E ARMAZENAMENTO ============ */
+const HOJE0 = new Date();
+let S = Object.assign({
+  v:1, inicio: ymd(HOJE0), criado: HOJE0.getTime(), meta:1000000, ticket:620, margem:30, conv:15,
+  slots: JSON.parse(JSON.stringify(SLOTS_PADRAO)),
+  contrato:{assinado:false, compromisso:"", multa:"", data:""},
+  modulos:{}, ideias:[], som:true
+}, lsGet("rdm-estado")||{});
+let DIAS_DB = lsGet("rdm-dias")||{};   // {ymd:{missoes:{id:{prova,hora}}, log:{}, motivos:{}}}
+let RADAR = lsGet("rdm-radar")||{};  // {ymd:{resumo,itens,ordens}} escrito pela rotina diária da equipe
+let EXTRA = Object.assign({entregas:[]}, lsGet("rdm-extra")||{}); let dbExtra=null;
+function persistExtra(){ lsSet("rdm-extra",EXTRA); queue("extra",()=>dbExtra&&dbExtra.set(JSON.parse(JSON.stringify(EXTRA)))) }
+async function carregarRadar(){ if(!dbBase) return; try{ const r=await dbBase.collection("radar").get(); const o={}; r.docs.forEach(d=>o[d.id]=JSON.parse(JSON.stringify(d.data()))); RADAR=o; lsSet("rdm-radar",RADAR); render() }catch(e){} }
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible"){ carregarRadar(); carregarPauta() } });
+let backend = "local"; let dbBase=null; let sampleFn=null; let downloadsCap=null;
+const saveQ = {};
+function persistEstado(){ lsSet("rdm-estado",S); queue("estado",()=>dbBase&&dbBase.set(JSON.parse(JSON.stringify(S)))) }
+function persistDia(k){ lsSet("rdm-dias",DIAS_DB); queue("dia-"+k,()=>dbBase&&dbBase.collection("dias").doc(k).set(JSON.parse(JSON.stringify(DIAS_DB[k])))) }
+function queue(key,fn){ clearTimeout(saveQ[key]?.t); const q=saveQ[key]||(saveQ[key]={p:Promise.resolve()}); q.t=setTimeout(()=>{q.p=q.p.then(fn).catch(e=>{ if(e&&e.code==="quota_exceeded") toast("Espaço do app cheio. Os dados ficaram salvos neste aparelho."); })},700) }
+function dia(k){ return DIAS_DB[k] || (DIAS_DB[k]={data:k,missoes:{},log:{},motivos:{}}) }
+
+async function conectar(){
+  if(!window.claude||!window.claude.use) return;
+  try{
+    const [db,user] = await Promise.all([claude.use("db"),claude.use("user")]);
+    const uid = user ? await user.id() : null;
+    if(db && uid){
+      dbBase = db.doc("data/users/"+uid+"/estado");
+      const [e, ds] = await Promise.all([dbBase.get(), dbBase.collection("dias").get()]);
+      if(e.exists){ S = Object.assign(S, e.data()); S.slots = Object.assign(JSON.parse(JSON.stringify(SLOTS_PADRAO)), S.slots||{}); }
+      else { await dbBase.set(JSON.parse(JSON.stringify(S))); }
+      const remoto = {}; ds.docs.forEach(d=>{ remoto[d.id]=JSON.parse(JSON.stringify(d.data())) });
+      for(const k in DIAS_DB){ if(!remoto[k]) { remoto[k]=DIAS_DB[k]; persistDiaLater.push(k) } }
+      DIAS_DB = remoto; lsSet("rdm-estado",S); lsSet("rdm-dias",DIAS_DB);
+      persistDiaLater.forEach(persistDia);
+      dbExtra = dbBase.collection("extra").doc("equipe");
+      const ex = await dbExtra.get();
+      if(ex.exists) EXTRA=Object.assign({entregas:[]},JSON.parse(JSON.stringify(ex.data()))); else if(EXTRA.entregas.length) await dbExtra.set(JSON.parse(JSON.stringify(EXTRA)));
+      lsSet("rdm-extra",EXTRA);
+      dbMarca = dbBase.collection("extra").doc("marca");
+      const mk = await dbMarca.get();
+      if(mk.exists) MARCA=Object.assign({},MARCA_PADRAO,JSON.parse(JSON.stringify(mk.data()))); else await dbMarca.set(JSON.parse(JSON.stringify(MARCA)));
+      lsSet("rdm-marca",MARCA); carregarLogo();
+      dbCat = dbBase.collection("extra").doc("catalogo");
+      const cg = await dbCat.get();
+      if(cg.exists && Array.isArray(cg.data().produtos)){ CAT=JSON.parse(JSON.stringify(cg.data())); refreshCatalogo(); lsSet("rdm-catalogo",CAT) } else await dbCat.set(JSON.parse(JSON.stringify(CAT)));
+      backend="nuvem"; render(); carregarRadar(); carregarPauta();
+    }
+  }catch(e){ backend="local"; }
+  claude.use("sample").then(s=>{sampleFn=s; if(view==="ia") render()});
+  claude.use("downloads").then(d=>{downloadsCap=d; if(view==="mais"||view==="ia"||view==="publicar") render()});
+  claude.use("mcp").then(m=>{mcpCap=m});
+}
+const persistDiaLater=[];
+
+/* ============ CÁLCULOS ============ */
+function moduloAtualIdx(){ for(let i=0;i<MODULOS.length;i++) if(!S.modulos[i]) return i; return MODULOS.length-1 }
+function semanaDoPlano(){ return Math.max(0,Math.floor(daysBetween(parseYmd(S.inicio),new Date())/7)) }
+function mesDoPlano(dStr){ const a=parseYmd(S.inicio), d=parseYmd(dStr); return (d.getFullYear()-a.getFullYear())*12+(d.getMonth()-a.getMonth())-(d.getDate()<a.getDate()?1:0) }
+function fatTotal(){ let t=0; for(const k in DIAS_DB) t+=Number(DIAS_DB[k].log?.faturamento||0); return t }
+function fatMes(m){ let t=0; for(const k in DIAS_DB) if(mesDoPlano(k)===m) t+=Number(DIAS_DB[k].log?.faturamento||0); return t }
+function metaMes(m){ return Math.round(RAMPA[Math.min(11,Math.max(0,m))]*S.meta/1000000) }
+function slotStatus(date,slot){ // antes | agora | depois
+  const s=S.slots[slot]; const today=ymd(date)===ymd(new Date());
+  if(!today) return ymd(date)<ymd(new Date())?"depois":"antes";
+  const n=nowMin(new Date()); if(n<hm(s.ini)) return "antes"; if(n<=hm(s.fim)) return "agora"; return "depois";
+}
+function missoesDe(date){ const mi=moduloAtualIdx(); const L=missoesDoDia(date,MODULOS[mi],MODULOS[mi].f);
+  if(NIVEL>=2 && date.getDay()===6 && ymd(date)>=ymd(new Date(Date.now()-6*864e5))) L.push({id:"sabado-reposicao",slot:"sabado",t:"Bloco de reposição (contrato nível "+NIVEL+")",d:"2 horas extras repondo as missões que ficaram para trás. Prova: o que você repôs."});
+  return L }
+function conta(d,m){ // missão de um turno que já tinha acabado quando o app foi criado não conta
+  if(ymd(d)!==S.inicio||!S.criado) return true; const c=new Date(S.criado); if(ymd(c)!==S.inicio) return true;
+  return hm(S.slots[m.slot].fim) > nowMin(c);
+}
+function execucao(diasAtras){ // % feitas em dias passados/presentes já vencidos
+  let total=0, feitas=0; const hoje=new Date(); const ini=parseYmd(S.inicio);
+  for(let i=0;i<diasAtras;i++){
+    const d=new Date(hoje); d.setDate(hoje.getDate()-i); if(d<ini) break;
+    const k=ymd(d); missoesDe(d).forEach(m=>{
+      if(!conta(d,m)) return;
+      const done=!!DIAS_DB[k]?.missoes?.[m.id]; const vencida = slotStatus(d,m.slot)==="depois";
+      if(done||vencida){ total++; if(done) feitas++; }
+    });
+  }
+  return {total,feitas,pct: total?Math.round(feitas/total*100):null};
+}
+function dividas(){ // missões vencidas sem prova nem motivo nos últimos 7 dias
+  const out=[]; const hoje=new Date(); const ini=parseYmd(S.inicio);
+  for(let i=0;i<7;i++){ const d=new Date(hoje); d.setDate(hoje.getDate()-i); if(d<ini) break; const k=ymd(d);
+    missoesDe(d).forEach(m=>{ if(conta(d,m) && slotStatus(d,m.slot)==="depois" && !DIAS_DB[k]?.missoes?.[m.id] && !DIAS_DB[k]?.motivos?.[m.id]) out.push({k,d,m}) }) }
+  return out;
+}
+function sequencia(){ // dias seguidos com 80% ou mais das missões feitas (hoje conta só se já bateu)
+  const okDia=d=>{const k=ymd(d);const ms=missoesDe(d).filter(m=>conta(d,m));return ms.length>0&&ms.filter(m=>DIAS_DB[k]?.missoes?.[m.id]).length/ms.length>=0.8};
+  const hoje=new Date(), ini=parseYmd(S.inicio); let n=okDia(hoje)?1:0;
+  for(let i=1;i<400;i++){ const d=new Date(hoje); d.setDate(hoje.getDate()-i); if(d<ini) break; if(okDia(d)) n++; else break }
+  return n }
+
+/* ============ VIEWS ============ */
+let view = (location.hash||"#hoje").slice(1); if(view==="agenda"||view==="biblioteca") view="mais"; if(!["hoje","trilha","equipe","placar","ia","publicar","mais"].includes(view)) view="hoje";
+document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>{view=b.dataset.v;render();window.scrollTo(0,0)});
+
+function renderStatus(){
+  const e7=execucao(7), dv=dividas().length, sq=sequencia();
+  const pct=e7.pct;
+  $("#status").innerHTML =
+    `<span class="pill ${pct===null?"":pct>=80?"ok":pct>=50?"warn":"bad"}" title="Missões cumpridas nos últimos 7 dias">Execução 7d <b class="num">${pct===null?"–":pct+"%"}</b></span>`+
+    (dv?`<span class="pill bad">${dv} em atraso</span>`:`<span class="pill ok">em dia</span>`)+
+    `<span class="pill acc">${sq} ${sq===1?"dia":"dias"} seguidos</span>`+(NIVEL?`<span class="pill bad" title="Semanas seguidas abaixo de 80%">contrato nível ${NIVEL}</span>`:"");
+  document.querySelectorAll("#tabs button").forEach(b=>b.setAttribute("aria-current",b.dataset.v===view?"page":"false"));
+}
+
+function viewHoje(){
+  const agora=new Date(), k=ymd(agora), ms=missoesDe(agora), d=dia(k);
+  const mi=moduloAtualIdx(), mod=MODULOS[mi], sem=semanaDoPlano();
+  const dv=dividas();
+  const slots=slotKeyFor(agora);
+  const atual=slots.find(s=>slotStatus(agora,s)==="agora");
+  const prox=slots.find(s=>slotStatus(agora,s)==="antes");
+  const m=mesDoPlano(k), fm=fatMes(m), mm=metaMes(m);
+  const diasMes=30, diaNoMes=Math.min(diasMes,Math.max(1,daysBetween(addMonths(parseYmd(S.inicio),m),agora)+1));
+  const ritmo=mm*diaNoMes/diasMes;
+  const falta=Math.max(0,mm-fm), restam=Math.max(1,diasMes-diaNoMes+1);
+  const porDia=falta/restam, vendasDia=porDia/S.ticket, conversasDia=vendasDia/(S.conv/100);
+  let h="";
+  if(!contratoAtivo()) h+=`<div class="card stack" style="border:2px solid var(--accent)">
+    <span class="eyebrow">Antes de tudo</span><h2>${S.contrato&&S.contrato.assinado?"Assine a versão 2 do contrato":"Assine o seu contrato"}</h2>
+    <p>12 meses, 80% de execução por semana, 3 níveis de consequência e nenhuma volta atrás. Sem contrato, a publicação no piloto automático não é liberada.</p>
+    <button class="btn primary" onclick="abrirContrato()">Escrever e assinar</button></div>`;
+  if(dv.length) h+=`<div class="debt"><h3>Cobrança: ${dv.length} ${dv.length===1?"missão vencida":"missões vencidas"} sem prova</h3>
+    <p>Missão vencida só sai daqui de dois jeitos: você faz agora e coloca a prova, ou registra o motivo verdadeiro. O motivo fica no histórico e entra na revisão de domingo.</p>
+    <div class="stack">${dv.slice(0,6).map(x=>`<div class="row" style="justify-content:space-between"><span><b>${esc(x.m.t)}</b> <span class="muted">· ${DIAS[x.d.getDay()]} ${x.d.getDate()}/${x.d.getMonth()+1}, ${esc(S.slots[x.m.slot].nome.toLowerCase())}</span></span>
+      <span class="row"><button class="btn sm primary" onclick="provar('${x.k}','${x.m.id}')">Fiz, colocar prova</button><button class="btn sm ghost" onclick="motivo('${x.k}','${x.m.id}')">Registrar motivo</button></span></div>`).join("")}</div>
+    ${contratoAtivo()?`<p class="muted">Contrato: ${NIVEL?`você está no <b>nível ${NIVEL}</b>. Consequência em vigor: <b>${esc(S.contrato["multa"+NIVEL])}</b>.`:`se a semana fechar abaixo de 80%, vale o nível 1: <b>${esc(S.contrato.multa1)}</b>.`}</p>`:""}</div>`;
+
+  // bloco do turno
+  const slotHead = atual? `<span class="tag now pulse">agora</span><h3>${esc(S.slots[atual].nome)}</h3><span class="clock num">${S.slots[atual].ini}–${S.slots[atual].fim}</span>`
+    : prox? `<span class="tag">próximo</span><h3>${esc(S.slots[prox].nome)}</h3><span class="clock num">${S.slots[prox].ini}</span>`
+    : `<span class="tag">dia encerrado</span><h3>Amanhã: ${DIAS[(agora.getDay()+1)%7]}</h3>`;
+  h+=`<div class="shift"><div class="shift-head">${slotHead}<span style="margin-left:auto" class="muted">${DIAS[agora.getDay()]}, ${agora.getDate()}/${agora.getMonth()+1} · semana ${sem+1} do plano</span></div><div class="shift-body">`;
+  slots.forEach(s=>{
+    const list=ms.filter(x=>x.slot===s); if(!list.length) return;
+    const st=slotStatus(agora,s);
+    h+=`<div class="row" style="margin-top:10px"><span class="eyebrow">${esc(S.slots[s].nome)} · <span class="num">${S.slots[s].ini}–${S.slots[s].fim}</span></span>${st==="agora"?`<span class="tag now">agora</span>`:""}</div>`;
+    list.forEach(x=>{ const done=d.missoes[x.id]; const late=!done&&st==="depois"&&conta(agora,x); const mot=d.motivos?.[x.id];
+      h+=`<div class="mission ${done?"done":""} ${late?"late":""}"><span class="box">${done?`<svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10" stroke="#fff" stroke-width="3" fill="none"/></svg>`:""}</span>
+      <div class="row"><span class="t">${esc(x.t)}</span>${late&&!mot?`<span class="tag late">vencida</span>`:""}</div>
+      <span class="d">${esc(x.d)}</span>
+      ${done?`<span class="proof"><b>Prova:</b> ${esc(done.prova)}</span>`:mot?`<span class="proof" style="background:var(--signal-soft)"><b>Motivo:</b> ${esc(mot)}</span>`:`<span class="act"><button class="btn sm primary" onclick="provar('${k}','${x.id}')">Concluir com prova</button>${x.id.endsWith("numeros")?`<button class="btn sm" onclick="view='placar';render()">Abrir Placar</button>`:""}${x.id.endsWith("mod")?`<button class="btn sm" onclick="abrirModulo(${mi})">Abrir aula</button>`:""}${x.id.includes("almoco-a")&&/IA/.test(x.t)?`<button class="btn sm" onclick="view='ia';render()">Estúdio IA</button>`:""}</span>`}
+      </div>`;});
+  });
+  h+=`</div></div>`;
+
+  // meta do dia
+  h+=`<div class="grid2">
+   <div class="card stack"><span class="eyebrow">Para bater a meta deste mês</span>
+     <div class="kpis" style="grid-template-columns:repeat(3,1fr)">
+       <div><div class="v num" style="font-size:1.25rem">${brl(porDia)}</div><div class="s muted">por dia</div></div>
+       <div><div class="v num" style="font-size:1.25rem">${vendasDia.toFixed(1).replace(".",",")}</div><div class="s muted">vendas/dia</div></div>
+       <div><div class="v num" style="font-size:1.25rem">${Math.ceil(conversasDia)}</div><div class="s muted">conversas/dia</div></div>
+     </div>
+     <div class="meter" aria-label="Faturamento do mês"><i style="width:${Math.min(100,fm/mm*100)}%"></i><b style="left:${Math.min(100,ritmo/mm*100)}%"></b></div>
+     <p class="muted" style="font-size:.85rem">Mês ${m+1}: <b class="num">${brl(fm)}</b> de <b class="num">${brl(mm)}</b>. O traço laranja é onde você deveria estar hoje. Conta com ticket de ${brl(S.ticket)} e ${S.conv}% das conversas virando venda.</p>
+   </div>
+   <div class="card stack"><span class="eyebrow">Módulo da semana · fase ${mod.f+1}: ${esc(FASES[mod.f].n)}</span>
+     <h3>${esc(mod.t)}</h3><p class="muted">${esc(mod.tarefa)}</p>
+     ${mi<sem?`<p><span class="tag late">atrasado ${sem-mi} ${sem-mi===1?"semana":"semanas"}</span> O plano previa o módulo ${sem+1}. Entregue este para destravar o próximo.</p>`:""}
+     <div><button class="btn primary" onclick="abrirModulo(${mi})">Abrir aula e entregar</button></div></div>
+  </div>`;
+  const rd=radarRecente();
+  h+= rd ? `<div class="card stack"><div class="row" style="justify-content:space-between"><span class="eyebrow">Radar da equipe · ${rd.k===k?"hoje":esc(rd.k.split("-").reverse().join("/"))}</span><button class="btn sm" onclick="view='equipe';render()">Abrir Equipe</button></div><p>${esc(rd.r.resumo||"")}</p>${(rd.r.ordens||[]).length?`<p class="muted" style="font-size:.88rem">${rd.r.ordens.length} ordens do dia esperando você pôr a equipe para trabalhar.</p>`:""}</div>`
+     : `<div class="card flat stack"><span class="eyebrow">Radar da equipe</span><p class="muted">Todo dia às 05:17 o detetive-de-mercado e o lider-dados pesquisam as novidades do mercado digital e de tecnologia e deixam o radar aqui, com ordens para cada funcionário. O primeiro chega amanhã cedo.</p><button class="btn sm" style="align-self:flex-start" onclick="view='equipe';render()">Ver a equipe</button></div>`;
+  const alerta=alertaSazonal(agora); if(alerta) h+=`<div class="card" style="border-color:var(--signal)"><span class="eyebrow" style="color:var(--signal)">Data forte chegando</span><p>${alerta}</p></div>`;
+  return h;
+}
+function addMonths(d,n){const x=new Date(d);x.setMonth(x.getMonth()+n);return x}
+function alertaSazonal(d){
+  const y=d.getFullYear(); const datas=[[new Date(y,10,11),"11.11"],[blackFriday(y),"Black Friday"],[new Date(y,11,25),"Natal"],[new Date(y,1,14),"Volta das férias"],[diaDosPais(y),"Dia dos Pais"]];
+  for(const [dt,n] of datas){ const dd=daysBetween(d,dt); if(dd>=0&&dd<=30) return `<b>${n}</b> em ${dd} ${dd===1?"dia":"dias"} (${dt.getDate()}/${dt.getMonth()+1}). Rode a skill campanha-sazonal agora e prepare kit, preço e mensagens. Quem planeja com antecedência vende mais sem queimar margem.` }
+  return "";
+}
+function blackFriday(y){const d=new Date(y,10,1);let c=0;while(true){if(d.getDay()===4){c++;if(c===4){d.setDate(d.getDate()+1);return d}}d.setDate(d.getDate()+1)}}
+function diaDosPais(y){const d=new Date(y,7,1);let c=0;while(true){if(d.getDay()===0){c++;if(c===2)return d}d.setDate(d.getDate()+1)}}
+
+function viewTrilha(){
+  const mi=moduloAtualIdx(), sem=semanaDoPlano();
+  const feitos=Object.keys(S.modulos).length;
+  let h=`<div class="stack"><h2>Trilha de 48 semanas</h2><p class="muted">Um módulo por semana: aula curta, tarefa prática e prova. O próximo só abre quando você entrega a prova do atual. Você entregou <b>${feitos}</b> de 48.</p>
+  <div class="meter"><i style="width:${feitos/48*100}%"></i><b style="left:${Math.min(100,(sem+1)/48*100)}%"></b></div></div>`;
+  FASES.forEach((f,fi)=>{
+    h+=`<div class="phase"><div class="phase-h"><span class="eyebrow">Fase ${fi+1} · semanas ${fi*4+1}–${fi*4+4}</span><h3>${esc(f.n)}</h3></div><p class="muted" style="font-size:.9rem">${esc(f.meta)}</p><div class="mods">`;
+    MODULOS.forEach((m,i)=>{ if(m.f!==fi) return; const done=!!S.modulos[i], locked=i>mi, cur=i===mi;
+      h+=`<button class="mod ${locked?"locked":""} ${cur?"current":""}" onclick="abrirModulo(${i})" ${locked?'aria-disabled="true"':""}><span class="wk">S${pad(i+1)}</span><span><b>${esc(m.t)}</b></span><span>${done?`<span class="pill ok">entregue</span>`:cur?`<span class="pill acc">agora</span>`:locked?`<span class="pill">bloqueado</span>`:""}</span></button>`});
+    h+=`</div></div>`;
+  });
+  return h;
+}
+
+function viewPlacar(){
+  const agora=new Date(), k=ymd(agora), d=dia(k), L=d.log||{};
+  const tot=fatTotal(), m=mesDoPlano(k);
+  let vendas=0,conv=0,orc=0,posts=0; for(const x in DIAS_DB){const l=DIAS_DB[x].log||{};vendas+=+l.vendas||0;conv+=+l.conversas||0;orc+=+l.orcamentos||0;posts+=+l.posts||0}
+  const taxa=conv?vendas/conv*100:null, ticket=vendas?tot/vendas:null, fech=orc?vendas/orc*100:null;
+  let h=`<div class="stack"><h2>Placar</h2><p class="muted">Anote os números do dia todas as noites. É daqui que sai a cobrança e o ajuste da meta.</p></div>
+  <div class="card stack"><span class="eyebrow">Números de hoje · ${agora.getDate()}/${agora.getMonth()+1}</span>
+   <form class="fields" id="flog" onsubmit="salvarLog(event)">
+    ${[["posts","Posts e Reels"],["conversas","Conversas novas"],["orcamentos","Orçamentos"],["vendas","Vendas"],["faturamento","Faturamento (R$)"]].map(([id,l])=>`<label class="f">${l}<input id="log-${id}" type="number" min="0" step="${id==="faturamento"?"0.01":"1"}" inputmode="decimal" value="${L[id]??""}"></label>`).join("")}
+    <div style="display:flex;align-items:flex-end"><button class="btn primary" type="submit">Salvar o dia</button></div>
+   </form></div>
+  <div class="kpis">
+   <div class="kpi"><span class="eyebrow">Acumulado</span><span class="v">${brl(tot)}</span><span class="s">de ${brl(S.meta)} · ${(tot/S.meta*100).toFixed(1).replace(".",",")}%</span></div>
+   <div class="kpi"><span class="eyebrow">Mês ${m+1}</span><span class="v">${brl(fatMes(m))}</span><span class="s">meta ${brl(metaMes(m))}</span></div>
+   <div class="kpi"><span class="eyebrow">Conversa → venda</span><span class="v">${taxa===null?"–":taxa.toFixed(1).replace(".",",")+"%"}</span><span class="s">sua meta: ${S.conv}% · mercado ~9%</span></div>
+   <div class="kpi"><span class="eyebrow">Orçamento → venda</span><span class="v">${fech===null?"–":fech.toFixed(0)+"%"}</span><span class="s">alvo de excelência: 30–50%</span></div>
+   <div class="kpi"><span class="eyebrow">Ticket médio real</span><span class="v">${ticket===null?"–":brl(ticket)}</span><span class="s">usado na conta: ${brl(S.ticket)}</span></div>
+   <div class="kpi"><span class="eyebrow">Posts publicados</span><span class="v">${posts}</span><span class="s">${vendas} vendas no total</span></div>
+  </div>`;
+  // gráfico 14 dias
+  const W=640,H=200,P=34, n=14; const pts=[]; for(let i=n-1;i>=0;i--){const x=new Date(agora);x.setDate(agora.getDate()-i);pts.push({d:x,v:+(DIAS_DB[ymd(x)]?.log?.faturamento||0)})}
+  const alvo=metaMes(m)/30; const max=Math.max(alvo*1.2,...pts.map(p=>p.v),1); const bw=(W-P-10)/n;
+  const y=v=>H-24-(v/max)*(H-40);
+  let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Faturamento dos últimos 14 dias contra a meta diária">`;
+  [0,.5,1].forEach(t=>{const v=max*t;svg+=`<line x1="${P}" x2="${W-6}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${P-4}" y="${y(v)+4}" text-anchor="end">${v>=1000?Math.round(v/1000)+"k":Math.round(v)}</text>`});
+  pts.forEach((p,i)=>{const x=P+i*bw+3;svg+=`<rect x="${x}" y="${y(p.v)}" width="${bw-6}" height="${Math.max(0,H-24-y(p.v))}" rx="3" fill="${p.v>=alvo?"var(--ok)":"var(--accent)"}"/>${i%2===(n-1)%2?`<text x="${x+(bw-6)/2}" y="${H-8}" text-anchor="middle">${p.d.getDate()}/${p.d.getMonth()+1}</text>`:""}`});
+  svg+=`<line x1="${P}" x2="${W-6}" y1="${y(alvo)}" y2="${y(alvo)}" stroke="var(--signal)" stroke-width="2" stroke-dasharray="5 4"/><text x="${W-8}" y="${y(alvo)-6}" text-anchor="end" style="fill:var(--signal)">meta/dia ${brl(alvo)}</text></svg>`;
+  h+=`<div class="card stack"><span class="eyebrow">Faturamento dos últimos 14 dias</span><div class="chart">${svg}</div></div>`;
+  // rampa
+  h+=`<div class="card stack"><span class="eyebrow">Rampa até ${brl(S.meta)} em 12 meses</span><p class="muted" style="font-size:.88rem">Ninguém começa vendendo R$ 83 mil por mês. A meta sobe mês a mês, conforme cada fase entra no ar. Ajuste a meta anual em Agenda → Configurações.</p>
+   <div class="scroll"><table class="t"><thead><tr><th>Mês</th><th>Fase principal</th><th class="n">Meta</th><th class="n">Feito</th><th class="n">Vendas/dia*</th></tr></thead><tbody>
+   ${RAMPA.map((_,i)=>{const mm=metaMes(i),f=fatMes(i);return `<tr${i===m?' style="background:var(--accent-soft)"':""}><td>${i+1}</td><td>${esc(FASES[i].n)}</td><td class="n">${brl(mm)}</td><td class="n" style="color:${f>=mm&&f>0?"var(--ok)":"inherit"}">${brl(f)}</td><td class="n">${(mm/30/S.ticket).toFixed(1).replace(".",",")}</td></tr>`}).join("")}
+   </tbody></table></div><p class="muted" style="font-size:.8rem">*com ticket de ${brl(S.ticket)}. Vender para empresas (fase 7) sobe o ticket e reduz o número de vendas por dia.</p></div>`;
+  return h;
+}
+
+const IA_MODOS = {
+  roteiro:{n:"Roteiro de Reel", ph:"Tema. Ex.: sua câmera ainda usa a senha admin?", p:t=>`Escreva 1 roteiro de Reel de 30 a 45 segundos para o Instagram da marca abaixo. Formato: GANCHO (até 3 s, falado e na tela) · FALA (frases curtas, numeradas por cena) · TEXTO NA TELA · LEGENDA (até 600 caracteres, termina com chamada para o WhatsApp) · 5 HASHTAGS. Tema: ${t}`},
+  ganchos:{n:"10 ganchos", ph:"Tema ou dor. Ex.: câmera offline", p:t=>`Escreva 10 ganchos de até 12 palavras para Reels, 2 de cada formato: a tese da marca, a dor de quem assiste, passo a passo, o que eu nunca faço, "se você é...". Numere e indique o formato. Tema: ${t}`},
+  legenda:{n:"Legenda", ph:"Do que é o post", p:t=>`Escreva 2 opções de legenda para Instagram (até 500 caracteres cada), com primeira linha forte, uma prova concreta e chamada para o WhatsApp. Post: ${t}`},
+  objecao:{n:"Objeção no WhatsApp", ph:"O que o cliente disse. Ex.: tá caro, na Shopee é metade", p:t=>`Um cliente disse no WhatsApp: "${t}". Escreva 3 respostas curtas (até 3 linhas cada, tom humano, sem pressão), cada uma terminando com uma pergunta que avança a venda. Use só os preços do catálogo.`},
+  carrossel:{n:"Carrossel", ph:"Tema. Ex.: qual kit para qual casa", p:t=>`Crie um carrossel de 7 slides para Instagram: título de cada slide (até 8 palavras) e texto de apoio (até 25 palavras). Slide 1 é gancho, slide 7 é chamada para o WhatsApp. Tema: ${t}`},
+  semana:{n:"Ideias da semana", ph:"Opcional: foco da semana", p:t=>`Monte o plano de conteúdo de 7 dias (segunda a domingo): para cada dia, formato (Reel, carrossel, story), tema, gancho e objetivo (atrair, ensinar ou vender). Equilibre 3 de atrair, 2 de ensinar e 2 de vender. Foco: ${t||"temas quentes de segurança residencial"}`},
+  revisar:{n:"Revisar promessa", ph:"Cole o texto que vai publicar", p:t=>`Revise o texto abaixo contra as regras da marca. Liste cada problema (trecho, por que é problema, como reescrever) e entregue a versão corrigida no fim. Se não houver problema, diga "Aprovado". Texto:\n${t}`},
+};
+let iaModo="roteiro", iaOut="", iaBusy=false, iaCtl=null;
+let iaAba="textos";
+function viewIA(){
+  const topo=`<div class="stack"><h2>Estúdio</h2><p class="muted">Textos, vídeos de Reels e artes de anúncio com o Kit da marca e as regras do revisor de promessas. Nada com promessa barrada sai daqui.</p></div>
+  <div class="chips" role="group" aria-label="Tipo">${[["textos","Textos"],["video","Vídeo Reel"],["anuncio","Arte de anúncio"]].map(([k,n])=>`<button class="chip" aria-pressed="${iaAba===k}" onclick="iaAba='${k}';render()">${n}</button>`).join("")}</div>`;
+  if(iaAba==="video") return topo+viewVideo();
+  if(iaAba==="anuncio") return topo+viewAnuncio();
+  const m=IA_MODOS[iaModo];
+  let h=topo+`
+  <div class="chips" role="group" aria-label="O que criar" style="margin-top:4px">${Object.entries(IA_MODOS).map(([k,v])=>`<button class="chip" aria-pressed="${k===iaModo}" onclick="iaModo='${k}';iaOut='';render()">${v.n}</button>`).join("")}</div>
+  <div class="card stack"><label class="f" for="ia-in">${esc(m.n)}</label><textarea id="ia-in" placeholder="${esc(m.ph)}"></textarea>
+   <div class="row">${sampleFn?`<button class="btn primary" id="ia-go" onclick="gerarIA()" ${iaBusy?"disabled":""}>${iaBusy?"Gerando…":"Gerar"}</button>${iaBusy?`<button class="btn" onclick="iaCtl&&iaCtl.abort()">Parar</button>`:""}`:`<span class="muted" style="font-size:.88rem">A IA embutida não está disponível nesta visualização. Use "Copiar prompt" e cole no Claude.</span>`}
+   <button class="btn" onclick="copiarPrompt()">Copiar prompt</button></div>
+   <div class="out" id="ia-out" aria-live="polite">${iaOut?esc(iaOut):`<span class="muted">O resultado aparece aqui.</span>`}</div>
+   ${iaOut&&!iaBusy?`<div class="row"><button class="btn sm" onclick="copiar(iaOut)">Copiar resultado</button><button class="btn sm" onclick="salvarIdeia()">Guardar nas ideias</button></div>`:""}
+  </div>`;
+  if(S.ideias.length) h+=`<div class="stack"><h3>Ideias guardadas</h3>${S.ideias.slice().reverse().map((x,i)=>`<details class="card"><summary><b>${esc(x.modo)}</b> · ${esc(x.tema).slice(0,60)} <span class="muted">· ${esc(x.data)}</span></summary><div class="out" style="margin-top:10px">${esc(x.texto)}</div><div class="row" style="margin-top:8px"><button class="btn sm" onclick="copiar(S.ideias[${S.ideias.length-1-i}].texto)">Copiar</button><button class="btn sm ghost" onclick="S.ideias.splice(${S.ideias.length-1-i},1);persistEstado();render()">Apagar</button></div></details>`).join("")}</div>`;
+  return h;
+}
+function promptCompleto(){ const t=($("#ia-in")?.value||"").trim(); return `Você é o estrategista de marketing e vendas da marca abaixo. Escreva em português do Brasil, frases curtas, sem emoji em excesso.\n\n${contexto()}\n\nPedido: ${IA_MODOS[iaModo].p(t)}` }
+async function gerarIA(){
+  const t=($("#ia-in")?.value||"").trim(); if(!t && iaModo!=="semana"){toast("Escreva o tema primeiro.");return}
+  iaBusy=true; iaOut=""; iaCtl=new AbortController(); const keep=t; render(); $("#ia-in").value=keep;
+  try{ const r=await sampleFn(promptCompleto(),{signal:iaCtl.signal,cache:false,onText:({text})=>{iaOut=text;const o=$("#ia-out");if(o)o.textContent=text}}); iaOut=r.text; }
+  catch(e){ iaOut = e?.text || ({not_granted:"Você não liberou a IA para este app. Libere no menu de permissões do artifact ou use Copiar prompt.",rate_limited:"Muitos pedidos seguidos. Espere um minuto e tente de novo.",cancelled:""}[e?.code] ?? "Não consegui gerar agora. Tente de novo em instantes ou use Copiar prompt."); }
+  iaBusy=false; iaTema=keep; render(); const i=$("#ia-in"); if(i) i.value=keep;
+}
+let iaTema="";
+function salvarIdeia(){ S.ideias.push({modo:IA_MODOS[iaModo].n,tema:iaTema||"(sem tema)",texto:iaOut.slice(0,5000),data:ymd(new Date())}); while(S.ideias.length>20)S.ideias.shift(); persistEstado(); toast("Guardado nas ideias."); render() }
+function copiarPrompt(){ copiar(promptCompleto()) }
+function copiar(t){ try{ navigator.clipboard.writeText(t).then(()=>toast("Copiado."),()=>mostrarTexto(t)) }catch(e){ mostrarTexto(t) } }
+function mostrarTexto(t){ sheet(`<h3>Selecione e copie</h3><textarea id="cp" style="min-height:220px">${esc(t)}</textarea><button class="btn" onclick="fecharSheet()">Fechar</button>`); setTimeout(()=>{$("#cp")?.select()},50) }
+
+function viewAgenda(){
+  const ordem=["manha","almoco","noite","sabado","domingo"];
+  let h=`<div class="stack"><h2>Agenda e alertas</h2><p class="muted">Os horários livres do seu CLT viram turnos fixos. Com o app aberto, ele toca e mostra a missão na hora. Para ser avisado com o app fechado, coloque a agenda no calendário do celular.</p></div>
+  <div class="card stack"><span class="eyebrow">Seus turnos</span>
+   ${ordem.map(s=>`<div class="fields" style="align-items:end"><label class="f">${esc(S.slots[s].nome)} <span class="muted" style="font-weight:400">${s==="sabado"?"sábado":s==="domingo"?"domingo":"segunda a sexta"}</span><input id="sl-${s}-ini" type="time" value="${S.slots[s].ini}"></label><label class="f">até<input id="sl-${s}-fim" type="time" value="${S.slots[s].fim}"></label></div>`).join("")}
+   <div class="row"><button class="btn primary" onclick="salvarSlots()">Salvar horários</button></div></div>
+  <div class="card stack"><span class="eyebrow">Avisos no celular com o app fechado</span>
+   <p>Baixe a agenda e abra o arquivo no celular. Ela cria os turnos no seu calendário (Google Agenda ou Calendário do iPhone) com alarme 5 minutos antes e na hora de começar.</p>
+   <div class="row">${downloadsCap?`<button class="btn primary" onclick="baixarICS()">Baixar agenda (.ics)</button>`:""}<button class="btn" onclick="mostrarTexto(gerarICS())">Ver o arquivo para copiar</button></div>
+   <p class="muted" style="font-size:.85rem">Além disso, o Claude manda uma cobrança no seu celular de manhã e à noite, lendo o que você entregou aqui. Para receber, deixe as notificações do app Claude ligadas.</p></div>
+  <div class="card stack"><span class="eyebrow">Alerta com o app aberto</span>
+   <label class="row" style="gap:8px"><input type="checkbox" id="som" style="width:auto" ${S.som?"checked":""} onchange="S.som=this.checked;persistEstado()"> Tocar som no começo de cada turno</label>
+   <div class="row"><button class="btn" onclick="testarAlarme()">Testar alerta agora</button></div></div>
+  <div class="card stack"><span class="eyebrow">Configurações da meta</span>
+   <div class="fields">
+    <label class="f">Meta anual (R$)<input id="cf-meta" type="number" min="10000" step="1000" value="${S.meta}"></label>
+    <label class="f">Ticket médio (R$)<input id="cf-ticket" type="number" min="50" step="1" value="${S.ticket}"></label>
+    <label class="f">Margem média (%)<input id="cf-margem" type="number" min="1" max="90" value="${S.margem}"></label>
+    <label class="f">Conversa → venda (%)<input id="cf-conv" type="number" min="1" max="80" value="${S.conv}"></label>
+    <label class="f">Início do plano<input id="cf-inicio" type="date" value="${S.inicio}" ${contratoAtivo()?"disabled":""}></label>
+   </div>
+   <p class="muted" style="font-size:.85rem">Referência de mercado: atendimento por WhatsApp no Brasil converte perto de 9% das conversas recebidas (OmniChat, 2026). 15% já exige atendimento muito bom. Lucro estimado no ano com a sua margem: <b class="num">${brl(S.meta*S.margem/100)}</b>.</p>
+   <div class="row"><button class="btn primary" onclick="salvarCfg()">Salvar</button><button class="btn ghost" onclick="abrirContrato()">${contratoAtivo()?"Ver contrato":"Assinar contrato"}</button></div></div>
+  <p class="muted" style="font-size:.82rem">Seus dados ficam ${backend==="nuvem"?"na sua área privada deste app, que só você acessa, e sincronizam entre os seus aparelhos":"neste aparelho (a sincronização entre aparelhos liga quando o app abre pelo link do Claude com você conectado)"}.</p>`;
+  return h;
+}
+function viewBiblioteca(){
+  const grupos=[...new Set(MATERIAIS.map(m=>m.g))];
+  return `<div class="stack"><h2>Materiais</h2><p class="muted">Selecionados para cada fase da trilha. Comece pelo livro da fase em que você está: 20 páginas por noite na sexta, o resto vira tarefa na Trilha. Cursos gratuitos mudam de vagas e de preço: confira na página antes de se inscrever.</p></div>`+
+  grupos.map(g=>`<div class="stack"><h3>${esc(g)}</h3><div class="lib">${MATERIAIS.filter(m=>m.g===g).map(m=>`<div class="card"><b>${esc(m.t)}</b><span class="muted" style="font-size:.9rem">${esc(m.d)}</span>${m.l?(m.l.startsWith("#")?`<button class="btn sm" style="align-self:flex-start" onclick="view='ia';render()">Abrir</button>`:`<a href="${esc(m.l)}" target="_blank" rel="noopener" style="font-size:.88rem">Abrir site</a>`):""}</div>`).join("")}</div></div>`).join("")+
+  `<div class="card flat stack"><h3>Sobre os 80%</h3><p>Nenhum método sério garante que 80% das pessoas que veem a marca comprem: loja virtual costuma converter entre 1% e 3% das visitas, e WhatsApp perto de 9% das conversas. O 80% que este app cobra é outro: <b>80% das missões cumpridas toda semana</b>. Além disso, com as perguntas certas e follow-up, é realista fechar de 30% a 50% dos orçamentos quentes. É essa disciplina, somada mês a mês, que leva ao número.</p></div>`;
+}
+
+
+/* ============ EQUIPE ============ */
+function radarRecente(){ const ks=Object.keys(RADAR).sort(); if(!ks.length) return null; const k=ks[ks.length-1]; return {k,r:RADAR[k]} }
+function func(id){ return EQUIPE.find(e=>e.id===id) || EQUIPE.find(e=>id&&id.includes(e.id)) || EQUIPE[0] }
+function resumoSituacao(){
+  const mi=moduloAtualIdx(), mod=MODULOS[mi], k=ymd(new Date()), m=mesDoPlano(k), e7=execucao(7);
+  let v=0,c=0; for(const x in DIAS_DB){const l=DIAS_DB[x].log||{}; v+=+l.vendas||0; c+=+l.conversas||0}
+  return `Semana ${semanaDoPlano()+1} do plano; módulo atual: "${mod.t}" (fase ${mod.f+1}: ${FASES[mod.f].n}). Faturamento acumulado ${brl(fatTotal())} de ${brl(S.meta)}; mês ${m+1}: ${brl(fatMes(m))} de ${brl(metaMes(m))}. Vendas registradas: ${v}; conversas: ${c}. Execução das missões em 7 dias: ${e7.pct===null?"sem dados":e7.pct+"%"}. O dono trabalha em regime CLT e só tem os horários livres (manhã, almoço, noite, sábado).`;
+}
+function viewEquipe(){
+  const rd=radarRecente(), k=ymd(new Date());
+  let h=`<div class="stack"><h2>Equipe Infinity Guard</h2><p class="muted">Os 22 funcionários estão prontos. Cada um conhece a marca, as regras da casa e a sua situação de hoje no plano. Toque numa tarefa e ele trabalha na hora. Toda madrugada a equipe pesquisa o mercado digital e de tecnologia e deixa o radar com as ordens do dia.</p></div>`;
+  if(rd){ const r=rd.r;
+    h+=`<div class="card stack" style="border-color:var(--accent)"><span class="eyebrow">Radar do mercado · ${rd.k===k?"hoje":esc(rd.k.split("-").reverse().join("/"))}</span><p><b>${esc(r.resumo||"")}</b></p>
+    ${(r.itens||[]).map(it=>`<div class="stack" style="gap:4px;border-top:1px solid var(--line);padding-top:10px"><div class="row"><span class="tag">${esc(it.tema||"")}</span>${it.etiqueta?`<span class="tag" style="background:${/confirm/i.test(it.etiqueta)?"var(--ok-soft)":"var(--signal-soft)"}">${esc(it.etiqueta)}</span>`:""}</div><b>${esc(it.titulo||"")}</b><span>${esc(it.oque||"")}</span>${it.porque?`<span class="muted" style="font-size:.9rem"><b>Para a Infinity Guard:</b> ${esc(it.porque)}</span>`:""}${it.acao?`<span style="font-size:.9rem"><b>Ação:</b> ${esc(it.acao)}</span>`:""}<div class="row">${safeUrl(it.fonte)?`<a href="${esc(safeUrl(it.fonte))}" target="_blank" rel="noopener" style="font-size:.85rem">Fonte</a>`:""}${it.funcionario?`<button class="btn sm" onclick="trabalhar('${esc(func(it.funcionario).id)}',${esc(jsq(it.acao||it.titulo||""))})">Pôr o ${esc(func(it.funcionario).id)} nisso</button>`:""}</div></div>`).join("")}
+    </div>`;
+    if((r.ordens||[]).length) h+=`<div class="card stack"><span class="eyebrow">Ordens do dia</span>${r.ordens.map((o,i)=>{const id=rd.k+"#"+i, feito=(S.ordens||{})[id]; const f=func(o.funcionario);
+      return `<div class="mission ${feito?"done":""}" style="grid-template-columns:auto 1fr"><span class="box">${feito?`<svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10" stroke="#fff" stroke-width="3" fill="none"/></svg>`:""}</span><span class="t">${esc(o.tarefa)}</span><span class="d">${esc(f.cargo)} (${esc(f.id)})${o.prazo?" · "+esc(o.prazo):""}</span>
+      <span class="act">${feito?"":`<button class="btn sm primary" onclick="trabalhar('${esc(f.id)}',${esc(jsq(o.tarefa))},'${id}')">Executar com ${esc(f.id)}</button><button class="btn sm ghost" onclick="concluirOrdem('${id}')">Já fiz</button>`}</span></div>`}).join("")}</div>`;
+  } else h+=`<div class="card flat stack"><span class="eyebrow">Radar do mercado</span><p class="muted">O primeiro radar chega amanhã às 05:17: novidades de Instagram, WhatsApp, TikTok, Meta Ads, IA, e-commerce e segurança eletrônica, com fonte, o que muda para a Infinity Guard e qual funcionário cuida. Enquanto isso, ponha a equipe para trabalhar abaixo.</p></div>`;
+  const squads=[...new Set(EQUIPE.map(e=>e.squad))];
+  squads.forEach(sq=>{ h+=`<div class="stack"><h3>Squad ${esc(sq)}</h3><div class="lib">${EQUIPE.filter(e=>e.squad===sq).map(e=>`<div class="card">
+    <div class="row" style="justify-content:space-between"><b>${esc(e.cargo)}</b>${/^(lider|diretor)/.test(e.id)?`<span class="pill acc">líder</span>`:""}</div>
+    <span class="num muted" style="font-size:.78rem">${esc(e.id)}</span>
+    <span class="muted" style="font-size:.88rem">${esc(e.missao)}</span>
+    <div class="stack" style="gap:6px;margin-top:4px">${e.tarefas.map(t=>`<button class="btn sm" style="text-align:left;justify-content:flex-start;white-space:normal" onclick="trabalhar('${e.id}',${esc(jsq(t))})">${esc(t)}</button>`).join("")}
+    <button class="btn sm ghost" style="align-self:flex-start" onclick="trabalhar('${e.id}','')">Outra tarefa</button></div></div>`).join("")}</div></div>` });
+  if(EXTRA.entregas.length) h+=`<div class="stack"><h3>Entregas guardadas</h3>${EXTRA.entregas.slice().reverse().map((x,i)=>{const j=EXTRA.entregas.length-1-i;return `<details class="card"><summary><b>${esc(x.func)}</b> · ${esc(x.tarefa).slice(0,70)} <span class="muted">· ${esc(x.data)}</span></summary><div class="out" style="margin-top:10px">${esc(x.texto)}</div><div class="row" style="margin-top:8px"><button class="btn sm" onclick="copiar(EXTRA.entregas[${j}].texto)">Copiar</button><button class="btn sm ghost" onclick="EXTRA.entregas.splice(${j},1);persistExtra();render()">Apagar</button></div></details>`}).join("")}</div>`;
+  return h;
+}
+let trab={id:null,out:"",busy:false,ctl:null,ordem:null};
+function promptFunc(id,t){ const e=func(id); return `Você é ${e.cargo} (${e.id}) da Infinity Guard, no squad ${e.squad}. ${e.desc}\nMissão: ${e.missao}\nO que você faz: ${e.faz}\nO que você entrega: ${e.entrega}\n${REGRAS_CASA}\nVocê não roda scripts aqui: quando precisar de preço calculado, revisar.py ou outro script, diga exatamente o comando ou a skill para o dono rodar no Claude Code.\n\nContexto da marca: ${contexto()}\n\nSituação do dono hoje: ${resumoSituacao()}\n\nTarefa do dono para você: ${t}\n\nEntregue pronto para usar, em português do Brasil, com no máximo 1 pergunta no fim se faltar dado essencial.` }
+function trabalhar(id,tarefa,ordem){ const e=func(id); trab={id:e.id,out:"",busy:false,ctl:null,ordem:ordem||null};
+  sheet(`<span class="eyebrow">${esc(e.squad)}</span><h3>${esc(e.cargo)}</h3><p class="muted" style="font-size:.88rem">${esc(e.desc)}</p>
+  <label class="f" for="tb-in">Tarefa</label><textarea id="tb-in" placeholder="O que ${esc(e.id)} deve fazer agora?">${esc(tarefa||"")}</textarea>
+  <div class="row">${sampleFn?`<button class="btn primary" id="tb-go" onclick="executarFunc()">Trabalhar agora</button>`:`<span class="muted" style="font-size:.88rem">A IA embutida não está disponível nesta visualização.</span>`}<button class="btn" onclick="copiar('Use o ${e.id}: '+($('#tb-in').value||''))">Copiar comando do Claude Code</button></div>
+  <div class="out" id="tb-out" aria-live="polite"><span class="muted">A entrega aparece aqui.</span></div><div class="row" id="tb-acts"></div>
+  <button class="btn ghost" style="align-self:flex-start" onclick="if(trab.ctl)trab.ctl.abort();fecharSheet()">Fechar</button>`);
+}
+async function executarFunc(){ const t=($("#tb-in").value||"").trim(); if(!t){toast("Escreva a tarefa.");return} if(trab.busy) return;
+  trab.busy=true; trab.ctl=new AbortController(); const b=$("#tb-go"); if(b){b.disabled=true;b.textContent="Trabalhando…"}
+  try{ const r=await sampleFn(promptFunc(trab.id,t),{signal:trab.ctl.signal,cache:false,onText:({text})=>{trab.out=text;const o=$("#tb-out");if(o)o.textContent=text}}); trab.out=r.text }
+  catch(e){ trab.out=e?.text||({not_granted:"Você não liberou a IA para este app. Libere no menu de permissões ou use o comando do Claude Code.",rate_limited:"Muitos pedidos seguidos. Espere um minuto.",cancelled:""}[e?.code]??"Não consegui agora. Tente de novo em instantes.") }
+  trab.busy=false; trab.tarefa=t; const o=$("#tb-out"); if(o) o.textContent=trab.out; if(b){b.disabled=false;b.textContent="Trabalhar de novo"}
+  const a=$("#tb-acts"); if(a&&trab.out) a.innerHTML=`<button class="btn sm" onclick="copiar(trab.out)">Copiar</button><button class="btn sm primary" onclick="guardarEntrega()">Guardar entrega${trab.ordem?" e concluir a ordem":""}</button>`;
+}
+function guardarEntrega(){ const e=func(trab.id); EXTRA.entregas.push({func:e.id,tarefa:trab.tarefa||"",texto:trab.out.slice(0,4000),data:ymd(new Date())}); while(EXTRA.entregas.length>25) EXTRA.entregas.shift(); persistExtra(); if(trab.ordem) concluirOrdem(trab.ordem,true); fecharSheet(); toast("Entrega guardada."); render() }
+function concluirOrdem(id,silent){ S.ordens=S.ordens||{}; S.ordens[id]=ymd(new Date()); const lim=ymd(new Date(Date.now()-30*864e5)); for(const k in S.ordens) if(k.slice(0,10)<lim) delete S.ordens[k]; persistEstado(); if(!silent){toast("Ordem concluída.");render()} }
+
+/* ============ KIT DA MARCA ============ */
+const FONTES = {"Archivo":"Archivo:wght@700;800","Montserrat":"Montserrat:wght@700;800","Poppins":"Poppins:wght@700;800","Oswald":"Oswald:wght@600;700","Bebas Neue":"Bebas+Neue","Inter":"Inter:wght@700;800"};
+const MARCA_PADRAO = {nome:"Infinity Guard", slogan:"Segurança onde você estiver", primaria:"#0A6B6B", destaque:"#F2A257", fundo:"#0D151B", texto:"#FFFFFF", fonte:"Archivo", whatsapp:"(31) 98667-9178", instagram:"", logo:null, travado:false, travadoEm:""};
+let MARCA = Object.assign({}, MARCA_PADRAO, lsGet("rdm-marca")||{}); let dbMarca=null; let logoImg=null;
+function persistMarca(){ lsSet("rdm-marca",MARCA); queue("marca",()=>dbMarca&&dbMarca.set(JSON.parse(JSON.stringify(MARCA)))) }
+function carregarLogo(){ logoImg=null; if(!MARCA.logo) return; const i=new Image(); i.onload=()=>{logoImg=i}; i.src=MARCA.logo }
+const fontesCarregadas=new Set();
+async function garantirFonte(f){ if(!fontesCarregadas.has(f)&&FONTES[f]){ const l=document.createElement("link"); l.rel="stylesheet"; l.href="https://fonts.googleapis.com/css2?family="+FONTES[f]+"&display=swap"; document.head.appendChild(l); fontesCarregadas.add(f) }
+  try{ await document.fonts.load(`700 80px "${f}"`) }catch(e){} }
+const hexOk = h=>/^#[0-9a-f]{6}$/i.test(h||"");
+function rgba(hex,a){ const n=parseInt((hex||"#000000").slice(1),16); return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})` }
+function safeUrl(u){ return /^https?:\/\//i.test(u||"")?u:"" }
+
+/* ============ REVISOR DE PROMESSAS (regras da casa) ============ */
+const PROIBIDO=[
+ [/100\s*%\s*segur|totalmente segur|seguran(ç|c)a total/i,"Promessa absoluta de segurança (\"100% seguro\"): troque por um benefício concreto."],
+ [/(à|a) prova de (invas|hack|roub|tudo)|invulner|inviol|nunca (ser(á|a)|é) invadid|imposs(í|i)vel invadir/i,"\"À prova de invasão\" é promessa que ninguém cumpre."],
+ [/instala(ç|c)(ã|a)o (gr(á|a)tis|inclusa|gratuita)|n(ó|o)s instalamos|a gente instala|t(é|e)cnico vai at(é|e)/i,"A loja não faz instalação."],
+ [/\b4g\b|chip de dados|funciona sem wi-?fi|sem internet funciona/i,"A loja não vende câmera 4G nem câmera que funciona sem Wi-Fi."],
+ [/anatel/i,"Só cite Anatel com o código conferido do produto."],
+ [/\d+\s*(anos?|meses) de garantia|garantia de \d+/i,"Prazo de garantia só com documento do fornecedor."],
+ [/\bde\s*r\$\s*[\d.,]+\s*(por|para)\s*r\$/i,"\"De/por\" só com o preço anterior real do site."],
+ [/depoimento|cliente disse|avalia(ç|c)(ã|a)o 5 estrelas/i,"Depoimento e avaliação só se forem reais e com permissão."],
+];
+PROIBIDO.push(
+ [/(sai|vai|chega|segue|entregue|enviad[oa])\s+(daqui\s+)?(j(á|a)\s+)?configurad|j(á|a) (vem|chega) configurad|senha j(á|a) (vem )?trocad/i,"No dropshipping o produto não passa por você: prometa a configuração guiada por vídeo quando chegar, não o produto já configurado."],
+ [/entrega (em )?(24|48)\s*h|chega amanh(ã|a)|entrega imediata|envio imediato|pronta entrega|entrega expressa/i,"Prazo de entrega só o do catálogo (dropshipping)."]
+);
+function checarPromessas(txt){ const out=[]; PROIBIDO.forEach(([re,msg])=>{ const m=String(txt||"").match(re); if(m) out.push({trecho:m[0],msg}) }); return out }
+
+/* ============ ESTÚDIO DE VÍDEO (Reels 1080x1920) ============ */
+const VW=1080, VH=1920;
+function planoVideo(r){
+  const L=[{tipo:"gancho",txt:(r.gancho||"").trim(),d:2.8}];
+  (r.cenas||[]).filter(Boolean).forEach(c=>{ const w=String(c).split(/\s+/).length; L.push({tipo:"cena",txt:String(c).trim(),d:Math.min(5.5,Math.max(2.6,w*0.34))}) });
+  L.push({tipo:"cta",txt:(r.cta||"Chame no WhatsApp").trim(),d:3.6});
+  let t=0; L.forEach(s=>{s.t0=t;t+=s.d}); return {cenas:L,total:t};
+}
+function quebrar(ctx,txt,maxW){ const ws=String(txt).split(/\s+/); const lines=[]; let l=""; ws.forEach(w=>{ const t=l?l+" "+w:w; if(ctx.measureText(t).width>maxW&&l){lines.push(l);l=w} else l=t }); if(l) lines.push(l); return lines }
+function cover(ctx,el,W,H,zoom){ const iw=el.videoWidth||el.naturalWidth||el.width, ih=el.videoHeight||el.naturalHeight||el.height; if(!iw||!ih) return; const s=Math.max(W/iw,H/ih)*(zoom||1); const w=iw*s,h=ih*s; ctx.drawImage(el,(W-w)/2,(H-h)/2,w,h) }
+function escudo(ctx,x,y,s,cor){ ctx.save(); ctx.translate(x,y); ctx.scale(s/24,s/24); ctx.lineWidth=2.2; ctx.strokeStyle=cor; ctx.lineCap="round"; ctx.lineJoin="round";
+  ctx.beginPath(); ctx.moveTo(12,2); ctx.lineTo(4,5); ctx.lineTo(4,11); ctx.bezierCurveTo(4,16,7.4,20.4,12,22); ctx.bezierCurveTo(16.6,20.4,20,16,20,11); ctx.lineTo(20,5); ctx.closePath(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(8,12.5); ctx.bezierCurveTo(9.2,10.9,10.6,10.9,12,12.5); ctx.bezierCurveTo(13.4,14.1,14.8,14.1,16,12.5); ctx.stroke(); ctx.restore() }
+function marcaTopo(ctx,M,x,y,tam){ if(logoImg){ const h=tam, w=logoImg.naturalWidth/logoImg.naturalHeight*h; ctx.drawImage(logoImg,x,y,Math.min(w,tam*4),h) } else { escudo(ctx,x,y,tam,M.texto); ctx.fillStyle=M.texto; ctx.font=`700 ${Math.round(tam*0.55)}px "${M.fonte}",sans-serif`; ctx.textBaseline="middle"; ctx.fillText(M.nome,x+tam*1.25,y+tam/2) } }
+const ease = x=>1-Math.pow(1-Math.min(1,Math.max(0,x)),3);
+function desenharQuadro(ctx,plan,t,M,midias){
+  const W=VW,H=VH; const i=Math.max(0,plan.cenas.findIndex(c=>t>=c.t0&&t<c.t0+c.d)); const s=plan.cenas[i]||plan.cenas[plan.cenas.length-1]; const lt=t-s.t0;
+  ctx.textBaseline="alphabetic"; ctx.fillStyle=M.fundo; ctx.fillRect(0,0,W,H);
+  const m=midias.length?midias[i%midias.length]:null;
+  if(m){ cover(ctx,m.el,W,H,1+0.05*(lt/s.d)); const g=ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,rgba(M.fundo,.35)); g.addColorStop(.45,rgba(M.fundo,.55)); g.addColorStop(1,rgba(M.fundo,.92)); ctx.fillStyle=g; ctx.fillRect(0,0,W,H) }
+  else { ctx.save(); ctx.globalAlpha=.07; ctx.strokeStyle=M.primaria; ctx.lineWidth=26; const off=(t*40)%140; for(let x=-H;x<W+H;x+=140){ ctx.beginPath(); ctx.moveTo(x+off,0); ctx.lineTo(x+off-H*.6,H); ctx.stroke() } ctx.restore();
+    const gx=W*.5+Math.sin(t*.7)*180, gy=H*.42; const rg=ctx.createRadialGradient(gx,gy,0,gx,gy,760); rg.addColorStop(0,rgba(M.primaria,.45)); rg.addColorStop(1,rgba(M.primaria,0)); ctx.fillStyle=rg; ctx.fillRect(0,0,W,H) }
+  // barra de progresso segmentada
+  const n=plan.cenas.length, gap=10, bw=(W-160-gap*(n-1))/n;
+  plan.cenas.forEach((c,k)=>{ const x=80+k*(bw+gap); ctx.fillStyle=rgba(M.texto,.28); ctx.fillRect(x,96,bw,8); const p=k<i?1:k>i?0:Math.min(1,lt/c.d); ctx.fillStyle=M.destaque; ctx.fillRect(x,96,bw*p,8) });
+  marcaTopo(ctx,M,80,150,72);
+  const a=ease(lt/0.4), out=Math.min(1,(s.d-lt)/0.25); ctx.save(); ctx.globalAlpha=Math.max(0,Math.min(a,out)); const dy=(1-a)*60;
+  if(s.tipo==="gancho"){
+    ctx.font=`800 104px "${M.fonte}",sans-serif`; const L=quebrar(ctx,s.txt.toUpperCase(),W-180); const lh=124; let y=H*.40-(L.length*lh)/2+dy;
+    L.forEach(l=>{ const w=ctx.measureText(l).width; ctx.fillStyle=M.primaria; ctx.fillRect(70,y-96,w+40,118); ctx.fillStyle=M.texto; ctx.fillText(l,90,y); y+=lh+6 });
+  } else if(s.tipo==="cena"){
+    ctx.font=`700 80px "${M.fonte}",sans-serif`; const L=quebrar(ctx,s.txt,W-200); const lh=98; let y=H*.43-(L.length*lh)/2+dy;
+    ctx.fillStyle=M.destaque; ctx.fillRect(80,y-70,12,L.length*lh-10);
+    ctx.fillStyle=M.texto; L.forEach(l=>{ ctx.fillText(l,120,y); y+=lh });
+  } else {
+    ctx.font=`800 92px "${M.fonte}",sans-serif`; const L=quebrar(ctx,s.txt,W-180); let y=H*.34+dy; ctx.fillStyle=M.texto; L.forEach(l=>{ ctx.fillText(l,90,y); y+=110 });
+    y+=40; const bh=150; ctx.fillStyle=M.destaque; roundRect(ctx,90,y,W-180,bh,32); ctx.fill();
+    ctx.fillStyle=M.fundo; ctx.font=`800 64px "${M.fonte}",sans-serif`; ctx.fillText("WhatsApp "+M.whatsapp,130,y+96);
+    if(M.instagram){ ctx.fillStyle=rgba(M.texto,.85); ctx.font=`600 52px "${M.fonte}",sans-serif`; ctx.fillText(M.instagram,90,y+bh+90) }
+  }
+  ctx.restore();
+  ctx.fillStyle=rgba(M.texto,.82); ctx.font=`600 40px "${M.fonte}",sans-serif`; ctx.fillText(M.slogan,80,H-430);
+}
+function roundRect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath() }
+function melhorMime(){ if(!window.MediaRecorder) return null; return ["video/mp4;codecs=avc1.42E01E,mp4a.40.2","video/mp4;codecs=avc1.42E01E","video/mp4;codecs=avc1","video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"].find(m=>{try{return MediaRecorder.isTypeSupported(m)}catch(e){return false}})||null }
+async function gravarVideo(plan,M,midias,musica,onProg){
+  const mime=melhorMime(); if(!mime) throw new Error("Este navegador não grava vídeo. Use o Chrome ou o Edge atualizado.");
+  await garantirFonte(M.fonte);
+  const c=document.createElement("canvas"); c.width=VW; c.height=VH; c.setAttribute("aria-hidden","true"); c.style.cssText="position:fixed;left:-20000px;top:0;width:108px;height:192px;pointer-events:none"; document.body.appendChild(c);
+  const ctx=c.getContext("2d"); desenharQuadro(ctx,plan,0,M,midias); const stream=c.captureStream(30);
+  let ac=null, audio=null;
+  if(musica){ ac=new (window.AudioContext||window.webkitAudioContext)(); audio=new Audio(musica); const src=ac.createMediaElementSource(audio); const dest=ac.createMediaStreamDestination(); src.connect(dest); dest.stream.getAudioTracks().forEach(tr=>stream.addTrack(tr)); }
+  midias.forEach(m=>{ if(m.tipo==="video"){ m.el.currentTime=0; m.el.play().catch(()=>{}) } });
+  const rec=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:8000000}); const parts=[]; rec.ondataavailable=e=>{ if(e.data&&e.data.size) parts.push(e.data) };
+  const parou=new Promise(r=>rec.onstop=r);
+  if(audio){ audio.currentTime=0; await audio.play().catch(()=>{}) }
+  rec.start(250); const t0=performance.now();
+  await new Promise(res=>{ (function loop(){ const t=(performance.now()-t0)/1000; desenharQuadro(ctx,plan,Math.min(t,plan.total-0.001),M,midias); onProg&&onProg(Math.min(1,t/plan.total)); if(t<plan.total) requestAnimationFrame(loop); else res() })() });
+  rec.stop(); await parou; c.remove(); if(audio){audio.pause()} if(ac) ac.close().catch(()=>{}); stream.getTracks().forEach(t=>t.stop());
+  const blob=new Blob(parts,{type:mime.split(";")[0]}); if(!blob.size) throw new Error("O navegador não conseguiu gravar o vídeo. Use o Chrome ou o Edge atualizado.");
+  return {blob, ext:mime.startsWith("video/mp4")?"mp4":"webm"};
+}
+
+/* ============ ARTE DE ANÚNCIO ============ */
+const FORMATOS={feed:[1080,1350,"Feed 4:5"],quadrado:[1080,1080,"Quadrado 1:1"],story:[1080,1920,"Stories e Reels 9:16"]};
+function desenharAnuncio(ctx,W,H,M,ad,fundoEl){
+  ctx.textBaseline="alphabetic"; ctx.fillStyle=M.fundo; ctx.fillRect(0,0,W,H);
+  if(fundoEl){ cover(ctx,fundoEl,W,H,1); const g=ctx.createLinearGradient(0,H*.25,0,H); g.addColorStop(0,rgba(M.fundo,.15)); g.addColorStop(1,rgba(M.fundo,.94)); ctx.fillStyle=g; ctx.fillRect(0,0,W,H) }
+  else { const rg=ctx.createRadialGradient(W*.8,H*.2,0,W*.8,H*.2,W); rg.addColorStop(0,rgba(M.primaria,.6)); rg.addColorStop(1,rgba(M.primaria,0)); ctx.fillStyle=rg; ctx.fillRect(0,0,W,H) }
+  const top=H===1920?170:70; marcaTopo(ctx,M,70,top,64);
+  const base=H===1920?H-520:H-70; let y=base;
+  const prod=CATALOGO.find(p=>p[2]===ad.produto);
+  ctx.fillStyle=M.destaque; roundRect(ctx,70,y-130,W-140,130,28); ctx.fill(); ctx.fillStyle=M.fundo; ctx.font=`800 56px "${M.fonte}",sans-serif`; ctx.fillText((ad.cta||"Chame no WhatsApp"),110,y-46);
+  y-=200;
+  if(prod){ ctx.fillStyle=M.texto; ctx.font=`800 84px "${M.fonte}",sans-serif`; ctx.fillText("R$ "+prod[1].toFixed(2).replace(".",","),70,y); ctx.font=`600 40px "${M.fonte}",sans-serif`; ctx.fillStyle=rgba(M.texto,.85); ctx.fillText(`R$ ${precoPix(prod[1]).toFixed(2).replace(".",",")} no Pix · até ${CAT.parcelas}x no cartão`,70,y+50); y-=150 }
+  ctx.font=`600 48px "${M.fonte}",sans-serif`; const sub=quebrar(ctx,ad.subtitulo||"",W-140); ctx.fillStyle=rgba(M.texto,.9); for(let k=sub.length-1;k>=0;k--){ ctx.fillText(sub[k],70,y); y-=62 }
+  y-=20; ctx.font=`800 96px "${M.fonte}",sans-serif`; const tit=quebrar(ctx,(ad.titulo||"").toUpperCase(),W-140); ctx.fillStyle=M.texto; for(let k=tit.length-1;k>=0;k--){ ctx.fillText(tit[k],70,y); y-=110 }
+}
+
+/* ============ CONTRATO v2 ============ */
+const FRASE_CONTRATO="EU NÃO VOLTO ATRÁS";
+function semanasFechadas(){ // execução de cada semana (seg–dom) já encerrada desde o início
+  const out=[]; const ini=parseYmd(S.inicio); const hoje=parseYmd(ymd(new Date()));
+  const seg=new Date(ini); seg.setDate(seg.getDate()-((seg.getDay()+6)%7));
+  for(let w=new Date(seg); ; w.setDate(w.getDate()+7)){ const fim=new Date(w); fim.setDate(fim.getDate()+6); if(fim>=hoje) break;
+    let tot=0,ok=0; for(let d=new Date(w); d<=fim; d.setDate(d.getDate()+1)){ if(d<ini) continue; const k=ymd(d); missoesDe(d).forEach(m=>{ if(!conta(d,m)) return; tot++; if(DIAS_DB[k]?.missoes?.[m.id]) ok++ }) }
+    if(tot) out.push({ini:ymd(w),pct:Math.round(ok/tot*100)}) }
+  return out;
+}
+function nivelContrato(){ if(!contratoAtivo()) return 0; const s=semanasFechadas(); let n=0; for(let i=s.length-1;i>=0;i--){ if(s[i].pct<80) n++; else break } return Math.min(3,n) }
+function contratoAtivo(){ return S.contrato&&S.contrato.v===2&&S.contrato.assinado }
+function bloqueado(){ const n=nivelContrato(); const dv=dividas().length; return (n>=3 && dv>0) || dv>=4 }
+function abrirContrato(){
+  const c=S.contrato||{}; const ativo=contratoAtivo();
+  const clausulas=`<ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:.92rem">
+   <li><b>Prazo:</b> 12 meses a partir da assinatura${ativo?` (até ${esc(c.ate.split("-").reverse().join("/"))})`:""}. Não existe pausa.</li>
+   <li><b>Meta de execução:</b> cumprir 80% ou mais das missões de cada semana, sempre com prova.</li>
+   <li><b>Nível 1</b> (1 semana abaixo de 80%): ${esc(c.multa1||"…")}</li>
+   <li><b>Nível 2</b> (2 semanas seguidas): ${esc(c.multa2||"…")} + bloco de reposição de 2 horas no sábado, que entra como missão.</li>
+   <li><b>Nível 3</b> (3 semanas seguidas): ${esc(c.multa3||"…")} + modo bloqueio: o app abre direto na cobrança até zerar as missões em atraso.</li>
+   <li><b>Produção e publicação:</b> autorizo a equipe a produzir a pauta e os criativos todos os dias, sempre com o Kit da marca travado e as regras do revisor de promessas. A publicação diária roda no piloto automático assim que o diretor-geral liberar as conexões.</li>
+   <li><b>Não retorno:</b> este contrato não pode ser editado depois de assinado. Para sair, existe um aviso de rescisão de 30 dias com justificativa escrita. Durante o aviso, todas as missões e cobranças continuam valendo.</li></ol>`;
+  if(ativo){
+    const r=c.rescisao; const falta=r?Math.max(0,30-daysBetween(parseYmd(r.data),new Date())):null;
+    sheet(`<span class="eyebrow">Contrato assinado em ${esc(c.data.split("-").reverse().join("/"))} por ${esc(c.nome)}</span><h3>Compromisso de execução</h3><p>${esc(c.compromisso)}</p>${clausulas}
+     <p class="muted" style="font-size:.85rem">Nível atual de cobrança: <b>${nivelContrato()}</b>.</p>
+     ${r?`<div class="debt"><b>Aviso de rescisão em andamento</b><p>Faltam ${falta} dias. Justificativa registrada: ${esc(r.motivo)}</p>${falta===0?`<button class="btn" onclick="confirmarRescisao()">Confirmar rescisão</button>`:""}<button class="btn sm ghost" onclick="cancelarRescisao()">Desistir do aviso e continuar</button></div>`
+       :`<details><summary class="muted">Pedir rescisão</summary><p class="muted" style="font-size:.88rem">Escreva pelo menos 200 caracteres explicando por que vai desistir. O aviso dura 30 dias e tudo continua valendo até lá.</p><textarea id="rs-m"></textarea><button class="btn sm" onclick="pedirRescisao()">Registrar aviso de rescisão</button></details>`}
+     <button class="btn ghost" style="align-self:flex-start" onclick="fecharSheet()">Fechar</button>`);
+    return;
+  }
+  sheet(`<span class="eyebrow">Contrato comigo mesmo · versão 2</span><h3>Compromisso de execução</h3>
+   ${c.assinado&&c.v!==2?`<p class="muted" style="font-size:.88rem">O contrato ganhou cláusulas novas. Assine a versão 2 para continuar.</p>`:""}
+   <label class="f">Eu me comprometo a…<textarea id="ct-c" placeholder="Ex.: cumprir 80% das missões toda semana nos meus horários livres por 12 meses, até a Infinity Guard faturar R$ 1 milhão por ano.">${esc(c.compromisso||"")}</textarea></label>
+   <label class="f">Consequência do nível 1 (1 semana abaixo de 80%)<input id="ct-1" value="${esc(c.multa1||c.multa||"")}" placeholder="Ex.: sem streaming no fim de semana"></label>
+   <label class="f">Consequência do nível 2 (2 semanas seguidas)<input id="ct-2" value="${esc(c.multa2||"")}" placeholder="Ex.: guardar R$ 200 na reserva do negócio e não tocar"></label>
+   <label class="f">Consequência do nível 3 (3 semanas seguidas)<input id="ct-3" value="${esc(c.multa3||"")}" placeholder="Ex.: acordar 1 hora mais cedo por 14 dias para repor as missões"></label>
+   ${clausulas}
+   <label class="f">Seu nome completo<input id="ct-n" value="${esc(c.nome||"")}"></label>
+   <label class="f">Para assinar, digite: ${FRASE_CONTRATO}<input id="ct-f" autocomplete="off"></label>
+   <div class="row"><button class="btn primary" onclick="assinar()">Assinar sem volta</button><button class="btn ghost" onclick="fecharSheet()">Agora não</button></div><p id="ct-err" class="muted"></p>`);
+}
+function assinar(){ const g=id=>($("#"+id).value||"").trim(); const err=$("#ct-err");
+  if(g("ct-c").length<20) return err.textContent="Escreva o compromisso com pelo menos 20 caracteres.";
+  if(g("ct-1").length<5||g("ct-2").length<5||g("ct-3").length<5) return err.textContent="Defina as 3 consequências.";
+  if(g("ct-n").length<5) return err.textContent="Escreva o seu nome completo.";
+  if(g("ct-f").toUpperCase()!==FRASE_CONTRATO) return err.textContent="A frase precisa ser exatamente: "+FRASE_CONTRATO;
+  const hoje=new Date(), ate=new Date(hoje); ate.setFullYear(ate.getFullYear()+1);
+  S.contrato={v:2,assinado:true,compromisso:g("ct-c"),multa1:g("ct-1"),multa2:g("ct-2"),multa3:g("ct-3"),multa:g("ct-1"),nome:g("ct-n"),data:ymd(hoje),ate:ymd(ate),autorizaPublicacao:true,rescisao:null};
+  persistEstado(); fecharSheet(); toast("Contrato assinado. Não tem volta."); render() }
+function pedirRescisao(){ const m=($("#rs-m").value||"").trim(); if(m.length<200){toast("A justificativa precisa de pelo menos 200 caracteres.");return} S.contrato.rescisao={data:ymd(new Date()),motivo:m}; persistEstado(); fecharSheet(); toast("Aviso registrado. Tudo continua valendo por 30 dias."); render() }
+function cancelarRescisao(){ S.contrato.rescisao=null; persistEstado(); fecharSheet(); toast("Aviso cancelado. Seguimos."); render() }
+function confirmarRescisao(){ S.contrato.assinado=false; S.contrato.encerradoEm=ymd(new Date()); persistEstado(); fecharSheet(); render() }
+
+/* ============ PUBLICAR: conexões, liberação e pauta ============ */
+let PAUTA = lsGet("rdm-pauta")||{};
+async function carregarPauta(){ if(!dbBase) return; try{ const r=await dbBase.collection("pauta").get(); const o={}; r.docs.forEach(d=>o[d.id]=JSON.parse(JSON.stringify(d.data()))); PAUTA=o; lsSet("rdm-pauta",PAUTA); render() }catch(e){} }
+let mcpCap=null;
+const REDES=[
+ {id:"meta",n:"Meta: Página do Facebook e contas de anúncio",resp:["lider-trafego","analista-de-midia"],auto:true,como:"Conecte o conector da Meta no Claude (Configurações → Conectores) e toque em Verificar. O app lê a Página e as contas de anúncio, sem mudar nada."},
+ {id:"instagram",n:"Instagram profissional ligado à Página",resp:["social-media"],como:"No Instagram: Configurações → Tipo de conta → Profissional. No Meta Business Suite: Configurações → Contas → Contas do Instagram → Conectar. Depois ligue o Instagram à conta de anúncios em Contas de anúncios → Ativos conectados."},
+ {id:"planejador",n:"Planejador do Meta Business Suite",resp:["social-media","lider-marketing"],como:"Abra business.facebook.com → Planejador. É ele que publica sozinho, todo dia, os vídeos do pacote da semana."},
+ {id:"whatsapp",n:"WhatsApp Business no perfil",resp:["consultor-whatsapp","lider-vendas"],como:"No Instagram: Editar perfil → Contato → WhatsApp. Use o número do Kit da marca."},
+ {id:"nuvemshop",n:"Nuvemshop com pixel da Meta",resp:["lider-operacoes","gestor-de-catalogo"],como:"Na Nuvemshop: Configurações → Códigos externos → Meta (pixel e API de Conversões)."},
+ {id:"tiktok",n:"TikTok (opcional)",resp:["roteirista-de-reels","social-media"],opcional:true,como:"Conta comercial no TikTok. Os mesmos vídeos do pacote servem lá; o TikTok também tem agendamento no computador."},
+];
+function conexao(id){ return (S.conexoes||{})[id]||{} }
+async function verificarMeta(){
+  const out=$("#meta-out"); if(out) out.textContent="Verificando…";
+  if(!mcpCap){ if(out) out.textContent="O conector da Meta não está disponível nesta visualização. Conecte a Meta em claude.ai → Configurações → Conectores e abra o app pelo link."; return }
+  const conv=S.metaConv||(S.metaConv=Array.from({length:20},()=>"ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789"[Math.floor(Math.random()*56)]).join(""));
+  const base={client_conversation_id:conv,advertiser_job:"set_up_and_fix_ad_account"};
+  const ler=r=>{ if(r&&r.payload!==undefined) return r.payload; try{ return JSON.parse((r.content||[]).find(c=>c.type==="text").text) }catch(e){ return {} } };
+  try{
+    const pg=ler(await mcpCap.callTool("Meta","ads_get_user_pages",base));
+    const ac=ler(await mcpCap.callTool("Meta","ads_get_ad_accounts",base));
+    const contas=(ac.ad_accounts||[]).filter(a=>a.account_status==="ACTIVE");
+    const ig=[];
+    for(const a of contas.slice(0,6)){ try{ const r=ler(await mcpCap.callTool("Meta","ads_get_ig_accounts",{...base,ad_account_id:a.ad_account_id})); let l=r.ig_accounts; if(typeof l==="string"){try{l=JSON.parse(l)}catch(e){l=[]}} (l||[]).forEach(x=>ig.push(x.username||x.name||x.id)) }catch(e){} }
+    S.conexoes=S.conexoes||{};
+    S.conexoes.meta={ok:(pg.pages||[]).length>0&&contas.length>0, paginas:(pg.pages||[]).map(p=>p.page_name), contas:contas.map(a=>({id:a.ad_account_id,nome:a.ad_account_name,pagamento:!!a.has_payment_method})), em:new Date().toISOString()};
+    if(ig.length){ S.conexoes.instagram=Object.assign({},S.conexoes.instagram,{ok:true,auto:true,contas:[...new Set(ig)]}) }
+    persistEstado(); render();
+  }catch(e){ const msg={needs_reauth:"A conexão da Meta expirou. Reconecte em claude.ai → Configurações → Conectores.",server_not_connected:"A Meta não está conectada na sua conta do Claude. Conecte em Configurações → Conectores.",not_granted:"Você não liberou a Meta para este app. Libere no menu de permissões do app.",consent_required:"Libere a Meta para este app quando o Claude perguntar.",rate_limited:"Muitos pedidos seguidos. Tente em 1 minuto."}[e?.code]||"Não consegui verificar agora ("+(e?.code||"erro")+")."; const o=$("#meta-out"); if(o) o.textContent=msg }
+}
+function marcarConexao(id){ const v=($("#cx-"+id)?.value||"").trim(); const ok=$("#cxk-"+id)?.checked; S.conexoes=S.conexoes||{}; S.conexoes[id]=Object.assign({},S.conexoes[id],{ok:!!ok,valor:v,em:new Date().toISOString()}); persistEstado(); toast(ok?"Conexão confirmada.":"Conexão marcada como pendente."); render() }
+function requisitos(){ return [
+  {n:"Contrato v2 assinado",ok:contratoAtivo(),resp:"diretor-geral"},
+  {n:"Kit da marca travado",ok:!!MARCA.travado,resp:"lider-marketing"},
+  {n:"Meta verificada (Página e conta de anúncio ativa)",ok:!!conexao("meta").ok,resp:"lider-trafego"},
+  {n:"Instagram profissional ligado",ok:!!conexao("instagram").ok,resp:"social-media"},
+  {n:"Planejador do Meta Business Suite pronto",ok:!!conexao("planejador").ok,resp:"social-media"},
+  {n:"WhatsApp no perfil",ok:!!conexao("whatsapp").ok,resp:"consultor-whatsapp"},
+] }
+function pilotoLiberado(){ return requisitos().every(r=>r.ok) }
+let pubAba="conexoes";
+function viewPublicar(){
+  const req=requisitos(), feitos=req.filter(r=>r.ok).length, lib=feitos===req.length;
+  let h=`<div class="stack"><h2>Publicar</h2><p class="muted">Primeiro você conecta as redes, com cada funcionário responsável pela dele. Quando o diretor-geral liberar, a equipe produz a pauta e os vídeos todos os dias com o Kit da marca travado, e o Planejador da Meta publica sozinho no horário.</p></div>
+  <div class="card stack" style="border-color:${lib?"var(--ok)":"var(--signal)"}"><div class="row" style="justify-content:space-between"><span class="eyebrow">Liberação do diretor-geral</span><span class="pill ${lib?"ok":"warn"}">${lib?"piloto automático liberado":feitos+" de "+req.length}</span></div>
+   ${req.map(r=>`<div class="row" style="justify-content:space-between"><span>${r.ok?"✓":"○"} ${esc(r.n)}</span><span class="muted num" style="font-size:.78rem">${esc(r.resp)}</span></div>`).join("")}
+   ${lib?"":`<button class="btn sm" style="align-self:flex-start" onclick="trabalhar('diretor-geral','Olhe o que falta na liberação do piloto automático (${esc(req.filter(r=>!r.ok).map(r=>r.n).join("; "))}) e me diga a ordem exata para resolver hoje, com o responsável de cada passo.')">Pedir o plano ao diretor-geral</button>`}</div>
+  <div class="chips" role="group" aria-label="Seção">${[["conexoes","1. Conexões"],["marca","2. Kit da marca"],["pauta","3. Pauta e vídeos"]].map(([k,n])=>`<button class="chip" aria-pressed="${pubAba===k}" onclick="pubAba='${k}';render()">${n}</button>`).join("")}</div>`;
+  if(pubAba==="conexoes") h+=viewConexoes(); else if(pubAba==="marca") h+=viewMarca(); else h+=viewPauta(lib);
+  return h;
+}
+function viewConexoes(){
+  const mt=conexao("meta");
+  return `<div class="stack">${REDES.map(r=>{ const c=conexao(r.id); return `<div class="card stack">
+    <div class="row" style="justify-content:space-between"><b>${esc(r.n)}</b><span class="pill ${c.ok?"ok":r.opcional?"":"warn"}">${c.ok?"conectado":r.opcional?"opcional":"pendente"}</span></div>
+    <span class="muted" style="font-size:.85rem">Responsável: ${r.resp.map(x=>`<button class="btn sm ghost" style="padding:2px 6px" onclick="trabalhar('${x}','Me guie passo a passo para deixar pronto: ${esc(r.n)}. ${esc(r.como)}')">${esc(x)}</button>`).join(" ")}</span>
+    <p style="font-size:.9rem">${esc(r.como)}</p>
+    ${r.auto?`<div class="row"><button class="btn primary sm" onclick="verificarMeta()">Verificar conexão</button>${mt.em?`<span class="muted" style="font-size:.8rem">última verificação ${esc(new Date(mt.em).toLocaleString("pt-BR"))}</span>`:""}</div>
+      <div id="meta-out" class="muted" style="font-size:.88rem">${mt.em?`Páginas: ${esc((mt.paginas||[]).join(", ")||"nenhuma")}. Contas de anúncio ativas: ${(mt.contas||[]).length} (${(mt.contas||[]).filter(a=>a.pagamento).length} com pagamento). Instagram ligado às contas: ${esc((conexao("instagram").contas||[]).join(", ")||"nenhum, falta ligar")}.`:""}</div>`
+     :`<div class="fields"><label class="f">${r.id==="instagram"?"@ do perfil":r.id==="nuvemshop"?"Endereço da loja":r.id==="whatsapp"?"Número":"Observação"}<input id="cx-${r.id}" value="${esc(c.valor||"")}"></label></div>
+      <label class="row" style="gap:8px;font-size:.9rem"><input type="checkbox" id="cxk-${r.id}" style="width:auto" ${c.ok?"checked":""}> Feito e conferido</label>
+      <button class="btn sm" style="align-self:flex-start" onclick="marcarConexao('${r.id}')">Salvar</button>`}
+   </div>`}).join("")}</div>`;
+}
+function viewMarca(){
+  const M=MARCA, dis=M.travado?"disabled":"";
+  const cor=(id,n)=>`<label class="f">${n}<span class="row" style="flex-wrap:nowrap"><input type="color" id="mk-${id}" value="${esc(M[id])}" ${dis} style="width:52px;padding:2px"><input id="mk-${id}-hex" value="${esc(M[id])}" ${dis} oninput="if(/^#[0-9a-f]{6}$/i.test(this.value))$('#mk-${id}').value=this.value"></span></label>`;
+  return `<div class="card stack"><div class="row" style="justify-content:space-between"><span class="eyebrow">Kit da marca</span><span class="pill ${M.travado?"ok":"warn"}">${M.travado?"travado em "+esc(M.travadoEm.split("-").reverse().join("/")):"não travado"}</span></div>
+   <p class="muted" style="font-size:.9rem">Todo vídeo e toda arte saem com estas cores, esta fonte e este logo. Coloque as cores reais da Infinity Guard (o código hexadecimal está no tema da Nuvemshop, em Personalizar → Cores). Depois de travar, nada muda sem renegociar o contrato.</p>
+   <div class="fields"><label class="f">Nome<input id="mk-nome" value="${esc(M.nome)}" ${dis}></label><label class="f">Slogan<input id="mk-slogan" value="${esc(M.slogan)}" ${dis}></label></div>
+   <div class="fields">${cor("primaria","Cor principal")}${cor("destaque","Cor de destaque e botão")}${cor("fundo","Cor de fundo")}${cor("texto","Cor do texto")}</div>
+   <div class="fields"><label class="f">Fonte dos títulos<select id="mk-fonte" ${dis}>${Object.keys(FONTES).map(f=>`<option ${f===M.fonte?"selected":""}>${f}</option>`).join("")}</select></label><label class="f">WhatsApp<input id="mk-whatsapp" value="${esc(M.whatsapp)}" ${dis}></label><label class="f">@ do Instagram<input id="mk-instagram" value="${esc(M.instagram)}" ${dis}></label></div>
+   <label class="f">Logo (PNG com fundo transparente, de preferência)<input type="file" id="mk-logo" accept="image/png,image/jpeg,image/webp,image/svg+xml" ${dis} onchange="lerLogo(this)"></label>
+   <div class="row">${M.logo?`<img src="${esc(M.logo)}" alt="Logo" style="height:56px;background:${esc(M.fundo)};padding:6px;border-radius:8px">`:`<span class="muted" style="font-size:.85rem">Sem logo: os criativos usam o escudo com o nome.</span>`}</div>
+   <canvas id="mk-prev" width="1080" height="1350" style="width:100%;max-width:280px;border-radius:10px;border:1px solid var(--line)"></canvas>
+   ${M.travado?`<p class="muted" style="font-size:.85rem">Kit travado. Para mudar, peça rescisão do contrato (aviso de 30 dias).</p>`:`<div class="row"><button class="btn" onclick="salvarMarca(false)">Salvar e ver prévia</button><button class="btn primary" onclick="travarPasso()">Travar o kit da marca</button></div><div id="mk-trava"></div>`}
+  </div>`;
+}
+function lerMarcaForm(){ if(MARCA.travado) return; ["nome","slogan","fonte","whatsapp","instagram"].forEach(k=>{const e=$("#mk-"+k); if(e) MARCA[k]=e.value.trim()||MARCA[k]}); ["primaria","destaque","fundo","texto"].forEach(k=>{ const hx=$("#mk-"+k+"-hex")?.value, c=$("#mk-"+k)?.value; MARCA[k]=hexOk(hx)?hx:hexOk(c)?c:MARCA[k] }) }
+function salvarMarca(silent){ lerMarcaForm(); persistMarca(); if(!silent) toast("Kit salvo."); render(); setTimeout(previaMarca,60) }
+function travarPasso(){ lerMarcaForm(); $("#mk-trava").innerHTML=`<div class="debt"><b>Travar para sempre?</b><p>Depois de travar, cores, fonte e logo não mudam mais neste contrato. Confira a prévia.</p><div class="row"><button class="btn primary" onclick="travarMarca()">Sim, travar</button><button class="btn ghost" onclick="$('#mk-trava').innerHTML=''">Ainda não</button></div></div>` }
+function travarMarca(){ lerMarcaForm(); MARCA.travado=true; MARCA.travadoEm=ymd(new Date()); persistMarca(); toast("Kit da marca travado."); render(); setTimeout(previaMarca,60) }
+function lerLogo(inp){ const f=inp.files&&inp.files[0]; if(!f) return; const url=URL.createObjectURL(f); const i=new Image(); i.onload=()=>{ const s=Math.min(1,480/Math.max(i.naturalWidth,i.naturalHeight)); const c=document.createElement("canvas"); c.width=Math.round(i.naturalWidth*s)||480; c.height=Math.round(i.naturalHeight*s)||480; c.getContext("2d").drawImage(i,0,0,c.width,c.height); MARCA.logo=c.toDataURL("image/png"); URL.revokeObjectURL(url); carregarLogo(); lerMarcaForm(); persistMarca(); render(); setTimeout(previaMarca,120) }; i.onerror=()=>toast("Não consegui ler esse arquivo de imagem."); i.src=url }
+async function previaMarca(){ const c=$("#mk-prev"); if(!c) return; await garantirFonte(MARCA.fonte); desenharAnuncio(c.getContext("2d"),1080,1350,MARCA,{titulo:"Sua câmera, do seu jeito",subtitulo:"Chegou? A gente configura junto com você por vídeo",cta:"Chame no WhatsApp",produto:CATALOGO[0]?CATALOGO[0][2]:""},null) }
+function viewPauta(lib){
+  const hoje=ymd(new Date()); const ks=Object.keys(PAUTA).sort().reverse().slice(0,10);
+  let h=`<div class="card stack"><span class="eyebrow">Como a publicação diária acontece sozinha</span>
+   <ol style="margin:0;padding-left:20px;font-size:.92rem;display:flex;flex-direction:column;gap:4px"><li>Todo dia às 05:17 a equipe pesquisa o mercado e grava aqui a pauta do dia: roteiro do Reel, legenda, hashtags e o anúncio.</li><li>No bloco de sábado você toca em <b>Gerar o pacote da semana</b>: o app renderiza os vídeos com o Kit da marca e baixa todos.</li><li>Você sobe o pacote uma vez no Planejador do Meta Business Suite, um por dia no horário indicado. A partir daí a Meta publica sozinha, todos os dias, sem pedir nada.</li></ol>
+   <p class="muted" style="font-size:.85rem">O conector da Meta disponível hoje cuida de anúncios, não de posts. Por isso a postagem diária roda pelo Planejador da própria Meta. Impulsionar com verba só depois que o Instagram estiver ligado à conta de anúncios, e sempre com o teto de gasto que você definir.</p></div>`;
+  if(!lib) h+=`<div class="debt"><b>Piloto automático bloqueado</b><p>Faltam conexões na liberação do diretor-geral. A pauta continua sendo produzida, mas o pacote da semana só libera depois das conexões.</p></div>`;
+  if(!PAUTA[hoje]) h+=`<div class="card flat stack"><p>A pauta de hoje ainda não chegou.</p>${sampleFn?`<button class="btn sm primary" style="align-self:flex-start" id="pt-go" onclick="produzirPauta()">Produzir a pauta de hoje agora</button>`:""}</div>`;
+  h+=`<div class="row"><button class="btn primary" ${lib?"":"disabled"} onclick="pacoteSemana()">Gerar o pacote da semana</button><span class="muted" id="pk-st" style="font-size:.85rem"></span></div>`;
+  ks.forEach(k=>{ const p=PAUTA[k], st=(S.pautaStatus||{})[k]; const prob=checarPromessas([p.reel?.gancho,(p.reel?.cenas||[]).join(" "),p.reel?.cta,p.legenda,p.anuncio?.titulo,p.anuncio?.subtitulo].join(" "));
+    h+=`<div class="card stack"><div class="row" style="justify-content:space-between"><span class="eyebrow">${esc(k.split("-").reverse().join("/"))}${k===hoje?" · hoje":""} · ${esc(p.horario||"12:00")}</span><span class="pill ${st==="agendado"?"ok":st==="gerado"?"acc":""}">${st||"a produzir"}</span></div>
+     <b>${esc(p.tema||"")}</b><p style="font-size:.92rem"><b>Gancho:</b> ${esc(p.reel?.gancho||"")}</p>
+     ${prob.length?`<div class="debt" style="padding:10px"><b>O revisor barrou:</b>${prob.map(x=>`<span style="font-size:.88rem">"${esc(x.trecho)}": ${esc(x.msg)}</span>`).join("")}</div>`:""}
+     <details><summary class="muted">Legenda e cenas</summary><div class="out" style="margin-top:8px">${esc((p.reel?.cenas||[]).map((c,i)=>(i+1)+". "+c).join("\n"))}\n\n${esc(p.legenda||"")}\n${esc((p.hashtags||[]).join(" "))}</div></details>
+     <div class="row"><button class="btn sm primary" ${prob.length?"disabled":""} onclick="abrirVideo('${k}')">Gerar vídeo</button><button class="btn sm" ${prob.length?"disabled":""} onclick="abrirAnuncio('${k}')">Gerar arte de anúncio</button><button class="btn sm" onclick="copiar(PAUTA['${k}'].legenda+'\\n\\n'+(PAUTA['${k}'].hashtags||[]).join(' '))">Copiar legenda</button>${st!=="agendado"?`<button class="btn sm ghost" onclick="statusPauta('${k}','agendado')">Já agendei no Planejador</button>`:""}</div></div>` });
+  return h;
+}
+function statusPauta(k,s){ S.pautaStatus=S.pautaStatus||{}; S.pautaStatus[k]=s; const lim=ymd(new Date(Date.now()-60*864e5)); for(const x in S.pautaStatus) if(x<lim) delete S.pautaStatus[x]; persistEstado(); render() }
+const PAUTA_FORMATO=()=>`Responda só com JSON neste formato: {"tema": "...", "funcionario": "roteirista-de-reels", "horario": "12:00", "reel": {"gancho": "até 10 palavras", "cenas": ["4 a 6 frases de até 14 palavras cada"], "cta": "até 6 palavras"}, "legenda": "até 600 caracteres terminando com chamada para o WhatsApp", "hashtags": ["5 hashtags"], "anuncio": {"titulo": "até 40 caracteres", "subtitulo": "até 70 caracteres", "cta": "até 20 caracteres", "produto": "um destes ids: ${CATALOGO.map(c=>c[2]).join(", ")}"}}`;
+async function produzirPauta(){ const b=$("#pt-go"); if(b){b.disabled=true;b.textContent="Produzindo…"}
+  const rd=radarRecente(); const k=ymd(new Date());
+  try{ const p=await sampleFn.json(promptFunc("roteirista-de-reels",`Produza a pauta de hoje (${k}) para o Instagram: 1 Reel de 25 a 40 segundos e 1 anúncio. Use um tema quente${rd?` do radar de hoje: ${rd.r.resumo}`:" de segurança residencial"}. ${PAUTA_FORMATO()}`),{cache:false});
+    p.data=k; p.origem="app"; PAUTA[k]=p; lsSet("rdm-pauta",PAUTA); if(dbBase) await dbBase.collection("pauta").doc(k).set(JSON.parse(JSON.stringify(p))); render() }
+  catch(e){ toast(e?.code==="rate_limited"?"Muitos pedidos seguidos. Tente em 1 minuto.":"Não consegui produzir agora. Tente de novo."); if(b){b.disabled=false;b.textContent="Produzir a pauta de hoje agora"} } }
+
+/* ===== telas do estúdio de vídeo e de anúncio ===== */
+let VID={k:null,roteiro:{gancho:"",cenas:[],cta:""},midias:[],musica:null,busy:false,res:null,anim:0};
+function abrirVideo(k){ const p=k&&PAUTA[k]; VID.k=k||null; VID.res=null; if(p) VID.roteiro=JSON.parse(JSON.stringify(p.reel||{})); view="ia"; iaAba="video"; render(); window.scrollTo(0,0) }
+let AD={k:null,ad:{titulo:"",subtitulo:"",cta:"Chame no WhatsApp",produto:"kit-cam-2"},formato:"feed",fundo:null};
+function abrirAnuncio(k){ const p=k&&PAUTA[k]; AD.k=k||null; if(p&&p.anuncio) AD.ad=Object.assign({},AD.ad,p.anuncio); view="ia"; iaAba="anuncio"; render(); window.scrollTo(0,0) }
+function viewVideo(){
+  const r=VID.roteiro; const txt=[r.gancho||"",...(r.cenas||[]),r.cta||""].join("\n");
+  const prob=checarPromessas(txt); const mime=melhorMime();
+  return `<div class="card stack"><span class="eyebrow">Vídeo Reel 1080×1920 com o Kit da marca${MARCA.travado?"":" (kit ainda não travado)"}</span>
+   <div class="row"><label class="f" style="flex:1">Tema para a IA roteirizar<input id="vd-tema" placeholder="Ex.: 3 sinais de que sua câmera foi invadida"></label>${sampleFn?`<button class="btn" id="vd-ia" onclick="roteirizar()">Roteirizar com IA</button>`:""}</div>
+   <label class="f" for="vd-txt">Roteiro: 1ª linha é o gancho, a última é a chamada final, uma cena por linha no meio</label>
+   <textarea id="vd-txt" style="min-height:160px" oninput="lerRoteiro()">${esc(txt.trim())}</textarea>
+   <div id="vd-prob">${prob.length?`<div class="debt" style="padding:10px"><b>O revisor barrou:</b>${prob.map(x=>`<span style="font-size:.88rem">"${esc(x.trecho)}": ${esc(x.msg)}</span>`).join("")}</div>`:""}</div>
+   <div class="fields"><label class="f">Fotos ou vídeos de fundo (opcional, um por cena)<input type="file" id="vd-mid" accept="image/*,video/*" multiple onchange="lerMidias(this)"></label><label class="f">Música (opcional, use só música com licença)<input type="file" id="vd-mus" accept="audio/*" onchange="lerMusica(this)"></label></div>
+   <span class="muted" style="font-size:.82rem">${VID.midias.length} fundos carregados${VID.musica?" · música carregada":""}. ${mime?`O vídeo sai em ${mime.startsWith("video/mp4")?"MP4, pronto para o Instagram":"WebM (o Instagram prefere MP4: use o Chrome ou o Edge atualizado no computador)"}.`:"Este navegador não grava vídeo."}</span>
+   <div class="row" style="align-items:flex-start;gap:16px"><canvas id="vd-prev" width="1080" height="1920" style="width:100%;max-width:240px;border-radius:12px;border:1px solid var(--line);background:#000"></canvas>
+    <div class="stack" style="flex:1;min-width:200px"><button class="btn" onclick="tocarPrevia()">Prévia</button><button class="btn primary" id="vd-go" ${prob.length||!mime?"disabled":""} onclick="renderizar()">Gerar vídeo</button><span id="vd-st" class="muted" style="font-size:.85rem">Mantenha esta tela aberta enquanto o vídeo é gravado (tempo real).</span><div id="vd-res"></div></div></div>
+  </div>`;
+}
+function lerRoteiro(){ const L=($("#vd-txt").value||"").split("\n").map(s=>s.trim()).filter(Boolean); VID.roteiro={gancho:L[0]||"",cenas:L.slice(1,-1),cta:L.length>1?L[L.length-1]:""};
+  const prob=checarPromessas(L.join(" ")); $("#vd-prob").innerHTML=prob.length?`<div class="debt" style="padding:10px"><b>O revisor barrou:</b>${prob.map(x=>`<span style="font-size:.88rem">"${esc(x.trecho)}": ${esc(x.msg)}</span>`).join("")}</div>`:""; const g=$("#vd-go"); if(g) g.disabled=!!prob.length||!melhorMime() }
+async function roteirizar(){ const t=($("#vd-tema").value||"").trim(); if(!t){toast("Escreva o tema.");return} const b=$("#vd-ia"); b.disabled=true; b.textContent="Roteirizando…";
+  try{ const r=await sampleFn.json(promptFunc("roteirista-de-reels",`Roteiro de Reel de 25 a 40 segundos sobre: ${t}. Responda só com JSON: {"gancho":"até 10 palavras","cenas":["4 a 6 frases de até 14 palavras"],"cta":"até 6 palavras"}`),{cache:false}); VID.roteiro={gancho:r.gancho||"",cenas:r.cenas||[],cta:r.cta||""}; render() }
+  catch(e){ toast("Não consegui roteirizar agora."); b.disabled=false; b.textContent="Roteirizar com IA" } }
+function lerMidias(inp){ VID.midias.forEach(m=>URL.revokeObjectURL(m.url)); VID.midias=[]; [...inp.files].slice(0,8).forEach(f=>{ const url=URL.createObjectURL(f); if(f.type.startsWith("video")){ const v=document.createElement("video"); v.src=url; v.muted=true; v.loop=true; v.playsInline=true; v.preload="auto"; VID.midias.push({tipo:"video",el:v,url}) } else { const i=new Image(); i.src=url; VID.midias.push({tipo:"img",el:i,url}) } }); const s=$("#vd-st"); if(s) s.textContent=VID.midias.length+" fundos carregados." }
+function lerMusica(inp){ const f=inp.files&&inp.files[0]; if(VID.musica) URL.revokeObjectURL(VID.musica); VID.musica=f?URL.createObjectURL(f):null }
+async function tocarPrevia(){ lerRoteiro(); const c=$("#vd-prev"); if(!c) return; await garantirFonte(MARCA.fonte); const ctx=c.getContext("2d"); const plan=planoVideo(VID.roteiro); cancelAnimationFrame(VID.anim); VID.midias.forEach(m=>{if(m.tipo==="video")m.el.play().catch(()=>{})}); const t0=performance.now();
+  (function loop(){ const t=(performance.now()-t0)/1000; if(!$("#vd-prev")) return; desenharQuadro(ctx,plan,Math.min(t,plan.total-0.001),MARCA,VID.midias); if(t<plan.total) VID.anim=requestAnimationFrame(loop) })() }
+async function renderizar(){ lerRoteiro(); if(VID.busy) return; if(!VID.roteiro.gancho){toast("Escreva o roteiro.");return} VID.busy=true; const g=$("#vd-go"), st=$("#vd-st"); g.disabled=true;
+  try{ const plan=planoVideo(VID.roteiro); const r=await gravarVideo(plan,MARCA,VID.midias,VID.musica,p=>{ if(st) st.textContent="Gravando "+Math.round(p*100)+"%…" });
+    VID.res=r; const url=URL.createObjectURL(r.blob); $("#vd-res").innerHTML=`<video src="${url}" controls playsinline style="width:100%;max-width:240px;border-radius:10px"></video><div class="row"><button class="btn primary sm" onclick="baixarVideo()">Baixar vídeo</button></div>`;
+    if(st) st.textContent="Pronto: "+(r.blob.size/1048576).toFixed(1).replace(".",",")+" MB em "+r.ext.toUpperCase()+"."; if(VID.k) statusPauta(VID.k,"gerado") }
+  catch(e){ if(st) st.textContent=e.message||"Não consegui gravar o vídeo." }
+  VID.busy=false; if(g) g.disabled=false }
+async function baixarVideo(){ if(!VID.res) return; const nome="infinity-guard-reel-"+(VID.k||ymd(new Date()))+"."+VID.res.ext; await salvarArquivo(nome,VID.res.blob) }
+async function salvarArquivo(nome,blob){ if(!downloadsCap){ toast("Baixar arquivos não está disponível nesta visualização."); return false } try{ const r=await downloadsCap.save({filename:nome,data:blob}); if(r?.status==="saved"){toast("Arquivo salvo."); return true} }catch(e){ if(e?.code!=="cancelled"&&e?.code!=="declined") toast("Não consegui salvar o arquivo.") } return false }
+async function pacoteSemana(){ const st=$("#pk-st"); const ks=Object.keys(PAUTA).sort().slice(-7); if(!ks.length){toast("Ainda não há pauta.");return} if(!melhorMime()){toast("Este navegador não grava vídeo. Use o Chrome ou o Edge.");return}
+  for(let i=0;i<ks.length;i++){ const p=PAUTA[ks[i]]; if(checarPromessas(JSON.stringify(p)).length){ if(st) st.textContent=ks[i]+": barrado pelo revisor, pulei."; continue }
+    if(st) st.textContent=`Vídeo ${i+1} de ${ks.length}…`; const r=await gravarVideo(planoVideo(p.reel||{}),MARCA,[],null,pr=>{ if(st) st.textContent=`Vídeo ${i+1} de ${ks.length}: ${Math.round(pr*100)}%` });
+    const ok=await salvarArquivo(`infinity-guard-reel-${ks[i]}.${r.ext}`,r.blob); if(ok) statusPauta(ks[i],"gerado") }
+  if(st) st.textContent="Pacote pronto. Agora suba no Planejador da Meta, um por dia no horário de cada pauta." }
+function viewAnuncio(){ const a=AD.ad; const prob=checarPromessas([a.titulo,a.subtitulo,a.cta].join(" "));
+  return `<div class="card stack"><span class="eyebrow">Arte de anúncio com o Kit da marca</span>
+   <div class="chips">${Object.entries(FORMATOS).map(([k,f])=>`<button class="chip" aria-pressed="${AD.formato===k}" onclick="AD.formato='${k}';render();setTimeout(desenharAd,60)">${f[2]}</button>`).join("")}</div>
+   <div class="fields"><label class="f">Título<input id="ad-titulo" value="${esc(a.titulo)}" oninput="lerAd()"></label><label class="f">Subtítulo<input id="ad-subtitulo" value="${esc(a.subtitulo)}" oninput="lerAd()"></label><label class="f">Botão<input id="ad-cta" value="${esc(a.cta)}" oninput="lerAd()"></label>
+    <label class="f">Produto e preço<select id="ad-produto" onchange="lerAd()"><option value="">Sem preço</option>${CATALOGO.map(p=>`<option value="${p[2]}" ${p[2]===a.produto?"selected":""}>${esc(p[0])}</option>`).join("")}</select></label></div>
+   <label class="f">Foto de fundo (opcional)<input type="file" accept="image/*" onchange="lerFundoAd(this)"></label>
+   ${sampleFn?`<button class="btn sm" style="align-self:flex-start" id="ad-ia" onclick="textoAdIA()">Escrever o texto com o criativos-de-anuncio</button>`:""}
+   <div id="ad-prob">${prob.length?`<div class="debt" style="padding:10px"><b>O revisor barrou:</b>${prob.map(x=>`<span style="font-size:.88rem">"${esc(x.trecho)}": ${esc(x.msg)}</span>`).join("")}</div>`:""}</div>
+   <canvas id="ad-prev" width="${FORMATOS[AD.formato][0]}" height="${FORMATOS[AD.formato][1]}" style="width:100%;max-width:300px;border-radius:10px;border:1px solid var(--line)"></canvas>
+   <div class="row"><button class="btn primary" id="ad-go" ${prob.length?"disabled":""} onclick="baixarAd()">Baixar PNG</button></div></div>`; }
+function lerAd(){ ["titulo","subtitulo","cta","produto"].forEach(k=>AD.ad[k]=$("#ad-"+k).value); const prob=checarPromessas([AD.ad.titulo,AD.ad.subtitulo,AD.ad.cta].join(" ")); $("#ad-prob").innerHTML=prob.length?`<div class="debt" style="padding:10px"><b>O revisor barrou:</b>${prob.map(x=>`<span style="font-size:.88rem">"${esc(x.trecho)}": ${esc(x.msg)}</span>`).join("")}</div>`:""; $("#ad-go").disabled=!!prob.length; desenharAd() }
+function lerFundoAd(inp){ const f=inp.files&&inp.files[0]; if(!f) return; const i=new Image(); i.onload=()=>{AD.fundo=i;desenharAd()}; i.src=URL.createObjectURL(f) }
+async function desenharAd(){ const c=$("#ad-prev"); if(!c) return; await garantirFonte(MARCA.fonte); const [W,H]=FORMATOS[AD.formato]; desenharAnuncio(c.getContext("2d"),W,H,MARCA,AD.ad,AD.fundo) }
+async function textoAdIA(){ const b=$("#ad-ia"); b.disabled=true; b.textContent="Escrevendo…"; const prod=CATALOGO.find(p=>p[2]===AD.ad.produto);
+  try{ const r=await sampleFn.json(promptFunc("criativos-de-anuncio",`Texto de uma arte de anúncio para Meta${prod?` do produto ${prod[0]}`:""}. Responda só com JSON: {"titulo":"até 40 caracteres","subtitulo":"até 70 caracteres","cta":"até 20 caracteres"}`),{cache:false}); Object.assign(AD.ad,{titulo:r.titulo||"",subtitulo:r.subtitulo||"",cta:r.cta||AD.ad.cta}); render(); setTimeout(desenharAd,60) }
+  catch(e){ toast("Não consegui escrever agora."); b.disabled=false; b.textContent="Escrever o texto com o criativos-de-anuncio" } }
+async function baixarAd(){ const c=$("#ad-prev"); await desenharAd(); c.toBlob(b=>{ if(b) salvarArquivo(`infinity-guard-anuncio-${AD.formato}-${ymd(new Date())}.png`,b) },"image/png") }
+
+
+/* ============ CATÁLOGO E PREÇOS ============ */
+let dbCat=null;
+function persistCat(){ CAT.atualizado_em=ymd(new Date()); refreshCatalogo(); lsSet("rdm-catalogo",CAT); queue("catalogo",()=>dbCat&&dbCat.set(JSON.parse(JSON.stringify(CAT)))) }
+function margemDe(p){ const pix=precoPix(p.preco), custo=Number(p.custo||0)+Number(p.frete||0); if(!custo) return null; const m=pix-custo; return {r:m,pct:pix?m/pix*100:0} }
+let catAberto=false;
+function viewCatalogo(){
+  const ps=CAT.produtos; const semPrazo=ps.filter(p=>p.ativo&&!p.prazo&&!CAT.prazo_padrao).length, semCusto=ps.filter(p=>p.ativo&&!Number(p.custo)).length;
+  return `<div class="card stack"><div class="row" style="justify-content:space-between"><span class="eyebrow">Catálogo e preços · dropshipping</span><span class="muted" style="font-size:.8rem">atualizado em ${esc((CAT.atualizado_em||"").split("-").reverse().join("/"))}</span></div>
+   <p style="font-size:.9rem">Este é o lugar único dos preços. As artes de anúncio, os 22 funcionários e a pauta das 05:17 leem daqui. Preencha o custo do fornecedor e o frete para ver a margem real no Pix, e o prazo de entrega que o fornecedor cumpre de verdade.</p>
+   ${semPrazo||semCusto?`<p class="muted" style="font-size:.85rem">${semCusto?semCusto+" produtos ativos sem custo. ":""}${semPrazo?semPrazo+" sem prazo de entrega.":""}</p>`:""}
+   <div class="fields"><label class="f">Desconto no Pix (%)<input id="cg-pix" type="number" min="0" max="30" value="${CAT.pix_pct}"></label><label class="f">Parcelas no cartão<input id="cg-parc" type="number" min="1" max="24" value="${CAT.parcelas}"></label><label class="f">Prazo padrão de entrega<input id="cg-prazo" value="${esc(CAT.prazo_padrao||"")}" placeholder="Ex.: 7 a 15 dias úteis"></label></div>
+   <details ${catAberto?"open":""} ontoggle="catAberto=this.open"><summary><b>${ps.filter(p=>p.ativo).length} produtos ativos de ${ps.length}</b> · tocar para editar</summary>
+   <div class="scroll" style="margin-top:10px"><table class="t"><thead><tr><th>Ativo</th><th>Produto</th><th class="n">Preço</th><th class="n">Pix</th><th class="n">Custo</th><th class="n">Frete</th><th class="n">Margem Pix</th><th>Prazo</th><th>Anatel</th></tr></thead><tbody>
+   ${ps.map((p,i)=>{ const m=margemDe(p); return `<tr><td><input type="checkbox" id="cp-${i}-ativo" ${p.ativo?"checked":""} style="width:auto"></td><td style="white-space:normal;min-width:180px;font-size:.82rem">${esc(p.nome)}<br><span class="muted num">${esc(p.id)}</span></td>
+     <td><input id="cp-${i}-preco" type="number" step="0.01" min="0" value="${p.preco}" style="width:92px"></td><td class="n">${brl2(precoPix(p.preco))}</td>
+     <td><input id="cp-${i}-custo" type="number" step="0.01" min="0" value="${p.custo||""}" style="width:84px"></td><td><input id="cp-${i}-frete" type="number" step="0.01" min="0" value="${p.frete||""}" style="width:76px"></td>
+     <td class="n" style="color:${m===null?"inherit":m.pct<15?"var(--danger)":m.pct<25?"var(--signal)":"var(--ok)"}">${m===null?"–":brl2(m.r)+" · "+m.pct.toFixed(0)+"%"}</td>
+     <td><input id="cp-${i}-prazo" value="${esc(p.prazo||"")}" placeholder="${esc(CAT.prazo_padrao||"7 a 15 dias")}" style="width:120px"></td><td><input id="cp-${i}-anatel" value="${esc(p.anatel||"")}" placeholder="código" style="width:110px"></td></tr>` }).join("")}
+   </tbody></table></div></details>
+   <p class="muted" style="font-size:.82rem">Margem no Pix = preço no Pix − custo do fornecedor − frete. Abaixo de 15% (vermelho) não aguenta anúncio. Taxa do cartão e do gateway ainda saem dessa margem.</p>
+   <div class="row"><button class="btn primary" onclick="salvarCatalogo()">Salvar catálogo</button><button class="btn" onclick="copiar(comandoGestor())">Copiar comando para o gestor-de-catalogo</button></div>
+   <p class="muted" style="font-size:.82rem">O comando atualiza o catálogo das skills no Claude Code (catalogo.json), para o atendente do WhatsApp usar os mesmos preços.</p></div>`;
+}
+function salvarCatalogo(){
+  const n=(id,d)=>{ const v=$("#"+id)?.value; return v===""||v===undefined?d:Number(v) };
+  CAT.pix_pct=Math.max(0,Math.min(30,n("cg-pix",CAT.pix_pct))); CAT.parcelas=Math.max(1,Math.min(24,Math.round(n("cg-parc",CAT.parcelas)))); CAT.prazo_padrao=($("#cg-prazo")?.value||"").trim();
+  const erros=[];
+  CAT.produtos.forEach((p,i)=>{ if(!$("#cp-"+i+"-preco")) return; const pr=n("cp-"+i+"-preco",p.preco); if(!(pr>0)) erros.push(p.id); else p.preco=Math.round(pr*100)/100;
+    p.custo=n("cp-"+i+"-custo",0)||0; p.frete=n("cp-"+i+"-frete",0)||0; p.prazo=($("#cp-"+i+"-prazo").value||"").trim(); p.anatel=($("#cp-"+i+"-anatel").value||"").trim(); p.ativo=$("#cp-"+i+"-ativo").checked });
+  persistCat(); toast(erros.length?"Salvo. Preço inválido mantido em: "+erros.join(", "):"Catálogo salvo. Anúncios, equipe e pauta já usam os preços novos."); render() }
+function comandoGestor(){ const base=Object.fromEntries(CAT_SEMENTE.produtos.map(p=>[p.id,p]));
+  const linhas=CAT.produtos.map(p=>{ const b=base[p.id]||{}; const mud=[]; if(Number(b.preco)!==Number(p.preco)) mud.push("preço "+brl2(p.preco)); if(!!b.ativo!==!!p.ativo) mud.push(p.ativo?"ativar":"desativar"); if(p.anatel) mud.push("Anatel "+p.anatel); if(p.prazo) mud.push("prazo de entrega "+p.prazo); return mud.length?`- ${p.id}: ${mud.join(", ")}`:"" }).filter(Boolean);
+  return `Use o gestor-de-catalogo: atualize o catálogo (dropshipping) com estes dados do app Rota do Milhão, recalculando Pix (${CAT.pix_pct}%) e parcelas (${CAT.parcelas}x), e rode a validação:\n${linhas.join("\n")||"- nenhuma mudança de preço"}${CAT.prazo_padrao?`\nPrazo padrão de entrega: ${CAT.prazo_padrao}`:""}` }
+
+/* ============ INSTALAR ============ */
+const REPO_URL="https://github.com/InfinityGuardOficial/infinity-guard-sistemas";
+function viewInstalar(){ return `<div class="card stack"><span class="eyebrow">Instalar no Windows e no celular</span>
+  <p style="font-size:.92rem">O app instalado abre esta mesma página privada, com o seu login do Claude. Quem baixar o instalador sem a sua conta não vê nada: os dados e a IA ficam presos ao seu login.</p>
+  <ul style="margin:0;padding-left:20px;font-size:.9rem;display:flex;flex-direction:column;gap:4px">
+   <li><b>Windows x64:</b> em <a href="${REPO_URL}/actions/workflows/apps.yml" target="_blank" rel="noopener">GitHub → Actions → Apps</a>, abra a última execução verde e baixe "rota-do-milhao-windows-x64". Tem instalador e versão portátil. Ele avisa nos seus turnos mesmo minimizado e pode iniciar com o Windows.</li>
+   <li><b>Android:</b> na mesma página, baixe "rota-do-milhao-android", abra o APK no celular e permita instalar de fonte desconhecida. Ele abre o app numa aba do Chrome (o login é o do Chrome, inclusive com o Google) e avisa nos seus turnos.</li>
+   <li><b>iPhone:</b> a Apple não permite instalar fora da App Store sem conta de desenvolvedor. Abra este link no Safari → Compartilhar → Adicionar à Tela de Início.</li>
+   <li><b>Sem baixar nada:</b> no Chrome ou no Edge, abra este link → menu → Instalar como app.</li></ul>
+  <p class="muted" style="font-size:.85rem">No Windows, entre no Claude com o seu e-mail (código por e-mail): o login com o Google pode ser bloqueado dentro do app. No Android, qualquer login funciona, porque é o do Chrome.</p></div>` }
+
+/* ============ AÇÕES ============ */
+function sheet(html){ $("#layer").innerHTML=`<div class="sheet" onclick="if(event.target===this)fecharSheet()"><div class="panel" role="dialog" aria-modal="true">${html}</div></div>` }
+function fecharSheet(){ $("#layer").innerHTML="" }
+function provar(k,id){
+  const d=new Date(parseYmd(k)); const m=missoesDe(d).find(x=>x.id===id);
+  sheet(`<span class="eyebrow">Concluir missão</span><h3>${esc(m?.t||"")}</h3><p class="muted">${esc(m?.d||"")}</p>
+   <label class="f" for="pv">Prova (link, número ou o que você fez — mínimo 8 caracteres)</label><textarea id="pv"></textarea>
+   <div class="row"><button class="btn primary" onclick="confirmarProva('${k}','${id}')">Concluir</button><button class="btn ghost" onclick="fecharSheet()">Cancelar</button></div><p id="pv-err" class="muted"></p>`);
+  setTimeout(()=>$("#pv")?.focus(),50);
+}
+function confirmarProva(k,id){ const v=($("#pv").value||"").trim(); if(v.length<8){ $("#pv-err").textContent="Prova curta demais. Escreva o link, o número ou o que você fez."; return }
+  const d=dia(k); d.missoes[id]={prova:v,hora:new Date().toISOString()}; if(d.motivos) delete d.motivos[id]; persistDia(k); fecharSheet(); toast("Missão concluída."); render() }
+function motivo(k,id){ sheet(`<span class="eyebrow">Missão não feita</span><h3>Qual foi o motivo real?</h3><p class="muted">Seja honesto. Na revisão de domingo você vai ver o padrão dos motivos.</p><textarea id="mt"></textarea><div class="row"><button class="btn primary" onclick="confirmarMotivo('${k}','${id}')">Registrar</button><button class="btn ghost" onclick="fecharSheet()">Cancelar</button></div>`) }
+function confirmarMotivo(k,id){ const v=($("#mt").value||"").trim(); if(v.length<5){toast("Escreva o motivo.");return} const d=dia(k); d.motivos=d.motivos||{}; d.motivos[id]=v; persistDia(k); fecharSheet(); render() }
+function abrirModulo(i){
+  const mi=moduloAtualIdx(); const m=MODULOS[i]; if(i>mi){ toast("Entregue a prova do módulo atual para abrir este."); return }
+  const done=S.modulos[i];
+  sheet(`<div class="lesson"><span class="eyebrow">Semana ${i+1} · fase ${m.f+1}: ${esc(FASES[m.f].n)}</span><h2>${esc(m.t)}</h2>
+   <div class="block"><span class="eyebrow">Aula</span><p>${esc(m.aula)}</p></div>
+   <div class="block task"><span class="eyebrow">Mão na massa</span><p>${esc(m.tarefa)}</p>${m.ferramenta?`<p class="muted" style="font-size:.88rem">Ferramenta: ${esc(m.ferramenta)}</p>`:""}${m.link?`<a href="${esc(m.link)}" target="_blank" rel="noopener" style="font-size:.88rem">Material de apoio</a>`:""}</div>
+   <div class="block proofb"><span class="eyebrow">Prova de entrega</span><p>${esc(m.prova)}</p>
+    ${done?`<div class="out">${esc(done.prova)}</div><p class="muted" style="font-size:.85rem">Entregue em ${esc(done.data)}.</p>`:`<textarea id="mp" placeholder="Cole aqui a prova"></textarea><p id="mp-err" class="muted"></p>`}</div>
+   <div class="row">${done?"":`<button class="btn primary" onclick="entregarModulo(${i})">Entregar e destravar a próxima semana</button>`}<button class="btn ghost" onclick="fecharSheet()">Fechar</button></div></div>`);
+}
+function entregarModulo(i){ const v=($("#mp").value||"").trim(); if(v.length<20){ $("#mp-err").textContent="A prova precisa mostrar o trabalho feito (pelo menos 20 caracteres)."; return }
+  S.modulos[i]={prova:v,data:ymd(new Date())}; persistEstado(); fecharSheet(); toast(i<47?"Entregue. Próxima semana destravada.":"Trilha completa."); render() }
+function salvarLog(e){ e.preventDefault(); const k=ymd(new Date()); const d=dia(k); d.log={}; ["posts","conversas","orcamentos","vendas","faturamento"].forEach(id=>{const v=$("#log-"+id).value; if(v!=="") d.log[id]=Number(v)});
+  if(d.log.faturamento!==undefined && !d.missoes["noite-numeros"] && new Date().getDay()>=1 && new Date().getDay()<=5) d.missoes["noite-numeros"]={prova:"Faturamento do dia: "+brl2(d.log.faturamento),hora:new Date().toISOString()};
+  persistDia(k); toast("Dia salvo."); render() }
+function salvarSlots(){ for(const s in S.slots){ const a=$("#sl-"+s+"-ini").value, b=$("#sl-"+s+"-fim").value; if(a&&b&&hm(b)>hm(a)){S.slots[s].ini=a;S.slots[s].fim=b} } persistEstado(); toast("Horários salvos. Baixe a agenda de novo para atualizar o calendário."); render() }
+function salvarCfg(){ const n=id=>Number($("#cf-"+id).value); if(n("meta")>0&&(!contratoAtivo()||n("meta")>=S.meta))S.meta=n("meta"); if(n("ticket")>0)S.ticket=n("ticket"); if(n("margem")>0)S.margem=n("margem"); if(n("conv")>0)S.conv=n("conv"); const i=$("#cf-inicio").value; if(contratoAtivo()){ if(n("meta")<S.meta) S.meta=Math.max(S.meta,n("meta")); toast("Com o contrato assinado, a data de início não muda e a meta só pode subir.") } else if(i) S.inicio=i; persistEstado(); toast("Configurações salvas."); render() }
+/* ============ AGENDA .ICS ============ */
+function gerarICS(){
+  const st=new Date(); const dt=ymd(st).replace(/-/g,"");
+  const ev=(slot,byday,titulo,desc)=>{const s=S.slots[slot];const a=s.ini.replace(":","")+"00",b=s.fim.replace(":","")+"00";
+   return ["BEGIN:VEVENT","UID:rdm-"+slot+"@infinityguard","DTSTAMP:"+dt+"T000000Z","DTSTART;TZID=America/Sao_Paulo:"+dt+"T"+a,"DTEND;TZID=America/Sao_Paulo:"+dt+"T"+b,"RRULE:FREQ=WEEKLY;BYDAY="+byday,"SUMMARY:"+titulo,"DESCRIPTION:"+desc,
+     "BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:"+titulo+" em 5 min","TRIGGER:-PT5M","END:VALARM","BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:Começou: "+titulo,"TRIGGER:PT0M","END:VALARM","END:VEVENT"].join("\r\n")};
+  return ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Infinity Guard//Rota do Milhao//PT","CALSCALE:GREGORIAN","X-WR-CALNAME:Rota do Milhão",
+   "BEGIN:VTIMEZONE","TZID:America/Sao_Paulo","BEGIN:STANDARD","DTSTART:19700101T000000","TZOFFSETFROM:-0300","TZOFFSETTO:-0300","TZNAME:-03","END:STANDARD","END:VTIMEZONE",
+   ev("manha","MO,TU,WE,TH,FR","Rota do Milhão: turno da manhã","Zerar o WhatsApp e 1 story. Abra o app e coloque a prova."),
+   ev("almoco","MO,TU,WE,TH,FR","Rota do Milhão: turno do almoço","Missão de conteúdo do dia. Abra o app."),
+   ev("noite","MO,TU,WE,TH,FR","Rota do Milhão: módulo da semana","Aula e tarefa da Trilha + registrar os números no Placar."),
+   ev("sabado","SA","Rota do Milhão: bloco de sábado","Gravar os Reels da semana e entregar a prova do módulo."),
+   ev("domingo","SU","Rota do Milhão: revisão semanal","15 minutos no Placar: execução, meta e 1 decisão."),
+   "END:VCALENDAR"].join("\r\n");
+}
+async function baixarICS(){ try{ const r=await downloadsCap.save({filename:"rota-do-milhao.ics",data:new Blob([gerarICS()],{type:"text/calendar"})}); if(r?.status==="saved") toast("Agenda baixada. Abra o arquivo no celular.") }catch(e){ if(e?.code!=="cancelled"&&e?.code!=="declined") mostrarTexto(gerarICS()) } }
+
+/* ============ ALARME ============ */
+let audioCtx=null;
+function beep(){ if(!S.som) return; try{ audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)(); const t=audioCtx.currentTime; [0,.35,.7].forEach(o=>{const g=audioCtx.createGain(),os=audioCtx.createOscillator();os.frequency.value=880;os.connect(g);g.connect(audioCtx.destination);g.gain.setValueAtTime(.0001,t+o);g.gain.exponentialRampToValueAtTime(.25,t+o+.02);g.gain.exponentialRampToValueAtTime(.0001,t+o+.25);os.start(t+o);os.stop(t+o+.3)}) }catch(e){} }
+function alarme(slot){
+  const ms=missoesDe(new Date()).filter(m=>m.slot===slot);
+  $("#layer").innerHTML=`<div class="alarm" role="alertdialog" aria-label="Hora do turno"><div class="card"><span class="eyebrow" style="color:var(--signal)">Hora do turno · ${S.slots[slot].ini}–${S.slots[slot].fim}</span><h2>${esc(S.slots[slot].nome)}</h2>
+  <ul style="margin:0;padding-left:18px">${ms.map(m=>`<li><b>${esc(m.t)}</b></li>`).join("")}</ul><p class="muted">Celular na mão, cronômetro ligado. Cada missão termina com prova.</p>
+  <div class="row"><button class="btn primary" onclick="fecharSheet();view='hoje';render()">Começar agora</button><button class="btn ghost" onclick="fecharSheet()">Fechar</button></div></div></div>`;
+  beep(); let n=0; const orig="Rota do Milhão"; const iv=setInterval(()=>{document.title=(n++%2?orig:"● Hora do turno");if(n>20){clearInterval(iv);document.title=orig}},800);
+  try{ if("Notification" in window && Notification.permission==="granted") new Notification("Rota do Milhão: "+S.slots[slot].nome,{body:ms.map(m=>m.t).join(" · ")}) }catch(e){}
+}
+function testarAlarme(){ try{ if("Notification" in window && Notification.permission==="default") Notification.requestPermission().catch(()=>{}) }catch(e){} const s=slotKeyFor(new Date())[0]; alarme(s) }
+const avisados = new Set();
+setInterval(()=>{ const n=new Date(), k=ymd(n), nm=nowMin(n);
+  slotKeyFor(n).forEach(s=>{ const ini=hm(S.slots[s].ini); if(nm>=ini && nm<ini+3 && !avisados.has(k+s)){ avisados.add(k+s); alarme(s) } });
+  renderStatus();
+},20000);
+
+/* ============ RENDER ============ */
+let NIVEL=0;
+function render(){
+  NIVEL=0; NIVEL=nivelContrato();
+  renderStatus();
+  if(bloqueado() && ["trilha","publicar","mais"].includes(view)){ $("#app").innerHTML=`<section class="view"><div class="debt"><h3>Bloqueado pelo contrato</h3><p>${NIVEL>=3?"Três semanas seguidas abaixo de 80%. ":""}Você tem ${dividas().length} missões vencidas sem prova. Esta área abre de novo quando você zerar as pendências em Hoje. Equipe, Estúdio e Placar continuam liberados para você trabalhar.</p><button class="btn primary" style="align-self:flex-start" onclick="view='hoje';render()">Ir para as pendências</button></div></section>`; return }
+  const v={hoje:viewHoje,trilha:viewTrilha,equipe:viewEquipe,placar:viewPlacar,ia:viewIA,publicar:viewPublicar,mais:viewMais}[view];
+  $("#app").innerHTML=`<section class="view">${v()}</section>`;
+  if(view==="ia"&&iaAba==="anuncio") setTimeout(desenharAd,30);
+  if(view==="ia"&&iaAba==="video") setTimeout(async()=>{ const c=$("#vd-prev"); if(c){ await garantirFonte(MARCA.fonte); desenharQuadro(c.getContext("2d"),planoVideo(VID.roteiro),0.6,MARCA,VID.midias) } },30);
+  if(view==="publicar"&&pubAba==="marca") setTimeout(previaMarca,30);
+}
+function viewMais(){ return viewCatalogo()+viewAgenda()+viewInstalar()+viewBiblioteca() }
+render();
+conectar();
+</script>

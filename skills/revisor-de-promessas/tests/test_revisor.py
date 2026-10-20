@@ -29,6 +29,12 @@ class Revisor(unittest.TestCase):
         self.assertIn("dados-sensiveis", self.ids("qual é a senha do wifi?"))
         self.assertNotIn("dados-sensiveis", self.ids("Troque a senha do Wi-Fi se ela for a de fábrica"))
 
+    def test_dropshipping(self):
+        self.assertIn("produto-ja-configurado", self.ids("Sua câmera sai daqui configurada"))
+        self.assertIn("produto-ja-configurado", self.ids("Já vem configurada, é só ligar"))
+        self.assertIn("prazo-de-entrega", self.ids("Entrega em 24h para todo o Brasil"))
+        self.assertNotIn("produto-ja-configurado", self.ids("Quando chegar, a gente configura junto com você por vídeo"))
+
     def test_ajustar_nao_bloqueia(self):
         r = rv.revisar("A melhor câmera do Brasil, últimas 3 unidades!", self.regras)
         self.assertEqual(r["veredito"], "AJUSTAR")

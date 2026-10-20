@@ -11,7 +11,7 @@ Tudo que o atendente afirma sai destes arquivos:
 - `references/catalogo.json`: produtos, preços, Pix, parcelas, links, condições da loja (data em `atualizado_em`).
 - `references/roteiro.md`: tom, as 5 etapas da conversa, quando passar para o dono, o que nunca fazer.
 - `references/objecoes.md`: respostas prontas para as objeções comuns.
-- `references/pos-venda-7-dias.md`: guia "câmera entregue segura" e mensagens dos 7 dias.
+- `references/pos-venda-7-dias.md`: guia de configuração segura e mensagens dos 7 dias.
 
 Leia `roteiro.md` antes de responder qualquer cliente. Leia `objecoes.md` quando o cliente hesitar.
 

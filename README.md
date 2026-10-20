@@ -51,9 +51,15 @@ Digite `/agents` no Claude Code para ver a equipe instalada.
 |---|---|
 | `agents/` | Os 22 funcionários. |
 | `.claude-plugin/` | Plugin "infinity-guard" com a equipe e as skills (instala com um comando, veja abaixo). |
+| `app/rota-do-milhao.html` | **Rota do Milhão**: app pessoal com os 22 funcionários (IA), radar e pauta diária, contrato sem volta, Kit da marca travado, estúdio de Reels e artes de anúncio, aba Publicar com as conexões, trilha de 48 semanas e placar até R$ 1 milhão/ano. Página privada no claude.ai. |
+| `desktop/` | App do Windows x64 (Electron): abre o Rota do Milhão com o seu login e avisa nos turnos pela bandeja. |
+| `android/` | App Android (APK): abre o Rota do Milhão e avisa nos turnos. |
+| `.github/workflows/apps.yml` | Gera o instalador do Windows e o APK a cada mudança em `desktop/` ou `android/` (Actions → Apps). |
 | `docs/organograma.md` | Quem é quem e quando chamar cada funcionário. |
 | `docs/raio-x-de-nicho.md` / `.html` | Raio X do mercado de segurança residencial (18/10/2026): concorrentes, preços, brechas. |
 | `docs/mapa-de-sistemas.md` | A ordem dos sistemas. |
+| `docs/mapa-de-dados.md` | Onde mora cada dado, qual é a fonte da verdade, quem cuida e como atualizar. |
+| `scripts/empacotar-skills.sh` | Testa todas as skills e refaz os .zip. |
 
 ## Instalar tudo de uma vez (plugin, recomendado)
 
@@ -62,7 +68,7 @@ No Claude Code, em qualquer pasta (por exemplo a pasta do projeto "Workshop IA a
 /plugin marketplace add InfinityGuardOficial/infinity-guard-sistemas
 /plugin install infinity-guard@infinity-guard-sistemas
 ```
-Isso instala os 22 funcionários e as 13 skills. Como o repositório é privado, o Claude Code precisa estar logado no GitHub com uma conta que tenha acesso (`gh auth login`). Para atualizar depois: `/plugin marketplace update infinity-guard-sistemas`.
+Isso instala os 22 funcionários e as 13 skills. Se o repositório estiver privado, o Claude Code precisa estar logado no GitHub com uma conta que tenha acesso (`gh auth login`). Para atualizar depois: `/plugin marketplace update infinity-guard-sistemas`.
 
 Para instalar só num projeto (e quem abrir a pasta também ter), rode os comandos acima e escolha "project" quando o Claude Code perguntar o escopo.
 
@@ -134,7 +140,7 @@ As skills que usam preço leem o catálogo da `atendente-infinity-guard` instala
 
 ## Atualizar preços
 
-Os preços e links ficam em `skills/atendente-infinity-guard/references/catalogo.json` (campo `atualizado_em` mostra a data). Mudou o preço na Nuvemshop? Peça ao `gestor-de-catalogo`, ou rode a skill `catalogo-e-precos` (ela recalcula Pix, parcelas e a data):
+A fonte da verdade dos preços é o Catálogo do app Rota do Milhão (Mais → Catálogo e preços). O botão "Copiar comando para o gestor-de-catalogo" gera o pedido que atualiza `skills/atendente-infinity-guard/references/catalogo.json`, que as skills leem. Também dá para rodar a skill `catalogo-e-precos` direto (ela recalcula Pix, parcelas e a data):
 
 ```bash
 cd skills/catalogo-e-precos
@@ -143,10 +149,10 @@ python3 scripts/catalogo.py atualizar --produto kit-cam-2 --preco 379.90 --grava
 python3 scripts/catalogo.py validar
 ```
 
-## Rodar todos os testes
+## Rodar todos os testes e refazer os .zip
 
 ```bash
-for d in skills/*/; do (cd "$d" && python3 -m unittest discover -s tests -q) || echo "falhou: $d"; done
+bash scripts/empacotar-skills.sh
 ```
 
 ## Próximos sistemas
