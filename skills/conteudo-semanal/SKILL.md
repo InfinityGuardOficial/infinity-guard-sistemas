@@ -34,3 +34,9 @@ No Claude Code, peça: "agende toda segunda às 8h: rode a skill conteudo-semana
 - O tema `anatel` só entra com `--anatel-publicado`, depois que o código estiver no site (não dá para dizer "eu confiro" antes).
 - Não prometa instalação, câmera 4G ou sem Wi-Fi.
 - Testes: `python3 -m unittest discover -s tests`.
+
+## Vídeos com IA (Reels 9:16)
+`videos/gerar_video.py` monta um Reel a partir de `videos/<nome>/cenas.json` (exemplo: `eu-tranquei-o-portao`).
+- `FAL_KEY=... python3 videos/gerar_video.py eu-tranquei-o-portao gerar`: gera as cenas de IA no fal.ai (imagem com o rosto de `videos/ref-maximiliano.jpg`, depois animação Kling). Precisa da chave `FAL_KEY` no ambiente e do domínio `queue.fal.run` liberado na rede.
+- `python3 videos/gerar_video.py eu-tranquei-o-portao montar`: junta as cenas com texto na tela, legenda, aviso "Cena ilustrativa criada com IA" e cartela final. Gravações reais (`cena7.mp4`, `cena8.mp4`) e `narracao.mp3` colocadas na pasta entram automaticamente.
+- Antes de publicar: conferir o rosto cena a cena e passar pelo `revisor-de-promessas`.
