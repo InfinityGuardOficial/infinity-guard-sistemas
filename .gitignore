@@ -5,3 +5,9 @@ custos.json
 estoque.json
 **/custos.json
 **/estoque.json
+desktop/node_modules/
+desktop/dist/
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties

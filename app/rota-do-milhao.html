@@ -174,10 +174,10 @@ table.t td.n,table.t th.n{text-align:right;font-family:var(--f-mono);font-varian
     <button data-v="hoje"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Hoje</button>
     <button data-v="trilha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19h16M6 15l4-4 3 3 5-6"/></svg>Trilha</button>
     <button data-v="equipe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.5c3 0 6 2 6 5.5"/></svg>Equipe</button>
+    <button data-v="ia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Estúdio</button>
+    <button data-v="publicar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l16-8-6 16-3-7z"/></svg>Publicar</button>
     <button data-v="placar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Placar</button>
-    <button data-v="ia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>IA</button>
-    <button data-v="agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Agenda</button>
-    <button data-v="biblioteca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h4v16H5zM10 4h4v16h-4zM15 5l4 1-3 14-4-1z"/></svg>Materiais</button>
+    <button data-v="mais"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>Mais</button>
   </nav>
 </header>
 
@@ -187,12 +187,12 @@ table.t td.n,table.t th.n{text-align:right;font-family:var(--f-mono);font-varian
 <script>
 /* ============ DADOS: catálogo (catalogo.json de 18/10/2026) ============ */
 const CATALOGO = [
-  ["Kit 2 câmeras Wi-Fi dupla lente", 392.35],
-  ["Câmera ASECAM PTZ zoom 8x", 407.17],
-  ["Alarme IKerui Wi-Fi/GSM", 875.50],
-  ["Fechadura facial 3D", 2173.27],
-  ["Fechadura biometria", 1218.54],
-  ["Sensor de presença", 71.98],
+  ["Kit 2 câmeras Wi-Fi dupla lente", 392.35, "kit-cam-2"],
+  ["Câmera ASECAM PTZ zoom 8x", 407.17, "cam-asecam-ptz"],
+  ["Alarme IKerui Wi-Fi/GSM", 875.50, "alarme-ikerui"],
+  ["Fechadura facial 3D", 2173.27, "fechadura-facial"],
+  ["Fechadura biometria", 1218.54, "fechadura-bio"],
+  ["Sensor de presença", 71.98, "sensor-presenca"],
 ];
 const REGRAS = "Regras que não podem ser quebradas: nunca prometer '100% seguro' ou 'à prova de invasão'; a loja NÃO faz instalação e NÃO vende câmera 4G; nunca inventar código Anatel, prazo de garantia, CNPJ, avaliação ou depoimento; nada de 'de/por' com preço antigo inventado; preço só os do catálogo; pedir permissão antes de mostrar conversa de cliente.";
 const CONTEXTO = `Marca: Infinity Guard (infinityguard.com.br), loja online na Nuvemshop de câmeras Wi-Fi, alarmes e fechaduras inteligentes para casa, comércio e home office. Envio para todo o Brasil, atendimento por WhatsApp (31) 98667-9178. Lema: "Segurança onde você estiver". Posicionamento: marca nova que vende orientação, câmera entregue configurada com segurança (senha trocada, firmware atualizado, rede 2,4 GHz) e suporte no WhatsApp que responde. Dores do público: medo de crime (96,2% dos brasileiros, Datafolha/FBSP 2026), câmera que fica offline, app instável, SAC que some, câmeras invadidas por senha 'admin' de fábrica (cerca de 68 mil expostas no Brasil, Band abr/2026). Catálogo: ${CATALOGO.map(c=>c[0]+" R$ "+c[1].toFixed(2).replace(".",",")).join("; ")}. Pix com 10% de desconto e até 12x no cartão. ${REGRAS}`;
@@ -292,7 +292,7 @@ const MATERIAIS = [
  {g:"Cursos gratuitos", t:"HubSpot Academy", d:"Vendas e marketing de conteúdo, com certificado.", l:"https://academy.hubspot.com/courses"},
  {g:"Plataformas", t:"Cursos da Nuvemshop (Ecommerce na Prática)", d:"Mais de 40 cursos dentro do painel nos planos pagos: tráfego, WhatsApp, SEO e marketplaces.", l:"https://www.nuvemshop.com.br/cursos"},
  {g:"Plataformas", t:"Central do Vendedor TikTok Shop", d:"Regras atuais de vendedor e afiliados. Em 2026 o criador precisa de 1.000 seguidores para vender como afiliado.", l:"https://seller-br.tiktok.com/"},
- {g:"Ferramentas de IA", t:"Estúdio IA deste app", d:"Roteiros, legendas, objeções e revisão de promessas com o contexto da Infinity Guard.", l:"#ia"},
+ {g:"Ferramentas de IA", t:"Estúdio deste app", d:"Roteiros, vídeos de Reels, artes de anúncio e revisão de promessas com o Kit da marca.", l:"#ia"},
  {g:"Ferramentas de IA", t:"CapCut", d:"Edição no celular com legenda automática.", l:"https://www.capcut.com/"},
  {g:"Ferramentas de IA", t:"Canva", d:"Carrosséis e artes com recursos de IA.", l:"https://www.canva.com/"},
  {g:"Ferramentas de IA", t:"Meta Business Suite", d:"Agende os posts da semana no sábado e publique no automático.", l:"https://business.facebook.com/"},
@@ -331,7 +331,7 @@ function missoesDoDia(date, mod, faseIdx){
     else add("noite","leitura","Leitura de 20 páginas","Livro da fase (veja Materiais). Prova: 1 ideia que vai aplicar.");
     add("noite","numeros","Registrar os números do dia","Posts, conversas, orçamentos, vendas e faturamento no Placar. Prova: o faturamento do dia.");
   } else if (wd===6){
-    add("sabado","gravar","Gravar os Reels da semana","Grave 3 a 5 vídeos de 30 a 45 s com os roteiros do Estúdio IA e agende no Meta Business Suite. Prova: quantos gravou.");
+    add("sabado","gravar","Pacote da semana no Planejador","Em Publicar → Pauta e vídeos, gere o pacote da semana (ou grave você mesmo com os roteiros) e agende um vídeo por dia no Planejador do Meta Business Suite. Prova: quantos ficaram agendados.");
     add("sabado","mod","Fechar a tarefa do módulo","Termine e entregue a prova do módulo \""+mod.t+"\" na Trilha. Prova: entregue ou o que falta.");
     if (faseIdx>=6) add("sabado","b2b","Visitas ou ligações B2B","2 visitas ou 5 ligações para empresas da lista. Prova: com quem falou.");
   } else {
@@ -371,7 +371,7 @@ let RADAR = lsGet("rdm-radar")||{};  // {ymd:{resumo,itens,ordens}} escrito pela
 let EXTRA = Object.assign({entregas:[]}, lsGet("rdm-extra")||{}); let dbExtra=null;
 function persistExtra(){ lsSet("rdm-extra",EXTRA); queue("extra",()=>dbExtra&&dbExtra.set(JSON.parse(JSON.stringify(EXTRA)))) }
 async function carregarRadar(){ if(!dbBase) return; try{ const r=await dbBase.collection("radar").get(); const o={}; r.docs.forEach(d=>o[d.id]=JSON.parse(JSON.stringify(d.data()))); RADAR=o; lsSet("rdm-radar",RADAR); render() }catch(e){} }
-document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") carregarRadar() });
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible"){ carregarRadar(); carregarPauta() } });
 let backend = "local"; let dbBase=null; let sampleFn=null; let downloadsCap=null;
 const saveQ = {};
 function persistEstado(){ lsSet("rdm-estado",S); queue("estado",()=>dbBase&&dbBase.set(JSON.parse(JSON.stringify(S)))) }
@@ -397,11 +397,16 @@ async function conectar(){
       const ex = await dbExtra.get();
       if(ex.exists) EXTRA=Object.assign({entregas:[]},JSON.parse(JSON.stringify(ex.data()))); else if(EXTRA.entregas.length) await dbExtra.set(JSON.parse(JSON.stringify(EXTRA)));
       lsSet("rdm-extra",EXTRA);
-      backend="nuvem"; render(); carregarRadar();
+      dbMarca = dbBase.collection("extra").doc("marca");
+      const mk = await dbMarca.get();
+      if(mk.exists) MARCA=Object.assign({},MARCA_PADRAO,JSON.parse(JSON.stringify(mk.data()))); else await dbMarca.set(JSON.parse(JSON.stringify(MARCA)));
+      lsSet("rdm-marca",MARCA); carregarLogo();
+      backend="nuvem"; render(); carregarRadar(); carregarPauta();
     }
   }catch(e){ backend="local"; }
   claude.use("sample").then(s=>{sampleFn=s; if(view==="ia") render()});
-  claude.use("downloads").then(d=>{downloadsCap=d; if(view==="agenda") render()});
+  claude.use("downloads").then(d=>{downloadsCap=d; if(view==="mais"||view==="ia"||view==="publicar") render()});
+  claude.use("mcp").then(m=>{mcpCap=m});
 }
 const persistDiaLater=[];
 
@@ -417,7 +422,9 @@ function slotStatus(date,slot){ // antes | agora | depois
   if(!today) return ymd(date)<ymd(new Date())?"depois":"antes";
   const n=nowMin(new Date()); if(n<hm(s.ini)) return "antes"; if(n<=hm(s.fim)) return "agora"; return "depois";
 }
-function missoesDe(date){ const mi=moduloAtualIdx(); return missoesDoDia(date,MODULOS[mi],MODULOS[mi].f) }
+function missoesDe(date){ const mi=moduloAtualIdx(); const L=missoesDoDia(date,MODULOS[mi],MODULOS[mi].f);
+  if(NIVEL>=2 && date.getDay()===6 && ymd(date)>=ymd(new Date(Date.now()-6*864e5))) L.push({id:"sabado-reposicao",slot:"sabado",t:"Bloco de reposição (contrato nível "+NIVEL+")",d:"2 horas extras repondo as missões que ficaram para trás. Prova: o que você repôs."});
+  return L }
 function conta(d,m){ // missão de um turno que já tinha acabado quando o app foi criado não conta
   if(ymd(d)!==S.inicio||!S.criado) return true; const c=new Date(S.criado); if(ymd(c)!==S.inicio) return true;
   return hm(S.slots[m.slot].fim) > nowMin(c);
@@ -447,7 +454,7 @@ function sequencia(){ // dias seguidos com 80% ou mais das missões feitas (hoje
   return n }
 
 /* ============ VIEWS ============ */
-let view = (location.hash||"#hoje").slice(1); if(!["hoje","trilha","equipe","placar","ia","agenda","biblioteca"].includes(view)) view="hoje";
+let view = (location.hash||"#hoje").slice(1); if(view==="agenda"||view==="biblioteca") view="mais"; if(!["hoje","trilha","equipe","placar","ia","publicar","mais"].includes(view)) view="hoje";
 document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>{view=b.dataset.v;render();window.scrollTo(0,0)});
 
 function renderStatus(){
@@ -456,7 +463,7 @@ function renderStatus(){
   $("#status").innerHTML =
     `<span class="pill ${pct===null?"":pct>=80?"ok":pct>=50?"warn":"bad"}" title="Missões cumpridas nos últimos 7 dias">Execução 7d <b class="num">${pct===null?"–":pct+"%"}</b></span>`+
     (dv?`<span class="pill bad">${dv} em atraso</span>`:`<span class="pill ok">em dia</span>`)+
-    `<span class="pill acc">${sq} ${sq===1?"dia":"dias"} seguidos</span>`;
+    `<span class="pill acc">${sq} ${sq===1?"dia":"dias"} seguidos</span>`+(NIVEL?`<span class="pill bad" title="Semanas seguidas abaixo de 80%">contrato nível ${NIVEL}</span>`:"");
   document.querySelectorAll("#tabs button").forEach(b=>b.setAttribute("aria-current",b.dataset.v===view?"page":"false"));
 }
 
@@ -473,15 +480,15 @@ function viewHoje(){
   const falta=Math.max(0,mm-fm), restam=Math.max(1,diasMes-diaNoMes+1);
   const porDia=falta/restam, vendasDia=porDia/S.ticket, conversasDia=vendasDia/(S.conv/100);
   let h="";
-  if(!S.contrato.assinado) h+=`<div class="card stack" style="border:2px solid var(--accent)">
-    <span class="eyebrow">Antes de começar</span><h2>Assine o seu contrato</h2>
-    <p>Este app cobra você todos os dias. Para a cobrança valer, escreva o seu compromisso e a consequência se a semana fechar abaixo de 80% de execução.</p>
+  if(!contratoAtivo()) h+=`<div class="card stack" style="border:2px solid var(--accent)">
+    <span class="eyebrow">Antes de tudo</span><h2>${S.contrato&&S.contrato.assinado?"Assine a versão 2 do contrato":"Assine o seu contrato"}</h2>
+    <p>12 meses, 80% de execução por semana, 3 níveis de consequência e nenhuma volta atrás. Sem contrato, a publicação no piloto automático não é liberada.</p>
     <button class="btn primary" onclick="abrirContrato()">Escrever e assinar</button></div>`;
   if(dv.length) h+=`<div class="debt"><h3>Cobrança: ${dv.length} ${dv.length===1?"missão vencida":"missões vencidas"} sem prova</h3>
     <p>Missão vencida só sai daqui de dois jeitos: você faz agora e coloca a prova, ou registra o motivo verdadeiro. O motivo fica no histórico e entra na revisão de domingo.</p>
     <div class="stack">${dv.slice(0,6).map(x=>`<div class="row" style="justify-content:space-between"><span><b>${esc(x.m.t)}</b> <span class="muted">· ${DIAS[x.d.getDay()]} ${x.d.getDate()}/${x.d.getMonth()+1}, ${esc(S.slots[x.m.slot].nome.toLowerCase())}</span></span>
       <span class="row"><button class="btn sm primary" onclick="provar('${x.k}','${x.m.id}')">Fiz, colocar prova</button><button class="btn sm ghost" onclick="motivo('${x.k}','${x.m.id}')">Registrar motivo</button></span></div>`).join("")}</div>
-    ${S.contrato.multa?`<p class="muted">Lembrete do seu contrato: <b>${esc(S.contrato.multa)}</b> se a semana fechar abaixo de 80%.</p>`:""}</div>`;
+    ${contratoAtivo()?`<p class="muted">Contrato: ${NIVEL?`você está no <b>nível ${NIVEL}</b>. Consequência em vigor: <b>${esc(S.contrato["multa"+NIVEL])}</b>.`:`se a semana fechar abaixo de 80%, vale o nível 1: <b>${esc(S.contrato.multa1)}</b>.`}</p>`:""}</div>`;
 
   // bloco do turno
   const slotHead = atual? `<span class="tag now pulse">agora</span><h3>${esc(S.slots[atual].nome)}</h3><span class="clock num">${S.slots[atual].ini}–${S.slots[atual].fim}</span>`
@@ -592,10 +599,15 @@ const IA_MODOS = {
   revisar:{n:"Revisar promessa", ph:"Cole o texto que vai publicar", p:t=>`Revise o texto abaixo contra as regras da marca. Liste cada problema (trecho, por que é problema, como reescrever) e entregue a versão corrigida no fim. Se não houver problema, diga "Aprovado". Texto:\n${t}`},
 };
 let iaModo="roteiro", iaOut="", iaBusy=false, iaCtl=null;
+let iaAba="textos";
 function viewIA(){
+  const topo=`<div class="stack"><h2>Estúdio</h2><p class="muted">Textos, vídeos de Reels e artes de anúncio com o Kit da marca e as regras do revisor de promessas. Nada com promessa barrada sai daqui.</p></div>
+  <div class="chips" role="group" aria-label="Tipo">${[["textos","Textos"],["video","Vídeo Reel"],["anuncio","Arte de anúncio"]].map(([k,n])=>`<button class="chip" aria-pressed="${iaAba===k}" onclick="iaAba='${k}';render()">${n}</button>`).join("")}</div>`;
+  if(iaAba==="video") return topo+viewVideo();
+  if(iaAba==="anuncio") return topo+viewAnuncio();
   const m=IA_MODOS[iaModo];
-  let h=`<div class="stack"><h2>Estúdio IA</h2><p class="muted">A IA já conhece a Infinity Guard, o catálogo e as regras do revisor de promessas. Você só diz o tema. Revise sempre antes de publicar: quem assina é você.</p></div>
-  <div class="chips" role="group" aria-label="O que criar">${Object.entries(IA_MODOS).map(([k,v])=>`<button class="chip" aria-pressed="${k===iaModo}" onclick="iaModo='${k}';iaOut='';render()">${v.n}</button>`).join("")}</div>
+  let h=topo+`
+  <div class="chips" role="group" aria-label="O que criar" style="margin-top:4px">${Object.entries(IA_MODOS).map(([k,v])=>`<button class="chip" aria-pressed="${k===iaModo}" onclick="iaModo='${k}';iaOut='';render()">${v.n}</button>`).join("")}</div>
   <div class="card stack"><label class="f" for="ia-in">${esc(m.n)}</label><textarea id="ia-in" placeholder="${esc(m.ph)}"></textarea>
    <div class="row">${sampleFn?`<button class="btn primary" id="ia-go" onclick="gerarIA()" ${iaBusy?"disabled":""}>${iaBusy?"Gerando…":"Gerar"}</button>${iaBusy?`<button class="btn" onclick="iaCtl&&iaCtl.abort()">Parar</button>`:""}`:`<span class="muted" style="font-size:.88rem">A IA embutida não está disponível nesta visualização. Use "Copiar prompt" e cole no Claude.</span>`}
    <button class="btn" onclick="copiarPrompt()">Copiar prompt</button></div>
@@ -638,10 +650,10 @@ function viewAgenda(){
     <label class="f">Ticket médio (R$)<input id="cf-ticket" type="number" min="50" step="1" value="${S.ticket}"></label>
     <label class="f">Margem média (%)<input id="cf-margem" type="number" min="1" max="90" value="${S.margem}"></label>
     <label class="f">Conversa → venda (%)<input id="cf-conv" type="number" min="1" max="80" value="${S.conv}"></label>
-    <label class="f">Início do plano<input id="cf-inicio" type="date" value="${S.inicio}"></label>
+    <label class="f">Início do plano<input id="cf-inicio" type="date" value="${S.inicio}" ${contratoAtivo()?"disabled":""}></label>
    </div>
    <p class="muted" style="font-size:.85rem">Referência de mercado: atendimento por WhatsApp no Brasil converte perto de 9% das conversas recebidas (OmniChat, 2026). 15% já exige atendimento muito bom. Lucro estimado no ano com a sua margem: <b class="num">${brl(S.meta*S.margem/100)}</b>.</p>
-   <div class="row"><button class="btn primary" onclick="salvarCfg()">Salvar</button><button class="btn ghost" onclick="abrirContrato()">${S.contrato.assinado?"Ver contrato":"Assinar contrato"}</button></div></div>
+   <div class="row"><button class="btn primary" onclick="salvarCfg()">Salvar</button><button class="btn ghost" onclick="abrirContrato()">${contratoAtivo()?"Ver contrato":"Assinar contrato"}</button></div></div>
   <p class="muted" style="font-size:.82rem">Seus dados ficam ${backend==="nuvem"?"na sua área privada deste app, que só você acessa, e sincronizam entre os seus aparelhos":"neste aparelho (a sincronização entre aparelhos liga quando o app abre pelo link do Claude com você conectado)"}.</p>`;
   return h;
 }
@@ -666,7 +678,7 @@ function viewEquipe(){
   let h=`<div class="stack"><h2>Equipe Infinity Guard</h2><p class="muted">Os 22 funcionários estão prontos. Cada um conhece a marca, as regras da casa e a sua situação de hoje no plano. Toque numa tarefa e ele trabalha na hora. Toda madrugada a equipe pesquisa o mercado digital e de tecnologia e deixa o radar com as ordens do dia.</p></div>`;
   if(rd){ const r=rd.r;
     h+=`<div class="card stack" style="border-color:var(--accent)"><span class="eyebrow">Radar do mercado · ${rd.k===k?"hoje":esc(rd.k.split("-").reverse().join("/"))}</span><p><b>${esc(r.resumo||"")}</b></p>
-    ${(r.itens||[]).map(it=>`<div class="stack" style="gap:4px;border-top:1px solid var(--line);padding-top:10px"><div class="row"><span class="tag">${esc(it.tema||"")}</span>${it.etiqueta?`<span class="tag" style="background:${/confirm/i.test(it.etiqueta)?"var(--ok-soft)":"var(--signal-soft)"}">${esc(it.etiqueta)}</span>`:""}</div><b>${esc(it.titulo||"")}</b><span>${esc(it.oque||"")}</span>${it.porque?`<span class="muted" style="font-size:.9rem"><b>Para a Infinity Guard:</b> ${esc(it.porque)}</span>`:""}${it.acao?`<span style="font-size:.9rem"><b>Ação:</b> ${esc(it.acao)}</span>`:""}<div class="row">${it.fonte?`<a href="${esc(it.fonte)}" target="_blank" rel="noopener" style="font-size:.85rem">Fonte</a>`:""}${it.funcionario?`<button class="btn sm" onclick="trabalhar('${esc(func(it.funcionario).id)}',${esc(jsq(it.acao||it.titulo||""))})">Pôr o ${esc(func(it.funcionario).id)} nisso</button>`:""}</div></div>`).join("")}
+    ${(r.itens||[]).map(it=>`<div class="stack" style="gap:4px;border-top:1px solid var(--line);padding-top:10px"><div class="row"><span class="tag">${esc(it.tema||"")}</span>${it.etiqueta?`<span class="tag" style="background:${/confirm/i.test(it.etiqueta)?"var(--ok-soft)":"var(--signal-soft)"}">${esc(it.etiqueta)}</span>`:""}</div><b>${esc(it.titulo||"")}</b><span>${esc(it.oque||"")}</span>${it.porque?`<span class="muted" style="font-size:.9rem"><b>Para a Infinity Guard:</b> ${esc(it.porque)}</span>`:""}${it.acao?`<span style="font-size:.9rem"><b>Ação:</b> ${esc(it.acao)}</span>`:""}<div class="row">${safeUrl(it.fonte)?`<a href="${esc(safeUrl(it.fonte))}" target="_blank" rel="noopener" style="font-size:.85rem">Fonte</a>`:""}${it.funcionario?`<button class="btn sm" onclick="trabalhar('${esc(func(it.funcionario).id)}',${esc(jsq(it.acao||it.titulo||""))})">Pôr o ${esc(func(it.funcionario).id)} nisso</button>`:""}</div></div>`).join("")}
     </div>`;
     if((r.ordens||[]).length) h+=`<div class="card stack"><span class="eyebrow">Ordens do dia</span>${r.ordens.map((o,i)=>{const id=rd.k+"#"+i, feito=(S.ordens||{})[id]; const f=func(o.funcionario);
       return `<div class="mission ${feito?"done":""}" style="grid-template-columns:auto 1fr"><span class="box">${feito?`<svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10" stroke="#fff" stroke-width="3" fill="none"/></svg>`:""}</span><span class="t">${esc(o.tarefa)}</span><span class="d">${esc(f.cargo)} (${esc(f.id)})${o.prazo?" · "+esc(o.prazo):""}</span>
@@ -701,6 +713,345 @@ async function executarFunc(){ const t=($("#tb-in").value||"").trim(); if(!t){to
 function guardarEntrega(){ const e=func(trab.id); EXTRA.entregas.push({func:e.id,tarefa:trab.tarefa||"",texto:trab.out.slice(0,4000),data:ymd(new Date())}); while(EXTRA.entregas.length>25) EXTRA.entregas.shift(); persistExtra(); if(trab.ordem) concluirOrdem(trab.ordem,true); fecharSheet(); toast("Entrega guardada."); render() }
 function concluirOrdem(id,silent){ S.ordens=S.ordens||{}; S.ordens[id]=ymd(new Date()); const lim=ymd(new Date(Date.now()-30*864e5)); for(const k in S.ordens) if(k.slice(0,10)<lim) delete S.ordens[k]; persistEstado(); if(!silent){toast("Ordem concluída.");render()} }
 
+/* ============ KIT DA MARCA ============ */
+const FONTES = {"Archivo":"Archivo:wght@700;800","Montserrat":"Montserrat:wght@700;800","Poppins":"Poppins:wght@700;800","Oswald":"Oswald:wght@600;700","Bebas Neue":"Bebas+Neue","Inter":"Inter:wght@700;800"};
+const MARCA_PADRAO = {nome:"Infinity Guard", slogan:"Segurança onde você estiver", primaria:"#0A6B6B", destaque:"#F2A257", fundo:"#0D151B", texto:"#FFFFFF", fonte:"Archivo", whatsapp:"(31) 98667-9178", instagram:"", logo:null, travado:false, travadoEm:""};
+let MARCA = Object.assign({}, MARCA_PADRAO, lsGet("rdm-marca")||{}); let dbMarca=null; let logoImg=null;
+function persistMarca(){ lsSet("rdm-marca",MARCA); queue("marca",()=>dbMarca&&dbMarca.set(JSON.parse(JSON.stringify(MARCA)))) }
+function carregarLogo(){ logoImg=null; if(!MARCA.logo) return; const i=new Image(); i.onload=()=>{logoImg=i}; i.src=MARCA.logo }
+const fontesCarregadas=new Set();
+async function garantirFonte(f){ if(!fontesCarregadas.has(f)&&FONTES[f]){ const l=document.createElement("link"); l.rel="stylesheet"; l.href="https://fonts.googleapis.com/css2?family="+FONTES[f]+"&display=swap"; document.head.appendChild(l); fontesCarregadas.add(f) }
+  try{ await document.fonts.load(`700 80px "${f}"`) }catch(e){} }
+const hexOk = h=>/^#[0-9a-f]{6}$/i.test(h||"");
+function rgba(hex,a){ const n=parseInt((hex||"#000000").slice(1),16); return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})` }
+function safeUrl(u){ return /^https?:\/\//i.test(u||"")?u:"" }
+
+/* ============ REVISOR DE PROMESSAS (regras da casa) ============ */
+const PROIBIDO=[
+ [/100\s*%\s*segur|totalmente segur|seguran(ç|c)a total/i,"Promessa absoluta de segurança (\"100% seguro\"): troque por um benefício concreto."],
+ [/(à|a) prova de (invas|hack|roub|tudo)|invulner|inviol|nunca (ser(á|a)|é) invadid|imposs(í|i)vel invadir/i,"\"À prova de invasão\" é promessa que ninguém cumpre."],
+ [/instala(ç|c)(ã|a)o (gr(á|a)tis|inclusa|gratuita)|n(ó|o)s instalamos|a gente instala|t(é|e)cnico vai at(é|e)/i,"A loja não faz instalação."],
+ [/\b4g\b|chip de dados|funciona sem wi-?fi|sem internet funciona/i,"A loja não vende câmera 4G nem câmera que funciona sem Wi-Fi."],
+ [/anatel/i,"Só cite Anatel com o código conferido do produto."],
+ [/\d+\s*(anos?|meses) de garantia|garantia de \d+/i,"Prazo de garantia só com documento do fornecedor."],
+ [/\bde\s*r\$\s*[\d.,]+\s*(por|para)\s*r\$/i,"\"De/por\" só com o preço anterior real do site."],
+ [/depoimento|cliente disse|avalia(ç|c)(ã|a)o 5 estrelas/i,"Depoimento e avaliação só se forem reais e com permissão."],
+];
+function checarPromessas(txt){ const out=[]; PROIBIDO.forEach(([re,msg])=>{ const m=String(txt||"").match(re); if(m) out.push({trecho:m[0],msg}) }); return out }
+
+/* ============ ESTÚDIO DE VÍDEO (Reels 1080x1920) ============ */
+const VW=1080, VH=1920;
+function planoVideo(r){
+  const L=[{tipo:"gancho",txt:(r.gancho||"").trim(),d:2.8}];
+  (r.cenas||[]).filter(Boolean).forEach(c=>{ const w=String(c).split(/\s+/).length; L.push({tipo:"cena",txt:String(c).trim(),d:Math.min(5.5,Math.max(2.6,w*0.34))}) });
+  L.push({tipo:"cta",txt:(r.cta||"Chame no WhatsApp").trim(),d:3.6});
+  let t=0; L.forEach(s=>{s.t0=t;t+=s.d}); return {cenas:L,total:t};
+}
+function quebrar(ctx,txt,maxW){ const ws=String(txt).split(/\s+/); const lines=[]; let l=""; ws.forEach(w=>{ const t=l?l+" "+w:w; if(ctx.measureText(t).width>maxW&&l){lines.push(l);l=w} else l=t }); if(l) lines.push(l); return lines }
+function cover(ctx,el,W,H,zoom){ const iw=el.videoWidth||el.naturalWidth||el.width, ih=el.videoHeight||el.naturalHeight||el.height; if(!iw||!ih) return; const s=Math.max(W/iw,H/ih)*(zoom||1); const w=iw*s,h=ih*s; ctx.drawImage(el,(W-w)/2,(H-h)/2,w,h) }
+function escudo(ctx,x,y,s,cor){ ctx.save(); ctx.translate(x,y); ctx.scale(s/24,s/24); ctx.lineWidth=2.2; ctx.strokeStyle=cor; ctx.lineCap="round"; ctx.lineJoin="round";
+  ctx.beginPath(); ctx.moveTo(12,2); ctx.lineTo(4,5); ctx.lineTo(4,11); ctx.bezierCurveTo(4,16,7.4,20.4,12,22); ctx.bezierCurveTo(16.6,20.4,20,16,20,11); ctx.lineTo(20,5); ctx.closePath(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(8,12.5); ctx.bezierCurveTo(9.2,10.9,10.6,10.9,12,12.5); ctx.bezierCurveTo(13.4,14.1,14.8,14.1,16,12.5); ctx.stroke(); ctx.restore() }
+function marcaTopo(ctx,M,x,y,tam){ if(logoImg){ const h=tam, w=logoImg.naturalWidth/logoImg.naturalHeight*h; ctx.drawImage(logoImg,x,y,Math.min(w,tam*4),h) } else { escudo(ctx,x,y,tam,M.texto); ctx.fillStyle=M.texto; ctx.font=`700 ${Math.round(tam*0.55)}px "${M.fonte}",sans-serif`; ctx.textBaseline="middle"; ctx.fillText(M.nome,x+tam*1.25,y+tam/2) } }
+const ease = x=>1-Math.pow(1-Math.min(1,Math.max(0,x)),3);
+function desenharQuadro(ctx,plan,t,M,midias){
+  const W=VW,H=VH; const i=Math.max(0,plan.cenas.findIndex(c=>t>=c.t0&&t<c.t0+c.d)); const s=plan.cenas[i]||plan.cenas[plan.cenas.length-1]; const lt=t-s.t0;
+  ctx.textBaseline="alphabetic"; ctx.fillStyle=M.fundo; ctx.fillRect(0,0,W,H);
+  const m=midias.length?midias[i%midias.length]:null;
+  if(m){ cover(ctx,m.el,W,H,1+0.05*(lt/s.d)); const g=ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,rgba(M.fundo,.35)); g.addColorStop(.45,rgba(M.fundo,.55)); g.addColorStop(1,rgba(M.fundo,.92)); ctx.fillStyle=g; ctx.fillRect(0,0,W,H) }
+  else { ctx.save(); ctx.globalAlpha=.07; ctx.strokeStyle=M.primaria; ctx.lineWidth=26; const off=(t*40)%140; for(let x=-H;x<W+H;x+=140){ ctx.beginPath(); ctx.moveTo(x+off,0); ctx.lineTo(x+off-H*.6,H); ctx.stroke() } ctx.restore();
+    const gx=W*.5+Math.sin(t*.7)*180, gy=H*.42; const rg=ctx.createRadialGradient(gx,gy,0,gx,gy,760); rg.addColorStop(0,rgba(M.primaria,.45)); rg.addColorStop(1,rgba(M.primaria,0)); ctx.fillStyle=rg; ctx.fillRect(0,0,W,H) }
+  // barra de progresso segmentada
+  const n=plan.cenas.length, gap=10, bw=(W-160-gap*(n-1))/n;
+  plan.cenas.forEach((c,k)=>{ const x=80+k*(bw+gap); ctx.fillStyle=rgba(M.texto,.28); ctx.fillRect(x,96,bw,8); const p=k<i?1:k>i?0:Math.min(1,lt/c.d); ctx.fillStyle=M.destaque; ctx.fillRect(x,96,bw*p,8) });
+  marcaTopo(ctx,M,80,150,72);
+  const a=ease(lt/0.4), out=Math.min(1,(s.d-lt)/0.25); ctx.save(); ctx.globalAlpha=Math.max(0,Math.min(a,out)); const dy=(1-a)*60;
+  if(s.tipo==="gancho"){
+    ctx.font=`800 104px "${M.fonte}",sans-serif`; const L=quebrar(ctx,s.txt.toUpperCase(),W-180); const lh=124; let y=H*.40-(L.length*lh)/2+dy;
+    L.forEach(l=>{ const w=ctx.measureText(l).width; ctx.fillStyle=M.primaria; ctx.fillRect(70,y-96,w+40,118); ctx.fillStyle=M.texto; ctx.fillText(l,90,y); y+=lh+6 });
+  } else if(s.tipo==="cena"){
+    ctx.font=`700 80px "${M.fonte}",sans-serif`; const L=quebrar(ctx,s.txt,W-200); const lh=98; let y=H*.43-(L.length*lh)/2+dy;
+    ctx.fillStyle=M.destaque; ctx.fillRect(80,y-70,12,L.length*lh-10);
+    ctx.fillStyle=M.texto; L.forEach(l=>{ ctx.fillText(l,120,y); y+=lh });
+  } else {
+    ctx.font=`800 92px "${M.fonte}",sans-serif`; const L=quebrar(ctx,s.txt,W-180); let y=H*.34+dy; ctx.fillStyle=M.texto; L.forEach(l=>{ ctx.fillText(l,90,y); y+=110 });
+    y+=40; const bh=150; ctx.fillStyle=M.destaque; roundRect(ctx,90,y,W-180,bh,32); ctx.fill();
+    ctx.fillStyle=M.fundo; ctx.font=`800 64px "${M.fonte}",sans-serif`; ctx.fillText("WhatsApp "+M.whatsapp,130,y+96);
+    if(M.instagram){ ctx.fillStyle=rgba(M.texto,.85); ctx.font=`600 52px "${M.fonte}",sans-serif`; ctx.fillText(M.instagram,90,y+bh+90) }
+  }
+  ctx.restore();
+  ctx.fillStyle=rgba(M.texto,.82); ctx.font=`600 40px "${M.fonte}",sans-serif`; ctx.fillText(M.slogan,80,H-430);
+}
+function roundRect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath() }
+function melhorMime(){ if(!window.MediaRecorder) return null; return ["video/mp4;codecs=avc1.42E01E,mp4a.40.2","video/mp4;codecs=avc1.42E01E","video/mp4;codecs=avc1","video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"].find(m=>{try{return MediaRecorder.isTypeSupported(m)}catch(e){return false}})||null }
+async function gravarVideo(plan,M,midias,musica,onProg){
+  const mime=melhorMime(); if(!mime) throw new Error("Este navegador não grava vídeo. Use o Chrome ou o Edge atualizado.");
+  await garantirFonte(M.fonte);
+  const c=document.createElement("canvas"); c.width=VW; c.height=VH; c.setAttribute("aria-hidden","true"); c.style.cssText="position:fixed;left:-20000px;top:0;width:108px;height:192px;pointer-events:none"; document.body.appendChild(c);
+  const ctx=c.getContext("2d"); desenharQuadro(ctx,plan,0,M,midias); const stream=c.captureStream(30);
+  let ac=null, audio=null;
+  if(musica){ ac=new (window.AudioContext||window.webkitAudioContext)(); audio=new Audio(musica); const src=ac.createMediaElementSource(audio); const dest=ac.createMediaStreamDestination(); src.connect(dest); dest.stream.getAudioTracks().forEach(tr=>stream.addTrack(tr)); }
+  midias.forEach(m=>{ if(m.tipo==="video"){ m.el.currentTime=0; m.el.play().catch(()=>{}) } });
+  const rec=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:8000000}); const parts=[]; rec.ondataavailable=e=>{ if(e.data&&e.data.size) parts.push(e.data) };
+  const parou=new Promise(r=>rec.onstop=r);
+  if(audio){ audio.currentTime=0; await audio.play().catch(()=>{}) }
+  rec.start(250); const t0=performance.now();
+  await new Promise(res=>{ (function loop(){ const t=(performance.now()-t0)/1000; desenharQuadro(ctx,plan,Math.min(t,plan.total-0.001),M,midias); onProg&&onProg(Math.min(1,t/plan.total)); if(t<plan.total) requestAnimationFrame(loop); else res() })() });
+  rec.stop(); await parou; c.remove(); if(audio){audio.pause()} if(ac) ac.close().catch(()=>{}); stream.getTracks().forEach(t=>t.stop());
+  const blob=new Blob(parts,{type:mime.split(";")[0]}); if(!blob.size) throw new Error("O navegador não conseguiu gravar o vídeo. Use o Chrome ou o Edge atualizado.");
+  return {blob, ext:mime.startsWith("video/mp4")?"mp4":"webm"};
+}
+
+/* ============ ARTE DE ANÚNCIO ============ */
+const FORMATOS={feed:[1080,1350,"Feed 4:5"],quadrado:[1080,1080,"Quadrado 1:1"],story:[1080,1920,"Stories e Reels 9:16"]};
+function desenharAnuncio(ctx,W,H,M,ad,fundoEl){
+  ctx.textBaseline="alphabetic"; ctx.fillStyle=M.fundo; ctx.fillRect(0,0,W,H);
+  if(fundoEl){ cover(ctx,fundoEl,W,H,1); const g=ctx.createLinearGradient(0,H*.25,0,H); g.addColorStop(0,rgba(M.fundo,.15)); g.addColorStop(1,rgba(M.fundo,.94)); ctx.fillStyle=g; ctx.fillRect(0,0,W,H) }
+  else { const rg=ctx.createRadialGradient(W*.8,H*.2,0,W*.8,H*.2,W); rg.addColorStop(0,rgba(M.primaria,.6)); rg.addColorStop(1,rgba(M.primaria,0)); ctx.fillStyle=rg; ctx.fillRect(0,0,W,H) }
+  const top=H===1920?170:70; marcaTopo(ctx,M,70,top,64);
+  const base=H===1920?H-520:H-70; let y=base;
+  const prod=CATALOGO.find(p=>p[2]===ad.produto);
+  ctx.fillStyle=M.destaque; roundRect(ctx,70,y-130,W-140,130,28); ctx.fill(); ctx.fillStyle=M.fundo; ctx.font=`800 56px "${M.fonte}",sans-serif`; ctx.fillText((ad.cta||"Chame no WhatsApp"),110,y-46);
+  y-=200;
+  if(prod){ ctx.fillStyle=M.texto; ctx.font=`800 84px "${M.fonte}",sans-serif`; ctx.fillText("R$ "+prod[1].toFixed(2).replace(".",","),70,y); ctx.font=`600 40px "${M.fonte}",sans-serif`; ctx.fillStyle=rgba(M.texto,.85); ctx.fillText("10% off no Pix · até 12x no cartão",70,y+50); y-=150 }
+  ctx.font=`600 48px "${M.fonte}",sans-serif`; const sub=quebrar(ctx,ad.subtitulo||"",W-140); ctx.fillStyle=rgba(M.texto,.9); for(let k=sub.length-1;k>=0;k--){ ctx.fillText(sub[k],70,y); y-=62 }
+  y-=20; ctx.font=`800 96px "${M.fonte}",sans-serif`; const tit=quebrar(ctx,(ad.titulo||"").toUpperCase(),W-140); ctx.fillStyle=M.texto; for(let k=tit.length-1;k>=0;k--){ ctx.fillText(tit[k],70,y); y-=110 }
+}
+
+/* ============ CONTRATO v2 ============ */
+const FRASE_CONTRATO="EU NÃO VOLTO ATRÁS";
+function semanasFechadas(){ // execução de cada semana (seg–dom) já encerrada desde o início
+  const out=[]; const ini=parseYmd(S.inicio); const hoje=parseYmd(ymd(new Date()));
+  const seg=new Date(ini); seg.setDate(seg.getDate()-((seg.getDay()+6)%7));
+  for(let w=new Date(seg); ; w.setDate(w.getDate()+7)){ const fim=new Date(w); fim.setDate(fim.getDate()+6); if(fim>=hoje) break;
+    let tot=0,ok=0; for(let d=new Date(w); d<=fim; d.setDate(d.getDate()+1)){ if(d<ini) continue; const k=ymd(d); missoesDe(d).forEach(m=>{ if(!conta(d,m)) return; tot++; if(DIAS_DB[k]?.missoes?.[m.id]) ok++ }) }
+    if(tot) out.push({ini:ymd(w),pct:Math.round(ok/tot*100)}) }
+  return out;
+}
+function nivelContrato(){ if(!contratoAtivo()) return 0; const s=semanasFechadas(); let n=0; for(let i=s.length-1;i>=0;i--){ if(s[i].pct<80) n++; else break } return Math.min(3,n) }
+function contratoAtivo(){ return S.contrato&&S.contrato.v===2&&S.contrato.assinado }
+function bloqueado(){ const n=nivelContrato(); const dv=dividas().length; return (n>=3 && dv>0) || dv>=4 }
+function abrirContrato(){
+  const c=S.contrato||{}; const ativo=contratoAtivo();
+  const clausulas=`<ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:.92rem">
+   <li><b>Prazo:</b> 12 meses a partir da assinatura${ativo?` (até ${esc(c.ate.split("-").reverse().join("/"))})`:""}. Não existe pausa.</li>
+   <li><b>Meta de execução:</b> cumprir 80% ou mais das missões de cada semana, sempre com prova.</li>
+   <li><b>Nível 1</b> (1 semana abaixo de 80%): ${esc(c.multa1||"…")}</li>
+   <li><b>Nível 2</b> (2 semanas seguidas): ${esc(c.multa2||"…")} + bloco de reposição de 2 horas no sábado, que entra como missão.</li>
+   <li><b>Nível 3</b> (3 semanas seguidas): ${esc(c.multa3||"…")} + modo bloqueio: o app abre direto na cobrança até zerar as missões em atraso.</li>
+   <li><b>Produção e publicação:</b> autorizo a equipe a produzir a pauta e os criativos todos os dias, sempre com o Kit da marca travado e as regras do revisor de promessas. A publicação diária roda no piloto automático assim que o diretor-geral liberar as conexões.</li>
+   <li><b>Não retorno:</b> este contrato não pode ser editado depois de assinado. Para sair, existe um aviso de rescisão de 30 dias com justificativa escrita. Durante o aviso, todas as missões e cobranças continuam valendo.</li></ol>`;
+  if(ativo){
+    const r=c.rescisao; const falta=r?Math.max(0,30-daysBetween(parseYmd(r.data),new Date())):null;
+    sheet(`<span class="eyebrow">Contrato assinado em ${esc(c.data.split("-").reverse().join("/"))} por ${esc(c.nome)}</span><h3>Compromisso de execução</h3><p>${esc(c.compromisso)}</p>${clausulas}
+     <p class="muted" style="font-size:.85rem">Nível atual de cobrança: <b>${nivelContrato()}</b>.</p>
+     ${r?`<div class="debt"><b>Aviso de rescisão em andamento</b><p>Faltam ${falta} dias. Justificativa registrada: ${esc(r.motivo)}</p>${falta===0?`<button class="btn" onclick="confirmarRescisao()">Confirmar rescisão</button>`:""}<button class="btn sm ghost" onclick="cancelarRescisao()">Desistir do aviso e continuar</button></div>`
+       :`<details><summary class="muted">Pedir rescisão</summary><p class="muted" style="font-size:.88rem">Escreva pelo menos 200 caracteres explicando por que vai desistir. O aviso dura 30 dias e tudo continua valendo até lá.</p><textarea id="rs-m"></textarea><button class="btn sm" onclick="pedirRescisao()">Registrar aviso de rescisão</button></details>`}
+     <button class="btn ghost" style="align-self:flex-start" onclick="fecharSheet()">Fechar</button>`);
+    return;
+  }
+  sheet(`<span class="eyebrow">Contrato comigo mesmo · versão 2</span><h3>Compromisso de execução</h3>
+   ${c.assinado&&c.v!==2?`<p class="muted" style="font-size:.88rem">O contrato ganhou cláusulas novas. Assine a versão 2 para continuar.</p>`:""}
+   <label class="f">Eu me comprometo a…<textarea id="ct-c" placeholder="Ex.: cumprir 80% das missões toda semana nos meus horários livres por 12 meses, até a Infinity Guard faturar R$ 1 milhão por ano.">${esc(c.compromisso||"")}</textarea></label>
+   <label class="f">Consequência do nível 1 (1 semana abaixo de 80%)<input id="ct-1" value="${esc(c.multa1||c.multa||"")}" placeholder="Ex.: sem streaming no fim de semana"></label>
+   <label class="f">Consequência do nível 2 (2 semanas seguidas)<input id="ct-2" value="${esc(c.multa2||"")}" placeholder="Ex.: guardar R$ 200 na reserva do negócio e não tocar"></label>
+   <label class="f">Consequência do nível 3 (3 semanas seguidas)<input id="ct-3" value="${esc(c.multa3||"")}" placeholder="Ex.: acordar 1 hora mais cedo por 14 dias para repor as missões"></label>
+   ${clausulas}
+   <label class="f">Seu nome completo<input id="ct-n" value="${esc(c.nome||"")}"></label>
+   <label class="f">Para assinar, digite: ${FRASE_CONTRATO}<input id="ct-f" autocomplete="off"></label>
+   <div class="row"><button class="btn primary" onclick="assinar()">Assinar sem volta</button><button class="btn ghost" onclick="fecharSheet()">Agora não</button></div><p id="ct-err" class="muted"></p>`);
+}
+function assinar(){ const g=id=>($("#"+id).value||"").trim(); const err=$("#ct-err");
+  if(g("ct-c").length<20) return err.textContent="Escreva o compromisso com pelo menos 20 caracteres.";
+  if(g("ct-1").length<5||g("ct-2").length<5||g("ct-3").length<5) return err.textContent="Defina as 3 consequências.";
+  if(g("ct-n").length<5) return err.textContent="Escreva o seu nome completo.";
+  if(g("ct-f").toUpperCase()!==FRASE_CONTRATO) return err.textContent="A frase precisa ser exatamente: "+FRASE_CONTRATO;
+  const hoje=new Date(), ate=new Date(hoje); ate.setFullYear(ate.getFullYear()+1);
+  S.contrato={v:2,assinado:true,compromisso:g("ct-c"),multa1:g("ct-1"),multa2:g("ct-2"),multa3:g("ct-3"),multa:g("ct-1"),nome:g("ct-n"),data:ymd(hoje),ate:ymd(ate),autorizaPublicacao:true,rescisao:null};
+  persistEstado(); fecharSheet(); toast("Contrato assinado. Não tem volta."); render() }
+function pedirRescisao(){ const m=($("#rs-m").value||"").trim(); if(m.length<200){toast("A justificativa precisa de pelo menos 200 caracteres.");return} S.contrato.rescisao={data:ymd(new Date()),motivo:m}; persistEstado(); fecharSheet(); toast("Aviso registrado. Tudo continua valendo por 30 dias."); render() }
+function cancelarRescisao(){ S.contrato.rescisao=null; persistEstado(); fecharSheet(); toast("Aviso cancelado. Seguimos."); render() }
+function confirmarRescisao(){ S.contrato.assinado=false; S.contrato.encerradoEm=ymd(new Date()); persistEstado(); fecharSheet(); render() }
+
+/* ============ PUBLICAR: conexões, liberação e pauta ============ */
+let PAUTA = lsGet("rdm-pauta")||{};
+async function carregarPauta(){ if(!dbBase) return; try{ const r=await dbBase.collection("pauta").get(); const o={}; r.docs.forEach(d=>o[d.id]=JSON.parse(JSON.stringify(d.data()))); PAUTA=o; lsSet("rdm-pauta",PAUTA); render() }catch(e){} }
+let mcpCap=null;
+const REDES=[
+ {id:"meta",n:"Meta: Página do Facebook e contas de anúncio",resp:["lider-trafego","analista-de-midia"],auto:true,como:"Conecte o conector da Meta no Claude (Configurações → Conectores) e toque em Verificar. O app lê a Página e as contas de anúncio, sem mudar nada."},
+ {id:"instagram",n:"Instagram profissional ligado à Página",resp:["social-media"],como:"No Instagram: Configurações → Tipo de conta → Profissional. No Meta Business Suite: Configurações → Contas → Contas do Instagram → Conectar. Depois ligue o Instagram à conta de anúncios em Contas de anúncios → Ativos conectados."},
+ {id:"planejador",n:"Planejador do Meta Business Suite",resp:["social-media","lider-marketing"],como:"Abra business.facebook.com → Planejador. É ele que publica sozinho, todo dia, os vídeos do pacote da semana."},
+ {id:"whatsapp",n:"WhatsApp Business no perfil",resp:["consultor-whatsapp","lider-vendas"],como:"No Instagram: Editar perfil → Contato → WhatsApp. Use o número do Kit da marca."},
+ {id:"nuvemshop",n:"Nuvemshop com pixel da Meta",resp:["lider-operacoes","gestor-de-catalogo"],como:"Na Nuvemshop: Configurações → Códigos externos → Meta (pixel e API de Conversões)."},
+ {id:"tiktok",n:"TikTok (opcional)",resp:["roteirista-de-reels","social-media"],opcional:true,como:"Conta comercial no TikTok. Os mesmos vídeos do pacote servem lá; o TikTok também tem agendamento no computador."},
+];
+function conexao(id){ return (S.conexoes||{})[id]||{} }
+async function verificarMeta(){
+  const out=$("#meta-out"); if(out) out.textContent="Verificando…";
+  if(!mcpCap){ if(out) out.textContent="O conector da Meta não está disponível nesta visualização. Conecte a Meta em claude.ai → Configurações → Conectores e abra o app pelo link."; return }
+  const conv=S.metaConv||(S.metaConv=Array.from({length:20},()=>"ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789"[Math.floor(Math.random()*56)]).join(""));
+  const base={client_conversation_id:conv,advertiser_job:"set_up_and_fix_ad_account"};
+  const ler=r=>{ if(r&&r.payload!==undefined) return r.payload; try{ return JSON.parse((r.content||[]).find(c=>c.type==="text").text) }catch(e){ return {} } };
+  try{
+    const pg=ler(await mcpCap.callTool("Meta","ads_get_user_pages",base));
+    const ac=ler(await mcpCap.callTool("Meta","ads_get_ad_accounts",base));
+    const contas=(ac.ad_accounts||[]).filter(a=>a.account_status==="ACTIVE");
+    const ig=[];
+    for(const a of contas.slice(0,6)){ try{ const r=ler(await mcpCap.callTool("Meta","ads_get_ig_accounts",{...base,ad_account_id:a.ad_account_id})); let l=r.ig_accounts; if(typeof l==="string"){try{l=JSON.parse(l)}catch(e){l=[]}} (l||[]).forEach(x=>ig.push(x.username||x.name||x.id)) }catch(e){} }
+    S.conexoes=S.conexoes||{};
+    S.conexoes.meta={ok:(pg.pages||[]).length>0&&contas.length>0, paginas:(pg.pages||[]).map(p=>p.page_name), contas:contas.map(a=>({id:a.ad_account_id,nome:a.ad_account_name,pagamento:!!a.has_payment_method})), em:new Date().toISOString()};
+    if(ig.length){ S.conexoes.instagram=Object.assign({},S.conexoes.instagram,{ok:true,auto:true,contas:[...new Set(ig)]}) }
+    persistEstado(); render();
+  }catch(e){ const msg={needs_reauth:"A conexão da Meta expirou. Reconecte em claude.ai → Configurações → Conectores.",server_not_connected:"A Meta não está conectada na sua conta do Claude. Conecte em Configurações → Conectores.",not_granted:"Você não liberou a Meta para este app. Libere no menu de permissões do app.",consent_required:"Libere a Meta para este app quando o Claude perguntar.",rate_limited:"Muitos pedidos seguidos. Tente em 1 minuto."}[e?.code]||"Não consegui verificar agora ("+(e?.code||"erro")+")."; const o=$("#meta-out"); if(o) o.textContent=msg }
+}
+function marcarConexao(id){ const v=($("#cx-"+id)?.value||"").trim(); const ok=$("#cxk-"+id)?.checked; S.conexoes=S.conexoes||{}; S.conexoes[id]=Object.assign({},S.conexoes[id],{ok:!!ok,valor:v,em:new Date().toISOString()}); persistEstado(); toast(ok?"Conexão confirmada.":"Conexão marcada como pendente."); render() }
+function requisitos(){ return [
+  {n:"Contrato v2 assinado",ok:contratoAtivo(),resp:"diretor-geral"},
+  {n:"Kit da marca travado",ok:!!MARCA.travado,resp:"lider-marketing"},
+  {n:"Meta verificada (Página e conta de anúncio ativa)",ok:!!conexao("meta").ok,resp:"lider-trafego"},
+  {n:"Instagram profissional ligado",ok:!!conexao("instagram").ok,resp:"social-media"},
+  {n:"Planejador do Meta Business Suite pronto",ok:!!conexao("planejador").ok,resp:"social-media"},
+  {n:"WhatsApp no perfil",ok:!!conexao("whatsapp").ok,resp:"consultor-whatsapp"},
+] }
+function pilotoLiberado(){ return requisitos().every(r=>r.ok) }
+let pubAba="conexoes";
+function viewPublicar(){
+  const req=requisitos(), feitos=req.filter(r=>r.ok).length, lib=feitos===req.length;
+  let h=`<div class="stack"><h2>Publicar</h2><p class="muted">Primeiro você conecta as redes, com cada funcionário responsável pela dele. Quando o diretor-geral liberar, a equipe produz a pauta e os vídeos todos os dias com o Kit da marca travado, e o Planejador da Meta publica sozinho no horário.</p></div>
+  <div class="card stack" style="border-color:${lib?"var(--ok)":"var(--signal)"}"><div class="row" style="justify-content:space-between"><span class="eyebrow">Liberação do diretor-geral</span><span class="pill ${lib?"ok":"warn"}">${lib?"piloto automático liberado":feitos+" de "+req.length}</span></div>
+   ${req.map(r=>`<div class="row" style="justify-content:space-between"><span>${r.ok?"✓":"○"} ${esc(r.n)}</span><span class="muted num" style="font-size:.78rem">${esc(r.resp)}</span></div>`).join("")}
+   ${lib?"":`<button class="btn sm" style="align-self:flex-start" onclick="trabalhar('diretor-geral','Olhe o que falta na liberação do piloto automático (${esc(req.filter(r=>!r.ok).map(r=>r.n).join("; "))}) e me diga a ordem exata para resolver hoje, com o responsável de cada passo.')">Pedir o plano ao diretor-geral</button>`}</div>
+  <div class="chips" role="group" aria-label="Seção">${[["conexoes","1. Conexões"],["marca","2. Kit da marca"],["pauta","3. Pauta e vídeos"]].map(([k,n])=>`<button class="chip" aria-pressed="${pubAba===k}" onclick="pubAba='${k}';render()">${n}</button>`).join("")}</div>`;
+  if(pubAba==="conexoes") h+=viewConexoes(); else if(pubAba==="marca") h+=viewMarca(); else h+=viewPauta(lib);
+  return h;
+}
+function viewConexoes(){
+  const mt=conexao("meta");
+  return `<div class="stack">${REDES.map(r=>{ const c=conexao(r.id); return `<div class="card stack">
+    <div class="row" style="justify-content:space-between"><b>${esc(r.n)}</b><span class="pill ${c.ok?"ok":r.opcional?"":"warn"}">${c.ok?"conectado":r.opcional?"opcional":"pendente"}</span></div>
+    <span class="muted" style="font-size:.85rem">Responsável: ${r.resp.map(x=>`<button class="btn sm ghost" style="padding:2px 6px" onclick="trabalhar('${x}','Me guie passo a passo para deixar pronto: ${esc(r.n)}. ${esc(r.como)}')">${esc(x)}</button>`).join(" ")}</span>
+    <p style="font-size:.9rem">${esc(r.como)}</p>
+    ${r.auto?`<div class="row"><button class="btn primary sm" onclick="verificarMeta()">Verificar conexão</button>${mt.em?`<span class="muted" style="font-size:.8rem">última verificação ${esc(new Date(mt.em).toLocaleString("pt-BR"))}</span>`:""}</div>
+      <div id="meta-out" class="muted" style="font-size:.88rem">${mt.em?`Páginas: ${esc((mt.paginas||[]).join(", ")||"nenhuma")}. Contas de anúncio ativas: ${(mt.contas||[]).length} (${(mt.contas||[]).filter(a=>a.pagamento).length} com pagamento). Instagram ligado às contas: ${esc((conexao("instagram").contas||[]).join(", ")||"nenhum, falta ligar")}.`:""}</div>`
+     :`<div class="fields"><label class="f">${r.id==="instagram"?"@ do perfil":r.id==="nuvemshop"?"Endereço da loja":r.id==="whatsapp"?"Número":"Observação"}<input id="cx-${r.id}" value="${esc(c.valor||"")}"></label></div>
+      <label class="row" style="gap:8px;font-size:.9rem"><input type="checkbox" id="cxk-${r.id}" style="width:auto" ${c.ok?"checked":""}> Feito e conferido</label>
+      <button class="btn sm" style="align-self:flex-start" onclick="marcarConexao('${r.id}')">Salvar</button>`}
+   </div>`}).join("")}</div>`;
+}
+function viewMarca(){
+  const M=MARCA, dis=M.travado?"disabled":"";
+  const cor=(id,n)=>`<label class="f">${n}<span class="row" style="flex-wrap:nowrap"><input type="color" id="mk-${id}" value="${esc(M[id])}" ${dis} style="width:52px;padding:2px"><input id="mk-${id}-hex" value="${esc(M[id])}" ${dis} oninput="if(/^#[0-9a-f]{6}$/i.test(this.value))$('#mk-${id}').value=this.value"></span></label>`;
+  return `<div class="card stack"><div class="row" style="justify-content:space-between"><span class="eyebrow">Kit da marca</span><span class="pill ${M.travado?"ok":"warn"}">${M.travado?"travado em "+esc(M.travadoEm.split("-").reverse().join("/")):"não travado"}</span></div>
+   <p class="muted" style="font-size:.9rem">Todo vídeo e toda arte saem com estas cores, esta fonte e este logo. Coloque as cores reais da Infinity Guard (o código hexadecimal está no tema da Nuvemshop, em Personalizar → Cores). Depois de travar, nada muda sem renegociar o contrato.</p>
+   <div class="fields"><label class="f">Nome<input id="mk-nome" value="${esc(M.nome)}" ${dis}></label><label class="f">Slogan<input id="mk-slogan" value="${esc(M.slogan)}" ${dis}></label></div>
+   <div class="fields">${cor("primaria","Cor principal")}${cor("destaque","Cor de destaque e botão")}${cor("fundo","Cor de fundo")}${cor("texto","Cor do texto")}</div>
+   <div class="fields"><label class="f">Fonte dos títulos<select id="mk-fonte" ${dis}>${Object.keys(FONTES).map(f=>`<option ${f===M.fonte?"selected":""}>${f}</option>`).join("")}</select></label><label class="f">WhatsApp<input id="mk-whatsapp" value="${esc(M.whatsapp)}" ${dis}></label><label class="f">@ do Instagram<input id="mk-instagram" value="${esc(M.instagram)}" ${dis}></label></div>
+   <label class="f">Logo (PNG com fundo transparente, de preferência)<input type="file" id="mk-logo" accept="image/png,image/jpeg,image/webp,image/svg+xml" ${dis} onchange="lerLogo(this)"></label>
+   <div class="row">${M.logo?`<img src="${esc(M.logo)}" alt="Logo" style="height:56px;background:${esc(M.fundo)};padding:6px;border-radius:8px">`:`<span class="muted" style="font-size:.85rem">Sem logo: os criativos usam o escudo com o nome.</span>`}</div>
+   <canvas id="mk-prev" width="1080" height="1350" style="width:100%;max-width:280px;border-radius:10px;border:1px solid var(--line)"></canvas>
+   ${M.travado?`<p class="muted" style="font-size:.85rem">Kit travado. Para mudar, peça rescisão do contrato (aviso de 30 dias).</p>`:`<div class="row"><button class="btn" onclick="salvarMarca(false)">Salvar e ver prévia</button><button class="btn primary" onclick="travarPasso()">Travar o kit da marca</button></div><div id="mk-trava"></div>`}
+  </div>`;
+}
+function lerMarcaForm(){ if(MARCA.travado) return; ["nome","slogan","fonte","whatsapp","instagram"].forEach(k=>{const e=$("#mk-"+k); if(e) MARCA[k]=e.value.trim()||MARCA[k]}); ["primaria","destaque","fundo","texto"].forEach(k=>{ const hx=$("#mk-"+k+"-hex")?.value, c=$("#mk-"+k)?.value; MARCA[k]=hexOk(hx)?hx:hexOk(c)?c:MARCA[k] }) }
+function salvarMarca(silent){ lerMarcaForm(); persistMarca(); if(!silent) toast("Kit salvo."); render(); setTimeout(previaMarca,60) }
+function travarPasso(){ lerMarcaForm(); $("#mk-trava").innerHTML=`<div class="debt"><b>Travar para sempre?</b><p>Depois de travar, cores, fonte e logo não mudam mais neste contrato. Confira a prévia.</p><div class="row"><button class="btn primary" onclick="travarMarca()">Sim, travar</button><button class="btn ghost" onclick="$('#mk-trava').innerHTML=''">Ainda não</button></div></div>` }
+function travarMarca(){ lerMarcaForm(); MARCA.travado=true; MARCA.travadoEm=ymd(new Date()); persistMarca(); toast("Kit da marca travado."); render(); setTimeout(previaMarca,60) }
+function lerLogo(inp){ const f=inp.files&&inp.files[0]; if(!f) return; const url=URL.createObjectURL(f); const i=new Image(); i.onload=()=>{ const s=Math.min(1,480/Math.max(i.naturalWidth,i.naturalHeight)); const c=document.createElement("canvas"); c.width=Math.round(i.naturalWidth*s)||480; c.height=Math.round(i.naturalHeight*s)||480; c.getContext("2d").drawImage(i,0,0,c.width,c.height); MARCA.logo=c.toDataURL("image/png"); URL.revokeObjectURL(url); carregarLogo(); lerMarcaForm(); persistMarca(); render(); setTimeout(previaMarca,120) }; i.onerror=()=>toast("Não consegui ler esse arquivo de imagem."); i.src=url }
+async function previaMarca(){ const c=$("#mk-prev"); if(!c) return; await garantirFonte(MARCA.fonte); desenharAnuncio(c.getContext("2d"),1080,1350,MARCA,{titulo:"Câmera que ninguém invade",subtitulo:"Sai daqui com a senha trocada e o passo a passo",cta:"Chame no WhatsApp",produto:"kit-cam-2"},null) }
+function viewPauta(lib){
+  const hoje=ymd(new Date()); const ks=Object.keys(PAUTA).sort().reverse().slice(0,10);
+  let h=`<div class="card stack"><span class="eyebrow">Como a publicação diária acontece sozinha</span>
+   <ol style="margin:0;padding-left:20px;font-size:.92rem;display:flex;flex-direction:column;gap:4px"><li>Todo dia às 05:17 a equipe pesquisa o mercado e grava aqui a pauta do dia: roteiro do Reel, legenda, hashtags e o anúncio.</li><li>No bloco de sábado você toca em <b>Gerar o pacote da semana</b>: o app renderiza os vídeos com o Kit da marca e baixa todos.</li><li>Você sobe o pacote uma vez no Planejador do Meta Business Suite, um por dia no horário indicado. A partir daí a Meta publica sozinha, todos os dias, sem pedir nada.</li></ol>
+   <p class="muted" style="font-size:.85rem">O conector da Meta disponível hoje cuida de anúncios, não de posts. Por isso a postagem diária roda pelo Planejador da própria Meta. Impulsionar com verba só depois que o Instagram estiver ligado à conta de anúncios, e sempre com o teto de gasto que você definir.</p></div>`;
+  if(!lib) h+=`<div class="debt"><b>Piloto automático bloqueado</b><p>Faltam conexões na liberação do diretor-geral. A pauta continua sendo produzida, mas o pacote da semana só libera depois das conexões.</p></div>`;
+  if(!PAUTA[hoje]) h+=`<div class="card flat stack"><p>A pauta de hoje ainda não chegou.</p>${sampleFn?`<button class="btn sm primary" style="align-self:flex-start" id="pt-go" onclick="produzirPauta()">Produzir a pauta de hoje agora</button>`:""}</div>`;
+  h+=`<div class="row"><button class="btn primary" ${lib?"":"disabled"} onclick="pacoteSemana()">Gerar o pacote da semana</button><span class="muted" id="pk-st" style="font-size:.85rem"></span></div>`;
+  ks.forEach(k=>{ const p=PAUTA[k], st=(S.pautaStatus||{})[k]; const prob=checarPromessas([p.reel?.gancho,(p.reel?.cenas||[]).join(" "),p.reel?.cta,p.legenda,p.anuncio?.titulo,p.anuncio?.subtitulo].join(" "));
+    h+=`<div class="card stack"><div class="row" style="justify-content:space-between"><span class="eyebrow">${esc(k.split("-").reverse().join("/"))}${k===hoje?" · hoje":""} · ${esc(p.horario||"12:00")}</span><span class="pill ${st==="agendado"?"ok":st==="gerado"?"acc":""}">${st||"a produzir"}</span></div>
+     <b>${esc(p.tema||"")}</b><p style="font-size:.92rem"><b>Gancho:</b> ${esc(p.reel?.gancho||"")}</p>
+     ${prob.length?`<div class="debt" style="padding:10px"><b>O revisor barrou:</b>${prob.map(x=>`<span style="font-size:.88rem">"${esc(x.trecho)}": ${esc(x.msg)}</span>`).join("")}</div>`:""}
+     <details><summary class="muted">Legenda e cenas</summary><div class="out" style="margin-top:8px">${esc((p.reel?.cenas||[]).map((c,i)=>(i+1)+". "+c).join("\n"))}\n\n${esc(p.legenda||"")}\n${esc((p.hashtags||[]).join(" "))}</div></details>
+     <div class="row"><button class="btn sm primary" ${prob.length?"disabled":""} onclick="abrirVideo('${k}')">Gerar vídeo</button><button class="btn sm" ${prob.length?"disabled":""} onclick="abrirAnuncio('${k}')">Gerar arte de anúncio</button><button class="btn sm" onclick="copiar(PAUTA['${k}'].legenda+'\\n\\n'+(PAUTA['${k}'].hashtags||[]).join(' '))">Copiar legenda</button>${st!=="agendado"?`<button class="btn sm ghost" onclick="statusPauta('${k}','agendado')">Já agendei no Planejador</button>`:""}</div></div>` });
+  return h;
+}
+function statusPauta(k,s){ S.pautaStatus=S.pautaStatus||{}; S.pautaStatus[k]=s; const lim=ymd(new Date(Date.now()-60*864e5)); for(const x in S.pautaStatus) if(x<lim) delete S.pautaStatus[x]; persistEstado(); render() }
+const PAUTA_FORMATO=`Responda só com JSON neste formato: {"tema": "...", "funcionario": "roteirista-de-reels", "horario": "12:00", "reel": {"gancho": "até 10 palavras", "cenas": ["4 a 6 frases de até 14 palavras cada"], "cta": "até 6 palavras"}, "legenda": "até 600 caracteres terminando com chamada para o WhatsApp", "hashtags": ["5 hashtags"], "anuncio": {"titulo": "até 40 caracteres", "subtitulo": "até 70 caracteres", "cta": "até 20 caracteres", "produto": "um destes ids: kit-cam-2, cam-asecam-ptz, alarme-ikerui, fechadura-facial, fechadura-bio, sensor-presenca"}}`;
+async function produzirPauta(){ const b=$("#pt-go"); if(b){b.disabled=true;b.textContent="Produzindo…"}
+  const rd=radarRecente(); const k=ymd(new Date());
+  try{ const p=await sampleFn.json(promptFunc("roteirista-de-reels",`Produza a pauta de hoje (${k}) para o Instagram: 1 Reel de 25 a 40 segundos e 1 anúncio. Use um tema quente${rd?` do radar de hoje: ${rd.r.resumo}`:" de segurança residencial"}. ${PAUTA_FORMATO}`),{cache:false});
+    p.data=k; p.origem="app"; PAUTA[k]=p; lsSet("rdm-pauta",PAUTA); if(dbBase) await dbBase.collection("pauta").doc(k).set(JSON.parse(JSON.stringify(p))); render() }
+  catch(e){ toast(e?.code==="rate_limited"?"Muitos pedidos seguidos. Tente em 1 minuto.":"Não consegui produzir agora. Tente de novo."); if(b){b.disabled=false;b.textContent="Produzir a pauta de hoje agora"} } }
+
+/* ===== telas do estúdio de vídeo e de anúncio ===== */
+let VID={k:null,roteiro:{gancho:"",cenas:[],cta:""},midias:[],musica:null,busy:false,res:null,anim:0};
+function abrirVideo(k){ const p=k&&PAUTA[k]; VID.k=k||null; VID.res=null; if(p) VID.roteiro=JSON.parse(JSON.stringify(p.reel||{})); view="ia"; iaAba="video"; render(); window.scrollTo(0,0) }
+let AD={k:null,ad:{titulo:"",subtitulo:"",cta:"Chame no WhatsApp",produto:"kit-cam-2"},formato:"feed",fundo:null};
+function abrirAnuncio(k){ const p=k&&PAUTA[k]; AD.k=k||null; if(p&&p.anuncio) AD.ad=Object.assign({},AD.ad,p.anuncio); view="ia"; iaAba="anuncio"; render(); window.scrollTo(0,0) }
+function viewVideo(){
+  const r=VID.roteiro; const txt=[r.gancho||"",...(r.cenas||[]),r.cta||""].join("\n");
+  const prob=checarPromessas(txt); const mime=melhorMime();
+  return `<div class="card stack"><span class="eyebrow">Vídeo Reel 1080×1920 com o Kit da marca${MARCA.travado?"":" (kit ainda não travado)"}</span>
+   <div class="row"><label class="f" style="flex:1">Tema para a IA roteirizar<input id="vd-tema" placeholder="Ex.: 3 sinais de que sua câmera foi invadida"></label>${sampleFn?`<button class="btn" id="vd-ia" onclick="roteirizar()">Roteirizar com IA</button>`:""}</div>
+   <label class="f" for="vd-txt">Roteiro: 1ª linha é o gancho, a última é a chamada final, uma cena por linha no meio</label>
+   <textarea id="vd-txt" style="min-height:160px" oninput="lerRoteiro()">${esc(txt.trim())}</textarea>
+   <div id="vd-prob">${prob.length?`<div class="debt" style="padding:10px"><b>O revisor barrou:</b>${prob.map(x=>`<span style="font-size:.88rem">"${esc(x.trecho)}": ${esc(x.msg)}</span>`).join("")}</div>`:""}</div>
+   <div class="fields"><label class="f">Fotos ou vídeos de fundo (opcional, um por cena)<input type="file" id="vd-mid" accept="image/*,video/*" multiple onchange="lerMidias(this)"></label><label class="f">Música (opcional, use só música com licença)<input type="file" id="vd-mus" accept="audio/*" onchange="lerMusica(this)"></label></div>
+   <span class="muted" style="font-size:.82rem">${VID.midias.length} fundos carregados${VID.musica?" · música carregada":""}. ${mime?`O vídeo sai em ${mime.startsWith("video/mp4")?"MP4, pronto para o Instagram":"WebM (o Instagram prefere MP4: use o Chrome ou o Edge atualizado no computador)"}.`:"Este navegador não grava vídeo."}</span>
+   <div class="row" style="align-items:flex-start;gap:16px"><canvas id="vd-prev" width="1080" height="1920" style="width:100%;max-width:240px;border-radius:12px;border:1px solid var(--line);background:#000"></canvas>
+    <div class="stack" style="flex:1;min-width:200px"><button class="btn" onclick="tocarPrevia()">Prévia</button><button class="btn primary" id="vd-go" ${prob.length||!mime?"disabled":""} onclick="renderizar()">Gerar vídeo</button><span id="vd-st" class="muted" style="font-size:.85rem">Mantenha esta tela aberta enquanto o vídeo é gravado (tempo real).</span><div id="vd-res"></div></div></div>
+  </div>`;
+}
+function lerRoteiro(){ const L=($("#vd-txt").value||"").split("\n").map(s=>s.trim()).filter(Boolean); VID.roteiro={gancho:L[0]||"",cenas:L.slice(1,-1),cta:L.length>1?L[L.length-1]:""};
+  const prob=checarPromessas(L.join(" ")); $("#vd-prob").innerHTML=prob.length?`<div class="debt" style="padding:10px"><b>O revisor barrou:</b>${prob.map(x=>`<span style="font-size:.88rem">"${esc(x.trecho)}": ${esc(x.msg)}</span>`).join("")}</div>`:""; const g=$("#vd-go"); if(g) g.disabled=!!prob.length||!melhorMime() }
+async function roteirizar(){ const t=($("#vd-tema").value||"").trim(); if(!t){toast("Escreva o tema.");return} const b=$("#vd-ia"); b.disabled=true; b.textContent="Roteirizando…";
+  try{ const r=await sampleFn.json(promptFunc("roteirista-de-reels",`Roteiro de Reel de 25 a 40 segundos sobre: ${t}. Responda só com JSON: {"gancho":"até 10 palavras","cenas":["4 a 6 frases de até 14 palavras"],"cta":"até 6 palavras"}`),{cache:false}); VID.roteiro={gancho:r.gancho||"",cenas:r.cenas||[],cta:r.cta||""}; render() }
+  catch(e){ toast("Não consegui roteirizar agora."); b.disabled=false; b.textContent="Roteirizar com IA" } }
+function lerMidias(inp){ VID.midias.forEach(m=>URL.revokeObjectURL(m.url)); VID.midias=[]; [...inp.files].slice(0,8).forEach(f=>{ const url=URL.createObjectURL(f); if(f.type.startsWith("video")){ const v=document.createElement("video"); v.src=url; v.muted=true; v.loop=true; v.playsInline=true; v.preload="auto"; VID.midias.push({tipo:"video",el:v,url}) } else { const i=new Image(); i.src=url; VID.midias.push({tipo:"img",el:i,url}) } }); const s=$("#vd-st"); if(s) s.textContent=VID.midias.length+" fundos carregados." }
+function lerMusica(inp){ const f=inp.files&&inp.files[0]; if(VID.musica) URL.revokeObjectURL(VID.musica); VID.musica=f?URL.createObjectURL(f):null }
+async function tocarPrevia(){ lerRoteiro(); const c=$("#vd-prev"); if(!c) return; await garantirFonte(MARCA.fonte); const ctx=c.getContext("2d"); const plan=planoVideo(VID.roteiro); cancelAnimationFrame(VID.anim); VID.midias.forEach(m=>{if(m.tipo==="video")m.el.play().catch(()=>{})}); const t0=performance.now();
+  (function loop(){ const t=(performance.now()-t0)/1000; if(!$("#vd-prev")) return; desenharQuadro(ctx,plan,Math.min(t,plan.total-0.001),MARCA,VID.midias); if(t<plan.total) VID.anim=requestAnimationFrame(loop) })() }
+async function renderizar(){ lerRoteiro(); if(VID.busy) return; if(!VID.roteiro.gancho){toast("Escreva o roteiro.");return} VID.busy=true; const g=$("#vd-go"), st=$("#vd-st"); g.disabled=true;
+  try{ const plan=planoVideo(VID.roteiro); const r=await gravarVideo(plan,MARCA,VID.midias,VID.musica,p=>{ if(st) st.textContent="Gravando "+Math.round(p*100)+"%…" });
+    VID.res=r; const url=URL.createObjectURL(r.blob); $("#vd-res").innerHTML=`<video src="${url}" controls playsinline style="width:100%;max-width:240px;border-radius:10px"></video><div class="row"><button class="btn primary sm" onclick="baixarVideo()">Baixar vídeo</button></div>`;
+    if(st) st.textContent="Pronto: "+(r.blob.size/1048576).toFixed(1).replace(".",",")+" MB em "+r.ext.toUpperCase()+"."; if(VID.k) statusPauta(VID.k,"gerado") }
+  catch(e){ if(st) st.textContent=e.message||"Não consegui gravar o vídeo." }
+  VID.busy=false; if(g) g.disabled=false }
+async function baixarVideo(){ if(!VID.res) return; const nome="infinity-guard-reel-"+(VID.k||ymd(new Date()))+"."+VID.res.ext; await salvarArquivo(nome,VID.res.blob) }
+async function salvarArquivo(nome,blob){ if(!downloadsCap){ toast("Baixar arquivos não está disponível nesta visualização."); return false } try{ const r=await downloadsCap.save({filename:nome,data:blob}); if(r?.status==="saved"){toast("Arquivo salvo."); return true} }catch(e){ if(e?.code!=="cancelled"&&e?.code!=="declined") toast("Não consegui salvar o arquivo.") } return false }
+async function pacoteSemana(){ const st=$("#pk-st"); const ks=Object.keys(PAUTA).sort().slice(-7); if(!ks.length){toast("Ainda não há pauta.");return} if(!melhorMime()){toast("Este navegador não grava vídeo. Use o Chrome ou o Edge.");return}
+  for(let i=0;i<ks.length;i++){ const p=PAUTA[ks[i]]; if(checarPromessas(JSON.stringify(p)).length){ if(st) st.textContent=ks[i]+": barrado pelo revisor, pulei."; continue }
+    if(st) st.textContent=`Vídeo ${i+1} de ${ks.length}…`; const r=await gravarVideo(planoVideo(p.reel||{}),MARCA,[],null,pr=>{ if(st) st.textContent=`Vídeo ${i+1} de ${ks.length}: ${Math.round(pr*100)}%` });
+    const ok=await salvarArquivo(`infinity-guard-reel-${ks[i]}.${r.ext}`,r.blob); if(ok) statusPauta(ks[i],"gerado") }
+  if(st) st.textContent="Pacote pronto. Agora suba no Planejador da Meta, um por dia no horário de cada pauta." }
+function viewAnuncio(){ const a=AD.ad; const prob=checarPromessas([a.titulo,a.subtitulo,a.cta].join(" "));
+  return `<div class="card stack"><span class="eyebrow">Arte de anúncio com o Kit da marca</span>
+   <div class="chips">${Object.entries(FORMATOS).map(([k,f])=>`<button class="chip" aria-pressed="${AD.formato===k}" onclick="AD.formato='${k}';render();setTimeout(desenharAd,60)">${f[2]}</button>`).join("")}</div>
+   <div class="fields"><label class="f">Título<input id="ad-titulo" value="${esc(a.titulo)}" oninput="lerAd()"></label><label class="f">Subtítulo<input id="ad-subtitulo" value="${esc(a.subtitulo)}" oninput="lerAd()"></label><label class="f">Botão<input id="ad-cta" value="${esc(a.cta)}" oninput="lerAd()"></label>
+    <label class="f">Produto e preço<select id="ad-produto" onchange="lerAd()"><option value="">Sem preço</option>${CATALOGO.map(p=>`<option value="${p[2]}" ${p[2]===a.produto?"selected":""}>${esc(p[0])}</option>`).join("")}</select></label></div>
+   <label class="f">Foto de fundo (opcional)<input type="file" accept="image/*" onchange="lerFundoAd(this)"></label>
+   ${sampleFn?`<button class="btn sm" style="align-self:flex-start" id="ad-ia" onclick="textoAdIA()">Escrever o texto com o criativos-de-anuncio</button>`:""}
+   <div id="ad-prob">${prob.length?`<div class="debt" style="padding:10px"><b>O revisor barrou:</b>${prob.map(x=>`<span style="font-size:.88rem">"${esc(x.trecho)}": ${esc(x.msg)}</span>`).join("")}</div>`:""}</div>
+   <canvas id="ad-prev" width="${FORMATOS[AD.formato][0]}" height="${FORMATOS[AD.formato][1]}" style="width:100%;max-width:300px;border-radius:10px;border:1px solid var(--line)"></canvas>
+   <div class="row"><button class="btn primary" id="ad-go" ${prob.length?"disabled":""} onclick="baixarAd()">Baixar PNG</button></div></div>`; }
+function lerAd(){ ["titulo","subtitulo","cta","produto"].forEach(k=>AD.ad[k]=$("#ad-"+k).value); const prob=checarPromessas([AD.ad.titulo,AD.ad.subtitulo,AD.ad.cta].join(" ")); $("#ad-prob").innerHTML=prob.length?`<div class="debt" style="padding:10px"><b>O revisor barrou:</b>${prob.map(x=>`<span style="font-size:.88rem">"${esc(x.trecho)}": ${esc(x.msg)}</span>`).join("")}</div>`:""; $("#ad-go").disabled=!!prob.length; desenharAd() }
+function lerFundoAd(inp){ const f=inp.files&&inp.files[0]; if(!f) return; const i=new Image(); i.onload=()=>{AD.fundo=i;desenharAd()}; i.src=URL.createObjectURL(f) }
+async function desenharAd(){ const c=$("#ad-prev"); if(!c) return; await garantirFonte(MARCA.fonte); const [W,H]=FORMATOS[AD.formato]; desenharAnuncio(c.getContext("2d"),W,H,MARCA,AD.ad,AD.fundo) }
+async function textoAdIA(){ const b=$("#ad-ia"); b.disabled=true; b.textContent="Escrevendo…"; const prod=CATALOGO.find(p=>p[2]===AD.ad.produto);
+  try{ const r=await sampleFn.json(promptFunc("criativos-de-anuncio",`Texto de uma arte de anúncio para Meta${prod?` do produto ${prod[0]}`:""}. Responda só com JSON: {"titulo":"até 40 caracteres","subtitulo":"até 70 caracteres","cta":"até 20 caracteres"}`),{cache:false}); Object.assign(AD.ad,{titulo:r.titulo||"",subtitulo:r.subtitulo||"",cta:r.cta||AD.ad.cta}); render(); setTimeout(desenharAd,60) }
+  catch(e){ toast("Não consegui escrever agora."); b.disabled=false; b.textContent="Escrever o texto com o criativos-de-anuncio" } }
+async function baixarAd(){ const c=$("#ad-prev"); await desenharAd(); c.toBlob(b=>{ if(b) salvarArquivo(`infinity-guard-anuncio-${AD.formato}-${ymd(new Date())}.png`,b) },"image/png") }
+
+/* ============ INSTALAR ============ */
+const REPO_URL="https://github.com/InfinityGuardOficial/infinity-guard-sistemas";
+function viewInstalar(){ return `<div class="card stack"><span class="eyebrow">Instalar no Windows e no celular</span>
+  <p style="font-size:.92rem">O app instalado abre esta mesma página privada, com o seu login do Claude. Quem baixar o instalador sem a sua conta não vê nada: os dados e a IA ficam presos ao seu login.</p>
+  <ul style="margin:0;padding-left:20px;font-size:.9rem;display:flex;flex-direction:column;gap:4px">
+   <li><b>Windows x64:</b> em <a href="${REPO_URL}/actions/workflows/apps.yml" target="_blank" rel="noopener">GitHub → Actions → Apps</a>, abra a última execução verde e baixe "rota-do-milhao-windows-x64". Tem instalador e versão portátil. Ele avisa nos seus turnos mesmo minimizado e pode iniciar com o Windows.</li>
+   <li><b>Android:</b> na mesma página, baixe "rota-do-milhao-android", abra o APK no celular e permita instalar de fonte desconhecida. Ele também avisa nos seus turnos.</li>
+   <li><b>iPhone:</b> a Apple não permite instalar fora da App Store sem conta de desenvolvedor. Abra este link no Safari → Compartilhar → Adicionar à Tela de Início.</li>
+   <li><b>Sem baixar nada:</b> no Chrome ou no Edge, abra este link → menu → Instalar como app.</li></ul>
+  <p class="muted" style="font-size:.85rem">No primeiro acesso, entre no Claude com o seu e-mail (código por e-mail). Login com o Google pode ser bloqueado dentro de apps instalados.</p></div>` }
+
 /* ============ AÇÕES ============ */
 function sheet(html){ $("#layer").innerHTML=`<div class="sheet" onclick="if(event.target===this)fecharSheet()"><div class="panel" role="dialog" aria-modal="true">${html}</div></div>` }
 function fecharSheet(){ $("#layer").innerHTML="" }
@@ -731,15 +1082,7 @@ function salvarLog(e){ e.preventDefault(); const k=ymd(new Date()); const d=dia(
   if(d.log.faturamento!==undefined && !d.missoes["noite-numeros"] && new Date().getDay()>=1 && new Date().getDay()<=5) d.missoes["noite-numeros"]={prova:"Faturamento do dia: "+brl2(d.log.faturamento),hora:new Date().toISOString()};
   persistDia(k); toast("Dia salvo."); render() }
 function salvarSlots(){ for(const s in S.slots){ const a=$("#sl-"+s+"-ini").value, b=$("#sl-"+s+"-fim").value; if(a&&b&&hm(b)>hm(a)){S.slots[s].ini=a;S.slots[s].fim=b} } persistEstado(); toast("Horários salvos. Baixe a agenda de novo para atualizar o calendário."); render() }
-function salvarCfg(){ const n=id=>Number($("#cf-"+id).value); if(n("meta")>0)S.meta=n("meta"); if(n("ticket")>0)S.ticket=n("ticket"); if(n("margem")>0)S.margem=n("margem"); if(n("conv")>0)S.conv=n("conv"); const i=$("#cf-inicio").value; if(i)S.inicio=i; persistEstado(); toast("Configurações salvas."); render() }
-function abrirContrato(){ const c=S.contrato;
-  sheet(`<span class="eyebrow">Contrato comigo mesmo</span><h3>Compromisso de execução</h3>
-  <label class="f">Eu me comprometo a…<textarea id="ct-c" placeholder="Ex.: cumprir 80% das missões toda semana nos meus horários livres por 12 meses, até chegar a R$ 1 milhão por ano.">${esc(c.compromisso)}</textarea></label>
-  <label class="f">Se a semana fechar abaixo de 80%, eu…<input id="ct-m" placeholder="Ex.: fico sem streaming no fim de semana e faço o bloco de sábado em dobro" value="${esc(c.multa)}"></label>
-  ${c.assinado?`<p class="muted">Assinado em ${esc(c.data)}.</p>`:""}
-  <div class="row"><button class="btn primary" onclick="assinar()">${c.assinado?"Atualizar":"Assinar"}</button><button class="btn ghost" onclick="fecharSheet()">Fechar</button></div>`) }
-function assinar(){ const c=$("#ct-c").value.trim(), m=$("#ct-m").value.trim(); if(c.length<15||m.length<5){toast("Escreva o compromisso e a consequência.");return} S.contrato={assinado:true,compromisso:c,multa:m,data:S.contrato.data||ymd(new Date())}; persistEstado(); fecharSheet(); toast("Contrato assinado."); render() }
-
+function salvarCfg(){ const n=id=>Number($("#cf-"+id).value); if(n("meta")>0&&(!contratoAtivo()||n("meta")>=S.meta))S.meta=n("meta"); if(n("ticket")>0)S.ticket=n("ticket"); if(n("margem")>0)S.margem=n("margem"); if(n("conv")>0)S.conv=n("conv"); const i=$("#cf-inicio").value; if(contratoAtivo()){ if(n("meta")<S.meta) S.meta=Math.max(S.meta,n("meta")); toast("Com o contrato assinado, a data de início não muda e a meta só pode subir.") } else if(i) S.inicio=i; persistEstado(); toast("Configurações salvas."); render() }
 /* ============ AGENDA .ICS ============ */
 function gerarICS(){
   const st=new Date(); const dt=ymd(st).replace(/-/g,"");
@@ -776,11 +1119,18 @@ setInterval(()=>{ const n=new Date(), k=ymd(n), nm=nowMin(n);
 },20000);
 
 /* ============ RENDER ============ */
+let NIVEL=0;
 function render(){
+  NIVEL=0; NIVEL=nivelContrato();
   renderStatus();
-  const v={hoje:viewHoje,trilha:viewTrilha,equipe:viewEquipe,placar:viewPlacar,ia:viewIA,agenda:viewAgenda,biblioteca:viewBiblioteca}[view];
+  if(bloqueado() && ["trilha","publicar","mais"].includes(view)){ $("#app").innerHTML=`<section class="view"><div class="debt"><h3>Bloqueado pelo contrato</h3><p>${NIVEL>=3?"Três semanas seguidas abaixo de 80%. ":""}Você tem ${dividas().length} missões vencidas sem prova. Esta área abre de novo quando você zerar as pendências em Hoje. Equipe, Estúdio e Placar continuam liberados para você trabalhar.</p><button class="btn primary" style="align-self:flex-start" onclick="view='hoje';render()">Ir para as pendências</button></div></section>`; return }
+  const v={hoje:viewHoje,trilha:viewTrilha,equipe:viewEquipe,placar:viewPlacar,ia:viewIA,publicar:viewPublicar,mais:viewMais}[view];
   $("#app").innerHTML=`<section class="view">${v()}</section>`;
+  if(view==="ia"&&iaAba==="anuncio") setTimeout(desenharAd,30);
+  if(view==="ia"&&iaAba==="video") setTimeout(async()=>{ const c=$("#vd-prev"); if(c){ await garantirFonte(MARCA.fonte); desenharQuadro(c.getContext("2d"),planoVideo(VID.roteiro),0.6,MARCA,VID.midias) } },30);
+  if(view==="publicar"&&pubAba==="marca") setTimeout(previaMarca,30);
 }
+function viewMais(){ return viewAgenda()+viewInstalar()+viewBiblioteca() }
 render();
 conectar();
 </script>

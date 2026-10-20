@@ -1,0 +1,39 @@
+{
+  "name": "rota-do-milhao",
+  "productName": "Rota do Milhão",
+  "version": "1.0.0",
+  "description": "App pessoal da Infinity Guard: abre o Rota do Milhão com o seu login do Claude e avisa nos turnos do horário livre.",
+  "author": "Infinity Guard",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win --x64 --publish never"
+  },
+  "devDependencies": {
+    "electron": "33.4.11",
+    "electron-builder": "25.1.8"
+  },
+  "build": {
+    "appId": "br.com.infinityguard.rotadomilhao",
+    "productName": "Rota do Milhão",
+    "directories": { "output": "dist" },
+    "files": ["main.js", "preload.js", "horarios.html", "icon.png"],
+    "win": {
+      "icon": "icon.png",
+      "target": [
+        { "target": "nsis", "arch": ["x64"] },
+        { "target": "portable", "arch": ["x64"] }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "Rota do Milhão",
+      "artifactName": "Rota-do-Milhao-Instalador-${version}-x64.${ext}"
+    },
+    "portable": { "artifactName": "Rota-do-Milhao-Portatil-${version}-x64.${ext}" }
+  }
+}
