@@ -35,7 +35,7 @@ public class MainActivity extends Activity {
 
     private void abrir() {
         CustomTabsIntent aba = new CustomTabsIntent.Builder()
-            .setDefaultColorSchemeParams(new CustomTabColorSchemeParams.Builder().setToolbarColor(0xFF0A6B6B).build())
+            .setDefaultColorSchemeParams(new CustomTabColorSchemeParams.Builder().setToolbarColor(0xFF001121).build())
             .setShowTitle(true)
             .build();
         try {

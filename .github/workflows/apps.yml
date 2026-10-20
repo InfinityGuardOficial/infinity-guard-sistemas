@@ -47,9 +47,9 @@ jobs:
         with:
           gradle-version: "8.9"
       - run: gradle -p android assembleDebug --no-daemon
-      - run: cp android/app/build/outputs/apk/debug/app-debug.apk Rota-do-Milhao-1.1.0.apk
+      - run: cp android/app/build/outputs/apk/debug/app-debug.apk Rota-do-Milhao-1.2.0.apk
       - uses: actions/upload-artifact@v4
         with:
           name: rota-do-milhao-android
-          path: Rota-do-Milhao-1.1.0.apk
+          path: Rota-do-Milhao-1.2.0.apk
           retention-days: 90
