@@ -1,7 +1,7 @@
 {
   "name": "rota-do-milhao",
   "productName": "Rota do Milhão",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "App pessoal da Infinity Guard: abre o Rota do Milhão com o seu login do Claude e avisa nos turnos do horário livre.",
   "author": "Infinity Guard",
   "main": "main.js",

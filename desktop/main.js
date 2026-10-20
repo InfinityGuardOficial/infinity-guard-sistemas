@@ -29,7 +29,7 @@ function mostrar() { if (!win) criarJanela(); win.show(); if (win.isMinimized())
 function criarJanela() {
   win = new BrowserWindow({
     width: 1240, height: 880, minWidth: 380, title: "Rota do Milhão",
-    icon: path.join(__dirname, "icon.png"), autoHideMenuBar: true, backgroundColor: "#0D151B",
+    icon: path.join(__dirname, "icon.png"), autoHideMenuBar: true, backgroundColor: "#001121",
     webPreferences: { partition: "persist:rota-do-milhao", contextIsolation: true, sandbox: true },
   });
   win.loadURL(URL_APP);

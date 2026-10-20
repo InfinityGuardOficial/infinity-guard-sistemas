@@ -18,7 +18,11 @@ Onde cada dado mora, qual é a fonte da verdade, quem cuida e como atualizar. Re
 | Temas de conteúdo | `skills/conteudo-semanal/references/temas.json` | — | `roteirista-de-reels` | Renovar a cada 45 dias. |
 | Ofertas de campanha | `skills/campanha-sazonal/references/ofertas.json` | `skills/campanha-sazonal/campanhas/*.md` (propostas datadas) | `lider-marketing` | Por campanha. |
 | Custos e estoque reais | `custos.json` e `estoque.json` na pasta da skill `catalogo-e-precos`, **fora do Git** (estão no `.gitignore`) | custo e frete no Catálogo do app | `gestor-de-catalogo` | Nunca suba esses arquivos para o GitHub. |
-| Pedidos e vendas | **Nuvemshop** (exportação CSV) | números do dia no Placar do app | `analista-de-vendas` | Placar todo dia; painel com o CSV toda semana. |
+| Pedidos e vendas | **Nuvemshop** (exportação CSV) | **App → Gestão → Pedidos** (importado pelo EDI ou lançado à mão) e o Placar | `analista-de-vendas` | Importar o CSV em Gestão → Integrações; Placar com "Puxar do ERP". |
+| Clientes e funil | **App → Gestão → Clientes (CRM)** | — | `lider-vendas`, `consultor-whatsapp` | Toda conversa nova vira contato com próxima ação e data. |
+| Fornecedores, prazo e pontualidade | **App → Gestão → Fornecedores (VMI)** | prazo no Catálogo | `gestor-de-catalogo` | Prazo do fornecedor alimenta a previsão de entrega. |
+| Estoque | **App → Gestão → Estoque (WMS)** | — | `gestor-de-catalogo` | Planilha do fornecedor (sku;estoque) toda segunda em Integrações. |
+| Despesas | **App → Gestão → Financeiro (ERP)** | — | `analista-de-vendas` | Lançar anúncios, apps e taxas no dia em que pagar. |
 | Campanhas, públicos, pixel e catálogo de anúncios | **Meta (Business "Infinity Guard - Segurança onde você estiver")** | — | `lider-trafego`, `analista-de-midia` | Gerenciador de Anúncios ou o conector da Meta no Claude. |
 
 ## 2. Fotos datadas (não atualize, faça uma nova)
@@ -40,6 +44,12 @@ Tudo na área privada `data/users/<dono>/` do app (ninguém mais lê, nem quem r
 | `estado/extra/catalogo` | catálogo e preços |
 | `estado/extra/marca` | Kit da marca |
 | `estado/extra/equipe` | entregas guardadas dos funcionários |
+| `estado/pedidos/<id>` | ERP e TMS: pedido, itens, total, custo, taxa, status, fornecedor, envio e rastreio |
+| `estado/clientes/<id>` | CRM: contato, etapa do funil, próxima ação e data, notas, consentimento, pedidos |
+| `estado/fornecedores/<id>` | VMI: fornecedor, prazos, política de troca, reserva |
+| `estado/lancamentos/<id>` | ERP financeiro: despesas e outras receitas do mês |
+
+Estoque (WMS) fica junto do produto no `estado/extra/catalogo` (fornecedor, SKU do fornecedor, estoque do fornecedor, estoque próprio, mínimo, data da conferência).
 
 ## 4. Meta: contas encontradas em 20/10/2026
 
