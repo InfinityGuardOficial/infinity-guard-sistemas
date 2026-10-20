@@ -13,6 +13,7 @@ Onde cada dado mora, qual é a fonte da verdade, quem cuida e como atualizar. Re
 | Radar do mercado e ordens do dia | **App** (gravado pela rotina das 05:17) | notificação no celular | `detetive-de-mercado`, `lider-dados` | Automático, todo dia. |
 | Pauta de publicação (roteiro, legenda, anúncio) | **App** (rotina das 05:17 ou "Produzir pauta" no app) | vídeos baixados, Planejador da Meta | `roteirista-de-reels`, `social-media` | Automático. Vídeo e agendamento: bloco de sábado. |
 | Conexões das redes | **App → Publicar → Conexões** | — | cada responsável indicado na tela | Verificar a Meta pelo app; o resto, marcar como feito. |
+| Regras de alerta da gestão (o que é "algo errado" e quem cuida) | `skills/monitor-de-gestao/references/alertas.json` | cópia no app (Gestão → Painel) e na rotina "Vigia da gestão" | `diretor-geral` | Mudou um limite? Peça para replicar no app e na rotina. |
 | Regras de promessa (o que nunca pode ser dito) | `skills/revisor-de-promessas/references/regras.json` | lista resumida dentro do app e na rotina das 05:17 | `guardiao-de-conformidade` | Mudou uma regra no JSON? Peça para replicar no app e na rotina. |
 | Preços dos concorrentes | `skills/radar-de-concorrentes/references/concorrentes.json` | `docs/raio-x-de-nicho.md` (foto de 18/10) | `detetive-de-mercado` | `radar.py registrar`, sempre com fonte. |
 | Temas de conteúdo | `skills/conteudo-semanal/references/temas.json` | — | `roteirista-de-reels` | Renovar a cada 45 dias. |
@@ -70,6 +71,7 @@ Recomendação: usar **uma** conta dentro do Business, com pagamento e com o Ins
 | 05:17 todo dia | radar, ordens e pauta | `estado/radar`, `estado/pauta` |
 | 05:52 seg–sáb | cobrança da manhã no celular | só lê |
 | 19:48 todo dia | cobrança da noite no celular | só lê |
+| 11:43 e 16:43 todo dia | vigia da gestão: alertas do ERP, CRM, WMS, TMS e VMI no celular, com o funcionário responsável | só lê |
 | push em `desktop/` ou `android/` | gera os instaladores (Actions → Apps) | GitHub Actions |
 | `bash scripts/empacotar-skills.sh` | testa as skills e refaz os .zip | `skills/*.zip` |
 | `python3 scripts/gerar-plugins.py` | refaz os 7 plugins de squad a partir de `agents/` e `skills/` | `plugins/`, `.claude-plugin/marketplace.json` |

@@ -5,6 +5,7 @@ skills:
   - atendente-infinity-guard
   - suporte-tecnico
   - prova-da-loja
+  - monitor-de-gestao
 color: cyan
 ---
 
@@ -31,7 +32,16 @@ Fazer cada comprador terminar a primeira semana com o aparelho seguro, funcionan
 
 ## Skills que você usa
 
-Já vêm carregadas: `atendente-infinity-guard`, `suporte-tecnico`, `prova-da-loja`. Os scripts ficam em `${CLAUDE_PLUGIN_ROOT}/skills/<nome-da-skill>/scripts/`: rode pelo caminho completo, sem `cd`, e nunca use uma cópia achada em outra pasta. Se o texto de uma skill não estiver no seu contexto, chame-a pelo nome antes de trabalhar. Skills do Pack NDF (Máquina de Anúncios, Máquina de Reels, Detetive de Nicho, Construtor de Página), se estiverem instaladas, podem ser chamadas pelo nome.
+Já vêm carregadas: `atendente-infinity-guard`, `suporte-tecnico`, `prova-da-loja`, `monitor-de-gestao`. Os scripts ficam em `${CLAUDE_PLUGIN_ROOT}/skills/<nome-da-skill>/scripts/`: rode pelo caminho completo, sem `cd`, e nunca use uma cópia achada em outra pasta. Se o texto de uma skill não estiver no seu contexto, chame-a pelo nome antes de trabalhar. Skills do Pack NDF (Máquina de Anúncios, Máquina de Reels, Detetive de Nicho, Construtor de Página), se estiverem instaladas, podem ser chamadas pelo nome.
+
+## Alertas que você acompanha
+
+Regras em `monitor-de-gestao/references/alertas.json`; os mesmos alertas aparecem no app (Gestão → Painel) e na notificação "Vigia da gestão" do celular do dono. Para conferir pelos dados: `python3 ${CLAUDE_PLUGIN_ROOT}/skills/monitor-de-gestao/scripts/monitor.py --backup <backup do app>`.
+
+- `tms-atraso` (critico): Pedido pago, no fornecedor ou em trânsito com a previsão de entrega já vencida. → Avisar o cliente antes que ele pergunte e cobrar o fornecedor. Sem prometer nova data que o fornecedor não confirmou.
+- `crm-followup-atrasado (pós-venda, avaliação D7)`
+
+Quando um alerta seu aparecer: diga o problema, o pedido ou produto e a ação de hoje em até 3 linhas, com a mensagem pronta se precisar falar com cliente ou fornecedor (quem envia é o dono).
 
 ## Para quem você passa
 

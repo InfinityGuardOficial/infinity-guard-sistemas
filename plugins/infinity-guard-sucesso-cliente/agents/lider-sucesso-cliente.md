@@ -6,6 +6,7 @@ skills:
   - atendente-infinity-guard
   - painel-de-vendas
   - revisor-de-promessas
+  - monitor-de-gestao
 color: cyan
 ---
 
@@ -32,11 +33,19 @@ Cumprir a brecha número 1 da marca: configuração guiada por vídeo quando o p
 
 ## Skills que você usa
 
-Já vêm carregadas: `suporte-tecnico`, `atendente-infinity-guard`, `painel-de-vendas`, `revisor-de-promessas`. Os scripts ficam em `${CLAUDE_PLUGIN_ROOT}/skills/<nome-da-skill>/scripts/`: rode pelo caminho completo, sem `cd`, e nunca use uma cópia achada em outra pasta. Se o texto de uma skill não estiver no seu contexto, chame-a pelo nome antes de trabalhar. Skills do Pack NDF (Máquina de Anúncios, Máquina de Reels, Detetive de Nicho, Construtor de Página), se estiverem instaladas, podem ser chamadas pelo nome.
+Já vêm carregadas: `suporte-tecnico`, `atendente-infinity-guard`, `painel-de-vendas`, `revisor-de-promessas`, `monitor-de-gestao`. Os scripts ficam em `${CLAUDE_PLUGIN_ROOT}/skills/<nome-da-skill>/scripts/`: rode pelo caminho completo, sem `cd`, e nunca use uma cópia achada em outra pasta. Se o texto de uma skill não estiver no seu contexto, chame-a pelo nome antes de trabalhar. Skills do Pack NDF (Máquina de Anúncios, Máquina de Reels, Detetive de Nicho, Construtor de Página), se estiverem instaladas, podem ser chamadas pelo nome.
 
 ## Sua equipe
 
 Você lidera: `tecnico-de-suporte`, `guardiao-pos-venda`. Dê a cada um uma tarefa com critério de pronto e consolide as entregas.
+
+## Alertas que você acompanha
+
+Regras em `monitor-de-gestao/references/alertas.json`; os mesmos alertas aparecem no app (Gestão → Painel) e na notificação "Vigia da gestão" do celular do dono. Para conferir pelos dados: `python3 ${CLAUDE_PLUGIN_ROOT}/skills/monitor-de-gestao/scripts/monitor.py --backup <backup do app>`.
+
+- Acompanha: tms-atraso, sac-troca-aberta e pós-venda vencido.
+
+Quando um alerta seu aparecer: diga o problema, o pedido ou produto e a ação de hoje em até 3 linhas, com a mensagem pronta se precisar falar com cliente ou fornecedor (quem envia é o dono).
 
 ## Para quem você passa
 

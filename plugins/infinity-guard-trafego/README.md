@@ -1,9 +1,9 @@
-# infinity-guard-trafego · 2.1.0
+# infinity-guard-trafego · 2.2.0
 
 Squad Tráfego Pago: criativos de anúncio, analista de mídia e o líder de tráfego.
 
 - Funcionários: `analista-de-midia`, `criativos-de-anuncio`, `lider-trafego`
-- Skills: `atendente-infinity-guard`, `campanha-sazonal`, `painel-de-vendas`, `plano-de-midia`, `prova-da-loja`, `revisor-de-promessas`
+- Skills: `atendente-infinity-guard`, `campanha-sazonal`, `monitor-de-gestao`, `painel-de-vendas`, `plano-de-midia`, `prova-da-loja`, `revisor-de-promessas`
 
 Instalar:
 ```

@@ -1,0 +1,30 @@
+{
+  "atualizado_em": "2026-10-20",
+  "nota": "Regras de alerta da Gestão do app Rota do Milhão (ERP, CRM, WMS, TMS, EDI, VMI). Cada regra tem nível (critico | alto | medio), o funcionário responsável e o que fazer. As mesmas regras rodam no app (Gestão → Painel e Hoje), na rotina 'Vigia da gestão' (notificação no celular) e no scripts/monitor.py. Mudou um limite aqui? Peça para replicar no app e na rotina.",
+  "limites": {
+    "dias_para_repassar": 1,
+    "dias_sem_rastreio": 2,
+    "dias_followup_atrasado": 1,
+    "dias_sem_conferir_estoque": 7,
+    "pontualidade_minima_pct": 80,
+    "entregas_minimas_para_avaliar": 3,
+    "anuncio_max_pct_receita": 30
+  },
+  "regras": [
+    {"id": "tms-atraso", "sistema": "TMS", "nivel": "critico", "responsavel": "guardiao-pos-venda", "quando": "Pedido pago, no fornecedor ou em trânsito com a previsão de entrega já vencida.", "acao": "Avisar o cliente antes que ele pergunte e cobrar o fornecedor. Sem prometer nova data que o fornecedor não confirmou."},
+    {"id": "wms-esgotado", "sistema": "WMS", "nivel": "critico", "responsavel": "gestor-de-catalogo", "quando": "Produto ativo com estoque zero (fornecedor + próprio).", "acao": "Desativar no Catálogo e pausar anúncio do produto até o fornecedor confirmar reposição."},
+    {"id": "erp-nao-repassado", "sistema": "ERP", "nivel": "alto", "responsavel": "lider-operacoes", "quando": "Pedido pago há mais de {dias_para_repassar} dia sem repassar ao fornecedor.", "acao": "Enviar o pedido ao fornecedor hoje (Gestão → Pedidos → Pedido p/ fornecedor)."},
+    {"id": "tms-sem-rastreio", "sistema": "TMS", "nivel": "alto", "responsavel": "lider-operacoes", "quando": "Pedido repassado ao fornecedor há mais de {dias_sem_rastreio} dias sem código de rastreio.", "acao": "Cobrar o código do fornecedor e registrar em Rastreio."},
+    {"id": "erp-margem-negativa", "sistema": "ERP", "nivel": "alto", "responsavel": "gestor-de-catalogo", "quando": "Pedido em que total − custo − taxa ficou negativo.", "acao": "Rever o preço ou o custo do produto antes da próxima venda."},
+    {"id": "fin-resultado-negativo", "sistema": "ERP", "nivel": "alto", "responsavel": "analista-de-vendas", "quando": "Resultado do mês (margem − despesas) abaixo de zero.", "acao": "Cortar a despesa que menos traz venda e rever o CPA máximo com o analista-de-midia."},
+    {"id": "vmi-pontualidade", "sistema": "VMI", "nivel": "alto", "responsavel": "gestor-de-catalogo", "quando": "Fornecedor com pelo menos {entregas_minimas_para_avaliar} entregas e menos de {pontualidade_minima_pct}% no prazo.", "acao": "Renegociar o prazo ou acionar o fornecedor reserva."},
+    {"id": "sac-troca-aberta", "sistema": "ERP", "nivel": "alto", "responsavel": "tecnico-de-suporte", "quando": "Pedido em troca ou devolução.", "acao": "Responder o cliente no mesmo dia e seguir o fluxo de troca do CDC."},
+    {"id": "fin-anuncio-alto", "sistema": "ERP", "nivel": "medio", "responsavel": "analista-de-midia", "quando": "Anúncios do mês acima de {anuncio_max_pct_receita}% da receita.", "acao": "Aplicar a régua escalar, manter ou pausar do plano-de-midia."},
+    {"id": "crm-followup-atrasado", "sistema": "CRM", "nivel": "medio", "responsavel": "consultor-whatsapp", "quando": "Contato com a próxima ação vencida há mais de {dias_followup_atrasado} dia. Orçamento vai para o recuperador-de-carrinho e pós-venda para o guardiao-pos-venda.", "acao": "Mandar a mensagem hoje e registrar o follow-up."},
+    {"id": "crm-orcamento-sem-acao", "sistema": "CRM", "nivel": "medio", "responsavel": "recuperador-de-carrinho", "quando": "Contato em orçamento sem próxima ação marcada.", "acao": "Marcar o follow-up D1, D3 ou D7."},
+    {"id": "wms-baixo", "sistema": "WMS", "nivel": "medio", "responsavel": "gestor-de-catalogo", "quando": "Produto ativo com estoque igual ou abaixo do mínimo.", "acao": "Confirmar reposição com o fornecedor."},
+    {"id": "wms-sem-conferencia", "sistema": "WMS", "nivel": "medio", "responsavel": "gestor-de-catalogo", "quando": "Produto ativo com fornecedor ligado e estoque não conferido há mais de {dias_sem_conferir_estoque} dias.", "acao": "Pedir a planilha de estoque ao fornecedor e importar em Integrações."},
+    {"id": "erp-sem-custo", "sistema": "ERP", "nivel": "medio", "responsavel": "gestor-de-catalogo", "quando": "Produto ativo sem custo do fornecedor no Catálogo.", "acao": "Preencher custo e frete: sem isso a margem e o resultado ficam errados."},
+    {"id": "vmi-sem-fornecedor", "sistema": "VMI", "nivel": "medio", "responsavel": "lider-operacoes", "quando": "Produto ativo sem fornecedor ligado.", "acao": "Cadastrar o fornecedor e ligar o produto em Gestão → Estoque."}
+  ]
+}

@@ -4,6 +4,7 @@ description: "Gestor de catálogo da Infinity Guard. Use quando mudar preço, at
 skills:
   - catalogo-e-precos
   - descricao-de-produto
+  - monitor-de-gestao
 color: blue
 ---
 
@@ -31,7 +32,20 @@ Um preço só, certo em todo lugar: site, atendente, campanha, proposta e anúnc
 
 ## Skills que você usa
 
-Já vêm carregadas: `catalogo-e-precos`, `descricao-de-produto`. Os scripts ficam em `${CLAUDE_PLUGIN_ROOT}/skills/<nome-da-skill>/scripts/`: rode pelo caminho completo, sem `cd`, e nunca use uma cópia achada em outra pasta. Se o texto de uma skill não estiver no seu contexto, chame-a pelo nome antes de trabalhar. Skills do Pack NDF (Máquina de Anúncios, Máquina de Reels, Detetive de Nicho, Construtor de Página), se estiverem instaladas, podem ser chamadas pelo nome.
+Já vêm carregadas: `catalogo-e-precos`, `descricao-de-produto`, `monitor-de-gestao`. Os scripts ficam em `${CLAUDE_PLUGIN_ROOT}/skills/<nome-da-skill>/scripts/`: rode pelo caminho completo, sem `cd`, e nunca use uma cópia achada em outra pasta. Se o texto de uma skill não estiver no seu contexto, chame-a pelo nome antes de trabalhar. Skills do Pack NDF (Máquina de Anúncios, Máquina de Reels, Detetive de Nicho, Construtor de Página), se estiverem instaladas, podem ser chamadas pelo nome.
+
+## Alertas que você acompanha
+
+Regras em `monitor-de-gestao/references/alertas.json`; os mesmos alertas aparecem no app (Gestão → Painel) e na notificação "Vigia da gestão" do celular do dono. Para conferir pelos dados: `python3 ${CLAUDE_PLUGIN_ROOT}/skills/monitor-de-gestao/scripts/monitor.py --backup <backup do app>`.
+
+- `wms-esgotado` (critico): Produto ativo com estoque zero (fornecedor + próprio). → Desativar no Catálogo e pausar anúncio do produto até o fornecedor confirmar reposição.
+- `erp-margem-negativa` (alto): Pedido em que total − custo − taxa ficou negativo. → Rever o preço ou o custo do produto antes da próxima venda.
+- `vmi-pontualidade` (alto): Fornecedor com pelo menos 3 entregas e menos de 80% no prazo. → Renegociar o prazo ou acionar o fornecedor reserva.
+- `wms-baixo` (medio): Produto ativo com estoque igual ou abaixo do mínimo. → Confirmar reposição com o fornecedor.
+- `wms-sem-conferencia` (medio): Produto ativo com fornecedor ligado e estoque não conferido há mais de 7 dias. → Pedir a planilha de estoque ao fornecedor e importar em Integrações.
+- `erp-sem-custo` (medio): Produto ativo sem custo do fornecedor no Catálogo. → Preencher custo e frete: sem isso a margem e o resultado ficam errados.
+
+Quando um alerta seu aparecer: diga o problema, o pedido ou produto e a ação de hoje em até 3 linhas, com a mensagem pronta se precisar falar com cliente ou fornecedor (quem envia é o dono).
 
 ## Para quem você passa
 

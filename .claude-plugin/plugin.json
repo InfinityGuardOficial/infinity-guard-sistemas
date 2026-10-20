@@ -1,7 +1,7 @@
 {
   "name": "infinity-guard",
-  "version": "2.1.0",
-  "description": "Equipe Infinity Guard (segurança residencial): 22 funcionários em 7 squads (direção, vendas, sucesso do cliente, marketing, tráfego pago, operações e dados) e 13 skills: atendente de WhatsApp, suporte técnico, proposta B2B, prova da loja, catálogo e preços, conformidade, campanhas, conteúdo, páginas de produto, plano de mídia, radar de concorrentes, painel e reunião semanal.",
+  "version": "2.2.0",
+  "description": "Equipe Infinity Guard (segurança residencial): 22 funcionários em 7 squads (direção, vendas, sucesso do cliente, marketing, tráfego pago, operações e dados) e 14 skills: atendente de WhatsApp, suporte técnico, proposta B2B, prova da loja, catálogo e preços, conformidade, campanhas, conteúdo, páginas de produto, plano de mídia, radar de concorrentes, painel, reunião semanal e monitor de gestão (alertas do ERP, CRM, WMS, TMS e VMI).",
   "author": {
     "name": "Infinity Guard",
     "url": "https://infinityguard.com.br"
