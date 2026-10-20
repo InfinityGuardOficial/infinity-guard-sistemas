@@ -1,0 +1,8 @@
+Número do Pedido;Data;Status do Pagamento;Total;Nome do Produto;Quantidade Comprada;Forma de Pagamento;Cupom de Desconto;Canal
+1001;02/11/2026 10:15:00;Pago;353,12;Câmera Wi-Fi Infinity Guard — Kit com 2 Unidades;1;Pix;;instagram
+1002;11/11/2026 08:40:00;Pago;1.141,07;Câmera Wi-Fi Infinity Guard — Kit com 2 Unidades;1;Cartão de crédito;IG1111;whatsapp
+1002;11/11/2026 08:40:00;Pago;1.141,07;Sistema de Alarme IKerui — Kit Completo;1;Cartão de crédito;IG1111;whatsapp
+1003;11/11/2026 19:02:00;Pendente;875,50;Sistema de Alarme IKerui — Kit Completo;1;Boleto;;loja
+1004;27/11/2026 12:00:00;Pago;1.026,96;Câmera Wi-Fi Infinity Guard — Kit com 2 Unidades;1;Pix;IGBLACK;whatsapp
+1004;27/11/2026 12:00:00;Pago;1.026,96;Sistema de Alarme IKerui — Kit Completo;1;Pix;IGBLACK;whatsapp
+1005;28/11/2026 15:30:00;Cancelado;2.173,27;Fechadura Inteligente Infinity Guard — Facial 3D;1;Cartão de crédito;;loja

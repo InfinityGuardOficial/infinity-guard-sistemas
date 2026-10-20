@@ -1,0 +1,5 @@
+data;cliente;kit_indicado;resultado;canal
+2026-11-10;Cliente A;kit-casa-vigiada;venda;whatsapp
+2026-11-11;Cliente B;kit-apto;carrinho;whatsapp
+2026-11-12;Cliente C;kit-casa-vigiada;recuperado;whatsapp
+2026-11-13;Cliente D;;sem_resposta;whatsapp

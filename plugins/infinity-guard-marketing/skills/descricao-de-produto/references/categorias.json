@@ -1,0 +1,42 @@
+{
+  "atualizado_em": "2026-10-19",
+  "nota": "Blocos por categoria para a página de produto. Só fatos que valem para qualquer modelo da categoria; especificação do modelo vem do catálogo ou do manual que o dono enviar.",
+  "categorias": {
+    "camera": {
+      "promessa": "Veja sua casa de onde estiver, pelo celular.",
+      "para_quem": ["quem trabalha fora e quer ver a casa durante o dia", "quem viaja e quer saber se está tudo bem", "quem tem pet, criança ou idoso em casa"],
+      "como_funciona": ["Liga na tomada e conecta no Wi-Fi 2,4 GHz da casa", "Você acompanha ao vivo e recebe aviso de movimento no app", "Grava em cartão microSD (vendido à parte) ou na nuvem do app (serviço do fabricante)"],
+      "palavras_seo": ["câmera wi-fi", "câmera de segurança", "visão noturna", "câmera para casa"]
+    },
+    "alarme": {
+      "promessa": "Saiba na hora se alguém abrir a porta, de onde você estiver.",
+      "para_quem": ["casa que fica vazia de dia ou em viagem", "comércio que fecha à noite", "sítio com Wi-Fi ou sinal de celular"],
+      "como_funciona": ["Central conecta no Wi-Fi ou com chip de celular (GSM)", "Sensores avisam quando porta ou janela abre", "Sirene dispara e você recebe o aviso no app"],
+      "palavras_seo": ["alarme wi-fi", "alarme gsm", "alarme residencial", "kit alarme sem fio"]
+    },
+    "fechadura": {
+      "promessa": "Entre em casa sem chave e saiba quem chegou.",
+      "para_quem": ["quem já perdeu ou teve chave copiada", "família com muita gente entrando e saindo", "imóvel de aluguel por temporada"],
+      "como_funciona": ["Abre com digital, senha, app ou chave de emergência (conforme o modelo)", "Funciona com pilhas e tem entrada de energia de emergência", "Confira a espessura da porta e a medida da máquina antes de comprar"],
+      "palavras_seo": ["fechadura digital", "fechadura inteligente", "fechadura biométrica", "fechadura com app"]
+    },
+    "complemento": {
+      "promessa": "Completa o seu sistema de segurança.",
+      "para_quem": ["quem já tem câmera ou alarme e quer automatizar"],
+      "como_funciona": ["Veja no texto do produto com quais aparelhos ele funciona"],
+      "palavras_seo": ["sensor de presença", "automação residencial"]
+    },
+    "home_office": {
+      "promessa": "Seu home office organizado e seguro.",
+      "para_quem": ["quem trabalha de casa", "quem usa notebook com monitor"],
+      "como_funciona": ["Veja compatibilidade e medidas no texto do produto"],
+      "palavras_seo": ["home office", "acessórios para notebook"]
+    }
+  },
+  "compra_segura": [
+    "Guia de configuração segura: rede 2,4 GHz, troca da senha de fábrica e atualização",
+    "Acompanhamento de 7 dias no WhatsApp depois da entrega",
+    "Troca em 7 dias",
+    "Garantia em todos os produtos"
+  ]
+}

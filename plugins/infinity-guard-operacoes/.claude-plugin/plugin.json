@@ -1,0 +1,15 @@
+{
+  "name": "infinity-guard-operacoes",
+  "version": "2.1.0",
+  "description": "Squad Operações e Loja: auditor da loja, gestor de catálogo, guardião de conformidade e o líder de operações. Skills: atendente-infinity-guard, catalogo-e-precos, descricao-de-produto, prova-da-loja, revisor-de-promessas, suporte-tecnico.",
+  "author": {
+    "name": "Infinity Guard",
+    "url": "https://infinityguard.com.br"
+  },
+  "homepage": "https://infinityguard.com.br",
+  "keywords": [
+    "infinity-guard",
+    "squad",
+    "operacoes"
+  ]
+}
