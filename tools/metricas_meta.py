@@ -82,6 +82,7 @@ def coletar(csv=None, dias=7, api=None):
 
 
 def main():
+    caminhos.terminal_utf8()
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--csv")
     ap.add_argument("--dias", type=int, default=7)

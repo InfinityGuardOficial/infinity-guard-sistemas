@@ -43,6 +43,7 @@ def coletar(pedidos=None, conversas=None, hoje=None):
 
 
 def main():
+    caminhos.terminal_utf8()
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--pedidos")
     ap.add_argument("--conversas")

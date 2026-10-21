@@ -97,7 +97,7 @@ class Linha_de_comando(Sandbox):
     def _rodar(self, *args):
         import os
         return subprocess.run([sys.executable, str(REPO / "core" / "daemon_orchestrator.py"), *args],
-                              capture_output=True, text=True, env=os.environ.copy(), timeout=60)
+                              capture_output=True, text=True, encoding="utf-8", env=os.environ.copy(), timeout=60)
 
     def test_uma_vez_status_parar(self):
         self.com_vendas()

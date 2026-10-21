@@ -6,5 +6,10 @@
 set -euo pipefail
 [ $# -ge 2 ] || { sed -n '2,5p' "$0"; exit 2; }
 cd "$(dirname "$0")/.."
-PY=$(command -v python3 || command -v python)
+# no Windows, "python3" pode ser o atalho da Microsoft Store que não roda: testa antes de usar
+PY=""
+for c in python3 python py; do
+  if command -v "$c" >/dev/null 2>&1 && "$c" -c "" >/dev/null 2>&1; then PY="$c"; break; fi
+done
+[ -n "$PY" ] || { echo "Python não encontrado"; exit 1; }
 exec "$PY" tools/run_claude_agent.py --agente "$1" --tarefa "$2" --evento "${3:-manual}"

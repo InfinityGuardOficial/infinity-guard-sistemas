@@ -1,5 +1,6 @@
 import json
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -19,6 +20,15 @@ RESPOSTA = """Resumo: 3 vendas.
 ## Observação
 nada mais
 """
+
+
+def _bash():
+    """No Windows, "bash" no PATH costuma ser o do WSL; o script é para o Git Bash, que fica ao lado do git."""
+    if os.name == "nt" and shutil.which("git"):
+        git_bash = Path(shutil.which("git")).resolve().parent.parent / "bin" / "bash.exe"
+        if git_bash.exists():
+            return str(git_bash)
+    return "bash"
 
 
 class Agente(Sandbox):
@@ -70,8 +80,9 @@ class Agente(Sandbox):
 
     def test_script_sh_valida_argumentos(self):
         sh = Path(__file__).resolve().parent.parent / "tools" / "run_claude_agent.sh"
-        r = subprocess.run(["bash", str(sh)], capture_output=True, text=True)
+        bash = _bash()
+        r = subprocess.run([bash, str(sh)], capture_output=True, text=True, encoding="utf-8")
         self.assertEqual(r.returncode, 2)
-        r = subprocess.run(["bash", str(sh), "analista-de-vendas", "resuma", "teste_sh"], capture_output=True, text=True)
+        r = subprocess.run([bash, str(sh), "analista-de-vendas", "resuma", "teste_sh"], capture_output=True, text=True, encoding="utf-8")
         self.assertEqual(r.returncode, 0, r.stderr)
         self.assertTrue(json.loads(r.stdout)["simulacao"])

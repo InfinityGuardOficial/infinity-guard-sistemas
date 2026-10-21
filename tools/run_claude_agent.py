@@ -97,6 +97,7 @@ def rodar(agente, tarefa, evento="manual", timeout_min=15, max_turnos=30, execut
 
 
 def main():
+    caminhos.terminal_utf8()
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--agente", required=True, choices=AGENTES)
     ap.add_argument("--tarefa", required=True)

@@ -39,4 +39,5 @@ def coletar(gravar=True, api_meta=None):
 
 
 if __name__ == "__main__":
+    caminhos.terminal_utf8()
     print(json.dumps(coletar(), indent=2, ensure_ascii=False, default=str))

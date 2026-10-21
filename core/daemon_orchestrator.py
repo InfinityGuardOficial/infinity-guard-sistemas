@@ -135,6 +135,7 @@ def status():
 
 
 def main(argv):
+    caminhos.terminal_utf8()
     configurar_logs()
     cmd = argv[1] if len(argv) > 1 else "rodar"
     if cmd == "rodar":
