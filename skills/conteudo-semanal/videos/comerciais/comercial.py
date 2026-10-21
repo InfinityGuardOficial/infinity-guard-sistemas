@@ -125,6 +125,21 @@ def logo_original():
         LOGO_H = base.load_img(np.array(im))
     return LOGO_H
 
+MINI = None
+def miniatura_produto():
+    """recorte automático das câmeras (partes claras) num quadro da tomada do produto"""
+    global MINI
+    if MINI is None:
+        n = base.NF.get("P4", 1)
+        im = Image.open(os.path.join(base.SHOTS, "P4", f"{max(1, n // 2):04d}.png")).convert("RGB")
+        a = np.asarray(im).astype(int).sum(axis=2)
+        ys, xs = np.where(a[: int(im.height * 0.62)] > 600)
+        x0, x1, y0, y1 = xs.min(), xs.max(), ys.min(), ys.max()
+        m = int(0.12 * (x1 - x0))
+        im = im.crop((max(0, x0 - m), max(0, y0 - m), min(im.width, x1 + m), min(im.height, y1 + m)))
+        MINI = base.load_img(np.array(im.convert("RGBA")))
+    return MINI
+
 def encerramento(cv, t, lt):
     k = eout(lt / 0.6)
     bg(cv, blurred("P4", base.NF.get("P4", 1), 0.35)); scrims(cv)
@@ -133,9 +148,11 @@ def encerramento(cv, t, lt):
     w = 880; h = w * img.height() / img.width()
     cv.drawRRect(rrect(W / 2 - w / 2 - 30, 300 - 30, w + 60, h + 60, 36), P("#ffffff"))
     cv.drawImageRect(img, skia.Rect.MakeXYWH(W / 2 - w / 2, 300, w, h), SAMP)
-    pk = shot("P4", base.NF.get("P4", 1) // 2)
+    pk = miniatura_produto()
     cv.save(); cv.clipRRect(rrect(W / 2 - 230, 820, 460, 420, 30), True)
-    cv.drawImageRect(pk, skia.Rect.MakeXYWH(W / 2 - 450, 1030 - 0.5 * 900 * H / W, 900, 900 * H / W), SAMP)
+    cv.drawRect(skia.Rect.MakeXYWH(W / 2 - 230, 820, 460, 420), P(NAVY))
+    s_ = min(460 / pk.width(), 420 / pk.height())
+    cv.drawImageRect(pk, skia.Rect.MakeXYWH(W / 2 - pk.width() * s_ / 2, 1030 - pk.height() * s_ / 2, pk.width() * s_, pk.height() * s_), SAMP)
     cv.restore()
     cv.drawRRect(rrect(W / 2 - 230, 820, 460, 420, 30), P(GOLD, stroke=3))
     text_c(cv, EP["site"], W / 2, 1330, font("m8", 58), P(GOLD2))

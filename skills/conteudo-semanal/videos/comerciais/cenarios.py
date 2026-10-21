@@ -266,7 +266,7 @@ def varanda(kind="porta_abre"):
         hold(ana, f(4.6), True); hold(ana, f(5.2), False)
         key(ana["armR"], "rotation_euler", f(6.0), (0, 0, 0)); key(ana["armR"], "rotation_euler", f(6.5), (-2.6, 0, -0.2))
         key(ana["armR"], "rotation_euler", f(7.6), (-2.6, 0, -0.2))
-        aim(cam, (3.5, -10.5, 1.9), (4.5, -4.9, 1.2), 1)
+        aim(cam, (1.8, -10.5, 1.9), (2.0, -4.9, 1.2), 1)
         aim(cam, (8.4, -9.0, 1.7), (8.6, -4.9, 1.25), int(f(3.4)))
         aim(cam, (8.6, -8.2, 1.65), (8.6, -4.9, 1.3), N)
     return cam
