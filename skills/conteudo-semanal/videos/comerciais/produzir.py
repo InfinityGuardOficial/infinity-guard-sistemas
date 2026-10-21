@@ -268,6 +268,7 @@ def checar(ep):
     if abs(dur - d["duracao"]) > 0.3: erros.append(f"duração {dur:.2f}s (esperado {d['duracao']}s)")
     if not a: erros.append("sem áudio")
     lo = subprocess.run(["ffmpeg", "-i", mp4, "-af", "ebur128=peak=true", "-f", "null", "-"], capture_output=True, text=True).stderr
+    lo = lo[lo.rfind("Summary:"):]  # só o resumo final (as linhas de antes são medições parciais)
     m = re.search(r"I:\s+(-?[\d.]+) LUFS", lo); pk = re.search(r"Peak:\s+(-?[\d.]+) dBFS", lo)
     if m and not (-17 <= float(m.group(1)) <= -12): erros.append(f"volume {m.group(1)} LUFS fora de -17..-12")
     if pk and float(pk.group(1)) > -0.5: erros.append(f"pico {pk.group(1)} dBFS (risco de estouro)")
