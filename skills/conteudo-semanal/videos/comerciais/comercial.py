@@ -135,7 +135,7 @@ def encerramento(cv, t, lt):
     cv.drawImageRect(img, skia.Rect.MakeXYWH(W / 2 - w / 2, 300, w, h), SAMP)
     pk = shot("P4", base.NF.get("P4", 1) // 2)
     cv.save(); cv.clipRRect(rrect(W / 2 - 230, 820, 460, 420, 30), True)
-    cv.drawImageRect(pk, skia.Rect.MakeXYWH(W / 2 - 230, 760, 460, 460 * H / W), SAMP)
+    cv.drawImageRect(pk, skia.Rect.MakeXYWH(W / 2 - 450, 1030 - 0.5 * 900 * H / W, 900, 900 * H / W), SAMP)
     cv.restore()
     cv.drawRRect(rrect(W / 2 - 230, 820, 460, 420, 30), P(GOLD, stroke=3))
     text_c(cv, EP["site"], W / 2, 1330, font("m8", 58), P(GOLD2))
@@ -153,7 +153,13 @@ EXTRAS = {}  # segmento (1..n) -> função(cv, t, lt) desenhada por cima
 def make_seg(i, s):
     def draw(cv, t, lt):
         if s.get("tomada"):
-            bg(cv, shot(s["tomada"], lt * SFPS + 1)); scrims(cv)
+            img = shot(s["tomada"], lt * SFPS + 1)
+            if any(x.get("tipo") == "produto" for x in s.get("tela", [])):
+                # produto: sobe o 3D para o cartão de preço não cobrir as câmeras
+                cv.drawImageRect(img, skia.Rect.MakeXYWH(0, -330, W, H), SAMP)
+            else:
+                bg(cv, img)
+            scrims(cv)
         if i + 1 in EXTRAS: EXTRAS[i + 1](cv, t, lt)
         for tl in s.get("tela", []):
             tipo = tl.get("tipo", "texto")

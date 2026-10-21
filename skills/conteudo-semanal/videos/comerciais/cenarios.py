@@ -69,10 +69,11 @@ def talk(p, f0, f1, fps=12):
     m.scale = (1.3, 0.3, 0.35); m.keyframe_insert("scale", frame=int(f1) + 1)
 
 
-def walk(p, f0, f1, a, b):
-    """anda do ponto a ao ponto b (x, y) balançando braços"""
+def walk(p, f0, f1, a, b, arms=True):
+    """anda do ponto a ao ponto b (x, y); balança os braços se não estiver carregando nada"""
     r = p["root"]
     key(r, "location", f0, (a[0], a[1], r.location.z)); key(r, "location", f1, (b[0], b[1], r.location.z))
+    if not arms: return
     for f in range(int(f0), int(f1) + 1, 2):
         sw = 0.5 * math.sin((f - f0) * 1.3)
         key(p["armL"], "rotation_euler", f, (sw, 0, 0)); key(p["armR"], "rotation_euler", f, (-sw, 0, 0))
@@ -248,7 +249,7 @@ def varanda(kind="porta_abre"):
         key(hinge2, "rotation_euler", 1, (0, 0, 0))
         pkg.parent = ana["root"]; pkg.location = (0, -0.42, 0.95)
         hold(ana, 1, True)
-        walk(ana, 1, f(3.0), (1.5, -4.95), (8.1, -4.95))
+        walk(ana, 1, f(3.0), (1.5, -4.95), (8.1, -4.95), arms=False)
         key(ana["root"], "rotation_euler", 1, (0, 0, math.radians(90))); key(ana["root"], "rotation_euler", f(3.0), (0, 0, math.radians(90)))
         hold(ana, f(3.1), True)
         talk(ana, f(1.0), f(3.2))
