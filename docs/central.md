@@ -1,5 +1,5 @@
 # Central Infinity Guard
-_Gerada em 21/10/2026 15:57 por `tools/central.py`. Para atualizar: `python3 tools/central.py`._
+_Gerada em 21/10/2026 15:58 por `tools/central.py`. Para atualizar: `python3 tools/central.py`._
 
 **Segurança onde você estiver.** Tudo do sistema num lugar só: o que existe, onde está e como está hoje.
 
@@ -9,6 +9,7 @@ _Gerada em 21/10/2026 15:57 por `tools/central.py`. Para atualizar: `python3 too
 - Ligar o orquestrador no seu computador: [README](../README.md) (seção "Orquestrador automático").
 - Regras da casa para o Claude: [.claude/CLAUDE.md](../.claude/CLAUDE.md) e [CLAUDE.md](../CLAUDE.md).
 - Onde mora cada dado e quem cuida: [mapa-de-dados.md](mapa-de-dados.md).
+- O que roda sozinho e o que espera você: [mapa-da-autonomia.md](mapa-da-autonomia.md). No celular, a aba Central do app Rota do Milhão mostra o mesmo em tempo real.
 
 ## Como está hoje
 
@@ -61,6 +62,7 @@ Quem é quem e quando chamar: [organograma.md](organograma.md).
 | [docs/raio-x-de-nicho.html](raio-x-de-nicho.html) | O mesmo Raio X, versão visual |
 | [docs/mapa-de-sistemas.md](mapa-de-sistemas.md) | A ordem dos sistemas e o status de cada um |
 | [docs/mapa-de-dados.md](mapa-de-dados.md) | Fonte da verdade de cada dado |
+| [docs/mapa-da-autonomia.md](mapa-da-autonomia.md) | Nível de autonomia: o que roda sozinho, o que espera o seu "pode" e o que está bloqueado |
 | [docs/organograma.md](organograma.md) | Os 22 funcionários e quando chamar cada um |
 | [docs/reunioes](reunioes) | Atas das reuniões da equipe |
 | [skills/prova-da-loja/auditorias](../skills/prova-da-loja/auditorias) | Auditorias do site |

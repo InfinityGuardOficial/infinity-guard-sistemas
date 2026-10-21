@@ -97,7 +97,9 @@ def gerar(base, projeto=None, com_orquestrador=False, agora=None):
          f"- Instalar a equipe e as skills: {_link(REPO / 'README.md', base, 'README')} (seção \"Instalar tudo de uma vez\").",
          f"- Ligar o orquestrador no seu computador: {_link(REPO / 'README.md', base, 'README')} (seção \"Orquestrador automático\").",
          f"- Regras da casa para o Claude: {_link(REPO / '.claude/CLAUDE.md', base, '.claude/CLAUDE.md')} e {_link(REPO / 'CLAUDE.md', base, 'CLAUDE.md')}.",
-         f"- Onde mora cada dado e quem cuida: {_link(REPO / 'docs/mapa-de-dados.md', base)}.", "",
+         f"- Onde mora cada dado e quem cuida: {_link(REPO / 'docs/mapa-de-dados.md', base)}.",
+         f"- O que roda sozinho e o que espera você: {_link(REPO / 'docs/mapa-da-autonomia.md', base)}. "
+         "No celular, a aba Central do app Rota do Milhão mostra o mesmo em tempo real.", "",
          "## Como está hoje", "",
          f"- **Catálogo** ({cat.get('atualizado_em', 's/ data')}): {len(ativos)} produtos ativos, {len(seg)} de segurança: "
          + "; ".join(f"{_nome_curto(p, seg)} {_brl(p['preco'])}" for p in seg) + ".",
@@ -134,6 +136,7 @@ def gerar(base, projeto=None, com_orquestrador=False, agora=None):
         ("docs/raio-x-de-nicho.html", "O mesmo Raio X, versão visual"),
         ("docs/mapa-de-sistemas.md", "A ordem dos sistemas e o status de cada um"),
         ("docs/mapa-de-dados.md", "Fonte da verdade de cada dado"),
+        ("docs/mapa-da-autonomia.md", "Nível de autonomia: o que roda sozinho, o que espera o seu \"pode\" e o que está bloqueado"),
         ("docs/organograma.md", "Os 22 funcionários e quando chamar cada um"),
         ("docs/reunioes", "Atas das reuniões da equipe"),
         ("skills/prova-da-loja/auditorias", "Auditorias do site"),
