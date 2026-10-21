@@ -149,6 +149,14 @@ textarea{min-height:84px;resize:vertical}
 .chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:6px 12px;font:600 .82rem var(--f-body);cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
 
+/* conversas com a equipe */
+.chat{display:flex;flex-direction:column;gap:10px}
+.msg{max-width:88%;padding:10px 12px;border-radius:14px;font-size:.93rem;min-width:0}
+.msg.eu{align-self:flex-end;background:var(--accent);color:var(--accent-fg);border-bottom-right-radius:4px}
+.msg.fn{align-self:flex-start;background:var(--surface);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg-quem{display:block;font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;opacity:.75;margin-bottom:4px}
+.msg-t{white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.eu .btn{color:var(--accent-fg)}
 /* biblioteca */
 .lib{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
 .lib .card{display:flex;flex-direction:column;gap:6px}
@@ -469,7 +477,7 @@ function renderStatus(){
   $("#status").innerHTML =
     `<span class="pill ${pct===null?"":pct>=80?"ok":pct>=50?"warn":"bad"}" title="Missões cumpridas nos últimos 7 dias">Execução 7d <b class="num">${pct===null?"–":pct+"%"}</b></span>`+
     (dv?`<span class="pill bad">${dv} em atraso</span>`:`<span class="pill ok">em dia</span>`)+
-    `<span class="pill acc">${sq} ${sq===1?"dia":"dias"} seguidos</span>`+(NIVEL?`<span class="pill bad" title="Semanas seguidas abaixo de 80%">contrato nível ${NIVEL}</span>`:"");
+    `<span class="pill acc">${sq} ${sq===1?"dia":"dias"} seguidos</span>`+(NIVEL?`<span class="pill bad" title="Semanas seguidas abaixo de 80%">contrato nível ${NIVEL}</span>`:"")+(typeof aguardandoTotal==="function"&&aguardandoTotal()?`<button class="pill warn" style="border:0;cursor:pointer;font:inherit;font-weight:600" onclick="view='equipe';eqAba='conversas';eqFiltro='responder';eqChat=null;render()">${aguardandoTotal()} respostas da equipe</button>`:"");
   document.querySelectorAll("#tabs button").forEach(b=>b.setAttribute("aria-current",b.dataset.v===view?"page":"false"));
 }
 
@@ -683,44 +691,7 @@ function resumoSituacao(){
   let v=0,c=0; for(const x in DIAS_DB){const l=DIAS_DB[x].log||{}; v+=+l.vendas||0; c+=+l.conversas||0}
   return `Semana ${semanaDoPlano()+1} do plano; módulo atual: "${mod.t}" (fase ${mod.f+1}: ${FASES[mod.f].n}). Faturamento acumulado ${brl(fatTotal())} de ${brl(S.meta)}; mês ${m+1}: ${brl(fatMes(m))} de ${brl(metaMes(m))}. Vendas registradas: ${v}; conversas: ${c}. Execução das missões em 7 dias: ${e7.pct===null?"sem dados":e7.pct+"%"}. O dono trabalha em regime CLT e só tem os horários livres (manhã, almoço, noite, sábado). ${resumoGestao()}`;
 }
-function viewEquipe(){
-  const rd=radarRecente(), k=ymd(new Date());
-  let h=`<div class="stack"><h2>Equipe Infinity Guard</h2><p class="muted">Os 22 funcionários estão prontos. Cada um conhece a marca, as regras da casa e a sua situação de hoje no plano. Toque numa tarefa e ele trabalha na hora. Toda madrugada a equipe pesquisa o mercado digital e de tecnologia e deixa o radar com as ordens do dia.</p></div>`;
-  if(rd){ const r=rd.r;
-    h+=`<div class="card stack" style="border-color:var(--accent)"><span class="eyebrow">Radar do mercado · ${rd.k===k?"hoje":esc(rd.k.split("-").reverse().join("/"))}</span><p><b>${esc(r.resumo||"")}</b></p>
-    ${(r.itens||[]).map(it=>`<div class="stack" style="gap:4px;border-top:1px solid var(--line);padding-top:10px"><div class="row"><span class="tag">${esc(it.tema||"")}</span>${it.etiqueta?`<span class="tag" style="background:${/confirm/i.test(it.etiqueta)?"var(--ok-soft)":"var(--signal-soft)"}">${esc(it.etiqueta)}</span>`:""}</div><b>${esc(it.titulo||"")}</b><span>${esc(it.oque||"")}</span>${it.porque?`<span class="muted" style="font-size:.9rem"><b>Para a Infinity Guard:</b> ${esc(it.porque)}</span>`:""}${it.acao?`<span style="font-size:.9rem"><b>Ação:</b> ${esc(it.acao)}</span>`:""}<div class="row">${safeUrl(it.fonte)?`<a href="${esc(safeUrl(it.fonte))}" target="_blank" rel="noopener" style="font-size:.85rem">Fonte</a>`:""}${it.funcionario?`<button class="btn sm" onclick="trabalhar('${esc(func(it.funcionario).id)}',${esc(jsq(it.acao||it.titulo||""))})">Pôr o ${esc(func(it.funcionario).id)} nisso</button>`:""}</div></div>`).join("")}
-    </div>`;
-    if((r.ordens||[]).length) h+=`<div class="card stack"><span class="eyebrow">Ordens do dia</span>${r.ordens.map((o,i)=>{const id=rd.k+"#"+i, feito=(S.ordens||{})[id]; const f=func(o.funcionario);
-      return `<div class="mission ${feito?"done":""}" style="grid-template-columns:auto 1fr"><span class="box">${feito?`<svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10" stroke="#fff" stroke-width="3" fill="none"/></svg>`:""}</span><span class="t">${esc(o.tarefa)}</span><span class="d">${esc(f.cargo)} (${esc(f.id)})${o.prazo?" · "+esc(o.prazo):""}</span>
-      <span class="act">${feito?"":`<button class="btn sm primary" onclick="trabalhar('${esc(f.id)}',${esc(jsq(o.tarefa))},'${id}')">Executar com ${esc(f.id)}</button><button class="btn sm ghost" onclick="concluirOrdem('${id}')">Já fiz</button>`}</span></div>`}).join("")}</div>`;
-  } else h+=`<div class="card flat stack"><span class="eyebrow">Radar do mercado</span><p class="muted">O primeiro radar chega amanhã às 05:17: novidades de Instagram, WhatsApp, TikTok, Meta Ads, IA, e-commerce e segurança eletrônica, com fonte, o que muda para a Infinity Guard e qual funcionário cuida. Enquanto isso, ponha a equipe para trabalhar abaixo.</p></div>`;
-  const squads=[...new Set(EQUIPE.map(e=>e.squad))];
-  squads.forEach(sq=>{ h+=`<div class="stack"><h3>Squad ${esc(sq)}</h3><div class="lib">${EQUIPE.filter(e=>e.squad===sq).map(e=>`<div class="card">
-    <div class="row" style="justify-content:space-between"><b>${esc(e.cargo)}</b>${/^(lider|diretor)/.test(e.id)?`<span class="pill acc">líder</span>`:""}</div>
-    <span class="num muted" style="font-size:.78rem">${esc(e.id)}</span>
-    <span class="muted" style="font-size:.88rem">${esc(e.missao)}</span>
-    <div class="stack" style="gap:6px;margin-top:4px">${e.tarefas.map(t=>`<button class="btn sm" style="text-align:left;justify-content:flex-start;white-space:normal" onclick="trabalhar('${e.id}',${esc(jsq(t))})">${esc(t)}</button>`).join("")}
-    <button class="btn sm ghost" style="align-self:flex-start" onclick="trabalhar('${e.id}','')">Outra tarefa</button></div></div>`).join("")}</div></div>` });
-  if(EXTRA.entregas.length) h+=`<div class="stack"><h3>Entregas guardadas</h3>${EXTRA.entregas.slice().reverse().map((x,i)=>{const j=EXTRA.entregas.length-1-i;return `<details class="card"><summary><b>${esc(x.func)}</b> · ${esc(x.tarefa).slice(0,70)} <span class="muted">· ${esc(x.data)}</span></summary><div class="out" style="margin-top:10px">${esc(x.texto)}</div><div class="row" style="margin-top:8px"><button class="btn sm" onclick="copiar(EXTRA.entregas[${j}].texto)">Copiar</button><button class="btn sm ghost" onclick="EXTRA.entregas.splice(${j},1);persistExtra();render()">Apagar</button></div></details>`}).join("")}</div>`;
-  return h;
-}
-let trab={id:null,out:"",busy:false,ctl:null,ordem:null};
 function promptFunc(id,t){ const e=func(id); return `Você é ${e.cargo} (${e.id}) da Infinity Guard, no squad ${e.squad}. ${e.desc}\nMissão: ${e.missao}\nO que você faz: ${e.faz}\nO que você entrega: ${e.entrega}\n${REGRAS_CASA}\nVocê não roda scripts aqui: quando precisar de preço calculado, revisar.py ou outro script, diga exatamente o comando ou a skill para o dono rodar no Claude Code.\n\nContexto da marca: ${contexto()}\n\nSituação do dono hoje: ${resumoSituacao()}\n\nTarefa do dono para você: ${t}\n\nEntregue pronto para usar, em português do Brasil, com no máximo 1 pergunta no fim se faltar dado essencial.` }
-function trabalhar(id,tarefa,ordem){ const e=func(id); trab={id:e.id,out:"",busy:false,ctl:null,ordem:ordem||null};
-  sheet(`<span class="eyebrow">${esc(e.squad)}</span><h3>${esc(e.cargo)}</h3><p class="muted" style="font-size:.88rem">${esc(e.desc)}</p>
-  <label class="f" for="tb-in">Tarefa</label><textarea id="tb-in" placeholder="O que ${esc(e.id)} deve fazer agora?">${esc(tarefa||"")}</textarea>
-  <div class="row">${sampleFn?`<button class="btn primary" id="tb-go" onclick="executarFunc()">Trabalhar agora</button>`:`<span class="muted" style="font-size:.88rem">A IA embutida não está disponível nesta visualização.</span>`}<button class="btn" onclick="copiar('Use o ${e.id}: '+($('#tb-in').value||''))">Copiar comando do Claude Code</button></div>
-  <div class="out" id="tb-out" aria-live="polite"><span class="muted">A entrega aparece aqui.</span></div><div class="row" id="tb-acts"></div>
-  <button class="btn ghost" style="align-self:flex-start" onclick="if(trab.ctl)trab.ctl.abort();fecharSheet()">Fechar</button>`);
-}
-async function executarFunc(){ const t=($("#tb-in").value||"").trim(); if(!t){toast("Escreva a tarefa.");return} if(trab.busy) return;
-  trab.busy=true; trab.ctl=new AbortController(); const b=$("#tb-go"); if(b){b.disabled=true;b.textContent="Trabalhando…"}
-  try{ const r=await sampleFn(promptFunc(trab.id,t),{signal:trab.ctl.signal,cache:false,onText:({text})=>{trab.out=text;const o=$("#tb-out");if(o)o.textContent=text}}); trab.out=r.text }
-  catch(e){ trab.out=e?.text||({not_granted:"Você não liberou a IA para este app. Libere no menu de permissões ou use o comando do Claude Code.",rate_limited:"Muitos pedidos seguidos. Espere um minuto.",cancelled:""}[e?.code]??"Não consegui agora. Tente de novo em instantes.") }
-  trab.busy=false; trab.tarefa=t; const o=$("#tb-out"); if(o) o.textContent=trab.out; if(b){b.disabled=false;b.textContent="Trabalhar de novo"}
-  const a=$("#tb-acts"); if(a&&trab.out) a.innerHTML=`<button class="btn sm" onclick="copiar(trab.out)">Copiar</button><button class="btn sm primary" onclick="guardarEntrega()">Guardar entrega${trab.ordem?" e concluir a ordem":""}</button>`;
-}
-function guardarEntrega(){ const e=func(trab.id); EXTRA.entregas.push({func:e.id,tarefa:trab.tarefa||"",texto:trab.out.slice(0,4000),data:ymd(new Date())}); while(EXTRA.entregas.length>25) EXTRA.entregas.shift(); persistExtra(); if(trab.ordem) concluirOrdem(trab.ordem,true); fecharSheet(); toast("Entrega guardada."); render() }
 function concluirOrdem(id,silent){ S.ordens=S.ordens||{}; S.ordens[id]=ymd(new Date()); const lim=ymd(new Date(Date.now()-30*864e5)); for(const k in S.ordens) if(k.slice(0,10)<lim) delete S.ordens[k]; persistEstado(); if(!silent){toast("Ordem concluída.");render()} }
 
 /* ============ KIT DA MARCA ============ */
@@ -1104,13 +1075,13 @@ function viewInstalar(){ return `<div class="card stack"><span class="eyebrow">I
 /* ============ GESTÃO: ERP · CRM · WMS · TMS · EDI · VMI ============
    Tudo ligado pelo id do produto (Catálogo), do pedido, do cliente e do fornecedor.
    Dados na área privada: estado/pedidos, estado/clientes, estado/fornecedores, estado/lancamentos. */
-const COLS={pedidos:{},clientes:{},fornecedores:{},lancamentos:{}};
+const COLS={pedidos:{},clientes:{},fornecedores:{},lancamentos:{},conversas:{}};
 Object.keys(COLS).forEach(c=>{ COLS[c]=lsGet("rdm-"+c)||{} });
 function salvarDoc(col,doc){ COLS[col][doc.id]=doc; lsSet("rdm-"+col,COLS[col]); queue(col+"-"+doc.id,()=>dbBase&&dbBase.collection(col).doc(doc.id).set(JSON.parse(JSON.stringify(doc)))) }
 function apagarDoc(col,id){ delete COLS[col][id]; lsSet("rdm-"+col,COLS[col]); queue(col+"-"+id,()=>dbBase&&dbBase.collection(col).doc(id).delete()) }
 async function carregarGestao(){ if(!dbBase) return; try{
   for(const c of Object.keys(COLS)){ const r=await dbBase.collection(c).get(); const remoto={}; r.docs.forEach(d=>remoto[d.id]=JSON.parse(JSON.stringify(d.data())));
-    for(const id in COLS[c]) if(!remoto[id]){ remoto[id]=COLS[c][id]; dbBase.collection(c).doc(id).set(JSON.parse(JSON.stringify(COLS[c][id]))).catch(()=>{}) }
+    for(const id in COLS[c]) if(!remoto[id]||(COLS[c][id].atualizadoEm||"")>(remoto[id].atualizadoEm||"")){ remoto[id]=COLS[c][id]; dbBase.collection(c).doc(id).set(JSON.parse(JSON.stringify(COLS[c][id]))).catch(()=>{}) }
     COLS[c]=remoto; lsSet("rdm-"+c,remoto) }
   render(); avisarGestao() }catch(e){} }
 const novoId=p=>p+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,4).toUpperCase();
@@ -1441,6 +1412,94 @@ function ediBackup(txt){ const b=JSON.parse(txt); if(b.app!=="rota-do-milhao") t
   toast(n+" registros restaurados (os que já existiam foram mantidos)."); render() }
 function puxarDoERP(){ const h=ymd(new Date()); const ps=lista("pedidos").filter(p=>valido(p)&&p.data===h); if(!ps.length){toast("Nenhum pedido de hoje no ERP.");return}
   $("#log-vendas").value=ps.length; $("#log-faturamento").value=ps.reduce((a,p)=>a+Number(p.total||0),0).toFixed(2); const conv=lista("clientes").filter(c=>c.criadoEm===h).length; if(conv&&!$("#log-conversas").value) $("#log-conversas").value=conv; toast("Preenchido com o ERP. Confira e salve o dia.") }
+
+/* ============ EQUIPE: conversas por funcionário e por etapa ============
+   Cada conversa (estado/conversas/<funcionario>__<etapa>) guarda as mensagens trocadas com um funcionário
+   sobre uma etapa: uma ordem do dia, uma tarefa, um alerta ou um assunto livre. */
+let eqAba="ordens", eqChat=null, eqFiltro="abertas", eqFunc="", chatBusy=false, chatCtl=null;
+const ETAPA_NOME={ordem:"Ordem do dia",tarefa:"Tarefa",alerta:"Alerta",livre:"Conversa livre"};
+const conversas=()=>Object.values(COLS.conversas||{});
+const ultima=c=>(c.msgs||[])[(c.msgs||[]).length-1];
+const aguardaVoce=c=>c.status!=="concluida"&&ultima(c)?.r==="func"&&!c.lida;
+function chaveEtapa(etapa,ref){ return etapa==="ordem"&&ref?"o-"+String(ref).replace(/[^A-Za-z0-9]/g,"-"):"t-"+Date.now().toString(36)+Math.random().toString(36).slice(2,5) }
+function abrirConversa(funcId,o){ o=o||{}; const e=func(funcId); const titulo=(o.titulo||"").trim()||"Conversa livre";
+  let c=conversas().find(x=>x.func===e.id&&((o.etapa==="ordem"&&o.ref&&x.ref===o.ref)||(o.etapa!=="ordem"&&x.status!=="concluida"&&x.titulo===titulo&&titulo!=="Conversa livre")));
+  if(!c){ c={id:e.id+"__"+chaveEtapa(o.etapa,o.ref),func:e.id,titulo:titulo.slice(0,160),etapa:o.etapa||"livre",ref:o.ref||"",msgs:[],status:"aberta",lida:true,criadoEm:new Date().toISOString(),atualizadoEm:new Date().toISOString()}; salvarDoc("conversas",c) }
+  view="equipe"; eqAba="conversas"; eqChat=c.id; c.lida=true; render(); rolarChat();
+  if(o.texto&&!c.msgs.length&&sampleFn) enviarMsg(c.id,o.texto);
+  else if(o.texto&&!c.msgs.length){ const i=$("#ch-in"); if(i) i.value=o.texto }
+}
+function trabalhar(id,tarefa,ordem){ abrirConversa(id,{titulo:tarefa||"Conversa livre",etapa:ordem?"ordem":(tarefa?"tarefa":"livre"),ref:ordem||"",texto:tarefa||""}) }
+function mensagensSample(c){ const e=func(c.func); const base=`Você é ${e.cargo} (${e.id}) da Infinity Guard, no squad ${e.squad}. ${e.desc}\nMissão: ${e.missao}\nO que você faz: ${e.faz}\nO que você entrega: ${e.entrega}\n${REGRAS_CASA}\nVocê não roda scripts aqui: quando precisar de preço calculado, revisar.py ou outro script, diga exatamente o comando ou a skill para o dono rodar no Claude Code.\n\nContexto da marca: ${contexto()}\n\nSituação do dono hoje: ${resumoSituacao()}\n\nEsta é uma conversa contínua com o dono sobre a etapa "${c.titulo}" (${ETAPA_NOME[c.etapa]||c.etapa}). Responda à última mensagem dele, levando em conta o que já foi combinado. Entregue pronto para usar, em português do Brasil, com no máximo 1 pergunta no fim se faltar dado essencial.`;
+  const ms=(c.msgs||[]).filter(m=>m.t); let lista=[]; ms.forEach(m=>{ const role=m.r==="eu"?"user":"assistant"; const ult=lista[lista.length-1]; if(ult&&ult.role===role) ult.content+="\n\n"+m.t; else lista.push({role,content:m.t}) });
+  if(lista.length>15) lista=[lista[0],...lista.slice(-14)]; if(lista[0]?.role!=="user") lista.unshift({role:"user",content:"(início da conversa)"}); if(lista.length>1&&lista[1].role==="user"){ lista[0].content+="\n\n"+lista[1].content; lista.splice(1,1) }
+  lista[0]={role:"user",content:base+"\n\nPrimeira mensagem do dono: "+lista[0].content}; return lista }
+async function enviarMsg(id,texto){ const c=COLS.conversas[id]; texto=(texto||"").trim(); if(!c||!texto||chatBusy) return;
+  if(!sampleFn){ toast("A IA embutida não está disponível nesta visualização. Use o comando do Claude Code."); return }
+  c.msgs.push({r:"eu",t:texto.slice(0,6000),em:new Date().toISOString()}); c.status="aberta"; c.atualizadoEm=new Date().toISOString(); salvarDoc("conversas",c);
+  chatBusy=true; chatCtl=new AbortController(); render(); rolarChat();
+  let out="";
+  try{ const r=await sampleFn(mensagensSample(c),{signal:chatCtl.signal,cache:false,onText:({text})=>{ out=text; const b=$("#ch-stream"); if(b){ b.textContent=text; rolarChat() } }}); out=r.text }
+  catch(e){ out=e?.text||""; if(!out){ chatBusy=false; render(); toast({not_granted:"Libere a IA para este app no menu de permissões.",rate_limited:"Muitos pedidos seguidos. Espere um minuto e toque em Reenviar.",cancelled:"Resposta interrompida."}[e?.code]||"O funcionário não respondeu agora. Toque em Reenviar."); return } }
+  c.msgs.push({r:"func",t:out.slice(0,6000),em:new Date().toISOString()}); while(c.msgs.length>60) c.msgs.shift();
+  c.lida=(view==="equipe"&&eqChat===id); c.atualizadoEm=new Date().toISOString(); salvarDoc("conversas",c); chatBusy=false; render(); rolarChat() }
+function reenviar(id){ const c=COLS.conversas[id]; const u=ultima(c); if(u?.r!=="eu") return; c.msgs.pop(); enviarMsg(id,u.t) }
+function enviarDoCampo(id){ const i=$("#ch-in"); const t=(i?.value||"").trim(); if(!t){ toast("Escreva a sua resposta."); return } enviarMsg(id,t) }
+function rolarChat(){ setTimeout(()=>{ const b=$("#ch-fim"); if(b) b.scrollIntoView({block:"end",behavior:"smooth"}) },40) }
+function concluirEtapa(id){ const c=COLS.conversas[id]; c.status="concluida"; c.lida=true; c.atualizadoEm=new Date().toISOString(); salvarDoc("conversas",c); if(c.etapa==="ordem"&&c.ref) concluirOrdem(c.ref,true); toast("Etapa concluída."); render() }
+function reabrirEtapa(id){ const c=COLS.conversas[id]; c.status="aberta"; salvarDoc("conversas",c); render() }
+function guardarMsg(id,i){ const c=COLS.conversas[id], m=c.msgs[i]; EXTRA.entregas.push({func:c.func,tarefa:c.titulo,texto:m.t.slice(0,4000),data:ymd(new Date())}); while(EXTRA.entregas.length>25) EXTRA.entregas.shift(); persistExtra(); toast("Guardado nas entregas.") }
+function novaEtapa(funcId){ abrirConversa(funcId,{titulo:"Conversa livre "+new Date().toLocaleDateString("pt-BR")+" "+new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),etapa:"livre"}) }
+function quando(iso){ if(!iso) return ""; const d=new Date(iso); const h=ymd(new Date()); return ymd(d)===h?d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}):d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"}) }
+function aguardandoTotal(){ return conversas().filter(aguardaVoce).length }
+
+function viewEquipe(){
+  const ag=aguardandoTotal();
+  const topo=`<div class="stack"><h2>Equipe Infinity Guard</h2><p class="muted">Os 22 funcionários conhecem a marca, as regras da casa e a sua situação de hoje. Cada ordem, tarefa ou alerta vira uma conversa separada com o funcionário responsável: você responde, pede ajuste e conclui a etapa quando estiver pronta.</p></div>
+  <div class="chips" role="group" aria-label="Seção da equipe">${[["ordens","Ordens e radar"],["conversas","Conversas"+(ag?" · "+ag+" para responder":"")],["funcionarios","Funcionários"]].map(([k,n])=>`<button class="chip" aria-pressed="${eqAba===k}" onclick="eqAba='${k}';eqChat=null;render()">${n}</button>`).join("")}</div>`;
+  if(eqAba==="conversas") return topo+(eqChat&&COLS.conversas[eqChat]?viewChat(COLS.conversas[eqChat]):viewConversas());
+  if(eqAba==="funcionarios") return topo+viewFuncionarios();
+  return topo+viewOrdens();
+}
+function viewOrdens(){ const rd=radarRecente(), k=ymd(new Date()); let h="";
+  if(rd){ const r=rd.r;
+    if((r.ordens||[]).length) h+=`<div class="card stack"><span class="eyebrow">Ordens do dia · ${rd.k===k?"hoje":esc(rd.k.split("-").reverse().join("/"))}</span>${r.ordens.map((o,i)=>{const id=rd.k+"#"+i, feito=(S.ordens||{})[id]; const f=func(o.funcionario); const cv=conversas().find(x=>x.ref===id);
+      return `<div class="mission ${feito?"done":""}" style="grid-template-columns:auto 1fr"><span class="box">${feito?`<svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10" stroke="#fff" stroke-width="3" fill="none"/></svg>`:""}</span><span class="t">${esc(o.tarefa)}</span><span class="d">${esc(f.cargo)} (${esc(f.id)})${o.prazo?" · prazo "+esc(String(o.prazo).split("-").reverse().slice(0,2).join("/")):""}${cv?` · ${cv.msgs.length} mensagens`+(aguardaVoce(cv)?" · <b>resposta nova</b>":""):""}</span>
+      <span class="act"><button class="btn sm primary" onclick="trabalhar('${esc(f.id)}',${esc(jsq(o.tarefa))},'${id}')">${cv?"Abrir conversa":"Executar com "+esc(f.id)}</button>${feito?"":`<button class="btn sm ghost" onclick="concluirOrdem('${id}')">Já fiz</button>`}</span></div>`}).join("")}</div>`;
+    h+=`<div class="card stack" style="border-color:var(--gold)"><span class="eyebrow">Radar do mercado · ${rd.k===k?"hoje":esc(rd.k.split("-").reverse().join("/"))}</span><p><b>${esc(r.resumo||"")}</b></p>
+    ${(r.itens||[]).map(it=>`<div class="stack" style="gap:4px;border-top:1px solid var(--line);padding-top:10px"><div class="row"><span class="tag">${esc(it.tema||"")}</span>${it.etiqueta?`<span class="tag" style="background:${/confirm/i.test(it.etiqueta)?"var(--ok-soft)":"var(--signal-soft)"}">${esc(it.etiqueta)}</span>`:""}</div><b>${esc(it.titulo||"")}</b><span>${esc(it.oque||"")}</span>${it.porque?`<span class="muted" style="font-size:.9rem"><b>Para a Infinity Guard:</b> ${esc(it.porque)}</span>`:""}${it.acao?`<span style="font-size:.9rem"><b>Ação:</b> ${esc(it.acao)}</span>`:""}<div class="row">${safeUrl(it.fonte)?`<a href="${esc(safeUrl(it.fonte))}" target="_blank" rel="noopener" style="font-size:.85rem">Fonte</a>`:""}${it.funcionario?`<button class="btn sm" onclick="trabalhar('${esc(func(it.funcionario).id)}',${esc(jsq(it.acao||it.titulo||""))})">Pôr o ${esc(func(it.funcionario).id)} nisso</button>`:""}</div></div>`).join("")}</div>`;
+  } else h+=`<div class="card flat stack"><span class="eyebrow">Radar do mercado</span><p class="muted">O radar chega todo dia às 05:17, com novidades do mercado, fonte, o que muda para a Infinity Guard e ordens para cada funcionário.</p></div>`;
+  if(EXTRA.entregas.length) h+=`<div class="stack"><h3>Entregas guardadas</h3>${EXTRA.entregas.slice().reverse().map((x,i)=>{const j=EXTRA.entregas.length-1-i;return `<details class="card"><summary><b>${esc(x.func)}</b> · ${esc(x.tarefa).slice(0,70)} <span class="muted">· ${esc(x.data)}</span></summary><div class="out" style="margin-top:10px">${esc(x.texto)}</div><div class="row" style="margin-top:8px"><button class="btn sm" onclick="copiar(EXTRA.entregas[${j}].texto)">Copiar</button><button class="btn sm ghost" onclick="EXTRA.entregas.splice(${j},1);persistExtra();render()">Apagar</button></div></details>`}).join("")}</div>`;
+  return h }
+function viewFuncionarios(){ const squads=[...new Set(EQUIPE.map(e=>e.squad))];
+  return squads.map(sq=>`<div class="stack"><h3>Squad ${esc(sq)}</h3><div class="lib">${EQUIPE.filter(e=>e.squad===sq).map(e=>{ const cs=conversas().filter(c=>c.func===e.id); const ab=cs.filter(c=>c.status!=="concluida").length, ag=cs.filter(aguardaVoce).length;
+    return `<div class="card"><div class="row" style="justify-content:space-between"><b>${esc(e.cargo)}</b>${/^(lider|diretor)/.test(e.id)?`<span class="pill acc">líder</span>`:""}</div>
+    <span class="num muted" style="font-size:.78rem">${esc(e.id)}${cs.length?` · ${ab} conversas abertas`:""}${ag?` · <b style="color:var(--signal)">${ag} para responder</b>`:""}</span>
+    <span class="muted" style="font-size:.88rem">${esc(e.missao)}</span>
+    <div class="stack" style="gap:6px;margin-top:4px">${e.tarefas.map(t=>`<button class="btn sm" style="text-align:left;justify-content:flex-start;white-space:normal" onclick="trabalhar('${e.id}',${esc(jsq(t))})">${esc(t)}</button>`).join("")}
+    <div class="row"><button class="btn sm primary" onclick="${cs.length?`eqAba='conversas';eqChat=null;eqFunc='${e.id}';render()`:`novaEtapa('${e.id}')`}">${cs.length?"Ver conversas":"Conversar"}</button><button class="btn sm ghost" onclick="novaEtapa('${e.id}')">Nova conversa</button></div></div></div>` }).join("")}</div></div>`).join("") }
+function viewConversas(){ let cs=conversas();
+  if(eqFiltro==="abertas") cs=cs.filter(c=>c.status!=="concluida"); else if(eqFiltro==="responder") cs=cs.filter(aguardaVoce); else if(eqFiltro==="concluidas") cs=cs.filter(c=>c.status==="concluida");
+  if(eqFunc) cs=cs.filter(c=>c.func===eqFunc);
+  cs.sort((a,b)=>(b.atualizadoEm||"").localeCompare(a.atualizadoEm||""));
+  const sel=`<label class="f" style="max-width:320px">Funcionário<select onchange="eqFunc=this.value;render()"><option value="">Todos os 22</option>${[...new Set(EQUIPE.map(e=>e.squad))].map(sq=>`<optgroup label="${esc(sq)}">${EQUIPE.filter(e=>e.squad===sq).map(e=>`<option value="${e.id}" ${eqFunc===e.id?"selected":""}>${esc(e.cargo)}</option>`).join("")}</optgroup>`).join("")}</select></label>`;
+  return `<div class="row" style="align-items:flex-end">${sel}${eqFunc?`<button class="btn sm primary" onclick="novaEtapa('${eqFunc}')">Nova conversa com ${esc(eqFunc)}</button>`:""}</div>
+  <div class="chips">${[["abertas","Abertas"],["responder","Para responder "+aguardandoTotal()],["concluidas","Concluídas"],["todas","Todas"]].map(([k,n])=>`<button class="chip" aria-pressed="${eqFiltro===k}" onclick="eqFiltro='${k}';render()">${n}</button>`).join("")}</div>
+  ${cs.length?`<div class="mods">${cs.map(c=>{ const e=func(c.func), u=ultima(c);
+    return `<button class="mod" style="grid-template-columns:1fr auto" onclick="eqChat='${c.id}';COLS.conversas['${c.id}'].lida=true;render();rolarChat()"><span style="min-width:0"><span class="row" style="gap:6px"><b>${esc(e.cargo)}</b><span class="tag">${esc(ETAPA_NOME[c.etapa]||c.etapa)}</span>${aguardaVoce(c)?`<span class="pill warn">resposta nova</span>`:""}${c.status==="concluida"?`<span class="pill ok">concluída</span>`:""}</span>
+      <span style="display:block;font-size:.88rem;overflow-wrap:anywhere">${esc(c.titulo)}</span><span class="muted" style="display:block;font-size:.82rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u?(u.r==="eu"?"Você: ":"")+esc(u.t.slice(0,120)):"sem mensagens ainda"}</span></span><span class="muted num" style="font-size:.78rem">${esc(quando(c.atualizadoEm))}</span></button>` }).join("")}</div>`
+  :`<div class="card flat"><p class="muted">Nenhuma conversa aqui. Toque em "Executar" numa ordem, em uma tarefa de um funcionário ou em "Nova conversa".</p></div>`}` }
+function viewChat(c){ const e=func(c.func); const etapas=conversas().filter(x=>x.func===c.func).sort((a,b)=>(b.atualizadoEm||"").localeCompare(a.atualizadoEm||"")); const u=ultima(c);
+  return `<div class="row"><button class="btn sm ghost" onclick="eqChat=null;render()">← Conversas</button></div>
+  <div class="card stack" style="gap:6px"><div class="row" style="justify-content:space-between"><b>${esc(e.cargo)}</b><span class="tag">${esc(e.squad)}</span></div><span class="muted" style="font-size:.85rem">${esc(e.desc)}</span>
+   <span class="eyebrow" style="margin-top:4px">Etapas com ${esc(e.id)}</span><div class="chips">${etapas.map(x=>`<button class="chip" aria-pressed="${x.id===c.id}" onclick="eqChat='${x.id}';COLS.conversas['${x.id}'].lida=true;render();rolarChat()">${x.status==="concluida"?"✓ ":aguardaVoce(x)?"● ":""}${esc(x.titulo.slice(0,42))}${x.titulo.length>42?"…":""}</button>`).join("")}<button class="chip" onclick="novaEtapa('${e.id}')">+ Nova</button></div></div>
+  <div class="card stack"><div class="row" style="justify-content:space-between"><span class="eyebrow">${esc(ETAPA_NOME[c.etapa]||c.etapa)}${c.status==="concluida"?" · concluída":""}</span>${c.status==="concluida"?`<button class="btn sm ghost" onclick="reabrirEtapa('${c.id}')">Reabrir</button>`:`<button class="btn sm" onclick="concluirEtapa('${c.id}')">Concluir etapa${c.etapa==="ordem"?" e a ordem":""}</button>`}</div><b>${esc(c.titulo)}</b></div>
+  <div class="chat" role="log" aria-live="polite">${c.msgs.map((m,i)=>`<div class="msg ${m.r==="eu"?"eu":"fn"}"><span class="msg-quem">${m.r==="eu"?"Você":esc(e.id)} · ${esc(quando(m.em))}</span><div class="msg-t">${esc(m.t)}</div>${m.r==="func"?`<div class="row" style="gap:6px;margin-top:6px"><button class="btn sm ghost" onclick="copiar(COLS.conversas['${c.id}'].msgs[${i}].t)">Copiar</button><button class="btn sm ghost" onclick="guardarMsg('${c.id}',${i})">Guardar entrega</button></div>`:""}</div>`).join("")}
+   ${chatBusy&&eqChat===c.id?`<div class="msg fn"><span class="msg-quem">${esc(e.id)} · escrevendo</span><div class="msg-t" id="ch-stream">…</div></div>`:""}
+   ${!c.msgs.length&&!chatBusy?`<p class="muted" style="font-size:.9rem">Escreva a primeira mensagem para ${esc(e.id)}: o que você precisa nesta etapa.</p>`:""}
+   ${!chatBusy&&u?.r==="eu"?`<div class="row"><span class="muted" style="font-size:.85rem">Sem resposta ainda.</span><button class="btn sm" onclick="reenviar('${c.id}')">Reenviar</button></div>`:""}<span id="ch-fim"></span></div>
+  ${c.status==="concluida"?`<p class="muted" style="font-size:.88rem">Etapa concluída. Reabra para continuar a conversa.</p>`:`<div class="card stack" style="gap:8px"><label class="f" for="ch-in">Sua resposta para ${esc(e.id)}</label><textarea id="ch-in" placeholder="Responda, peça ajuste ou mande o próximo passo" onkeydown="if((event.ctrlKey||event.metaKey)&&event.key==='Enter'){event.preventDefault();enviarDoCampo('${c.id}')}"></textarea>
+   <div class="row">${sampleFn?`<button class="btn primary" ${chatBusy?"disabled":""} onclick="enviarDoCampo('${c.id}')">${chatBusy?"Aguardando resposta…":"Enviar"}</button>`:`<span class="muted" style="font-size:.85rem">A IA embutida não está disponível nesta visualização.</span>`}${chatBusy?`<button class="btn" onclick="chatCtl&&chatCtl.abort()">Parar</button>`:""}<button class="btn ghost" onclick="copiar('Use o ${e.id}: '+(($('#ch-in')||{}).value||${esc(jsq(c.titulo))}))">Copiar comando do Claude Code</button></div></div>`}` }
 
 /* ============ AÇÕES ============ */
 function sheet(html){ $("#layer").innerHTML=`<div class="sheet" onclick="if(event.target===this)fecharSheet()"><div class="panel" role="dialog" aria-modal="true">${html}</div></div>` }
