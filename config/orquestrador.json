@@ -7,5 +7,30 @@
   "agente_timeout_minutos": 15,
   "agente_max_turnos": 30,
   "margem_bruta": 0.35,
-  "ticket_referencia": null
+  "ticket_referencia": null,
+  "rotinas": {
+    "catalogo": {
+      "ativa": true,
+      "frequencia": "diaria"
+    },
+    "gestao": {
+      "ativa": true,
+      "frequencia": "diaria"
+    },
+    "conteudo": {
+      "ativa": true,
+      "frequencia": "semanal",
+      "dia": 0
+    },
+    "radar": {
+      "ativa": true,
+      "frequencia": "semanal",
+      "dia": 2
+    },
+    "auditoria": {
+      "ativa": true,
+      "frequencia": "semanal",
+      "dia": 3
+    }
+  }
 }

@@ -56,7 +56,8 @@ def pedidos_de_aprovacao(texto):
     m = re.search(r"^##\s*Pedidos de aprova[çc][ãa]o\s*$(.*?)(?=^##\s|\Z)", texto, re.M | re.S | re.I)
     if not m:
         return []
-    return [l.strip()[2:].strip() for l in m.group(1).splitlines() if l.strip().startswith(("- ", "* "))]
+    itens = [l.strip()[2:].strip() for l in m.group(1).splitlines() if l.strip().startswith(("- ", "* "))]
+    return [i for i in itens if not re.match(r"(nenhum|nenhuma|nada)\b", i, re.I)]
 
 
 def registrar_aprovacoes(agente, evento, pedidos, relatorio):
