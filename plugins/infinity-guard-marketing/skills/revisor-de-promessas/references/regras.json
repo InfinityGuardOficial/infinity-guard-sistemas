@@ -10,7 +10,7 @@
      "reescrever": "Troque o medo pela tranquilidade: 'ver sua casa de qualquer lugar, sem susto'."},
     {"id": "garantia-sem-prazo-documentado", "gravidade": "bloqueia", "padrao": "garantia (vital[ií]cia|eterna|para sempre|de \\d+ (anos?|meses))|\\d+ (anos?|meses) de garantia",
      "porque": "A loja ainda não tem prazo de garantia documentado pelo fornecedor. Só vale a garantia legal de 90 dias (CDC art. 26).",
-     "reescrever": "'Garantia em todos os produtos' ou, com documento do fornecedor, o prazo exato por produto."},
+     "reescrever": "'90 dias de garantia legal (CDC art. 26)' ou, com documento do fornecedor, o prazo exato por produto."},
     {"id": "anatel-sem-codigo", "gravidade": "bloqueia", "padrao": "homologad[oa]s? (pela )?anatel|certificad[oa]s? (pela )?anatel|aprovad[oa]s? (pela )?anatel|\\b\\d{5}-\\d{2}-\\d{5}\\b",
      "porque": "Só pode citar homologação ou código depois de conferido no portal da Anatel com o modelo exato e publicado no site.",
      "reescrever": "Até lá: 'a gente confere a homologação e te manda o código do seu modelo'."},
