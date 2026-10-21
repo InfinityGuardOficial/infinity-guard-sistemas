@@ -1,0 +1,11 @@
+{
+  "_leia": "Padrões do orquestrador. Não edite aqui: copie as chaves que quiser mudar para config/orquestrador.local.json (fica fora do Git). Tokens NUNCA entram nestes arquivos: use variáveis de ambiente.",
+  "intervalo_minutos": 30,
+  "hora_relatorio_diario": 8,
+  "dia_reuniao_semanal": 0,
+  "rodar_agentes": true,
+  "agente_timeout_minutos": 15,
+  "agente_max_turnos": 30,
+  "margem_bruta": 0.35,
+  "ticket_referencia": null
+}

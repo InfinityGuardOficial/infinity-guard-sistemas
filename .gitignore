@@ -11,3 +11,7 @@ android/.gradle/
 android/build/
 android/app/build/
 android/local.properties
+logs/*
+!logs/.gitkeep
+dados/**/*.csv
+config/orquestrador.local.json

@@ -58,6 +58,7 @@ Digite `/agents` no Claude Code para ver a equipe instalada.
 | `.github/workflows/apps.yml` | Gera o instalador do Windows e o APK a cada mudança em `desktop/` ou `android/` (Actions → Apps). |
 | `docs/organograma.md` | Quem é quem e quando chamar cada funcionário. |
 | `docs/raio-x-de-nicho.md` / `.html` | Raio X do mercado de segurança residencial (18/10/2026): concorrentes, preços, brechas. |
+| `core/`, `tools/`, `config/` | Orquestrador automático (veja a seção abaixo). |
 | `docs/mapa-de-sistemas.md` | A ordem dos sistemas. |
 | `docs/mapa-de-dados.md` | Onde mora cada dado, qual é a fonte da verdade, quem cuida e como atualizar. |
 | `scripts/empacotar-skills.sh` | Testa todas as skills e refaz os .zip. |
@@ -194,6 +195,58 @@ python3 scripts/catalogo.py validar
 ```bash
 bash scripts/empacotar-skills.sh
 ```
+
+## Orquestrador automático (core/ e tools/)
+
+Um programa que fica rodando no seu computador e, a cada 30 minutos, lê os números da loja e chama o funcionário certo:
+
+| Quando | Quem é chamado | O que entrega |
+|---|---|---|
+| Todo dia, a partir das 8h | `analista-de-vendas` | painel em `logs/paineis/` e 3 números + 1 ação |
+| Entrou pedido pago novo no CSV | `guardiao-pos-venda` | rascunho do pós-venda (não envia) |
+| A régua do `plano-de-midia` mandou pausar ou escalar um conjunto | `analista-de-midia` | o porquê de cada decisão |
+| ROAS abaixo do equilíbrio | `lider-trafego` | causa provável e plano de 3 dias |
+| Segunda-feira | `diretor-geral` | pauta da reunião e as 3 prioridades |
+
+**De onde vêm os números:** a exportação de vendas da Nuvemshop que você salva em `dados/nuvemshop/` (o mais novo vale) e o Meta Ads só em modo leitura: pela API, se as variáveis `META_ACCESS_TOKEN` e `META_AD_ACCOUNT_ID` existirem, ou pelo CSV do Gerenciador em `dados/meta/`. Sem arquivo, o número fica vazio: nada é inventado.
+
+**O que ele não faz sozinho:** gastar, mexer em anúncio, preço ou loja, falar com cliente ou publicar. Quando um funcionário recomenda isso, a recomendação vira um pedido em `logs/aprovacoes.json`, e quem executa é você. As regras estão em `.claude/CLAUDE.md`.
+
+**Antes de ligar:** Python 3.10+ e o Claude Code instalado e logado (`claude` funcionando no terminal). Rode tudo da pasta do repositório.
+
+### Windows (PowerShell)
+
+```powershell
+cd C:\caminho\infinity-guard-sistemas
+python core\daemon_orchestrator.py uma-vez        # um ciclo para testar
+Start-Process pythonw -ArgumentList "core\daemon_orchestrator.py" -WorkingDirectory (Get-Location) -WindowStyle Hidden   # liga em segundo plano
+python core\daemon_orchestrator.py status         # fila, últimas tarefas e o que espera o seu "pode"
+python core\daemon_orchestrator.py parar          # desliga
+```
+
+Para ligar sozinho quando você entrar no Windows (Agendador de Tarefas):
+```powershell
+schtasks /Create /TN "Infinity Guard Orquestrador" /SC ONLOGON /TR "pythonw `"$PWD\core\daemon_orchestrator.py`""
+```
+Para tirar: `schtasks /Delete /TN "Infinity Guard Orquestrador" /F`. Token da Meta (opcional, só leitura): `setx META_ACCESS_TOKEN "seu_token"` e `setx META_AD_ACCOUNT_ID "act_123..."`, depois abra um terminal novo.
+
+### Mac / Linux
+
+```bash
+cd caminho/infinity-guard-sistemas
+python3 core/daemon_orchestrator.py uma-vez
+nohup python3 core/daemon_orchestrator.py > /dev/null 2>&1 &
+python3 core/daemon_orchestrator.py status
+python3 core/daemon_orchestrator.py parar
+```
+
+### Ajustes e ferramentas
+
+- Mudar intervalo, hora do relatório, margem ou desligar os agentes: crie `config/orquestrador.local.json` só com as chaves que mudam, por exemplo `{"intervalo_minutos": 60, "margem_bruta": 0.3}`. Os padrões estão em `config/orquestrador.json`.
+- Chamar um funcionário na mão: `tools/run_claude_agent.sh analista-de-vendas "Resuma a semana"` (no PowerShell: `python tools\run_claude_agent.py --agente analista-de-vendas --tarefa "Resuma a semana"`).
+- Ver só as métricas: `python3 tools/coletar_metricas.py` (grava `logs/metrics.json`).
+- Logs: `logs/system.log`, `logs/errors.log`; respostas dos funcionários em `logs/agentes/`.
+- Testes: `python3 -m unittest discover -s tests`.
 
 ## Próximos sistemas
 
