@@ -21,3 +21,14 @@ jobs:
           python-version: "3.12"
       - name: Orquestrador
         run: python -m unittest discover -s tests -v
+      - name: Instalador do Windows (Agendador de Tarefas)
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          '{"rodar_agentes": false, "avisar_no_windows": false, "rotinas": {"catalogo": {"ativa": false}, "gestao": {"ativa": false}, "conteudo": {"ativa": false}, "radar": {"ativa": false}, "auditoria": {"ativa": false}}}' | Set-Content config\orquestrador.local.json -Encoding ascii
+          .\scripts\windows\instalar-orquestrador.ps1 -NomeTarefa "IG-Teste-CI" -SemPlugin -SemAtualizarRepo -ModoServico
+          if ($LASTEXITCODE -ne 0) { Get-Content logs\errors.log -ErrorAction SilentlyContinue; exit 1 }
+          if (-not (Get-ScheduledTask -TaskName "IG-Teste-CI")) { throw "tarefa não foi criada" }
+          if (-not (Test-Path logs\aprovacoes.html)) { throw "página de aprovações não foi gerada" }
+          .\scripts\windows\instalar-orquestrador.ps1 -NomeTarefa "IG-Teste-CI" -Desinstalar
+          if (Get-ScheduledTask -TaskName "IG-Teste-CI" -ErrorAction SilentlyContinue) { throw "tarefa não foi apagada" }

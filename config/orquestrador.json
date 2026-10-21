@@ -32,5 +32,15 @@
       "frequencia": "semanal",
       "dia": 3
     }
+  },
+  "avisar_no_windows": true,
+  "fontes": {
+    "_leia": "Dados automáticos (tools/fontes_externas.py). Cole os links e a pasta em config/orquestrador.local.json.",
+    "pasta_drive": null,
+    "planilhas": {
+      "nuvemshop": null,
+      "conversas": null,
+      "meta": null
+    }
   }
 }

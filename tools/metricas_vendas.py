@@ -7,6 +7,7 @@ Uso:
 
 Coloque em dados/nuvemshop/ a exportação de vendas (Nuvemshop → Vendas → Exportar). Se houver um arquivo
 com "conversa" no nome, ele entra como planilha do atendimento (conversão das conversas).
+Também lê a planilha do Google e a pasta do Drive configuradas (tools/fontes_externas.py).
 Nada é estimado: sem arquivo, a resposta diz que não há dados.
 """
 import argparse
@@ -17,18 +18,17 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from core import caminhos  # noqa: E402
-from tools import _skills  # noqa: E402
+from tools import _skills, fontes_externas  # noqa: E402
 
 
-def _mais_novo(pasta, conversas):
-    arquivos = [f for f in Path(pasta).glob("*.csv") if ("conversa" in f.name.lower()) == conversas]
-    return max(arquivos, key=lambda f: f.stat().st_mtime) if arquivos else None
+def _mais_novo(conversas):
+    return fontes_externas.mais_novo("nuvemshop", lambda f: ("conversa" in f.name.lower()) == conversas)
 
 
 def coletar(pedidos=None, conversas=None, hoje=None):
     pasta = caminhos.dados() / "nuvemshop"
-    pedidos = Path(pedidos) if pedidos else _mais_novo(pasta, False)
-    conversas = Path(conversas) if conversas else _mais_novo(pasta, True)
+    pedidos = Path(pedidos) if pedidos else _mais_novo(False)
+    conversas = Path(conversas) if conversas else _mais_novo(True)
     if not pedidos or not pedidos.exists():
         return {"fonte": "nuvemshop_csv", "ok": False,
                 "motivo": f"nenhum CSV de pedidos em {pasta}. Exporte as vendas na Nuvemshop e salve lá."}

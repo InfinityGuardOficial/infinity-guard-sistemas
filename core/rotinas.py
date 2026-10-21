@@ -20,6 +20,7 @@ from pathlib import Path
 
 from core import caminhos
 from core.caminhos import REPO
+from tools import fontes_externas
 
 SKILLS = REPO / "skills"
 
@@ -61,7 +62,7 @@ def catalogo(hoje):
 
 
 def gestao(hoje):
-    backups = sorted((caminhos.dados() / "app").glob("*.json"), key=lambda p: p.stat().st_mtime)
+    backups = sorted((f for p in fontes_externas.pastas("app") for f in p.glob("*.json")), key=lambda p: p.stat().st_mtime)
     if not backups:
         return "sem backup do app em dados/app/ (Gestão → Integrações → Backup completo)", None
     rc, out, err = _script("monitor-de-gestao", "monitor.py", "--backup", str(backups[-1]), "--json")

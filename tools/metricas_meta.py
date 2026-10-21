@@ -4,7 +4,8 @@
 1. API de Marketing da Meta (GET /insights), quando existirem as variáveis de ambiente
    META_ACCESS_TOKEN e META_AD_ACCOUNT_ID (ex.: act_123456789). Este adaptador só faz GET.
 2. CSV exportado do Gerenciador de Anúncios em dados/meta/ (colunas conjunto;gasto;compras;receita,
-   o mesmo formato de skills/plano-de-midia), o mais novo da pasta.
+   o mesmo formato de skills/plano-de-midia), o mais novo da pasta. Também vale a planilha do Google e a
+   pasta do Drive configuradas (tools/fontes_externas.py).
 
 Uso:
   python3 tools/metricas_meta.py [--csv resultados.csv] [--dias 7]
@@ -20,7 +21,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from core import caminhos  # noqa: E402
-from tools import _skills  # noqa: E402
+from tools import _skills, fontes_externas  # noqa: E402
 
 API = "https://graph.facebook.com/v21.0"
 COMPRA = ("purchase", "offsite_conversion.fb_pixel_purchase", "omni_purchase")
@@ -57,8 +58,7 @@ class MetaAdsLeitura:
 
 
 def _csv_mais_novo():
-    arquivos = list((caminhos.dados() / "meta").glob("*.csv"))
-    return max(arquivos, key=lambda f: f.stat().st_mtime) if arquivos else None
+    return fontes_externas.mais_novo("meta")
 
 
 def coletar(csv=None, dias=7, api=None):

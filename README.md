@@ -223,7 +223,7 @@ Além disso, rotinas que só leem rodam sozinhas e chamam o responsável quando 
 
 Tudo do dia fica num arquivo só: `logs/resumo/AAAA-MM-DD.md` (números, rotinas, funcionários chamados e o que espera o seu "pode").
 
-**De onde vêm os números:** a exportação de vendas da Nuvemshop que você salva em `dados/nuvemshop/` (o mais novo vale) e o Meta Ads só em modo leitura: pela API, se as variáveis `META_ACCESS_TOKEN` e `META_AD_ACCOUNT_ID` existirem, ou pelo CSV do Gerenciador em `dados/meta/`. Sem arquivo, o número fica vazio: nada é inventado.
+**De onde vêm os números:** a exportação de vendas da Nuvemshop que você salva em `dados/nuvemshop/` (o mais novo vale) e o Meta Ads só em modo leitura: pela API, se as variáveis `META_ACCESS_TOKEN` e `META_AD_ACCOUNT_ID` existirem, ou pelo CSV do Gerenciador em `dados/meta/`. Para não exportar nada na mão, ligue uma planilha do Google ou uma pasta do Google Drive (`tools/fontes_externas.py`, veja [`docs/no-seu-pc.md`](docs/no-seu-pc.md)). Sem arquivo, o número fica vazio: nada é inventado.
 
 **O que ele não faz sozinho:** gastar, mexer em anúncio, preço ou loja, falar com cliente ou publicar. Quando um funcionário recomenda isso, a recomendação vira um pedido em `logs/aprovacoes.json`, e quem executa é você. As regras estão em `.claude/CLAUDE.md`.
 
@@ -237,15 +237,12 @@ python core\daemon_orchestrator.py uma-vez        # um ciclo para testar
 Start-Process pythonw -ArgumentList "core\daemon_orchestrator.py" -WorkingDirectory (Get-Location) -WindowStyle Hidden   # liga em segundo plano
 python core\daemon_orchestrator.py status         # fila, últimas tarefas e o que espera o seu "pode"
 python core\daemon_orchestrator.py aprovacoes     # cada pedido com o número, o porquê e o link de onde fazer
-python core\daemon_orchestrator.py aprovar 2      # marca como aprovado (quem executa é você); recusar 2 também existe
+python core\daemon_orchestrator.py aprovar 2 5   # marca como aprovado (quem executa é você); recusar 2 também existe
+python core\daemon_orchestrator.py pagina        # abre logs\aprovacoes.html: cada pedido com o link de onde fazer
 python core\daemon_orchestrator.py parar          # desliga
 ```
 
-Para ligar sozinho quando você entrar no Windows (Agendador de Tarefas):
-```powershell
-schtasks /Create /TN "Infinity Guard Orquestrador" /SC ONLOGON /TR "pythonw `"$PWD\core\daemon_orchestrator.py`""
-```
-Para tirar: `schtasks /Delete /TN "Infinity Guard Orquestrador" /F`. Token da Meta (opcional, só leitura): `setx META_ACCESS_TOKEN "seu_token"` e `setx META_AD_ACCOUNT_ID "act_123..."`, depois abra um terminal novo.
+Para ligar sozinho (e atualizar o plugin): dois cliques em `scripts\windows\instalar-orquestrador.cmd`. Ele cria a tarefa "Infinity Guard - Orquestrador" no Agendador (liga ao entrar no Windows e religa se cair) e espera o primeiro ciclo. Para tirar: `.\scripts\windows\instalar-orquestrador.ps1 -Desinstalar`. Passo a passo completo: [`docs/no-seu-pc.md`](docs/no-seu-pc.md). Token da Meta (opcional, só leitura): `setx META_ACCESS_TOKEN "seu_token"` e `setx META_AD_ACCOUNT_ID "act_123..."`, depois abra um terminal novo.
 
 ### Mac / Linux
 
