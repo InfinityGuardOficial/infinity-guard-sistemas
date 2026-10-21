@@ -18,7 +18,7 @@
 2. Câmera offline: "câmera que fica offline não protege; a gente te ensina a deixar a sua sempre online".
 3. Casa vazia de dia: "você trabalha fora; sua casa não precisa ficar no escuro".
 4. Antes de comprar na Black Friday: "3 coisas para olhar antes de comprar câmera".
-5. Suporte que responde: "comprou e travou? a gente responde no WhatsApp".
+5. Suporte que responde: "comprou e ficou com dúvida? o manual vem na caixa e a gente responde no WhatsApp" (sem prometer configurar por WhatsApp ou vídeo).
 
 ## O que medir toda segunda
 CPA por conjunto, ROAS, custo por conversa iniciada no WhatsApp, % de conversas que viram venda (do `painel-de-vendas`), frequência (acima de 3 no quente: trocar criativo).

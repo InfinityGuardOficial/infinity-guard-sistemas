@@ -2,6 +2,8 @@
 
 **Segurança onde você estiver.** Sistemas da Infinity Guard (https://infinityguard.com.br) para usar dentro do Claude Code: skills prontas, estudos de mercado e o mapa do que vem a seguir.
 
+**Tudo num lugar só:** [`docs/central.md`](docs/central.md) junta o estado de hoje e o índice de tudo (atualize com `python3 tools/central.py`; no seu computador o orquestrador mantém `logs/central.md` com o resumo do dia e as aprovações).
+
 ## A equipe (22 funcionários em 7 squads)
 
 Cada funcionário é um agente do Claude Code (pasta `agents/`) com cargo, missão, regras e as skills do trabalho dele já carregadas. Quem lidera cada squad distribui o trabalho; o `diretor-geral` decide as prioridades da semana. Organograma completo: [`docs/organograma.md`](docs/organograma.md).
@@ -209,6 +211,18 @@ Um programa que fica rodando no seu computador e, a cada 30 minutos, lê os núm
 | ROAS abaixo do equilíbrio | `lider-trafego` | causa provável e plano de 3 dias |
 | Segunda-feira | `diretor-geral` | pauta da reunião e as 3 prioridades |
 
+Além disso, rotinas que só leem rodam sozinhas e chamam o responsável quando acham algo (ligue e desligue cada uma em `"rotinas"` no config):
+
+| Rotina | Quando | O que confere | Chama |
+|---|---|---|---|
+| `catalogo` | todo dia | Pix, parcelas, links e idade do catálogo | `gestor-de-catalogo` |
+| `gestao` | todo dia | alertas do app (backup salvo em `dados/app/`) | `lider-operacoes` |
+| `conteudo` | segunda | pauta dos 3 Reels da semana (não registra no histórico) | `roteirista-de-reels` |
+| `radar` | quarta | preços de concorrente com mais de 30 dias | `detetive-de-mercado` |
+| `auditoria` | quinta | CNPJ, Anatel, garantia e avaliações no site | `auditor-da-loja` |
+
+Tudo do dia fica num arquivo só: `logs/resumo/AAAA-MM-DD.md` (números, rotinas, funcionários chamados e o que espera o seu "pode").
+
 **De onde vêm os números:** a exportação de vendas da Nuvemshop que você salva em `dados/nuvemshop/` (o mais novo vale) e o Meta Ads só em modo leitura: pela API, se as variáveis `META_ACCESS_TOKEN` e `META_AD_ACCOUNT_ID` existirem, ou pelo CSV do Gerenciador em `dados/meta/`. Sem arquivo, o número fica vazio: nada é inventado.
 
 **O que ele não faz sozinho:** gastar, mexer em anúncio, preço ou loja, falar com cliente ou publicar. Quando um funcionário recomenda isso, a recomendação vira um pedido em `logs/aprovacoes.json`, e quem executa é você. As regras estão em `.claude/CLAUDE.md`.
@@ -222,6 +236,8 @@ cd C:\caminho\infinity-guard-sistemas
 python core\daemon_orchestrator.py uma-vez        # um ciclo para testar
 Start-Process pythonw -ArgumentList "core\daemon_orchestrator.py" -WorkingDirectory (Get-Location) -WindowStyle Hidden   # liga em segundo plano
 python core\daemon_orchestrator.py status         # fila, últimas tarefas e o que espera o seu "pode"
+python core\daemon_orchestrator.py aprovacoes     # cada pedido com o número, o porquê e o link de onde fazer
+python core\daemon_orchestrator.py aprovar 2      # marca como aprovado (quem executa é você); recusar 2 também existe
 python core\daemon_orchestrator.py parar          # desliga
 ```
 
@@ -238,6 +254,7 @@ cd caminho/infinity-guard-sistemas
 python3 core/daemon_orchestrator.py uma-vez
 nohup python3 core/daemon_orchestrator.py > /dev/null 2>&1 &
 python3 core/daemon_orchestrator.py status
+python3 core/daemon_orchestrator.py aprovacoes
 python3 core/daemon_orchestrator.py parar
 ```
 

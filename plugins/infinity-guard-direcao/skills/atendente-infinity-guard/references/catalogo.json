@@ -12,7 +12,8 @@
     "troca": "7 dias para troca",
     "garantia": "Garantia em todos os produtos (prazo não informado no site: NÃO prometer prazo)",
     "anatel": "Dropshipping: a loja não publica código Anatel. NÃO informar código nem dizer que é homologado; se perguntarem, dizer que vai conferir e passar para o dono",
-    "instalacao": "A loja não vende instalação; envia guia de configuração e suporte pelo WhatsApp"
+    "instalacao": "A loja não vende instalação; o manual de instruções acompanha o produto",
+    "suporte": "A loja tira dúvidas pelo WhatsApp; NÃO configura o produto por WhatsApp nem por vídeo"
   },
   "produtos": [
     {"id": "kit-cam-2", "categoria": "camera", "nome": "Câmera Wi-Fi Infinity Guard — Kit com 2 Unidades, Dupla Lente e Visão Noturna", "unidades": 2, "preco": 392.35, "preco_de": 413.00, "pix": 353.12, "parcelas": 12, "parcela_valor": 32.70, "url": "https://infinityguard.com.br/produtos/camera-wi-fi-infinity-guard-dupla-lente-2k/", "destaques": ["kit com 2 câmeras", "dupla lente", "visão noturna"], "requisitos": ["Wi-Fi no local", "tomada perto"], "ativo": true},

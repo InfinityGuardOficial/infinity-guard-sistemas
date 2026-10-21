@@ -1,6 +1,6 @@
 ---
 name: revisor-de-promessas
-description: Revisor de promessas e conformidade da Infinity Guard. Use antes de publicar ou mandar qualquer anúncio, post, roteiro, legenda, página de produto, proposta ou mensagem de WhatsApp, para barrar promessa enganosa (100% seguro, instalação, 4G, garantia ou Anatel sem documento, preço "de" maquiado, depoimento inventado) e pedido de dado sensível.
+description: Revisor de promessas e conformidade da Infinity Guard. Use antes de publicar ou mandar qualquer anúncio, post, roteiro, legenda, página de produto, proposta ou mensagem de WhatsApp, para barrar promessa enganosa (100% seguro, instalação, 4G, garantia ou Anatel sem documento, preço "de" maquiado, depoimento inventado) e pedido de dado sensível, além de promessa de configurar o produto por WhatsApp ou vídeo.
 ---
 
 # Revisor de Promessas — o último olhar antes de publicar
@@ -9,7 +9,7 @@ A Infinity Guard vende confiança. Uma promessa que a loja não cumpre (ou não 
 
 Arquivos:
 - `scripts/revisar.py`: lê o texto (arquivo, `--texto` ou entrada padrão) e aponta cada trecho arriscado com a linha, a gravidade, o porquê e como reescrever.
-- `references/regras.json`: as regras (segurança absoluta, medo exagerado, garantia e Anatel sem documento, instalação, 4G/sem Wi-Fi, superlativo, "de/por" maquiado, urgência falsa, prazo de frete, depoimento inventado, dado de cartão/senha, falar mal de concorrente). Base: CDC arts. 26, 30, 31 e 37, Decreto 7.962/2013, regras de anúncio da Meta, LGPD e o que a loja oferece de fato.
+- `references/regras.json`: as regras (segurança absoluta, medo exagerado, garantia e Anatel sem documento, instalação, 4G/sem Wi-Fi, superlativo, "de/por" maquiado, urgência falsa, prazo de frete, depoimento inventado, dado de cartão/senha, falar mal de concorrente, produto já configurado, prazo de entrega e **configuração pela loja**: a loja não configura o produto por WhatsApp nem por vídeo, ela tira dúvidas, porque o manual de instruções acompanha o produto). Base: CDC arts. 26, 30, 31 e 37, Decreto 7.962/2013, regras de anúncio da Meta, LGPD e o que a loja oferece de fato.
 
 ## Modos
 

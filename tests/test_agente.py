@@ -57,6 +57,7 @@ class Agente(Sandbox):
         self.assertEqual(rca.pedidos_de_aprovacao(RESPOSTA),
                          ["Pausar o conjunto WhatsApp quente (gastou 300 sem venda)", "Subir 20% no Remarketing 7 dias"])
         self.assertEqual(rca.pedidos_de_aprovacao("sem seção"), [])
+        self.assertEqual(rca.pedidos_de_aprovacao("## Pedidos de aprovação\n- Nenhuma ação recomendada.\n"), [])
 
     def test_simulacao_nao_chama_claude(self):
         r = rca.rodar("analista-de-vendas", "resuma", evento="teste",

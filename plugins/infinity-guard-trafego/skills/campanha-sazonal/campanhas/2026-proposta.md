@@ -18,7 +18,7 @@ Gerado em 2026-10-18 com os preços do catálogo. Desconto do kit: 10% sobre a s
 | Kit Porta Inteligente | quem quer acabar com chave copiada ou perdida | 1× Kit 2 câmeras Wi-Fi dupla lente + 1× Fechadura com biometria | R$ 1.610,89 | R$ 1.449,80 | R$ 1.304,82 | 12x R$ 120,82 |
 | Kit Casa Completa | casa grande, sítio com Wi-Fi ou quem viaja muito | 1× Câmera ASECAM com rastreamento + 1× Kit 2 câmeras Wi-Fi dupla lente + 1× Alarme IKerui Wi-Fi/GSM + 1× Fechadura com biometria + 1× Lâmpada com sensor de presença | R$ 2.965,54 | R$ 2.668,99 | R$ 2.402,09 | 12x R$ 222,42 |
 
-Promessa de todos os kits: passo a passo de configuração segura e acompanhamento de 7 dias no WhatsApp. Sem instalação no local.
+Promessa de todos os kits: manual de instruções na caixa e dúvidas respondidas no WhatsApp nos primeiros 7 dias. Sem instalação no local; a loja tira dúvidas, não faz a configuração pelo cliente.
 
 ## 11.11 · 11/11
 
@@ -47,7 +47,7 @@ Cupom: **IG1111** (sugestão: crie na Nuvemshop antes de mandar qualquer mensage
 
 **vip**
 ```
-Oi {nome}! Aqui é da Infinity Guard. No 11.11 vou separar kits montados pra cada tipo de casa, com preço especial e configuração segura acompanhada no WhatsApp. Quer entrar na lista e receber antes de todo mundo? É só responder SIM.
+Oi {nome}! Aqui é da Infinity Guard. No 11.11 vou separar kits montados pra cada tipo de casa, com preço especial e dúvidas respondidas no WhatsApp. Quer entrar na lista e receber antes de todo mundo? É só responder SIM.
 ```
 
 **abertura**
@@ -57,7 +57,7 @@ Oi {nome}! Aqui é da Infinity Guard. No 11.11 vou separar kits montados pra cad
 • Kit Casa Vigiada: R$ 1.141,07 ou R$ 1.026,96 no Pix (12x de R$ 95,09)
 • Kit Porta Inteligente: R$ 1.449,80 ou R$ 1.304,82 no Pix (12x de R$ 120,82)
 • Kit Casa Completa: R$ 2.668,99 ou R$ 2.402,09 no Pix (12x de R$ 222,42)
-Todos vão com o passo a passo de configuração segura e suporte aqui no WhatsApp. Quer que eu te ajude a ver qual serve pra sua casa? https://infinityguard.com.br
+Todos vão com o manual de instruções e dúvidas respondidas aqui no WhatsApp. Quer que eu te ajude a ver qual serve pra sua casa? https://infinityguard.com.br
 Se não quiser mais receber, responda SAIR.
 ```
 
@@ -91,9 +91,9 @@ Cupom: **IGBLACK** (sugestão: crie na Nuvemshop antes de mandar qualquer mensag
 | 26/11 (quinta) | Reels + Stories | Post de abertura com os kits |
 | 26/11 (quinta) | Anúncio | Só orgânico: anúncio pago bloqueado até a prova da loja passar |
 | 27/11 (sexta) | WhatsApp | 12h: texto 'lembrete' para quem respondeu e não comprou |
-| 27/11 (sexta) | Stories | Prova: unboxing e configuração segura na prática |
+| 27/11 (sexta) | Stories | Prova: unboxing, o manual na caixa e uma dúvida respondida |
 | 28/11 (sábado) | WhatsApp | 12h: texto 'lembrete' para quem respondeu e não comprou |
-| 28/11 (sábado) | Stories | Prova: unboxing e configuração segura na prática |
+| 28/11 (sábado) | Stories | Prova: unboxing, o manual na caixa e uma dúvida respondida |
 | 29/11 (domingo) | WhatsApp | 18h: texto 'ultima' para a lista VIP que ainda não comprou |
 | 29/11 (domingo) | Stories | Últimas horas |
 | 30/11 (segunda) | WhatsApp | Pós-venda dia 1 para cada compra (skill atendente, modo pós-venda); desativar cupom |
@@ -102,7 +102,7 @@ Cupom: **IGBLACK** (sugestão: crie na Nuvemshop antes de mandar qualquer mensag
 
 **vip**
 ```
-Oi {nome}! Aqui é da Infinity Guard. Na Black Friday vou separar kits montados pra cada tipo de casa, com preço especial e configuração segura acompanhada no WhatsApp. Quer entrar na lista e receber antes de todo mundo? É só responder SIM.
+Oi {nome}! Aqui é da Infinity Guard. Na Black Friday vou separar kits montados pra cada tipo de casa, com preço especial e dúvidas respondidas no WhatsApp. Quer entrar na lista e receber antes de todo mundo? É só responder SIM.
 ```
 
 **abertura**
@@ -112,7 +112,7 @@ Oi {nome}! Aqui é da Infinity Guard. Na Black Friday vou separar kits montados 
 • Kit Casa Vigiada: R$ 1.141,07 ou R$ 1.026,96 no Pix (12x de R$ 95,09)
 • Kit Porta Inteligente: R$ 1.449,80 ou R$ 1.304,82 no Pix (12x de R$ 120,82)
 • Kit Casa Completa: R$ 2.668,99 ou R$ 2.402,09 no Pix (12x de R$ 222,42)
-Todos vão com o passo a passo de configuração segura e suporte aqui no WhatsApp. Quer que eu te ajude a ver qual serve pra sua casa? https://infinityguard.com.br
+Todos vão com o manual de instruções e dúvidas respondidas aqui no WhatsApp. Quer que eu te ajude a ver qual serve pra sua casa? https://infinityguard.com.br
 Se não quiser mais receber, responda SAIR.
 ```
 

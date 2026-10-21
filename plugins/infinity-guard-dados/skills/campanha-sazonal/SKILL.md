@@ -5,7 +5,7 @@ description: Campanha 11.11 e Black Friday (26 a 29/11) da Infinity Guard. Use p
 
 # Campanha Sazonal — 11.11 e Black Friday
 
-O Raio X (18/10/2026) mostra que a Infinity Guard é mais cara que a Intelbras e que os kits de marketplace (2 câmeras por R$ 162 a R$ 180 em oferta). **Não dá para ganhar a Black Friday no preço.** A campanha vende kit montado para cada tipo de casa, configuração segura e suporte que responde, com um desconto honesto em cima do preço atual.
+O Raio X (18/10/2026) mostra que a Infinity Guard é mais cara que a Intelbras e que os kits de marketplace (2 câmeras por R$ 162 a R$ 180 em oferta). **Não dá para ganhar a Black Friday no preço.** A campanha vende kit montado para cada tipo de casa e suporte que responde as dúvidas, com um desconto honesto em cima do preço atual.
 
 Arquivos:
 - `scripts/montar_campanha.py`: calcula os kits (preço "de" = soma dos preços atuais, "por" com o desconto, Pix, parcelas), gera o calendário com as datas reais de 2026 e as mensagens de WhatsApp.
@@ -28,7 +28,7 @@ Rode a skill `prova-da-loja`. Enquanto CNPJ e garantia com prazo não estiverem 
 ### 3. Anúncios e Reels
 Passe para a Máquina de Anúncios e a Máquina de Reels (se instaladas) este briefing, com a tabela de ofertas do modo 1:
 - Público: dono de casa ou apartamento que quer ver a casa de longe e tem medo de câmera invadida ou offline.
-- Promessa: kit certo para a sua casa, configurado com segurança, com suporte no WhatsApp. Nada de "o mais barato".
+- Promessa: kit certo para a sua casa, manual de instruções na caixa e dúvidas respondidas no WhatsApp. Nada de "o mais barato". A loja não configura o produto por WhatsApp nem por vídeo.
 - Prova: só cite garantia e avaliações que já estejam no site. Anatel não entra em campanha (dropshipping: a loja não publica código).
 - Ângulos: senha de fábrica (câmera invadida), o que olhar antes de comprar câmera na Black Friday, casa vazia durante o dia.
 

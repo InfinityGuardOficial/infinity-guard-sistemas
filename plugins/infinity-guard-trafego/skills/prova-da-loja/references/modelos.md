@@ -14,7 +14,7 @@ Atendimento: [dias e horário]
 ```
 ✔ Garantia: 90 dias de garantia legal [+ X meses do fabricante, se houver documento]
 ✔ 7 dias para trocar ou devolver, sem burocracia
-✔ Vai com o passo a passo de configuração segura e suporte no WhatsApp
+✔ Manual de instruções acompanha o produto, e a gente tira suas dúvidas no WhatsApp
 ```
 
 ## Página de trocas: o que acrescentar

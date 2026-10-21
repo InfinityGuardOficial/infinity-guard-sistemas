@@ -19,13 +19,13 @@ A equipe inteira (22 funcionários, 7 squads) trabalhou sobre os dados reais do 
 | Squad | Funcionário | Ordem | Prazo |
 |---|---|---|---|
 | Direção | `diretor-geral` | Top 3 da semana: (1) prova da loja no ar — CNPJ, prazo de entrega, troca e garantia por escrito — até 25/10; (2) custo, frete e prazo dos 6 produtos e fornecedor cadastrado até 23/10; (3) campanha 11.11 orgânica pronta até 28/10. Anúncio pago continua proibido até a prova passar. | 25/10 |
-| Vendas | `lider-vendas` | Listar as 5 dúvidas mais comuns sobre câmeras Wi-Fi e escrever respostas curtas para o WhatsApp, destacando a configuração junto por vídeo. | 23/10 |
+| Vendas | `lider-vendas` | Listar as 5 dúvidas mais comuns sobre câmeras Wi-Fi e escrever respostas curtas para o WhatsApp, destacando que o manual de instruções acompanha o produto e que a loja tira dúvidas (regra de 21/10: não configura por WhatsApp nem por vídeo). | 23/10 |
 | Vendas | `consultor-whatsapp` | Confirmar se o WhatsApp da loja é o app gratuito ou a API (e o custo, se for API) e criar as respostas rápidas /kit, /pix e /prazo com o prazo do catálogo. | 22/10 |
 | Vendas | `recuperador-de-carrinho` | Adaptar as mensagens VIP do 11.11 (vip, abertura, última) ao dropshipping, prontas para disparar em 04/11. | 28/10 |
 | Vendas | `vendedor-b2b` | Listar 20 comércios do bairro e do caminho do trabalho (nome, contato, quem decide) e escrever a primeira abordagem para o bloco de sábado. | 26/10 |
 | Sucesso do Cliente | `lider-sucesso-cliente` | Definir o prazo de resposta que cabe no horário livre do CLT (ex.: até as 20h do mesmo dia útil) e o texto para publicar na loja. | 24/10 |
-| Sucesso do Cliente | `tecnico-de-suporte` | Escrever o roteiro da configuração guiada por vídeo em 15 minutos: rede 2,4 GHz, senha nova, atualização e verificação em duas etapas. | 24/10 |
-| Sucesso do Cliente | `guardiao-pos-venda` | Ajustar as mensagens D0 a D7 ao prazo do fornecedor (rastreio, chegada, configuração por vídeo, avaliação no D7). | 25/10 |
+| Sucesso do Cliente | `tecnico-de-suporte` | Escrever as respostas prontas para as dúvidas de configuração mais comuns, apontando o manual de instruções: rede 2,4 GHz, senha nova, atualização e verificação em duas etapas (regra de 21/10: a loja não configura por WhatsApp nem por vídeo). | 24/10 |
+| Sucesso do Cliente | `guardiao-pos-venda` | Ajustar as mensagens D0 a D7 ao prazo do fornecedor (rastreio, chegada com o manual de instruções e dúvidas no WhatsApp, avaliação no D7). | 25/10 |
 | Marketing e Conteúdo | `lider-marketing` | Aprovar a campanha 11.11 só orgânica com os 4 kits (Apartamento Tranquilo, Casa Vigiada, Porta Inteligente, Casa Completa) e o calendário de 28/10 a 12/11. | 25/10 |
 | Marketing e Conteúdo | `roteirista-de-reels` | Gravar o Reel de hoje (trocar a senha ao receber a câmera) e preparar os 3 roteiros da semana de 26/10: câmera offline, casa certa e fechadura facial. | 25/10 |
 | Marketing e Conteúdo | `copywriter-de-loja` | Escrever a chamada de Black Friday para a página inicial e a nova descrição do kit de 2 câmeras, sem de/por e sem prazo menor que o do catálogo. | 24/10 |

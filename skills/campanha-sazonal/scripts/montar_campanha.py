@@ -105,10 +105,10 @@ def mensagens(kits, cupom, nome_evento, link, artigo="o"):
     sair = "Se não quiser mais receber, responda SAIR."
     return {
         "vip": ("Oi {nome}! Aqui é da Infinity Guard. " + no.capitalize() + " " + nome_evento + " vou separar kits montados pra cada tipo de casa, "
-                "com preço especial e configuração segura acompanhada no WhatsApp. Quer entrar na lista e receber antes de todo mundo? "
+                "com preço especial e dúvidas respondidas no WhatsApp. Quer entrar na lista e receber antes de todo mundo? "
                 "É só responder SIM."),
         "abertura": (f"{{nome}}, começou {artigo} {nome_evento} da Infinity Guard{c}:\n{lista}\n"
-                     f"Todos vão com o passo a passo de configuração segura e suporte aqui no WhatsApp. "
+                     f"Todos vão com o manual de instruções e dúvidas respondidas aqui no WhatsApp. "
                      f"Quer que eu te ajude a ver qual serve pra sua casa? {link}\n{sair}"),
         "lembrete": (f"{{nome}}, pra casa que fica vazia durante o dia eu indico o {principal['nome']} ({principal['gancho']}): "
                      f"{brl(principal['pix'])} no Pix{c}. Me fala como é sua casa que eu confirmo se é o certo. {sair}"),
@@ -149,7 +149,7 @@ def calendario(evento, ev, prova_ok):
                        (dia, "Stories", "Últimas horas")]
         else:
             passos += [(dia, "WhatsApp", "12h: texto 'lembrete' para quem respondeu e não comprou"),
-                       (dia, "Stories", "Prova: unboxing e configuração segura na prática")]
+                       (dia, "Stories", "Prova: unboxing, o manual na caixa e uma dúvida respondida")]
         if ini == fim:
             passos += [(dia, "WhatsApp", "18h: texto 'ultima' só para quem respondeu a abertura e ainda não comprou")]
         dia += timedelta(days=1)
@@ -197,8 +197,8 @@ def para_md(c):
         st = "" if k["ativo"] else " (fora)"
         L.append(f"| {k['nome']}{st} | {k['para']} | {itens} | {brl(k['de'])} | {brl(k['por'])} | {brl(k['pix'])} | "
                  f"{k['parcelas']}x {brl(k['parcela_valor'])} |")
-    L += ["", "Promessa de todos os kits: passo a passo de configuração segura e acompanhamento de 7 dias no WhatsApp. "
-          "Sem instalação no local.", ""]
+    L += ["", "Promessa de todos os kits: manual de instruções na caixa e dúvidas respondidas no WhatsApp nos primeiros 7 dias. "
+          "Sem instalação no local; a loja tira dúvidas, não faz a configuração pelo cliente.", ""]
     for e in c["eventos"]:
         L += [f"## {e['nome']} · {e['inicio'][8:10]}/{e['inicio'][5:7]}" + (f" a {e['fim'][8:10]}/{e['fim'][5:7]}" if e["fim"] != e["inicio"] else ""), "",
               f"Fonte do tamanho do evento: {e['fonte']}.", "",

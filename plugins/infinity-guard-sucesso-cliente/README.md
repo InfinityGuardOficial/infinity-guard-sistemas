@@ -1,4 +1,4 @@
-# infinity-guard-sucesso-cliente · 2.2.1
+# infinity-guard-sucesso-cliente · 2.2.2
 
 Squad Sucesso do Cliente: técnico de suporte, guardião do pós-venda e o líder do squad.
 
