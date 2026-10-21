@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "infinity-guard-sistemas": {
+      "source": {
+        "source": "github",
+        "repo": "InfinityGuardOficial/infinity-guard-sistemas"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "infinity-guard@infinity-guard-sistemas": true
+  }
+}
