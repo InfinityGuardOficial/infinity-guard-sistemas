@@ -60,6 +60,7 @@ Digite `/agents` no Claude Code para ver a equipe instalada.
 | `docs/raio-x-de-nicho.md` / `.html` | Raio X do mercado de segurança residencial (18/10/2026): concorrentes, preços, brechas. |
 | `core/`, `tools/`, `config/` | Orquestrador automático (veja a seção abaixo). |
 | `docs/mapa-de-sistemas.md` | A ordem dos sistemas. |
+| `docs/mapa-da-autonomia.md` | O que roda sozinho, o que espera o "pode" do dono e o que está bloqueado (nível 4). |
 | `docs/mapa-de-dados.md` | Onde mora cada dado, qual é a fonte da verdade, quem cuida e como atualizar. |
 | `scripts/empacotar-skills.sh` | Testa todas as skills e refaz os .zip. |
 | `plugins/` e `scripts/gerar-plugins.py` | Um plugin por squad, gerado a partir de `agents/` e `skills/`. |
