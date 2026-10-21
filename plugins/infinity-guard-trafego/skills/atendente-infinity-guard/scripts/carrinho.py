@@ -41,7 +41,7 @@ def sequencia(nome, produto_id, link=None, cupom=None):
         {"quando": "no dia seguinte",
          "texto": f"{nome}, {curto} sai por {brl(p['preco'])} ou {brl(p['pix'])} no Pix, "
                   f"em até {p['parcelas']}x sem juros e com frete grátis. "
-                  f"E vai com o passo a passo pra configurar com segurança, com a gente te respondendo no WhatsApp. "
+                  f"E vai com o manual de instruções, com a gente tirando suas dúvidas no WhatsApp. "
                   f"Quer que eu tire alguma dúvida antes? {link}"},
         {"quando": "3 dias depois (última)",
          "texto": (f"{nome}, última mensagem pra não te incomodar. "

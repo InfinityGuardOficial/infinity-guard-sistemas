@@ -33,7 +33,24 @@ class Revisor(unittest.TestCase):
         self.assertIn("produto-ja-configurado", self.ids("Sua câmera sai daqui configurada"))
         self.assertIn("produto-ja-configurado", self.ids("Já vem configurada, é só ligar"))
         self.assertIn("prazo-de-entrega", self.ids("Entrega em 24h para todo o Brasil"))
-        self.assertNotIn("produto-ja-configurado", self.ids("Quando chegar, a gente configura junto com você por vídeo"))
+        self.assertNotIn("produto-ja-configurado", self.ids("O manual de instruções acompanha o produto"))
+
+    def test_loja_nao_configura_por_whatsapp_nem_video(self):
+        for texto in ("Quando chegar, a gente configura junto com você por vídeo no WhatsApp",
+                      "Eu configuro com você por vídeo (rede Wi-Fi 2,4 GHz, senha trocada)",
+                      "Kits com configuração segura acompanhada no WhatsApp",
+                      "Configuração guiada por vídeo em 15 minutos",
+                      "Te ajudo a configurar pelo WhatsApp",
+                      "Me chama que eu te passo a configuração por vídeo",
+                      "Chamada de vídeo pra configurar a fechadura"):
+            self.assertIn("configuracao-pela-loja", self.ids(texto), msg=texto)
+            self.assertEqual(rv.revisar(texto, self.regras)["veredito"], "BLOQUEADO", msg=texto)
+        for texto in ("O manual de instruções acompanha o produto. Ficou com dúvida? Chama no WhatsApp que a gente responde.",
+                      "No app: configurações do aparelho, atualização.",
+                      "Deixe o aparelho a até 3 metros do roteador só para configurar.",
+                      "Siga o manual para configurar a câmera no app."):
+            self.assertNotIn("configuracao-pela-loja", self.ids(texto), msg=texto)
+        self.assertEqual(rv.revisar("A loja não configura por WhatsApp nem por vídeo.", self.regras)["bloqueia"], 0)
 
     def test_ajustar_nao_bloqueia(self):
         r = rv.revisar("A melhor câmera do Brasil, últimas 3 unidades!", self.regras)

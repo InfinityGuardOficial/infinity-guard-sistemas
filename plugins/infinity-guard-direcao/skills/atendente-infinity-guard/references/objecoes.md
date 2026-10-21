@@ -3,22 +3,22 @@
 Regra: concorde com o que é verdade, mostre o que a Infinity Guard entrega a mais, devolva com uma pergunta.
 
 **"No Mercado Livre / Shopee tem mais barato."**
-"Tem sim, e eu não vou competir com câmera de oferta. A diferença aqui é que a sua sai com o passo a passo pra trocar a senha de fábrica e eu te respondo no WhatsApp se ela der qualquer problema. Muita câmera barata fica offline e o vendedor some. No Pix a sua sai por X. Quer que eu separe?"
+"Tem sim, e eu não vou competir com câmera de oferta. A diferença aqui é que o manual de instruções vem junto, eu te explico os cuidados pra trocar a senha de fábrica e respondo suas dúvidas no WhatsApp se ela der qualquer problema. Muita câmera barata fica offline e o vendedor some. No Pix a sua sai por X. Quer que eu separe?"
 
 **"A Intelbras é mais conhecida."**
-"É uma ótima marca. O que eu ofereço é escolher junto com você o kit certo pra sua casa e te acompanhar nos primeiros 7 dias. Se você preferir comparar, me diz qual modelo viu que eu te mostro a diferença honesta."
+"É uma ótima marca. O que eu ofereço é escolher junto com você o kit certo pra sua casa e tirar suas dúvidas nos primeiros 7 dias. Se você preferir comparar, me diz qual modelo viu que eu te mostro a diferença honesta."
 
 **"Essa câmera é homologada pela Anatel?"**
 Se o código estiver no catálogo: informe. Se não: "Vou te passar o código de homologação conferido no portal da Anatel. Me dá só um instante que eu confirmo com o responsável." → passar para humano. Nunca invente.
 
 **"E se a câmera ficar offline / der problema?"**
-"Primeiro, quando ela chegar eu configuro com você por vídeo (rede Wi-Fi 2,4 GHz, senha trocada, atualização). Se mesmo assim der problema, você fala comigo aqui no WhatsApp. E você tem 7 dias para troca."
+"O manual de instruções vem junto e explica a configuração. Os pontos que mais evitam problema são rede Wi-Fi 2,4 GHz, senha trocada e app atualizado. Se ficar com dúvida ou der problema, você fala comigo aqui no WhatsApp que eu respondo. E você tem 7 dias para troca." (Regra da loja: tira dúvidas, não faz a configuração pelo cliente.)
 
 **"Alguém pode invadir minha câmera?"**
-"Esse é o cuidado que quase ninguém tem: tem muita câmera no Brasil exposta com a senha de fábrica. Quando a sua chegar, eu faço com você por vídeo: trocar a senha, ativar a verificação em duas etapas do app e atualizar. Leva 5 minutos."
+"Esse é o cuidado que quase ninguém tem: tem muita câmera no Brasil exposta com a senha de fábrica. Quando a sua chegar, siga o manual e faça três coisas: trocar a senha, ativar a verificação em duas etapas do app e atualizar. Leva 5 minutos, e se travar em alguma, me chama aqui que eu tiro a dúvida."
 
 **"Precisa instalar? Vocês instalam?"**
-"A câmera é de encaixe e Wi-Fi, você mesmo coloca, é só ter tomada perto. Eu te mando o passo a passo e te acompanho pelo WhatsApp. A loja não faz instalação no local."
+"A câmera é de encaixe e Wi-Fi, você mesmo coloca, é só ter tomada perto. O manual de instruções acompanha o produto, e se ficar dúvida eu respondo pelo WhatsApp. A loja não faz instalação no local."
 
 **"Não tenho Wi-Fi lá (sítio, portão longe)."**
 "Então a câmera não é o melhor pra esse ponto, porque ela precisa de Wi-Fi. O alarme IKerui funciona com chip de celular e te avisa na hora se alguém entrar. Quer que eu te mostre?"

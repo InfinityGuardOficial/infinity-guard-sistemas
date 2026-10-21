@@ -56,7 +56,8 @@ def avaliar(metricas, estado, cfg, agora=None):
             eventos.append(_evento(
                 "novas_vendas", "guardiao-pos-venda",
                 f"Entraram {novos} pedido(s) pago(s) novo(s) no CSV {arq_vendas}. "
-                "Prepare o rascunho da mensagem de pós-venda do dia 0 para cada um (não envie).", novos=novos))
+                "Prepare o rascunho da mensagem de pós-venda do dia 0 para cada um (não envie). Regra da loja: a gente tira "
+                "dúvidas e o manual de instruções acompanha o produto; nunca ofereça configurar por WhatsApp ou vídeo.", novos=novos))
         estado["pedidos_pagos"] = vendas["pedidos_pagos"]
 
     if meta.get("ok") and meta.get("conjuntos"):
