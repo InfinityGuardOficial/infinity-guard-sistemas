@@ -15,6 +15,11 @@ class Monitor(unittest.TestCase):
         self.por = {(a["regra"], a["responsavel"]): a for a in self.alertas}
         self.ids = {a["regra"] for a in self.alertas}
 
+    def test_prazo_em_dias_uteis_vira_corridos(self):
+        self.assertEqual(mn._prazo_max("8 a 15 dias úteis"), 21)
+        self.assertEqual(mn._prazo_max("7 a 15 dias"), 15)
+        self.assertIsNone(mn._prazo_max(""))
+
     def test_criticos_primeiro(self):
         self.assertEqual(self.alertas[0]["nivel"], "critico")
         self.assertIn("tms-atraso", self.ids)

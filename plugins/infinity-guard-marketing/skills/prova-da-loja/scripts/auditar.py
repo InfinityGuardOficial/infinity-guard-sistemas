@@ -217,6 +217,8 @@ def paginas_do_catalogo():
     dados = json.loads(cat.read_text(encoding="utf-8"))
     base = dados["site"].rstrip("/") + "/"
     alvos = [base + p for p in INSTITUCIONAIS]
+    if dados.get("landing"):  # página de oferta (oferta.infinityguard.com.br)
+        alvos.append(dados["landing"].rstrip("/") + "/")
     alvos += [p["url"] for p in dados["produtos"] if p.get("ativo") and p["categoria"] != "home_office"]
     return alvos
 

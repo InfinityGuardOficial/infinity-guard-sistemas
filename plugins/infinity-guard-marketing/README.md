@@ -1,4 +1,4 @@
-# infinity-guard-marketing · 2.2.2
+# infinity-guard-marketing · 2.2.3
 
 Squad Marketing e Conteúdo: roteirista de Reels, copywriter da loja, social media e o líder de marketing.
 

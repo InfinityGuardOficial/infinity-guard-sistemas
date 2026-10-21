@@ -57,8 +57,11 @@ def _d(s):
 
 
 def _prazo_max(texto):
+    """Maior número do prazo, em dias corridos ("15 dias úteis" vira 21)."""
     n = [int(x) for x in re.findall(r"\d+", str(texto or ""))]
-    return max(n) if n else None
+    if not n:
+        return None
+    return -(-max(n) * 7 // 5) if re.search(r"[úu]te(is|l)", str(texto), re.I) else max(n)
 
 
 def avaliar(dados, hoje=None, regras=None):
