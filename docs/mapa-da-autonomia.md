@@ -41,3 +41,22 @@ Tudo num lugar só: o que a equipe faz sozinha, o que espera o "pode" do dono e 
 | Margem e CPA reais | Catálogo sem custo, frete e prazo | O dono preenche no Catálogo do app |
 | Rotinas lerem o repositório se ele ficar privado | O clone sem login falha | Avisar o Claude para trocar o clone por outro caminho |
 | Rotina rodar outra rotina de novo sozinha | As rotinas na nuvem não têm acesso à ferramenta de rotinas; o zelador avisa e o dono toca em "Executar agora" no app Claude | — |
+
+## Anúncios e verba: o que falta (21/10/2026)
+
+O dono decidiu deixar pagamentos para depois. Hoje o sistema **lê** os anúncios e **recomenda** (pausar, manter, escalar pela régua do `plano-de-midia`), mas não executa nada na conta de anúncios. O que já está pronto para decidir rápido:
+
+- aviso do Windows quando chega pedido novo, página `logs/aprovacoes.html` com o link direto do Gerenciador e aprovação de vários pedidos de uma vez (`aprovar 2 5 7`);
+- números da Meta entrando sozinhos pela API (token só leitura), por planilha do Google ou pela pasta do Drive (`docs/no-seu-pc.md`).
+
+Para a equipe pausar ou ajustar verba sozinha, faltaria, nesta ordem:
+
+| # | O que | Quem |
+|---|---|---|
+| 1 | Prova da loja pronta (CNPJ, garantia, troca, prazo de entrega no site) e pixel com evento de compra funcionando | Dono |
+| 2 | Conta de anúncio com forma de pagamento e Instagram ligado | Dono, no Meta Business Suite |
+| 3 | Teto de gasto semanal e o CPA máximo (margem real no Catálogo do app) | Dono |
+| 4 | Decisão escrita do dono liberando a execução automática dentro do teto | Dono |
+| 5 | Construir a execução (pausar e reduzir primeiro; aumentar só depois de semanas de histórico), com registro de cada ação e botão de desfazer | Claude, depois do item 4 |
+
+Até lá, nenhum código do repositório altera campanha, conjunto, anúncio ou orçamento.

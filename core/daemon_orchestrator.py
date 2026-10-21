@@ -12,7 +12,8 @@ Uso:
   python3 core/daemon_orchestrator.py status     # fila, últimas tarefas e aprovações pendentes
   python3 core/daemon_orchestrator.py parar      # pede para o daemon em segundo plano encerrar
   python3 core/daemon_orchestrator.py aprovacoes # pedidos esperando o seu "pode", com o link de onde fazer
-  python3 core/daemon_orchestrator.py aprovar 3 [nota]   /   recusar 3 [nota]
+  python3 core/daemon_orchestrator.py aprovar 3 [5 7] [nota]   /   recusar 3 [nota]
+  python3 core/daemon_orchestrator.py pagina     # abre logs/aprovacoes.html (links de onde fazer cada ação)
 Funciona igual no Windows, Linux e Mac. Logs em logs/system.log e logs/errors.log.
 """
 import json
@@ -92,14 +93,19 @@ def ciclo(cfg=None, rodar=run_claude_agent.rodar, agora=None, api_meta=None, rot
             log.info("enfileirado: %s", e["type"])
     regras.gravar_estado(estado)
     (caminhos.logs() / "daemon.heartbeat").write_text(m["gerado_em"], encoding="utf-8")
+    antes = len(aprovacoes.pendentes())
     tarefas = processar_fila(cfg, rodar)
+    aviso = aprovacoes.avisar(len(aprovacoes.pendentes()) - antes, cfg)
+    if aviso:
+        log.info(aviso)
+    aprovacoes.salvar_pagina(agora_)
     arquivo_resumo = resumo.gerar(m, agora_)
     try:
         central.salvar(caminhos.logs() / "central.md", com_orquestrador=True, agora=agora_)
     except Exception:
         log.exception("central não foi atualizada")
     return {"metricas": m, "eventos": eventos, "avisos": avisos, "rotinas": feitas, "tarefas": tarefas,
-            "resumo": str(arquivo_resumo)}
+            "resumo": str(arquivo_resumo), "aviso_aprovacoes": aviso}
 
 
 def _ja_rodando(cfg):
@@ -172,17 +178,29 @@ def main(argv):
         print(aprovacoes.texto_lista())
         return 0
     if cmd in ("aprovar", "recusar"):
-        if len(argv) < 3 or not argv[2].isdigit():
-            print(f"Uso: {cmd} <número> [nota]. Veja os números com: aprovacoes")
+        nums = []
+        for a in argv[2:]:
+            if not a.isdigit():
+                break
+            nums.append(int(a))
+        if not nums:
+            print(f"Uso: {cmd} <número> [<número> ...] [nota]. Veja os números com: aprovacoes")
             return 2
-        try:
-            p = aprovacoes.decidir(int(argv[2]), cmd == "aprovar", " ".join(argv[3:]))
-        except ValueError as e:
-            print(e)
-            return 1
-        print(f"Pedido {argv[2]} {'aprovado' if cmd == 'aprovar' else 'recusado'}: {p['acao']}")
-        if cmd == "aprovar" and aprovacoes.link(p):
-            print(f"Agora é com você: {aprovacoes.link(p)}")
+        erro = False
+        for n, p in aprovacoes.decidir_varios(nums, cmd == "aprovar", " ".join(argv[2 + len(nums):])):
+            if isinstance(p, str):
+                print(p)
+                erro = True
+                continue
+            print(f"Pedido {n} {'aprovado' if cmd == 'aprovar' else 'recusado'}: {p['acao']}")
+            if cmd == "aprovar" and aprovacoes.link(p):
+                print(f"  Agora é com você: {aprovacoes.link(p)}")
+        return 1 if erro else 0
+    if cmd == "pagina":
+        f = aprovacoes.salvar_pagina()
+        print(f)
+        if sys.platform == "win32":
+            os.startfile(f)  # noqa: S606 (abre no navegador padrão)
         return 0
     if cmd == "parar":
         (caminhos.logs() / "PARAR").write_text("parar", encoding="utf-8")
