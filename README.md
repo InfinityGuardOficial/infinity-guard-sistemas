@@ -67,6 +67,18 @@ Digite `/agents` no Claude Code para ver a equipe instalada.
 
 O arquivo `.claude/settings.json` ativa o plugin `infinity-guard` (22 funcionários e 14 skills) para quem abrir esta pasta no Claude Code, no computador ou na nuvem. Na primeira vez, o Claude Code pergunta se você confia no projeto e se quer instalar o plugin: responda que sim. Confira com `/agents` e `/skills`.
 
+## Servidor MCP
+
+`mcp_servers/infinity_guard_mcp.py` é um servidor MCP (Model Context Protocol, stdio, sem dependências) que expõe 9 ferramentas das skills para o Claude Code ou o Claude Desktop: `revisar_texto`, `validar_catalogo`, `comparar_concorrentes`, `recomendar_kit`, `plano_de_midia`, `montar_campanha`, `pauta_da_semana`, `reuniao_semanal` e `vigiar_gestao`. Todas só leem e calculam.
+
+Neste projeto ele já está em `.mcp.json`: na primeira vez, o Claude Code pede para aprovar o servidor `infinity-guard`. Para usar em outro lugar:
+```
+claude mcp add infinity-guard -- python3 /caminho/infinity-guard-sistemas/mcp_servers/infinity_guard_mcp.py
+```
+No Claude Desktop: Configurações → Desenvolvedor → Editar configuração, e adicione o mesmo comando em `mcpServers`.
+
+As regras do projeto para o Claude Code ficam em `CLAUDE.md`.
+
 ## Instalar tudo de uma vez (plugin, recomendado)
 
 No Claude Code, em qualquer pasta (por exemplo a pasta do projeto "Workshop IA autônoma"):
