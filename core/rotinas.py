@@ -12,6 +12,7 @@ acha algo para resolver, devolve um evento para a fila chamar o funcionário res
 | auditoria | quinta                    | prova-da-loja/auditar.py --catalogo      | auditor-da-loja        |
 """
 import json
+import os
 import subprocess
 import sys
 from datetime import datetime, timedelta
@@ -24,8 +25,10 @@ SKILLS = REPO / "skills"
 
 
 def _script(skill, nome, *args, timeout=180):
+    # no Windows o script imprime em cp1252 quando a saída vai para um cano; força UTF-8 nos dois lados
+    env = {**os.environ, "PYTHONIOENCODING": "utf-8", "PYTHONUTF8": "1"}
     r = subprocess.run([sys.executable, str(SKILLS / skill / "scripts" / nome), *args], capture_output=True,
-                       text=True, encoding="utf-8", timeout=timeout, cwd=str(SKILLS / skill))
+                       text=True, encoding="utf-8", timeout=timeout, cwd=str(SKILLS / skill), env=env)
     return r.returncode, r.stdout, r.stderr
 
 
