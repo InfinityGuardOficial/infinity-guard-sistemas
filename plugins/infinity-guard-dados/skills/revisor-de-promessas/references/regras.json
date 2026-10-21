@@ -40,7 +40,7 @@
      "reescrever": "'Te mando o link de pagamento seguro da loja.'"},
     {"id": "falar-mal-concorrente", "gravidade": "ajustar", "padrao": "\\b(intelbras|tapo|tp-?link|mercusys|positivo|xiaomi|ezviz|imou)\\b.{0,40}(ruim|lixo|porcaria|n[aã]o presta|p[eé]ssim|golpe|falsificad)",
      "porque": "Não falar mal de concorrente pelo nome (regra da marca e risco de propaganda comparativa abusiva).",
-     "reescrever": "Fale do critério, não da marca: 'antes de comprar qualquer câmera, confira se tem código Anatel e suporte em português'."},
+     "reescrever": "Fale do critério, não da marca: 'antes de comprar qualquer câmera, confira a garantia por escrito e se tem suporte em português'."},
     {"id": "produto-ja-configurado", "gravidade": "bloqueia", "padrao": "(sai|vai|chega|segue|entregue|enviad[oa])\\s+(daqui\\s+)?(j[aá]\\s+)?configurad|j[aá] (vem|chega) configurad|senha j[aá] (vem )?trocad",
      "porque": "A loja trabalha com dropshipping: o produto vai do fornecedor direto para o cliente e não passa pela loja. Prometer que ele chega configurado é publicidade enganosa (CDC art. 37).",
      "reescrever": "Prometa o que a loja faz: 'o manual de instruções acompanha o produto e a gente tira suas dúvidas no WhatsApp'."},

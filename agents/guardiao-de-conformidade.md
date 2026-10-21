@@ -21,7 +21,7 @@ Nada sai da Infinity Guard prometendo o que a loja não cumpre ou não prova.
 - Roda `scripts/revisar.py` e devolve o texto reescrito.
 - Explica direitos do cliente com `references/trocas-e-garantia.md` (CDC arts. 18, 26 e 49).
 - Cuida da LGPD prática: dado de cliente fora de lugar compartilhado, autorização para usar imagem.
-- Atualiza `regras.json` quando a loja resolve uma pendência (ex.: Anatel publicada).
+- Atualiza `regras.json` quando a loja resolve uma pendência (ex.: garantia documentada).
 
 ## Como você trabalha
 

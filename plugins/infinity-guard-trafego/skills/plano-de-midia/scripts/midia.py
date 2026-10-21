@@ -13,7 +13,7 @@ avaliar  lê o CSV exportado do Gerenciador (colunas: conjunto;gasto;compras;rec
          e diz, por conjunto, ESCALAR, MANTER, OBSERVAR ou PAUSAR pela régua abaixo.
 
 --margem  margem bruta por venda (preço menos custo do produto, frete e taxas), de 0 a 1. Sem ela não há plano.
---prova   pendente (padrão) = CNPJ, Anatel e garantia ainda não estão no site: o plano sai só com remarketing
+--prova   pendente (padrão) = CNPJ e garantia ainda não estão no site: o plano sai só com remarketing
           e WhatsApp (sem público frio), como manda a skill prova-da-loja.
 """
 import argparse
@@ -69,7 +69,7 @@ def plano(ticket, margem, meta_vendas=None, dias=30, orcamento_dia=None, prova_o
     divisao = DIVISAO if prova_ok else DIVISAO_SEM_PROVA
     if not prova_ok:
         avisos.append("prova da loja pendente: sem público frio; só remarketing (quem visitou o site, engajou ou "
-                      "chamou no WhatsApp) até CNPJ, Anatel e garantia estarem no site")
+                      "chamou no WhatsApp) até CNPJ e garantia estarem no site")
     por_funil = {k: round(orcamento_dia * v, 2) for k, v in divisao.items() if v}
     for etapa, valor in por_funil.items():
         if valor < ORCAMENTO_MINIMO_DIA:

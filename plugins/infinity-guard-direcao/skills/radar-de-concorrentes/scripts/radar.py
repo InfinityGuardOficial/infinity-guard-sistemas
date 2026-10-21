@@ -52,7 +52,7 @@ def comparar(leituras, nossos):
         mediana = precos[len(precos) // 2] if len(precos) % 2 else round((precos[len(precos) // 2 - 1] + precos[len(precos) // 2]) / 2, 2)
         dif = round((p["preco"] - mediana) / mediana, 4)
         if dif > 0.25:
-            leitura = "acima do mercado: precisa de prova e serviço visíveis (Anatel, garantia, suporte) ou revisar preço"
+            leitura = "acima do mercado: precisa de prova e serviço visíveis (garantia, prazo de entrega, suporte) ou revisar preço"
         elif dif < -0.15:
             leitura = "abaixo do mercado: espaço para margem ou para destacar o preço"
         else:

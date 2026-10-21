@@ -11,7 +11,7 @@ Uso:
 --desconto  desconto do kit sobre a soma dos preços ATUAIS (o Pix de 10% da loja vem por cima, se a Nuvemshop somar).
 --cupom     código que você criou (ou vai criar) na Nuvemshop. Sem ele, usa o sugerido e avisa para criar.
 --custos    JSON {"kit-cam-2": 210.00, ...} com o seu custo por produto; checa a margem de cada kit.
---prova     ok | pendente. Pendente = sem anúncio pago (CNPJ, Anatel e garantia ainda não estão no site).
+--prova     ok | pendente. Pendente = sem anúncio pago (CNPJ e garantia ainda não estão no site).
 """
 import argparse
 import json
@@ -123,7 +123,7 @@ def calendario(evento, ev, prova_ok):
     passos = []
     if evento == "1111":
         passos += [
-            (date(2026, 10, 21), "Loja", "Prazo do código Anatel da câmera (ação 1 do Posicionamento) e da auditoria da prova-da-loja"),
+            (date(2026, 10, 21), "Loja", "Prazo da auditoria da prova-da-loja (CNPJ, garantia com prazo, troca e prazo de entrega no site)"),
             (date(2026, 10, 28), "Loja", "Criar o cupom na Nuvemshop e congelar os preços atuais até 29/11 (sem subir preço antes da promoção)"),
             (date(2026, 11, 2), "Reels", "Reels de aquecimento: câmera invadida por senha de fábrica (Máquina de Reels, tema quente)"),
             (date(2026, 11, 4), "WhatsApp", "Mensagem VIP para quem já conversou com a loja (texto 'vip'); só manda o resto para quem disser SIM"),
@@ -133,7 +133,7 @@ def calendario(evento, ev, prova_ok):
     else:
         passos += [
             (date(2026, 11, 12), "WhatsApp", "Quem deixou carrinho no 11.11: sequência de carrinho da skill atendente"),
-            (date(2026, 11, 16), "Reels", "Reels: o que olhar antes de comprar câmera na Black Friday (Anatel, garantia, suporte)"),
+            (date(2026, 11, 16), "Reels", "Reels: o que olhar antes de comprar câmera na Black Friday (prazo de entrega, garantia, suporte)"),
             (date(2026, 11, 20), "WhatsApp", "Mensagem VIP de Black Friday (texto 'vip') para a base que respondeu no 11.11"),
             (date(2026, 11, 24), "Stories", "Esquenta: contagem regressiva e caixa de perguntas"),
         ]
@@ -170,7 +170,7 @@ def montar(eventos=("1111", "blackfriday"), desconto=0.10, cupom=None, custos=No
     if custos is None:
         avisos.append("sem custos informados: confirme a margem de cada kit antes de criar o cupom")
     if not prova_ok:
-        avisos.append("prova da loja pendente (CNPJ, Anatel, garantia): campanha só orgânica e WhatsApp; nada de anúncio pago")
+        avisos.append("prova da loja pendente (CNPJ, garantia): campanha só orgânica e WhatsApp; nada de anúncio pago")
     avisos.append("o cupom vale para o carrinho todo, não só para o kit: o kit é a forma de apresentar a oferta")
     avisos.append("confirme na Nuvemshop se o cupom soma com o desconto de 10% no Pix; se não somar, use o valor 'por' na comunicação")
     saida = {"gerado_em": date.today().isoformat(), "desconto": desconto, "prova_ok": prova_ok,

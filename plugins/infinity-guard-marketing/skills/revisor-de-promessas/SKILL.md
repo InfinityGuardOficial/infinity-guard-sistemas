@@ -27,7 +27,7 @@ for f in pautas/*.md; do python3 scripts/revisar.py --arquivo "$f" --estrito || 
 ```
 
 ### 3. Quando a loja resolver uma pendência
-Com o código Anatel conferido e publicado no site, use `--liberar anatel-sem-codigo`. Com o prazo de garantia documentado pelo fornecedor e publicado, `--liberar garantia-sem-prazo-documentado`. Melhor ainda: atualize `references/regras.json` e o `catalogo.json` da atendente no mesmo dia.
+Com o prazo de garantia documentado pelo fornecedor e publicado, `--liberar garantia-sem-prazo-documentado`. A regra `anatel-sem-codigo` fica sempre ligada: a loja vende por dropshipping e não publica código Anatel. Melhor ainda: atualize `references/regras.json` e o `catalogo.json` da atendente no mesmo dia.
 
 ### 4. Revisão de contexto (o que o script não vê)
 Depois do script, leia o texto e confira:

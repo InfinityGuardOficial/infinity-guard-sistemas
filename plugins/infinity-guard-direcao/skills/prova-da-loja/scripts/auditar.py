@@ -8,8 +8,10 @@ Uso:
   ... --json          (saída em JSON)
   ... --saida relatorio.md
 
-O que confere: CNPJ (com dígito verificador), código Anatel, garantia com prazo, avaliações,
-política de troca, contato e endereço, HTTPS e rastros de fornecedor (ex.: "plugue da UE").
+O que confere: CNPJ (com dígito verificador), garantia com prazo, avaliações, política de troca,
+contato e endereço, HTTPS e rastros de fornecedor (ex.: "plugue da UE").
+Código Anatel não é cobrado (dropshipping: a conferência dos modelos é tarefa interna do dono, no app).
+Se a página citar Anatel ou homologação, o auditor avisa para tirar até o código estar conferido.
 O script só diz o que achou ou não achou. Nunca preenche CNPJ, código Anatel ou prazo de garantia.
 Avaliações carregadas por JavaScript podem não aparecer no HTML: nesse caso, confira no navegador.
 """
@@ -26,7 +28,6 @@ AQUI = Path(__file__).resolve().parent.parent
 CATALOGOS = [AQUI.parent / "atendente-infinity-guard" / "references" / "catalogo.json",
              AQUI / "references" / "catalogo.json"]
 INSTITUCIONAIS = ["", "sobre-a-infinity-guard/", "trocas-e-devolucoes/", "contato/", "perguntas-frequentes/"]
-CATEGORIAS_RADIO = {"camera", "alarme", "fechadura"}  # Wi-Fi/Bluetooth/GSM: precisa de Anatel
 
 # --- leitura -------------------------------------------------------------------------------
 
@@ -59,7 +60,7 @@ def cnpj_valido(numero):
 
 
 RE_CNPJ = re.compile(r"\b\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2}\b")
-RE_ANATEL_COD = re.compile(r"\b\d{5}-\d{2}-\d{5}\b")
+RE_ANATEL = re.compile(r"anatel|homologad|\b\d{5}-\d{2}-\d{5}\b", re.I)
 RE_GARANTIA_PRAZO = re.compile(
     r"garantia[^.]{0,80}?\b(\d{1,3}|um|uma|dois|tr[eê]s|seis|doze)\s*(dias?|m[eê]s(es)?|anos?)\b"
     r"|\b(\d{1,3}|um|uma|dois|tr[eê]s|seis|doze)\s*(dias?|m[eê]s(es)?|anos?)\s*de\s*garantia", re.I)
@@ -78,7 +79,7 @@ RASTROS = [  # sobras de anúncio importado que derrubam a confiança
 ]
 
 
-def checar(texto, html, url, radio=True):
+def checar(texto, html, url):
     """Devolve a lista de itens checados para uma página."""
     t = texto
     itens = []
@@ -97,17 +98,9 @@ def checar(texto, html, url, radio=True):
         item("cnpj", "falta", "nenhum CNPJ na página",
              "Coloque no rodapé: razão social, CNPJ e endereço (Decreto 7.962/2013).")
 
-    if radio:
-        cods = RE_ANATEL_COD.findall(t)
-        if cods:
-            item("anatel", "ok", f"código no formato Anatel: {', '.join(sorted(set(cods)))}",
-                 "Confira o código no portal de produtos homologados da Anatel e guarde o print.")
-        elif re.search(r"anatel|homologa", t, re.I):
-            item("anatel", "aviso", "fala de Anatel mas sem código no formato 00000-00-00000",
-                 "Troque o texto genérico pelo código de homologação do produto, conferido no portal da Anatel.")
-        else:
-            item("anatel", "falta", "nenhuma menção a Anatel nem código de homologação",
-                 "Peça o código ao fornecedor, confira no portal da Anatel e publique na página do produto.")
+    if RE_ANATEL.search(t):  # não é cobrado; só avisa se a página afirma o que a loja ainda não conferiu
+        item("anatel", "aviso", "a página cita Anatel, homologação ou código",
+             "Tire a menção até o dono conferir o modelo no portal da Anatel (tarefa interna no app).")
 
     m = RE_GARANTIA_PRAZO.search(t)
     if m:
@@ -156,14 +149,13 @@ def checar(texto, html, url, radio=True):
 
 # --- relatório -------------------------------------------------------------------------------
 
-PESO = {"cnpj": 1, "anatel": 2, "garantia": 3, "avaliacoes": 4, "troca": 5, "contato": 6, "rastros": 7, "https": 0}
-ROTULO = {"cnpj": "CNPJ e razão social", "anatel": "Código Anatel", "garantia": "Garantia com prazo",
+PESO = {"cnpj": 1, "garantia": 2, "avaliacoes": 3, "troca": 4, "anatel": 5, "contato": 6, "rastros": 7, "https": 0}
+ROTULO = {"cnpj": "CNPJ e razão social", "anatel": "Menção a Anatel", "garantia": "Garantia com prazo",
           "avaliacoes": "Avaliações reais", "troca": "Troca em 7 dias", "contato": "Endereço e contato",
           "rastros": "Rastros de fornecedor", "https": "HTTPS"}
 SIMBOLO = {"ok": "✅", "aviso": "⚠️", "falta": "❌", "erro": "❌"}
 MANUAIS = [
     "Fotos reais: pelo menos 1 foto sua do produto na mão ou instalado (o script não distingue foto real de foto do fornecedor).",
-    "Código Anatel conferido no portal da Anatel para cada câmera, alarme, fechadura e sensor (guarde o print).",
     "Avaliações: abra a página no navegador; se o app de avaliações carrega por JavaScript, o script não vê.",
     "Página de trocas: diga quem paga o frete da devolução e para onde enviar.",
     "Rodapé: link do Twitter/X e demais redes funcionando.",
@@ -171,11 +163,11 @@ MANUAIS = [
 
 
 def auditar(paginas):
-    """paginas: lista de dicts {url, html, radio}. Devolve o relatório em dict."""
+    """paginas: lista de dicts {url, html}. Devolve o relatório em dict."""
     resultado = []
     for p in paginas:
         txt = texto_de(p["html"])
-        resultado.append({"url": p["url"], "itens": checar(txt, p["html"], p["url"], p.get("radio", True))})
+        resultado.append({"url": p["url"], "itens": checar(txt, p["html"], p["url"])})
     # site inteiro: CNPJ/contato valem se aparecem em qualquer página; o resto é por página
     correcoes = {}
     for pg in resultado:
@@ -198,7 +190,7 @@ def auditar(paginas):
 def relatorio_md(r):
     linhas = [f"# Auditoria de prova da loja · {r['data']}", "",
               f"**Nota de prova: {r['nota']}/100** ({len(r['paginas'])} páginas). "
-              "Regra: sem CNPJ, Anatel e garantia com prazo, não ligue anúncio.", "",
+              "Regra: sem CNPJ e garantia com prazo, não ligue anúncio.", "",
               "## Lista de correção, em ordem", ""]
     if not r["correcoes"]:
         linhas.append("Nada pendente nos itens automáticos.")
@@ -214,7 +206,7 @@ def relatorio_md(r):
         for it in pg["itens"]:
             linhas.append(f"- {SIMBOLO[it['status']]} {ROTULO.get(it['chave'], it['chave'])}: {it['achado']}")
         linhas.append("")
-    linhas.append("O auditor só registra o que encontrou. CNPJ, código Anatel e prazo de garantia vêm dos documentos do dono.")
+    linhas.append("O auditor só registra o que encontrou. CNPJ e prazo de garantia vêm dos documentos do dono.")
     return "\n".join(linhas)
 
 
@@ -224,9 +216,8 @@ def paginas_do_catalogo():
         raise SystemExit("catálogo não encontrado (instale a skill atendente-infinity-guard ao lado desta)")
     dados = json.loads(cat.read_text(encoding="utf-8"))
     base = dados["site"].rstrip("/") + "/"
-    alvos = [(base + p, False) for p in INSTITUCIONAIS]
-    alvos += [(p["url"], p["categoria"] in CATEGORIAS_RADIO) for p in dados["produtos"]
-              if p.get("ativo") and p["categoria"] != "home_office"]
+    alvos = [base + p for p in INSTITUCIONAIS]
+    alvos += [p["url"] for p in dados["produtos"] if p.get("ativo") and p["categoria"] != "home_office"]
     return alvos
 
 
@@ -235,23 +226,21 @@ def main():
     ap.add_argument("--url", action="append", default=[])
     ap.add_argument("--arquivo", action="append", default=[])
     ap.add_argument("--catalogo", action="store_true")
-    ap.add_argument("--sem-anatel", action="store_true", help="não exigir Anatel nas URLs/arquivos dados")
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--saida")
     a = ap.parse_args()
 
-    alvos = [(u, not a.sem_anatel) for u in a.url]
+    alvos = list(a.url)
     if a.catalogo:
         alvos += paginas_do_catalogo()
     paginas, falhas = [], []
-    for u, radio in alvos:
+    for u in alvos:
         try:
-            paginas.append({"url": u, "html": baixar(u), "radio": radio})
+            paginas.append({"url": u, "html": baixar(u)})
         except Exception as e:  # noqa: BLE001
             falhas.append(f"{u}: {e}")
     for f in a.arquivo:
-        paginas.append({"url": f, "html": Path(f).read_text(encoding="utf-8", errors="replace"),
-                        "radio": not a.sem_anatel})
+        paginas.append({"url": f, "html": Path(f).read_text(encoding="utf-8", errors="replace")})
     if not paginas:
         raise SystemExit("nenhuma página lida. " + " | ".join(falhas))
     r = auditar(paginas)

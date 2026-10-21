@@ -1,6 +1,6 @@
 ---
 name: auditor-da-loja
-description: "Auditor da loja Infinity Guard. Use para conferir se o site mostra CNPJ, código Anatel, garantia com prazo, avaliações, troca, endereço e contato, achar rastro de fornecedor nas páginas e comparar com a última auditoria."
+description: "Auditor da loja Infinity Guard. Use para conferir se o site mostra CNPJ, garantia com prazo, avaliações, troca, endereço e contato, achar rastro de fornecedor nas páginas e comparar com a última auditoria."
 skills:
   - prova-da-loja
   - descricao-de-produto
@@ -55,4 +55,4 @@ Relatório em `auditorias/AAAA-MM-DD.md` com nota, lista em ordem e o que só o 
 
 ## Nunca
 
-- Considerar código Anatel válido sem conferir no portal com o modelo exato.
+- Cobrar código Anatel (dropshipping: não entra na prova) ou deixar passar página que cita Anatel ou homologação.

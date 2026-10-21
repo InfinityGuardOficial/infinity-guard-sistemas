@@ -9,8 +9,8 @@ from auditar import auditar, cnpj_valido, relatorio_md, texto_de  # noqa: E402
 FIX = AQUI / "fixtures"
 
 
-def pagina(nome, radio=True):
-    return {"url": nome, "html": (FIX / nome).read_text(encoding="utf-8"), "radio": radio}
+def pagina(nome):
+    return {"url": nome, "html": (FIX / nome).read_text(encoding="utf-8")}
 
 
 def status(r, chave, i=0):
@@ -31,7 +31,6 @@ class LojaHoje(unittest.TestCase):
 
     def test_acha_o_que_falta(self):
         self.assertEqual(status(self.r, "cnpj"), "falta")  # CNPJ só dentro de <script> não conta
-        self.assertEqual(status(self.r, "anatel"), "falta")
         self.assertEqual(status(self.r, "garantia"), "aviso")
         self.assertEqual(status(self.r, "avaliacoes"), "falta")
         self.assertEqual(status(self.r, "troca"), "ok")
@@ -43,7 +42,7 @@ class LojaHoje(unittest.TestCase):
         self.assertIn("placeholder", it["achado"])
 
     def test_ordem_da_correcao(self):
-        self.assertEqual([c["chave"] for c in self.r["correcoes"]][:4], ["cnpj", "anatel", "garantia", "avaliacoes"])
+        self.assertEqual([c["chave"] for c in self.r["correcoes"]][:3], ["cnpj", "garantia", "avaliacoes"])
 
     def test_relatorio_nao_inventa(self):
         md = relatorio_md(self.r)
@@ -61,11 +60,20 @@ class LojaCorrigida(unittest.TestCase):
     def test_cnpj_do_rodape_vale_para_o_site(self):
         r = auditar([pagina("produto_hoje.html"), pagina("produto_corrigido.html")])
         self.assertNotIn("cnpj", [c["chave"] for c in r["correcoes"]])
-        self.assertIn("anatel", [c["chave"] for c in r["correcoes"]])
+        self.assertIn("garantia", [c["chave"] for c in r["correcoes"]])
 
-    def test_institucional_nao_exige_anatel(self):
-        r = auditar([pagina("produto_hoje.html", radio=False)])
+
+class Anatel(unittest.TestCase):
+    """Dropshipping: o código Anatel não é cobrado; citar Anatel sem conferir vira aviso."""
+
+    def test_nao_cobra_anatel(self):
+        r = auditar([pagina("produto_hoje.html")])
         self.assertNotIn("anatel", [it["chave"] for it in r["paginas"][0]["itens"]])
+        self.assertNotIn("Anatel", relatorio_md(r).split("## Conferir à mão")[1])
+
+    def test_avisa_quando_a_pagina_cita_anatel(self):
+        r = auditar([{"url": "p", "html": "<p>Câmera homologada pela Anatel: 12345-24-06789</p>"}])
+        self.assertEqual(status(r, "anatel"), "aviso")
 
 
 class Texto(unittest.TestCase):

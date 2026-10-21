@@ -9,7 +9,7 @@ O conteúdo existe para levar gente ao WhatsApp, onde a skill `atendente-infinit
 
 Arquivos:
 - `scripts/pauta_semana.py`: escolhe 3 temas para a semana (segunda, quarta e sexta), em formatos diferentes, sem repetir tema das últimas 2 semanas. Nas semanas do 11.11 (09/11) e da Black Friday (23/11), o tema da campanha entra primeiro.
-- `references/temas.json`: banco de temas com fonte (Raio X de 18/10/2026): senha de fábrica, câmera offline, casa certa, Anatel, fechadura facial, casa vazia, app chinês, qual casa, Black Friday, suporte que responde, 4G solar.
+- `references/temas.json`: banco de temas com fonte (Raio X de 18/10/2026): senha de fábrica, câmera offline, casa certa, fechadura facial, casa vazia, app chinês, qual casa, Black Friday, suporte que responde, 4G solar.
 - `pautas/`: pautas geradas e `historico.json` (o que já foi usado).
 
 ## Modos
@@ -31,6 +31,6 @@ No Claude Code, peça: "agende toda segunda às 8h: rode a skill conteudo-semana
 
 ## Regras
 - Nunca invente história de cliente, depoimento ou número sem fonte.
-- O tema `anatel` só entra com `--anatel-publicado`, depois que o código estiver no site (não dá para dizer "eu confiro" antes).
+- Sem tema de Anatel: a loja vende por dropshipping e não publica código (o revisor barra).
 - Não prometa instalação, câmera 4G ou sem Wi-Fi.
 - Testes: `python3 -m unittest discover -s tests`.

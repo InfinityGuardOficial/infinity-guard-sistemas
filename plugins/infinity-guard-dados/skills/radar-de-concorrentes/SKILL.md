@@ -17,7 +17,7 @@ Arquivos:
 ```bash
 python3 scripts/radar.py comparar
 ```
-Entregue ao dono: produto, nossa diferença para a mediana e a leitura (acima, na faixa, abaixo). Acima de 25%: ou a página mostra prova e serviço (Anatel, garantia, suporte), ou o preço é revisto com a skill `catalogo-e-precos`.
+Entregue ao dono: produto, nossa diferença para a mediana e a leitura (acima, na faixa, abaixo). Acima de 25%: ou a página mostra prova e serviço (garantia, prazo de entrega, suporte), ou o preço é revisto com a skill `catalogo-e-precos`.
 
 ### 2. Nova leitura
 Pesquise na web (busca e leitura de página) e registre só o que leu de verdade:
@@ -36,5 +36,5 @@ Refaça as leituras velhas. Para análise maior de mercado (temas, dores, brecha
 - Número sem fonte não entra. Marque oferta como oferta.
 - Compare produto equivalente (mesma categoria e uso), não o mais barato que achar.
 - O radar informa; preço quem decide é o dono.
-- Não fale mal de concorrente em conteúdo: use o radar para mostrar critério ("confira a garantia e o código Anatel").
+- Não fale mal de concorrente em conteúdo: use o radar para mostrar critério ("confira a garantia e o prazo de entrega").
 - Testes: `python3 -m unittest discover -s tests`.

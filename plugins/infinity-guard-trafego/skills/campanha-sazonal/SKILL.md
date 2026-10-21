@@ -23,13 +23,13 @@ Opções: `--evento 1111|blackfriday|ambos`, `--cupom CODIGO` (o que o dono crio
 Nunca calcule preço de kit de cabeça: sempre o script.
 
 ### 2. Antes de lançar (portão de prova)
-Rode a skill `prova-da-loja`. Enquanto CNPJ, código Anatel e garantia com prazo não estiverem no site, use `--prova pendente` (o padrão): a campanha fica em orgânico e WhatsApp, sem anúncio pago. Diga isso ao dono em uma linha.
+Rode a skill `prova-da-loja`. Enquanto CNPJ e garantia com prazo não estiverem no site, use `--prova pendente` (o padrão): a campanha fica em orgânico e WhatsApp, sem anúncio pago. Diga isso ao dono em uma linha.
 
 ### 3. Anúncios e Reels
 Passe para a Máquina de Anúncios e a Máquina de Reels (se instaladas) este briefing, com a tabela de ofertas do modo 1:
 - Público: dono de casa ou apartamento que quer ver a casa de longe e tem medo de câmera invadida ou offline.
 - Promessa: kit certo para a sua casa, manual de instruções na caixa e dúvidas respondidas no WhatsApp. Nada de "o mais barato". A loja não configura o produto por WhatsApp nem por vídeo.
-- Prova: só cite código Anatel, garantia e avaliações que já estejam no site.
+- Prova: só cite garantia e avaliações que já estejam no site. Anatel não entra em campanha (dropshipping: a loja não publica código).
 - Ângulos: senha de fábrica (câmera invadida), o que olhar antes de comprar câmera na Black Friday, casa vazia durante o dia.
 
 ### 4. Durante a campanha

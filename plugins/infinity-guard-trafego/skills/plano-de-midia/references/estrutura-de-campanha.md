@@ -2,7 +2,7 @@
 
 ## Antes de ligar
 - [ ] Pixel da Meta instalado na Nuvemshop (integração nativa) com evento de compra chegando.
-- [ ] Prova da loja aprovada para público frio: CNPJ, Anatel conferida e garantia com prazo no site.
+- [ ] Prova da loja aprovada para público frio: CNPJ e garantia com prazo no site.
 - [ ] Atendente pronto para responder WhatsApp em minutos (o anúncio traz conversa; conversa sem resposta queima verba).
 - [ ] Margem por kit informada (para o CPA máximo).
 

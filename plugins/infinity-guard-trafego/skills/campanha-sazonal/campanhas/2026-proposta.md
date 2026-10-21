@@ -5,7 +5,7 @@ Gerado em 2026-10-18 com os preços do catálogo. Desconto do kit: 10% sobre a s
 ## Antes de lançar
 
 - ⚠️ sem custos informados: confirme a margem de cada kit antes de criar o cupom
-- ⚠️ prova da loja pendente (CNPJ, Anatel, garantia): campanha só orgânica e WhatsApp; nada de anúncio pago
+- ⚠️ prova da loja pendente (CNPJ, garantia): campanha só orgânica e WhatsApp; nada de anúncio pago
 - ⚠️ o cupom vale para o carrinho todo, não só para o kit: o kit é a forma de apresentar a oferta
 - ⚠️ confirme na Nuvemshop se o cupom soma com o desconto de 10% no Pix; se não somar, use o valor 'por' na comunicação
 
@@ -30,7 +30,7 @@ Cupom: **IG1111** (sugestão: crie na Nuvemshop antes de mandar qualquer mensage
 
 | Quando | Canal | O que fazer |
 |---|---|---|
-| 21/10 (quarta) | Loja | Prazo do código Anatel da câmera (ação 1 do Posicionamento) e da auditoria da prova-da-loja |
+| 21/10 (quarta) | Loja | Prazo da auditoria da prova-da-loja (CNPJ, garantia com prazo, troca e prazo de entrega no site) |
 | 28/10 (quarta) | Loja | Criar o cupom na Nuvemshop e congelar os preços atuais até 29/11 (sem subir preço antes da promoção) |
 | 02/11 (segunda) | Reels | Reels de aquecimento: câmera invadida por senha de fábrica (Máquina de Reels, tema quente) |
 | 04/11 (quarta) | WhatsApp | Mensagem VIP para quem já conversou com a loja (texto 'vip'); só manda o resto para quem disser SIM |
@@ -83,7 +83,7 @@ Cupom: **IGBLACK** (sugestão: crie na Nuvemshop antes de mandar qualquer mensag
 | Quando | Canal | O que fazer |
 |---|---|---|
 | 12/11 (quinta) | WhatsApp | Quem deixou carrinho no 11.11: sequência de carrinho da skill atendente |
-| 16/11 (segunda) | Reels | Reels: o que olhar antes de comprar câmera na Black Friday (Anatel, garantia, suporte) |
+| 16/11 (segunda) | Reels | Reels: o que olhar antes de comprar câmera na Black Friday (prazo de entrega, garantia, suporte) |
 | 20/11 (sexta) | WhatsApp | Mensagem VIP de Black Friday (texto 'vip') para a base que respondeu no 11.11 |
 | 24/11 (terça) | Stories | Esquenta: contagem regressiva e caixa de perguntas |
 | 26/11 (quinta) | WhatsApp | 8h: texto 'abertura' para a lista VIP |

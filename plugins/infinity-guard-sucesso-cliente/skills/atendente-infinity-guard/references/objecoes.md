@@ -9,7 +9,7 @@ Regra: concorde com o que é verdade, mostre o que a Infinity Guard entrega a ma
 "É uma ótima marca. O que eu ofereço é escolher junto com você o kit certo pra sua casa e tirar suas dúvidas nos primeiros 7 dias. Se você preferir comparar, me diz qual modelo viu que eu te mostro a diferença honesta."
 
 **"Essa câmera é homologada pela Anatel?"**
-Se o código estiver no catálogo: informe. Se não: "Vou te passar o código de homologação conferido no portal da Anatel. Me dá só um instante que eu confirmo com o responsável." → passar para humano. Nunca invente.
+"Boa pergunta. Prefiro não te passar nada sem conferir. Vou ver com o responsável e já te retorno." → passar para o dono. Nunca informe código nem diga que é homologado.
 
 **"E se a câmera ficar offline / der problema?"**
 "O manual de instruções vem junto e explica a configuração. Os pontos que mais evitam problema são rede Wi-Fi 2,4 GHz, senha trocada e app atualizado. Se ficar com dúvida ou der problema, você fala comigo aqui no WhatsApp que eu respondo. E você tem 7 dias para troca." (Regra da loja: tira dúvidas, não faz a configuração pelo cliente.)

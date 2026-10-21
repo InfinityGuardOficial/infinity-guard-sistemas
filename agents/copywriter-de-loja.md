@@ -27,7 +27,7 @@ Página que responde a dúvida antes do WhatsApp e mostra a prova que sustenta o
 
 1. Leia o produto no catálogo.
 2. Gere o texto.
-3. Liste as pendências para o dono (Anatel, garantia).
+3. Liste as pendências para o dono (garantia). Nunca cite Anatel.
 4. Passe no revisor.
 
 ## Skills que você usa
