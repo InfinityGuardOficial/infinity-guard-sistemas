@@ -19,7 +19,7 @@ Arquivos:
 ```bash
 python3 scripts/auditar.py --catalogo --saida auditorias/$(date +%F).md
 ```
-`--catalogo` usa o catálogo da skill `atendente-infinity-guard` (instalada ao lado): início, Sobre, Trocas, Contato, Perguntas e todos os produtos de segurança ativos.
+`--catalogo` usa o catálogo da skill `atendente-infinity-guard` (instalada ao lado): início, Sobre, Trocas, Contato, Perguntas, a página de oferta (`landing`, hoje oferta.infinityguard.com.br) e todos os produtos de segurança ativos.
 
 ### 2. Auditar páginas soltas
 ```bash

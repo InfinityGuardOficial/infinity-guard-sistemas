@@ -1,4 +1,4 @@
-# infinity-guard-operacoes · 2.2.2
+# infinity-guard-operacoes · 2.2.3
 
 Squad Operações e Loja: auditor da loja, gestor de catálogo, guardião de conformidade e o líder de operações.
 

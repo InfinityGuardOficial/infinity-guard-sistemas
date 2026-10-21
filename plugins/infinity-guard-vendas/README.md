@@ -1,4 +1,4 @@
-# infinity-guard-vendas · 2.2.2
+# infinity-guard-vendas · 2.2.3
 
 Squad Vendas: consultor de WhatsApp, recuperador de carrinho, vendedor B2B e o líder de vendas.
 
