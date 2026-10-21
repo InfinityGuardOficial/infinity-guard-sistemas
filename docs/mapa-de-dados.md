@@ -49,6 +49,7 @@ Tudo na área privada `data/users/<dono>/` do app (ninguém mais lê, nem quem r
 | `estado/clientes/<id>` | CRM: contato, etapa do funil, próxima ação e data, notas, consentimento, pedidos |
 | `estado/fornecedores/<id>` | VMI: fornecedor, prazos, política de troca, reserva |
 | `estado/lancamentos/<id>` | ERP financeiro: despesas e outras receitas do mês |
+| `estado/conversas/<funcionário>__<etapa>` | Conversas com a equipe: uma por funcionário e por etapa (ordem do dia, tarefa, alerta ou conversa livre), com as mensagens trocadas e o status |
 
 Estoque (WMS) fica junto do produto no `estado/extra/catalogo` (fornecedor, SKU do fornecedor, estoque do fornecedor, estoque próprio, mínimo, data da conferência).
 
