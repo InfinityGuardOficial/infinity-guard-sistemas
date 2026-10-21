@@ -7,7 +7,7 @@ Uso:
   cat roteiro.md | python3 revisar.py
   ... --json             (saída em JSON)
   ... --estrito          (sai com código 1 se houver algo que bloqueia; bom para conferir em lote)
-  ... --liberar anatel-sem-codigo   (regra já resolvida: por exemplo, código conferido e publicado no site)
+  ... --liberar garantia-sem-prazo-documentado   (regra já resolvida: por exemplo, prazo documentado e publicado no site)
 
 Cada achado traz a linha, o trecho, a gravidade (bloqueia | ajustar), o porquê e como reescrever.
 """

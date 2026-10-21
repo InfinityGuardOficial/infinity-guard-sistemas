@@ -12,7 +12,6 @@ Atendimento: [dias e horário]
 
 ## Bloco "Compra segura" na página de cada câmera, alarme e fechadura
 ```
-✔ Homologado pela Anatel: [código 00000-00-00000] (conferido no portal da Anatel em [data])
 ✔ Garantia: 90 dias de garantia legal [+ X meses do fabricante, se houver documento]
 ✔ 7 dias para trocar ou devolver, sem burocracia
 ✔ Vai com o passo a passo de configuração segura e suporte no WhatsApp
@@ -26,11 +25,10 @@ Reembolso em até [X] dias após recebermos o produto, pelo mesmo meio de pagame
 Defeito dentro da garantia: chame no WhatsApp com foto ou vídeo; respondemos em até [X] horas úteis.
 ```
 
-## Mensagem para o fornecedor pedindo o código Anatel
+## Mensagem para o fornecedor pedindo garantia e prazo por escrito
 ```
-Olá! Revendo os produtos [modelo exato de cada um] na minha loja. Pode me enviar o número do
-certificado de homologação da Anatel de cada modelo (formato 00000-00-00000) e o prazo de garantia
-que vocês dão por escrito? Preciso publicar na página de venda.
+Olá! Revendo os produtos [modelo exato de cada um] na minha loja. Pode me enviar, por escrito,
+o prazo de garantia que vocês dão e o prazo real de entrega para o Brasil? Preciso publicar na página de venda.
 ```
 
 ## Pedido de avaliação (dia 7 do pós-venda)

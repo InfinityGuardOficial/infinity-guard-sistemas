@@ -33,7 +33,7 @@ Digite `/agents` no Claude Code para ver a equipe instalada.
 | `skills/atendente-infinity-guard/` | Atendente do WhatsApp: indica o kit certo, quebra objeções, recupera carrinho, pós-venda de 7 dias e prompt do robô. **Guarda o catálogo único de preços.** | Vendas, Sucesso |
 | `skills/suporte-tecnico/` | Diagnóstico de câmera, alarme e fechadura com passo a passo para o WhatsApp; trocas e garantia pelo CDC. | Sucesso, Conformidade |
 | `skills/proposta-comercial/` | Proposta para comércio, escritório e condomínio com preço, Pix, parcelas, validade e limite de desconto. | Vendas B2B |
-| `skills/prova-da-loja/` | Auditor do site: CNPJ, Anatel, garantia, avaliações, troca, contato e rastros de fornecedor. | Operações |
+| `skills/prova-da-loja/` | Auditor do site: CNPJ, garantia, avaliações, troca, contato e rastros de fornecedor. | Operações |
 | `skills/catalogo-e-precos/` | Valida e atualiza o catálogo (Pix, parcelas, data), margem por produto e estoque. | Operações |
 | `skills/revisor-de-promessas/` | Barra promessa enganosa antes de publicar (100% seguro, instalação, 4G, Anatel ou garantia sem documento, "de/por" maquiado). | Todos |
 | `skills/descricao-de-produto/` | Página de produto para a Nuvemshop: título SEO, meta, descrição curta e HTML. | Marketing, Operações |

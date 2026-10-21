@@ -60,7 +60,7 @@ FERRAMENTAS = {
         {"type": "object", "properties": {
             "ticket": _num("Ticket médio em reais."), "margem": _num("Margem de 0 a 1 (ex.: 0.30)."),
             "meta_vendas": _num("Vendas desejadas no período."), "dias": _num("Dias do período (padrão 30)."),
-            "prova": {"type": "string", "enum": ["pendente", "ok"], "description": "Prova da loja (CNPJ, Anatel, garantia) no site."}},
+            "prova": {"type": "string", "enum": ["pendente", "ok"], "description": "Prova da loja (CNPJ, garantia) no site."}},
          "required": ["ticket", "margem", "meta_vendas"]},
         lambda a: ["plano-de-midia/scripts/midia.py", "plano", "--ticket", str(a["ticket"]), "--margem", str(a["margem"]),
                    "--meta-vendas", str(int(a["meta_vendas"])), "--dias", str(int(a.get("dias") or 30)), "--prova", a.get("prova") or "pendente"],

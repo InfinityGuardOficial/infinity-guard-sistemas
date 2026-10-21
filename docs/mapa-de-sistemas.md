@@ -10,7 +10,7 @@ Regra que guia a ordem: **primeiro a conversa que vende, depois a prova que sust
 |---|---|---|---|---|---|
 | 1 | **Atendente de Vendas WhatsApp** | Skill `atendente-infinity-guard` (+ scripts) | Qualifica a casa em 3 a 5 perguntas, indica o kit certo com preço e Pix, responde objeções, recupera carrinho e entrega o guia "câmera entregue segura" | Agora (antes de 11/11) | **Construído** (`skills/atendente-infinity-guard/`) |
 | 2 | Recuperação de carrinho e pós-venda 7 dias | Modo dentro da skill 1 + app da Nuvemshop | Sequência de mensagens D0/D1/D3 e guia dos primeiros 7 dias | Agora | **Construído** como modo da skill 1; falta ligar no app da loja |
-| 3 | Auditor de Prova da Loja | Skill `prova-da-loja` | Checa site e cada produto: CNPJ, prazo de garantia, código Anatel conferido, avaliações, fotos reais; gera lista de correção | Até 25/10 | **Construído** (`skills/prova-da-loja/`); 1ª auditoria em 18/10 |
+| 3 | Auditor de Prova da Loja | Skill `prova-da-loja` | Checa site e cada produto: CNPJ, prazo de garantia, avaliações, fotos reais; gera lista de correção | Até 25/10 | **Construído** (`skills/prova-da-loja/`); 1ª auditoria em 18/10 |
 | 4 | Campanha 11.11 e Black Friday | Skill `campanha-sazonal` (usa Máquina de Anúncios e Reels) | Oferta de kit, cupom, calendário de posts e mensagens de WhatsApp para 11/11 e 26 a 29/11 | Até 04/11 | **Construído** (`skills/campanha-sazonal/`); proposta com 10% em `campanhas/` |
 | 5 | Conteúdo semanal no automático | Rotina agendada no Claude (trigger) + Máquina de Reels | Toda segunda: 3 roteiros com os temas quentes (câmera invadida, offline, fechadura facial) | Depois do 4 | **Construído** (`skills/conteudo-semanal/`) + agendamento às segundas |
 | 6 | Painel de vendas | Artifact com dados da Nuvemshop | Conversas, kits indicados, carrinhos recuperados, vendas por canal | Depois das primeiras 20 vendas | **Construído** (`skills/painel-de-vendas/`); falta o CSV de pedidos |
@@ -38,7 +38,7 @@ Já vem dentro da skill 1. Para rodar sozinho, falta você instalar na Nuvemshop
 
 ## 3. Auditor de Prova da Loja
 
-O Raio X é claro: "não dá para ser caro e anônimo ao mesmo tempo". Antes de qualquer anúncio, a skill confere página por página o que falta (Anatel, CNPJ, garantia com prazo, avaliações, política de troca legível, foto real) e devolve uma lista de correção em ordem. Conecta com a ação 1 do Posicionamento (código Anatel da câmera até 21/10).
+O Raio X é claro: "não dá para ser caro e anônimo ao mesmo tempo". Antes de qualquer anúncio, a skill confere página por página o que falta (CNPJ, garantia com prazo, avaliações, política de troca legível, foto real) e devolve uma lista de correção em ordem.
 
 ## 4. Campanha 11.11 e Black Friday
 
@@ -50,7 +50,7 @@ Conteúdo semanal por rotina agendada, painel de vendas e o plugin no GitHub vê
 
 ## O que só você pode fazer (sem isso, nenhum sistema vende)
 
-1. Pedir ao fornecedor e conferir no portal da Anatel o código de cada câmera, alarme e fechadura.
+1. Anatel: tarefa sua para as férias de novembro, só no app (Central → "Tarefa sua").
 2. Colocar no rodapé do site o CNPJ e o prazo de garantia por produto.
 3. Escolher e instalar o app de WhatsApp com IA na Nuvemshop (a skill gera o conteúdo; a instalação é sua).
 4. Revisar o preço dos itens que não aguentam a comparação (kit 2 câmeras e fechadura facial).

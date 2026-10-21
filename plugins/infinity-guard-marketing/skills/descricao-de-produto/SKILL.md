@@ -1,6 +1,6 @@
 ---
 name: descricao-de-produto
-description: Páginas de produto e SEO da Infinity Guard na Nuvemshop. Use para escrever ou reescrever a descrição de um produto, o título SEO, a meta description, a descrição curta e o bloco "Compra segura", sempre com preço do catálogo e sem prometer Anatel ou garantia que a loja ainda não documentou.
+description: Páginas de produto e SEO da Infinity Guard na Nuvemshop. Use para escrever ou reescrever a descrição de um produto, o título SEO, a meta description, a descrição curta e o bloco "Compra segura", sempre com preço do catálogo e sem citar Anatel e sem prometer garantia que a loja ainda não documentou.
 ---
 
 # Descrição de Produto — página que vende sem prometer o que não tem
@@ -8,7 +8,7 @@ description: Páginas de produto e SEO da Infinity Guard na Nuvemshop. Use para 
 O cliente de segurança compara antes de comprar. Página com "para quem é", "antes de comprar, confira" e "compra segura" responde as dúvidas que viram WhatsApp e corta devolução por produto errado. Esta skill gera tudo a partir do `catalogo.json` da skill `atendente-infinity-guard`.
 
 Arquivos:
-- `scripts/descrever.py`: título SEO (até 60 caracteres), meta description (até 155), descrição curta com Pix e parcelas, e o HTML pronto para o editor da Nuvemshop. Lista as pendências (Anatel, garantia) para o dono.
+- `scripts/descrever.py`: título SEO (até 60 caracteres), meta description (até 155), descrição curta com Pix e parcelas, e o HTML pronto para o editor da Nuvemshop. Lista as pendências (garantia) para o dono. Nunca cita Anatel: a loja vende por dropshipping e não publica código.
 - `references/categorias.json`: promessa, para quem, como funciona e palavras de SEO por categoria; bloco "Compra segura".
 
 ## Modos
@@ -25,9 +25,9 @@ python3 scripts/descrever.py --todos --saida paginas/
 ```
 
 ### 3. Com prova publicada
-Quando o dono tiver o código Anatel conferido e o prazo de garantia por escrito:
+Quando o dono tiver o prazo de garantia por escrito:
 ```bash
-python3 scripts/descrever.py --produto alarme-ikerui --anatel 00000-00-00000 --garantia "12 meses"
+python3 scripts/descrever.py --produto alarme-ikerui --garantia "12 meses"
 ```
 Depois rode a skill `prova-da-loja` na URL do produto para confirmar que apareceu.
 

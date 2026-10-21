@@ -51,9 +51,6 @@ def coletar(hoje, base=SKILLS):
             add(1, "Operações e Loja", f"Catálogo com {idade} dias: reconferir preços no site (catalogo-e-precos validar).",
                 "catalogo.json")
         cond = cat.get("condicoes", {})
-        if "NÃO informar código" in cond.get("anatel", ""):
-            add(1, "Operações e Loja", "Código Anatel ainda não publicado: cobrar do fornecedor e conferir no portal.",
-                "catalogo.json → condicoes.anatel")
         if "NÃO prometer prazo" in cond.get("garantia", ""):
             add(1, "Operações e Loja", "Prazo de garantia sem documento do fornecedor: pedir por escrito.",
                 "catalogo.json → condicoes.garantia")
@@ -88,7 +85,7 @@ def coletar(hoje, base=SKILLS):
         elif m and int(m.group(1)) < int(m.group(2)):
             add(2, "Operações e Loja", f"Auditoria de {d:%d/%m}{nota}: seguir a lista de correção em ordem.", f.name)
         if m and int(m.group(1)) < 4:
-            add(1, "Tráfego Pago", f"Prova da loja {m.group(1)} de {m.group(2)}: sem público frio até CNPJ, Anatel e garantia.",
+            add(1, "Tráfego Pago", f"Prova da loja {m.group(1)} de {m.group(2)}: sem público frio até CNPJ e garantia.",
                 f.name)
 
     hist = ler_json(base / "conteudo-semanal" / "pautas" / "historico.json") or {}

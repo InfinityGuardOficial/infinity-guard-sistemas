@@ -48,8 +48,8 @@ No Claude Code, peça pelo nome ("use o lider-vendas para...") ou só descreva o
 
 | Funcionário | Cargo | Skills | Chame quando |
 |---|---|---|---|
-| **lider-operacoes** (líder) | Head de Operações e E-commerce | catalogo-e-precos, prova-da-loja, revisor-de-promessas | Para cuidar do site na Nuvemshop, catálogo, preços, estoque, fornecedores, prova da loja (CNPJ, Anatel, garantia) e conformidade |
-| auditor-da-loja | Auditor de Prova da Loja | prova-da-loja, descricao-de-produto | Para conferir se o site mostra CNPJ, código Anatel, garantia com prazo, avaliações, troca, endereço e contato, achar rastro de fornecedor nas páginas e comparar com a última auditoria |
+| **lider-operacoes** (líder) | Head de Operações e E-commerce | catalogo-e-precos, prova-da-loja, revisor-de-promessas | Para cuidar do site na Nuvemshop, catálogo, preços, estoque, fornecedores, prova da loja (CNPJ, garantia) e conformidade |
+| auditor-da-loja | Auditor de Prova da Loja | prova-da-loja, descricao-de-produto | Para conferir se o site mostra CNPJ, garantia com prazo, avaliações, troca, endereço e contato, achar rastro de fornecedor nas páginas e comparar com a última auditoria |
 | gestor-de-catalogo | Gestor de Catálogo, Preços e Estoque | catalogo-e-precos, descricao-de-produto | Quando mudar preço, ativar ou desativar produto, conferir margem no Pix e no cartão, estoque baixo, reposição com fornecedor ou validar o catálogo antes de campanha |
 | guardiao-de-conformidade | Guardião de Conformidade (CDC, LGPD, Anatel e regras da Meta) | revisor-de-promessas, prova-da-loja, suporte-tecnico | Para revisar qualquer texto antes de publicar (anúncio, post, página, proposta, mensagem), tirar dúvida sobre troca, garantia, arrependimento, LGPD, Anatel ou regra de anúncio |
 

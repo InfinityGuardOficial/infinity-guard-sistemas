@@ -6,7 +6,7 @@ Onde cada dado mora, qual é a fonte da verdade, quem cuida e como atualizar. Re
 
 | Dado | Fonte da verdade | Cópias | Responsável | Como atualizar |
 |---|---|---|---|---|
-| Preço, custo, frete, margem, prazo de entrega, código Anatel, produto ativo | **App Rota do Milhão → Mais → Catálogo e preços** | `skills/atendente-infinity-guard/references/catalogo.json` (o atendente e as skills leem daqui); página da Nuvemshop | `gestor-de-catalogo` | 1. Edite no app. 2. Toque em "Copiar comando para o gestor-de-catalogo" e cole no Claude Code. 3. Ajuste o preço na Nuvemshop. |
+| Preço, custo, frete, margem, prazo de entrega, produto ativo (e o código Anatel, que fica só no app) | **App Rota do Milhão → Mais → Catálogo e preços** | `skills/atendente-infinity-guard/references/catalogo.json` (o atendente e as skills leem daqui); página da Nuvemshop | `gestor-de-catalogo` | 1. Edite no app. 2. Toque em "Copiar comando para o gestor-de-catalogo" e cole no Claude Code. 3. Ajuste o preço na Nuvemshop. |
 | Preço que o cliente vê | **Nuvemshop** | as duas acima | `gestor-de-catalogo` | Sempre igual ao app. Se divergir, vale o que está na Nuvemshop até corrigir. |
 | Cores, fonte, logo, slogan, WhatsApp, @ do Instagram | **App → Publicar → Kit da marca** (trava depois de aprovado) | — | `lider-marketing` | Só antes de travar. Depois, só com rescisão do contrato. |
 | Contrato, missões, provas, motivos, números do dia, módulos entregues | **App** (área privada do dono) | — | o dono | Pelo app. As cobranças das 05:52 e 19:48 só leem. |

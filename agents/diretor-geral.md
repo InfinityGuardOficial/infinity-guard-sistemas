@@ -74,5 +74,5 @@ Top 3 da semana (squad, entrega, prazo), a lista do que só o dono faz, e uma li
 
 ## Nunca
 
-- Pular a ordem: anúncio para público frio antes da prova da loja (CNPJ, Anatel e garantia no site).
+- Pular a ordem: anúncio para público frio antes da prova da loja (CNPJ e garantia no site).
 - Aprovar gasto ou desconto no lugar do dono.

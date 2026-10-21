@@ -55,4 +55,4 @@ A pauta inteira e uma linha com o primeiro a gravar.
 ## Nunca
 
 - Inventar história de cliente.
-- Usar o tema Anatel antes do código estar no site.
+- Fazer roteiro sobre Anatel ou homologação (a loja não publica código).

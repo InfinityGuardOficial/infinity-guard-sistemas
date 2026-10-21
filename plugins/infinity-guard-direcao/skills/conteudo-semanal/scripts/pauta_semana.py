@@ -5,7 +5,6 @@ Uso:
   python3 pauta_semana.py                         (semana que começa na próxima segunda)
   python3 pauta_semana.py --semana 2026-11-23     (qualquer data; usa a segunda daquela semana)
   python3 pauta_semana.py --registrar             (grava os temas escolhidos no histórico)
-  python3 pauta_semana.py --anatel-publicado      (libera temas que dependem do código Anatel no site)
   ... --json | --saida pautas/2026-10-19.md
 
 Regras: tema repetido só depois de 2 semanas; nas semanas do 11.11 e da Black Friday, o tema da campanha entra primeiro;
@@ -43,23 +42,21 @@ def ler_historico(caminho=HISTORICO):
     return json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
 
 
-def disponivel(t, semana, anatel):
-    if t.get("requer") == "anatel_publicado" and not anatel:
-        return False
+def disponivel(t, semana):
     j = t.get("janela")
     if j and not (date.fromisoformat(j[0]) <= semana + timedelta(days=6) and semana <= date.fromisoformat(j[1])):
         return False
     return True
 
 
-def escolher(semana, dados, historico, anatel=False, n=3):
+def escolher(semana, dados, historico, n=3):
     semana = segunda(semana)
     recentes = set()
     for k, ids in historico.items():
         dk = date.fromisoformat(k)
         if dk != semana and 0 < (semana - dk).days <= INTERVALO * 7:
             recentes.update(ids)
-    temas = [t for t in dados["temas"] if disponivel(t, semana, anatel)]
+    temas = [t for t in dados["temas"] if disponivel(t, semana)]
     # ordem estável que gira a cada semana
     giro = semana.isocalendar()[1] % len(temas) if temas else 0
     temas = temas[giro:] + temas[:giro]
@@ -87,11 +84,11 @@ def roteiro(t, dados, dia):
             "legenda": t["legenda"] + " " + dados["cta"], "produto": t["produto"]}
 
 
-def pauta(semana=None, historico=None, anatel=False, dados=None):
+def pauta(semana=None, historico=None, dados=None):
     dados = dados or carregar()
     semana = segunda(semana or proxima_segunda())
     historico = ler_historico() if historico is None else historico
-    escolhidos, ev = escolher(semana, dados, historico, anatel)
+    escolhidos, ev = escolher(semana, dados, historico)
     idade = (date.today() - date.fromisoformat(dados["atualizado_em"])).days
     avisos = []
     if idade > 45:
@@ -122,11 +119,10 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--semana")
     ap.add_argument("--registrar", action="store_true")
-    ap.add_argument("--anatel-publicado", action="store_true")
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--saida")
     a = ap.parse_args()
-    p = pauta(date.fromisoformat(a.semana) if a.semana else None, anatel=a.anatel_publicado)
+    p = pauta(date.fromisoformat(a.semana) if a.semana else None)
     out = json.dumps(p, ensure_ascii=False, indent=2) if a.json else para_md(p)
     if a.saida:
         Path(a.saida).write_text(out, encoding="utf-8")

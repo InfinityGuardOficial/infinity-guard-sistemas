@@ -4,17 +4,16 @@ e o texto completo em HTML (para colar no editor) a partir do catálogo.
 
 Uso:
   python3 descrever.py --produto kit-cam-2
-  python3 descrever.py --produto alarme-ikerui --anatel 12345-21-01234 --garantia "12 meses"
+  python3 descrever.py --produto alarme-ikerui --garantia "12 meses"
   python3 descrever.py --todos --saida paginas/          (um arquivo .html por produto ativo)
   ... --json
 
---anatel   só depois de conferido no portal da Anatel com o modelo exato. Sem ele, a página não cita código.
+A página nunca cita Anatel nem código de homologação (dropshipping: a conferência é tarefa interna do dono, no app).
 --garantia só com documento do fornecedor. Sem ele, a página diz "Garantia em todos os produtos".
 """
 import argparse
 import html
 import json
-import re
 from pathlib import Path
 
 AQUI = Path(__file__).resolve().parent.parent
@@ -23,8 +22,6 @@ CATALOGOS = [AQUI.parent / "atendente-infinity-guard" / "references" / "catalogo
              AQUI / "references" / "catalogo.json"]
 TITULO_MAX = 60
 META_MAX = 155
-ANATEL = re.compile(r"^\d{5}-\d{2}-\d{5}$")
-PRECISA_ANATEL = {"camera", "alarme", "fechadura"}
 
 
 def brl(v):
@@ -57,9 +54,7 @@ def titulo_seo(p):
     return cortar(base, TITULO_MAX)
 
 
-def descrever(p, cat, cats, anatel=None, garantia=None):
-    if anatel and not ANATEL.match(anatel):
-        raise ValueError("código Anatel fora do formato 00000-00-00000")
+def descrever(p, cat, cats, garantia=None):
     c = cats["categorias"].get(p["categoria"], cats["categorias"]["complemento"])
     pix = brl(p["pix"])
     parc = f" ou em até {p['parcelas']}x" if p["parcelas"] > 1 else ""
@@ -73,8 +68,6 @@ def descrever(p, cat, cats, anatel=None, garantia=None):
     if garantia:
         compra[-1] = f"Garantia de {garantia}"
     pendencias = []
-    if p["categoria"] in PRECISA_ANATEL and not anatel:
-        pendencias.append("código Anatel do modelo (conferir no portal da Anatel e publicar na página)")
     if not garantia:
         pendencias.append("prazo de garantia por escrito do fornecedor")
     e = html.escape
@@ -87,8 +80,6 @@ def descrever(p, cat, cats, anatel=None, garantia=None):
     if p.get("unidades", 1) > 1:
         partes.append(f"<p>Este kit vem com <strong>{p['unidades']} unidades</strong>.</p>")
     partes.append("<h3>Compra segura Infinity Guard</h3><ul>" + "".join(f"<li>{e(x)}</li>" for x in compra) + "</ul>")
-    if anatel:
-        partes.append(f"<p>Homologação Anatel: <strong>{e(anatel)}</strong></p>")
     partes.append(f"<p>Dúvida sobre qual escolher para a sua casa? Chame no WhatsApp {e(cat['whatsapp'])} "
                   "que a gente te ajuda a montar o kit certo.</p>")
     return {"id": p["id"], "titulo_seo": titulo_seo(p), "meta_description": meta,
@@ -100,7 +91,6 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--produto")
     ap.add_argument("--todos", action="store_true")
-    ap.add_argument("--anatel")
     ap.add_argument("--garantia")
     ap.add_argument("--catalogo")
     ap.add_argument("--json", action="store_true")
@@ -117,7 +107,7 @@ def main():
     for p in alvo:
         if not p["ativo"]:
             print(f"[para o dono] {p['id']} está inativo no catálogo")
-        d = descrever(p, cat, cats, a.anatel if not a.todos else None, a.garantia)
+        d = descrever(p, cat, cats, a.garantia)
         if a.json:
             texto = json.dumps(d, ensure_ascii=False, indent=2)
         else:
