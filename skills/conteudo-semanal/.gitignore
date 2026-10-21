@@ -1,3 +1,7 @@
 videos/*/tmp/
 videos/*/clips/
 videos/*/*.mp4
+videos/*/build/
+videos/anime3d/modelos/
+videos/anime3d/.venv-blender/
+__pycache__/
