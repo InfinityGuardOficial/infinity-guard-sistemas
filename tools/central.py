@@ -97,6 +97,8 @@ def gerar(base, projeto=None, com_orquestrador=False, agora=None):
          f"- Instalar a equipe e as skills: {_link(REPO / 'README.md', base, 'README')} (seção \"Instalar tudo de uma vez\").",
          f"- Ligar o orquestrador no seu computador: {_link(REPO / 'README.md', base, 'README')} (seção \"Orquestrador automático\").",
          f"- Regras da casa para o Claude: {_link(REPO / '.claude/CLAUDE.md', base, '.claude/CLAUDE.md')} e {_link(REPO / 'CLAUDE.md', base, 'CLAUDE.md')}.",
+         "- Regra de suporte (21/10/2026): a loja tira dúvidas no WhatsApp e o manual de instruções acompanha o produto; "
+         "ela não configura o produto por WhatsApp nem por vídeo (o revisor barra essa promessa).",
          f"- Onde mora cada dado e quem cuida: {_link(REPO / 'docs/mapa-de-dados.md', base)}.",
          f"- O que roda sozinho e o que espera você: {_link(REPO / 'docs/mapa-da-autonomia.md', base)}. "
          "No celular, a aba Central do app Rota do Milhão mostra o mesmo em tempo real.", "",

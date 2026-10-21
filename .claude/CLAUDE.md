@@ -31,7 +31,7 @@ Essas ações viram linhas em `logs/aprovacoes.json` (seção "## Pedidos de apr
 
 ## Promessas proibidas (valem para todo texto)
 
-Nada de Anatel, garantia, CNPJ, avaliação ou depoimento que não esteja documentado; nada de "100% seguro"; a loja não faz instalação nem vende câmera 4G; é dropshipping, então nunca prometa produto já configurado nem prazo menor que o do catálogo. Regras completas em `skills/revisor-de-promessas/references/regras.json`.
+Nada de Anatel, garantia, CNPJ, avaliação ou depoimento que não esteja documentado; nada de "100% seguro"; a loja não faz instalação nem vende câmera 4G; é dropshipping, então nunca prometa produto já configurado nem prazo menor que o do catálogo; a loja não configura o produto por WhatsApp nem por vídeo: ela tira dúvidas, e o manual de instruções acompanha o produto. Regras completas em `skills/revisor-de-promessas/references/regras.json`.
 
 ## Segredos
 

@@ -6,7 +6,7 @@ Loja online de câmeras Wi-Fi, alarmes e fechaduras inteligentes, vendida por **
 
 - Preço, Pix e parcela só saem do catálogo (`skills/atendente-infinity-guard/references/catalogo.json`; a fonte da verdade é o Catálogo do app Rota do Milhão, ver `docs/mapa-de-dados.md`).
 - Nunca invente código Anatel, prazo de garantia, CNPJ, depoimento, avaliação ou número sem fonte.
-- Nunca prometa "100% seguro", instalação, câmera 4G, produto "já configurado" ou prazo de entrega menor que o do catálogo. A promessa certa: "quando chegar, a gente configura junto com você por vídeo no WhatsApp".
+- Nunca prometa "100% seguro", instalação, câmera 4G, produto "já configurado" ou prazo de entrega menor que o do catálogo. A loja **não configura o produto por WhatsApp nem por vídeo**: ela tira dúvidas, porque o manual de instruções acompanha o produto. A promessa certa: "o manual de instruções acompanha o produto, e a gente tira suas dúvidas no WhatsApp". O revisor barra promessa de configuração (regra `configuracao-pela-loja`).
 - Todo texto para a rua passa pelo revisor: `python3 skills/revisor-de-promessas/scripts/revisar.py --texto "..."` (ou a ferramenta MCP `revisar_texto`).
 - **Gasto, publicação, mensagem para cliente real, mudança no site ou na conta de anúncios: só com o "pode" do dono.** Isso vale também para rotinas agendadas.
 - Português do Brasil, frases curtas, tom de tranquilidade (nunca medo).

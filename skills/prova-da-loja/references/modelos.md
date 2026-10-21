@@ -15,7 +15,7 @@ Atendimento: [dias e horário]
 ✔ Homologado pela Anatel: [código 00000-00-00000] (conferido no portal da Anatel em [data])
 ✔ Garantia: 90 dias de garantia legal [+ X meses do fabricante, se houver documento]
 ✔ 7 dias para trocar ou devolver, sem burocracia
-✔ Vai com o passo a passo de configuração segura e suporte no WhatsApp
+✔ Manual de instruções acompanha o produto, e a gente tira suas dúvidas no WhatsApp
 ```
 
 ## Página de trocas: o que acrescentar
