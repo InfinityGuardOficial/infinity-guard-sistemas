@@ -28,7 +28,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from core import aprovacoes, caminhos, config, regras, resumo, rotinas  # noqa: E402
 from core.event_queue import EventQueue  # noqa: E402
-from tools import coletar_metricas, run_claude_agent  # noqa: E402
+from tools import central, coletar_metricas, run_claude_agent  # noqa: E402
 
 log = logging.getLogger("infinity-guard")
 log.addHandler(logging.NullHandler())
@@ -94,6 +94,10 @@ def ciclo(cfg=None, rodar=run_claude_agent.rodar, agora=None, api_meta=None, rot
     (caminhos.logs() / "daemon.heartbeat").write_text(m["gerado_em"], encoding="utf-8")
     tarefas = processar_fila(cfg, rodar)
     arquivo_resumo = resumo.gerar(m, agora_)
+    try:
+        central.salvar(caminhos.logs() / "central.md", com_orquestrador=True, agora=agora_)
+    except Exception:
+        log.exception("central não foi atualizada")
     return {"metricas": m, "eventos": eventos, "avisos": avisos, "rotinas": feitas, "tarefas": tarefas,
             "resumo": str(arquivo_resumo)}
 

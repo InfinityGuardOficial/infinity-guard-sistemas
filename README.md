@@ -2,6 +2,8 @@
 
 **Segurança onde você estiver.** Sistemas da Infinity Guard (https://infinityguard.com.br) para usar dentro do Claude Code: skills prontas, estudos de mercado e o mapa do que vem a seguir.
 
+**Tudo num lugar só:** [`docs/central.md`](docs/central.md) junta o estado de hoje e o índice de tudo (atualize com `python3 tools/central.py`; no seu computador o orquestrador mantém `logs/central.md` com o resumo do dia e as aprovações).
+
 ## A equipe (22 funcionários em 7 squads)
 
 Cada funcionário é um agente do Claude Code (pasta `agents/`) com cargo, missão, regras e as skills do trabalho dele já carregadas. Quem lidera cada squad distribui o trabalho; o `diretor-geral` decide as prioridades da semana. Organograma completo: [`docs/organograma.md`](docs/organograma.md).
