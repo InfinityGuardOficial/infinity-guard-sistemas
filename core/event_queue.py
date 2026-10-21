@@ -31,23 +31,30 @@ def _trava(espera=10.0):
             os.write(fd, str(os.getpid()).encode())
             os.close(fd)
             break
-        except FileExistsError:
+        except (FileExistsError, PermissionError):
+            # no Windows, uma trava que está sendo apagada dá PermissionError em vez de FileExistsError
             try:
                 if time.time() - trava.stat().st_mtime > TRAVA_VELHA:
                     trava.unlink()
                     continue
             except FileNotFoundError:
                 continue
+            except PermissionError:
+                pass
             if time.monotonic() > limite:
                 raise TimeoutError(f"fila travada por outro processo ({trava})")
             time.sleep(0.05)
     try:
         yield
     finally:
-        try:
-            trava.unlink()
-        except FileNotFoundError:
-            pass
+        for _ in range(50):
+            try:
+                trava.unlink()
+                break
+            except FileNotFoundError:
+                break
+            except PermissionError:  # Windows: antivírus ou indexador segurando o arquivo por um instante
+                time.sleep(0.02)
 
 
 def _ler():
