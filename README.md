@@ -63,6 +63,10 @@ Digite `/agents` no Claude Code para ver a equipe instalada.
 | `scripts/empacotar-skills.sh` | Testa todas as skills e refaz os .zip. |
 | `plugins/` e `scripts/gerar-plugins.py` | Um plugin por squad, gerado a partir de `agents/` e `skills/`. |
 
+## Já ativado neste projeto
+
+O arquivo `.claude/settings.json` ativa o plugin `infinity-guard` (22 funcionários e 14 skills) para quem abrir esta pasta no Claude Code, no computador ou na nuvem. Na primeira vez, o Claude Code pergunta se você confia no projeto e se quer instalar o plugin: responda que sim. Confira com `/agents` e `/skills`.
+
 ## Instalar tudo de uma vez (plugin, recomendado)
 
 No Claude Code, em qualquer pasta (por exemplo a pasta do projeto "Workshop IA autônoma"):
