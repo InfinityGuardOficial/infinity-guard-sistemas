@@ -49,6 +49,9 @@ Tudo na área privada `data/users/<dono>/` do app (ninguém mais lê, nem quem r
 | `estado/clientes/<id>` | CRM: contato, etapa do funil, próxima ação e data, notas, consentimento, pedidos |
 | `estado/fornecedores/<id>` | VMI: fornecedor, prazos, política de troca, reserva |
 | `estado/lancamentos/<id>` | ERP financeiro: despesas e outras receitas do mês |
+| `estado/aprovacoes/<id>` | Caixa de aprovações: propostas da equipe e das rotinas (publicação, mensagem, conteúdo, preço, operação) com status pendente, aprovado, ajustar ou recusado |
+| `estado/extra/rotinas` | Situação das rotinas, gravada pelo zelador às 07:07 |
+| `estado/extra/plano-semana` | Plano da semana do diretor-geral (top 3, ordens, propostas, alertas) |
 | `estado/conversas/<funcionário>__<etapa>` | Conversas com a equipe: uma por funcionário e por etapa (ordem do dia, tarefa, alerta ou conversa livre), com as mensagens trocadas e o status |
 
 Estoque (WMS) fica junto do produto no `estado/extra/catalogo` (fornecedor, SKU do fornecedor, estoque do fornecedor, estoque próprio, mínimo, data da conferência).
@@ -69,9 +72,11 @@ Recomendação: usar **uma** conta dentro do Business, com pagamento e com o Ins
 
 | Quando | O que faz | Escreve em |
 |---|---|---|
-| 05:17 todo dia | radar, ordens e pauta | `estado/radar`, `estado/pauta` |
+| 05:17 todo dia | radar, ordens, pauta e proposta de publicação | `estado/radar`, `estado/pauta`, `estado/aprovacoes` |
 | 05:52 seg–sáb | cobrança da manhã no celular | só lê |
 | 19:48 todo dia | cobrança da noite no celular | só lê |
+| 06:13 segunda | diretor-geral: plano da semana, ordens e propostas | `estado/radar`, `estado/aprovacoes`, `estado/extra/plano-semana` |
+| 07:07 todo dia | zelador: confere as rotinas e roda o radar de novo se falhou | `estado/extra/rotinas` |
 | 11:43 e 16:43 todo dia | vigia da gestão: alertas do ERP, CRM, WMS, TMS e VMI no celular, com o funcionário responsável | só lê |
 | push em `desktop/` ou `android/` | gera os instaladores (Actions → Apps) | GitHub Actions |
 | `bash scripts/empacotar-skills.sh` | testa as skills e refaz os .zip | `skills/*.zip` |
