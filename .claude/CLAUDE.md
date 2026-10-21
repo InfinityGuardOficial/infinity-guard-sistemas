@@ -6,9 +6,9 @@ Este repositório é o sistema da Infinity Guard (https://infinityguard.com.br),
 
 - `agents/`: os 22 funcionários (7 squads, um líder por squad, `diretor-geral` no topo). Edite aqui; `plugins/` é gerado por `scripts/gerar-plugins.py`.
 - `skills/`: as skills com os scripts que fazem as contas. Número sai de script, nunca de cabeça.
-- `core/`: orquestrador automático. `daemon_orchestrator.py` roda em ciclos, `event_queue.py` é a fila (`logs/queue.json`), `regras.py` transforma métricas em eventos, `config.py` lê `config/orquestrador.json` + `config/orquestrador.local.json`.
-- `tools/`: coleta de métricas (`metricas_vendas.py` lê o CSV da Nuvemshop via `skills/painel-de-vendas`; `metricas_meta.py` lê o Meta Ads só em modo leitura, pela API ou pelo CSV do Gerenciador; `coletar_metricas.py` junta tudo em `logs/metrics.json`) e o disparo dos agentes (`run_claude_agent.py` / `.sh`).
-- `logs/` e `dados/`: gerados no computador, fora do Git. `dados/nuvemshop/` recebe a exportação de vendas; `dados/meta/` o CSV do Gerenciador.
+- `core/`: orquestrador automático. `daemon_orchestrator.py` roda em ciclos, `event_queue.py` é a fila (`logs/queue.json`), `regras.py` transforma métricas em eventos, `rotinas.py` roda os scripts das skills que só leem (catálogo, gestão, conteúdo, radar, auditoria), `aprovacoes.py` cuida dos pedidos, `resumo.py` escreve `logs/resumo/AAAA-MM-DD.md`, `config.py` lê `config/orquestrador.json` + `config/orquestrador.local.json`.
+- `tools/`: coleta de métricas (`metricas_vendas.py` lê o CSV da Nuvemshop via `skills/painel-de-vendas`; `metricas_meta.py` lê o Meta Ads só em modo leitura, pela API ou pelo CSV do Gerenciador; `coletar_metricas.py` junta tudo em `logs/metrics.json`) o disparo dos agentes (`run_claude_agent.py` / `.sh`) e a central (`central.py` → `docs/central.md`; rode de novo quando mudar catálogo, equipe, skills ou docs).
+- `logs/` e `dados/`: gerados no computador, fora do Git. `dados/nuvemshop/` recebe a exportação de vendas; `dados/meta/` o CSV do Gerenciador; `dados/app/` o backup do app Rota do Milhão.
 - `tests/`: testes do orquestrador. Rode `python3 -m unittest discover -s tests` antes de qualquer merge; as skills têm os delas (`bash scripts/empacotar-skills.sh`).
 
 ## Fontes da verdade
@@ -27,7 +27,7 @@ O orquestrador e os agentes disparados por ele trabalham em modo de leitura. Sem
 - envia mensagem, e-mail ou WhatsApp a cliente real;
 - publica em rede social.
 
-Essas ações viram linhas em `logs/aprovacoes.json` (seção "## Pedidos de aprovação" na resposta do agente) e aparecem em `python3 core/daemon_orchestrator.py status`. Quem executa é o max. Texto que vai para a rua passa antes pelo `revisor-de-promessas`.
+Essas ações viram linhas em `logs/aprovacoes.json` (seção "## Pedidos de aprovação" na resposta do agente) e aparecem em `python3 core/daemon_orchestrator.py aprovacoes`. `aprovar <n>` só registra a decisão: quem executa é o max. Pagamentos e gasto automático ficaram para depois, por decisão do max (21/10/2026). Texto que vai para a rua passa antes pelo `revisor-de-promessas`.
 
 ## Promessas proibidas (valem para todo texto)
 

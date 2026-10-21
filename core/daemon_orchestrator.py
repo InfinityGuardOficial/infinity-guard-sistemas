@@ -11,6 +11,8 @@ Uso:
   python3 core/daemon_orchestrator.py uma-vez    # um ciclo só (bom para testar)
   python3 core/daemon_orchestrator.py status     # fila, últimas tarefas e aprovações pendentes
   python3 core/daemon_orchestrator.py parar      # pede para o daemon em segundo plano encerrar
+  python3 core/daemon_orchestrator.py aprovacoes # pedidos esperando o seu "pode", com o link de onde fazer
+  python3 core/daemon_orchestrator.py aprovar 3 [nota]   /   recusar 3 [nota]
 Funciona igual no Windows, Linux e Mac. Logs em logs/system.log e logs/errors.log.
 """
 import json
@@ -18,14 +20,15 @@ import logging
 import os
 import sys
 import time
+from datetime import datetime
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from core import caminhos, config, regras  # noqa: E402
+from core import aprovacoes, caminhos, config, regras, resumo, rotinas  # noqa: E402
 from core.event_queue import EventQueue  # noqa: E402
-from tools import coletar_metricas, run_claude_agent  # noqa: E402
+from tools import central, coletar_metricas, run_claude_agent  # noqa: E402
 
 log = logging.getLogger("infinity-guard")
 log.addHandler(logging.NullHandler())
@@ -71,10 +74,17 @@ def processar_fila(cfg, rodar=run_claude_agent.rodar):
     return feitas
 
 
-def ciclo(cfg=None, rodar=run_claude_agent.rodar, agora=None, api_meta=None):
+def ciclo(cfg=None, rodar=run_claude_agent.rodar, agora=None, api_meta=None, rotinas_fn=None):
     cfg = cfg or config.carregar()
+    agora_ = agora or datetime.now()
     m = coletar_metricas.coletar(api_meta=api_meta)
-    eventos, avisos, estado = regras.avaliar(m, regras.ler_estado(), cfg, agora)
+    eventos, avisos, estado = regras.avaliar(m, regras.ler_estado(), cfg, agora_)
+    feitas, ev_rotinas, estado = rotinas.rodar(cfg, estado, agora_, rotinas_fn)
+    for r in feitas:
+        (log.info if r["ok"] else log.error)("rotina %s: %s", r["rotina"], r["resumo"])
+    eventos += ev_rotinas
+    estado["ultimas_rotinas"] = [r for r in estado.get("ultimas_rotinas", []) if r.get("data") == agora_.date().isoformat()] \
+        + [{**r, "data": agora_.date().isoformat()} for r in feitas]
     for a in avisos:
         log.warning(a)
     for e in eventos:
@@ -82,7 +92,14 @@ def ciclo(cfg=None, rodar=run_claude_agent.rodar, agora=None, api_meta=None):
             log.info("enfileirado: %s", e["type"])
     regras.gravar_estado(estado)
     (caminhos.logs() / "daemon.heartbeat").write_text(m["gerado_em"], encoding="utf-8")
-    return {"metricas": m, "eventos": eventos, "avisos": avisos, "tarefas": processar_fila(cfg, rodar)}
+    tarefas = processar_fila(cfg, rodar)
+    arquivo_resumo = resumo.gerar(m, agora_)
+    try:
+        central.salvar(caminhos.logs() / "central.md", com_orquestrador=True, agora=agora_)
+    except Exception:
+        log.exception("central não foi atualizada")
+    return {"metricas": m, "eventos": eventos, "avisos": avisos, "rotinas": feitas, "tarefas": tarefas,
+            "resumo": str(arquivo_resumo)}
 
 
 def _ja_rodando(cfg):
@@ -128,9 +145,10 @@ def status():
     print(f"Fila: {len(q['pending_tasks'])} pendente(s)")
     for t in q["history"][-5:]:
         print(f"  {t.get('started_at', '')} {t['type']} → {t['details'].get('agente')}: {t.get('status', 'rodando')}")
-    print(f"Aprovações aguardando você: {len(aprov)}")
-    for a in aprov[-10:]:
-        print(f"  [{a['agente']}] {a['acao']}  (logs/agentes/{a['relatorio']})")
+    print(f"Aprovações aguardando você: {len(aprov)} (detalhes: comando aprovacoes)")
+    hoje = caminhos.logs() / "resumo" / f"{datetime.now():%Y-%m-%d}.md"
+    if hoje.exists():
+        print(f"Resumo do dia: {hoje}")
     return 0
 
 
@@ -143,11 +161,29 @@ def main(argv):
     if cmd == "uma-vez":
         r = ciclo()
         print(json.dumps({"eventos": [e["type"] for e in r["eventos"]], "avisos": r["avisos"],
-                          "tarefas": [{"tipo": t["type"], "status": t["status"]} for t in r["tarefas"]]},
+                          "rotinas": [{"rotina": x["rotina"], "ok": x["ok"], "resumo": x["resumo"]} for x in r["rotinas"]],
+                          "tarefas": [{"tipo": t["type"], "status": t["status"]} for t in r["tarefas"]],
+                          "resumo": r["resumo"]},
                          indent=2, ensure_ascii=False))
         return 0
     if cmd == "status":
         return status()
+    if cmd == "aprovacoes":
+        print(aprovacoes.texto_lista())
+        return 0
+    if cmd in ("aprovar", "recusar"):
+        if len(argv) < 3 or not argv[2].isdigit():
+            print(f"Uso: {cmd} <número> [nota]. Veja os números com: aprovacoes")
+            return 2
+        try:
+            p = aprovacoes.decidir(int(argv[2]), cmd == "aprovar", " ".join(argv[3:]))
+        except ValueError as e:
+            print(e)
+            return 1
+        print(f"Pedido {argv[2]} {'aprovado' if cmd == 'aprovar' else 'recusado'}: {p['acao']}")
+        if cmd == "aprovar" and aprovacoes.link(p):
+            print(f"Agora é com você: {aprovacoes.link(p)}")
+        return 0
     if cmd == "parar":
         (caminhos.logs() / "PARAR").write_text("parar", encoding="utf-8")
         print("Pedido de parada enviado: o daemon encerra em até 5 segundos (ou ao fim do agente em andamento).")

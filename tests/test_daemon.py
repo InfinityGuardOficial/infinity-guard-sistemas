@@ -50,7 +50,7 @@ class Ciclo(Sandbox):
         self.com_vendas(conversas=True)
         self.com_meta()
         chamadas = []
-        r = d.ciclo(rodar=falso(chamadas, aprovacoes=1), agora=TERCA_9H)
+        r = d.ciclo(rotinas_fn={}, rodar=falso(chamadas, aprovacoes=1), agora=TERCA_9H)
         tipos = [e["type"] for e in r["eventos"]]
         self.assertIn("relatorio_diario", tipos)
         self.assertIn("revisar_conjuntos", tipos)
@@ -62,7 +62,7 @@ class Ciclo(Sandbox):
 
         # segundo ciclo no mesmo dia, sem mudança: nada novo
         chamadas.clear()
-        r2 = d.ciclo(rodar=falso(chamadas), agora=TERCA_9H)
+        r2 = d.ciclo(rotinas_fn={}, rodar=falso(chamadas), agora=TERCA_9H)
         self.assertEqual(r2["eventos"], [])
         self.assertEqual(chamadas, [])
 
@@ -70,7 +70,7 @@ class Ciclo(Sandbox):
         self.com_vendas()
         regras.gravar_estado({"pedidos_pagos": 1, "ultimo_relatorio": TERCA_9H.date().isoformat()})
         chamadas = []
-        r = d.ciclo(rodar=falso(chamadas), agora=TERCA_9H)
+        r = d.ciclo(rotinas_fn={}, rodar=falso(chamadas), agora=TERCA_9H)
         self.assertEqual(chamadas, [("novas_vendas", "guardiao-pos-venda")])
         self.assertGreater(r["eventos"][0]["details"]["novos"], 0)
 
@@ -79,7 +79,7 @@ class Ciclo(Sandbox):
 
         def explode(*a, **k):
             raise RuntimeError("claude fora do ar")
-        r = d.ciclo(rodar=explode, agora=TERCA_9H)
+        r = d.ciclo(rotinas_fn={}, rodar=explode, agora=TERCA_9H)
         self.assertEqual([t["status"] for t in r["tarefas"]], ["erro"])
         self.assertIn("claude fora do ar", EventQueue.snapshot()["history"][-1]["saida"])
 
@@ -88,7 +88,7 @@ class Ciclo(Sandbox):
         cfg = config.carregar()
         cfg["rodar_agentes"] = False
         chamadas = []
-        d.ciclo(cfg, rodar=falso(chamadas), agora=TERCA_9H)
+        d.ciclo(cfg, rotinas_fn={}, rodar=falso(chamadas), agora=TERCA_9H)
         self.assertEqual(chamadas, [])
         self.assertEqual(EventQueue.snapshot()["history"][-1]["status"], "pulada")
 
@@ -101,6 +101,9 @@ class Linha_de_comando(Sandbox):
 
     def test_uma_vez_status_parar(self):
         self.com_vendas()
+        (self.home / "config").mkdir()
+        (self.home / "config" / "orquestrador.local.json").write_text(  # sem internet no teste
+            '{"rotinas": {"auditoria": {"ativa": false}}}', encoding="utf-8")
         r = self._rodar("uma-vez")
         self.assertEqual(r.returncode, 0, r.stderr)
         saida = json.loads(r.stdout)
