@@ -29,7 +29,7 @@ A equipe inteira (22 funcionários, 7 squads) trabalhou sobre os dados reais do 
 | Marketing e Conteúdo | `lider-marketing` | Aprovar a campanha 11.11 só orgânica com os 4 kits (Apartamento Tranquilo, Casa Vigiada, Porta Inteligente, Casa Completa) e o calendário de 28/10 a 12/11. | 25/10 |
 | Marketing e Conteúdo | `roteirista-de-reels` | Gravar o Reel de hoje (trocar a senha ao receber a câmera) e preparar os 3 roteiros da semana de 26/10: câmera offline, casa certa e fechadura facial. | 25/10 |
 | Marketing e Conteúdo | `copywriter-de-loja` | Escrever a chamada de Black Friday para a página inicial e a nova descrição do kit de 2 câmeras, sem de/por e sem prazo menor que o do catálogo. | 24/10 |
-| Marketing e Conteúdo | `social-media` | Ajustar bio e destaques (Kits, Como configurar, Suporte, Entrega) e agendar os 3 posts da semana no Planejador da Meta. | 25/10 |
+| Marketing e Conteúdo | `social-media` | Ajustar bio e destaques (Kits, Manual e dúvidas, Suporte, Entrega) e agendar os 3 posts da semana no Planejador da Meta. | 25/10 |
 | Tráfego Pago | `lider-trafego` | Manter o portão de prova: sem público frio. Deixar pronto o remarketing de R$ 23,81/dia para ligar quando a prova passar; recalcular o CPA máximo (hoje R$ 186 com margem provisória de 30%) quando os custos estiverem no Catálogo. | 26/10 |
 | Tráfego Pago | `criativos-de-anuncio` | Criar 3 criativos de remarketing no Estúdio com o Kit da marca (kit 2 câmeras, alarme, fechadura facial), passando pelo revisor. | 26/10 |
 | Tráfego Pago | `analista-de-midia` | Escolher uma conta de anúncio com pagamento (a 'Infinity Guard' está sem forma de pagamento), ligar o Instagram a ela e conferir o pixel da Nuvemshop. | 26/10 |
