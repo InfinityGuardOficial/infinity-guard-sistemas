@@ -31,7 +31,7 @@ def _num(desc):
 # nome -> (descrição, schema de entrada, função que monta o comando)
 FERRAMENTAS = {
     "revisar_texto": (
-        "Revisa um texto da Infinity Guard (anúncio, post, roteiro, legenda, mensagem) contra as regras do revisor de promessas: 100% seguro, instalação, 4G, Anatel ou garantia sem documento, de/por, produto já configurado, prazo de entrega, promessa de configurar o produto por WhatsApp ou vídeo. Devolve o veredito e como reescrever.",
+        "Revisa um texto da Infinity Guard (anúncio, post, roteiro, legenda, mensagem) contra as regras do revisor de promessas: 100% seguro, instalação, 4G, Anatel ou garantia sem documento, de/por, produto já configurado, prazo de entrega, promessa de configurar o produto por WhatsApp ou vídeo ou de dar suporte de conexão ao Wi-Fi pela loja. Devolve o veredito e como reescrever.",
         {"type": "object", "properties": {"texto": _txt("Texto a revisar.")}, "required": ["texto"]},
         lambda a: ["revisor-de-promessas/scripts/revisar.py", "--texto", str(a["texto"])],
     ),

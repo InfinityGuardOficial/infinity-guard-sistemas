@@ -40,7 +40,7 @@ python3 scripts/carrinho.py --nome Ana --produto kit-cam-2 --link <link do carri
 Gera 3 mensagens (30-60 min, dia seguinte, 3 dias). Só use `--cupom` com cupom que já existe na loja. Para rodar sozinho, as mensagens vão no app de carrinho abandonado da Nuvemshop que o dono instalar.
 
 ### 4. Pós-venda
-Use `references/pos-venda-7-dias.md`, troque `{nome}` e mande a mensagem do dia pedido. No dia da entrega, sempre os 3 ajustes: rede 2,4 GHz, trocar senha de fábrica, atualizar.
+Use `references/pos-venda-7-dias.md`, troque `{nome}` e mande a mensagem do dia pedido. No dia da entrega, sempre os 2 cuidados de segurança: trocar a senha de fábrica e atualizar. A conexão no Wi-Fi é com o manual: a loja não ajuda a conectar o Wi-Fi.
 
 ### 5. Exportar o robô de WhatsApp
 ```bash

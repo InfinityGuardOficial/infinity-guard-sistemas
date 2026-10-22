@@ -47,7 +47,7 @@ def diagnosticar(mensagem, problemas, categoria=None):
 
 def mensagem_whatsapp(prob, nome=None):
     oi = f"{nome}, " if nome else ""
-    linhas = [f"{oi}vamos resolver juntos. Faz assim, um passo de cada vez, e me fala em qual deu certo:"]
+    linhas = [f"{oi}vamos ver isso. Faz assim, um passo de cada vez, e me fala em qual deu certo:"]
     linhas += [f"{i}. {passo.replace('**', '*')}" for i, passo in enumerate(prob["passos"], 1)]
     linhas.append("O manual de instruções que veio com o produto também explica esse passo. Se não resolver, me manda "
                   "uma foto ou um vídeo curto mostrando o que acontece que eu tiro a dúvida daqui.")

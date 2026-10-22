@@ -27,13 +27,13 @@ python3 scripts/diagnostico.py --troca --recebido 2026-10-15 [--defeito]
 Peça número do pedido, foto ou vídeo e a data de recebimento. Entregue ao dono o caso e o resumo; o dono decide.
 
 ### 3. Pós-venda que evita chamado
-Na entrega, a skill `atendente-infinity-guard` (modo pós-venda) lembra que o manual acompanha o produto e manda por escrito os 3 cuidados: rede 2,4 GHz, trocar a senha, atualizar. Metade dos chamados some aqui.
+Na entrega, a skill `atendente-infinity-guard` (modo pós-venda) lembra que o manual acompanha o produto e manda por escrito os 2 cuidados: trocar a senha e atualizar. Metade dos chamados some aqui.
 
 ### 4. Aprender com cada chamado
 Problema novo resolvido? Acrescente em `references/problemas.json` (id, produtos, palavras, titulo, passos, escalar_se) e rode os testes. Registre a conversa no `conversas.csv` da skill `painel-de-vendas` com resultado `em_aberto` até fechar.
 
 ## Regras
-- A loja tira dúvidas, não configura: nunca ofereça configurar o produto pelo cliente, por WhatsApp ou por chamada de vídeo. Responda por mensagem e indique o manual de instruções que acompanha o produto. O cliente pode mandar foto ou vídeo do problema para a gente entender a dúvida.
+- A loja tira dúvidas, não configura: nunca ofereça configurar o produto pelo cliente, por WhatsApp ou por chamada de vídeo, nem ajudar a conectar o Wi-Fi (a conexão está no manual). Responda por mensagem e indique o manual de instruções que acompanha o produto. O cliente pode mandar foto ou vídeo do problema para a gente entender a dúvida.
 - Nunca mande abrir o aparelho, mexer na fiação da casa ou usar fonte diferente da original.
 - Nunca negue troca dentro do prazo legal nem prometa prazo de garantia além dos 90 dias até o fornecedor documentar.
 - Cliente dizendo que alguém controlou o aparelho, reclamação, Procon ou Reclame Aqui: passe para o dono na hora.

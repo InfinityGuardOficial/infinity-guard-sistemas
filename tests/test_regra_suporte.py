@@ -1,7 +1,8 @@
 """Regra de suporte (21/10/2026): a loja tira dúvidas, não configura o produto por WhatsApp nem por vídeo.
 
 Varre o material da equipe (agentes, skills, docs, app, orquestrador) com a regra `configuracao-pela-loja`
-do revisor de promessas: nenhum texto pode prometer configuração pela loja.
+e `wifi-pela-loja` (22/10/2026) do revisor de promessas: nenhum texto pode prometer configuração pela loja
+nem ajuda para conectar o Wi-Fi.
 """
 import sys
 import unittest
@@ -29,8 +30,8 @@ def arquivos():
 
 class RegraDeSuporte(unittest.TestCase):
     def test_nenhum_material_promete_configurar_por_whatsapp_ou_video(self):
-        regras = [r for r in rv.carregar_regras() if r["id"] == "configuracao-pela-loja"]
-        self.assertEqual(len(regras), 1)
+        regras = [r for r in rv.carregar_regras() if r["id"] in ("configuracao-pela-loja", "wifi-pela-loja")]
+        self.assertEqual(len(regras), 2)
         achados = []
         for f in arquivos():
             for a in rv.revisar(f.read_text(encoding="utf-8"), regras)["achados"]:
