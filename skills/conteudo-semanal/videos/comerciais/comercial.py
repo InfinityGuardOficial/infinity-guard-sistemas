@@ -218,7 +218,7 @@ def make_seg(i, s):
             elif tipo == "encerramento": encerramento(cv, t, t - tl["ini"])
             elif tipo == "selo_produto": selo_produto(cv, t, t - tl["ini"])
             elif tipo == "texto" and t >= tl["ini"] and t < tl.get("fim", s["fim"]):
-                if i == 0: onscreen(cv, tl["texto"], tl["ini"] - s["ini"], lt, y=430, size=76)
+                if i == 0: onscreen(cv, tl["texto"], tl["ini"] - s["ini"], lt, y=tl.get("y", 430), size=76)
                 else:
                     others = [x for x in s["tela"] if x.get("tipo", "texto") == "texto" and x["ini"] <= t]
                     pos = others.index(tl)
