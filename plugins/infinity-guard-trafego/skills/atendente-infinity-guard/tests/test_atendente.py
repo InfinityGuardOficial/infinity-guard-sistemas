@@ -95,7 +95,7 @@ class Exportar(unittest.TestCase):
         p = exportar_prompt.montar()
         self.assertIn("ESGOTADO", p)
         self.assertIn("Nunca", p)
-        self.assertIn("2,4 GHz", p)
+        self.assertNotIn("2,4 GHz", p)
         self.assertNotIn("scripts/recomendar_kit.py", p)
 
 

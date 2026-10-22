@@ -185,13 +185,8 @@ def mensagem(res):
                           "Dá para parcelar sem juros, ou começar por um item só e completar depois.")
     if not res["wifi"]:
         partes.append(res["avisos"][0])
-    tem_camera = any(i["id"].startswith(("kit-cam", "cam-")) for i in res["ideal"]["itens"])
-    if tem_camera:
-        partes.append("E aqui tem uma diferença: o manual de instruções vem junto, eu te explico os cuidados pra trocar "
-                      "a senha de fábrica e deixar tudo seguro, e tiro suas dúvidas aqui no WhatsApp nos primeiros 7 dias.")
-    else:
-        partes.append("E você não fica sozinho: o manual de instruções acompanha o produto, "
-                      "e eu tiro suas dúvidas aqui no WhatsApp nos primeiros 7 dias.")
+    partes.append("E você não fica sozinho: o manual de instruções acompanha o produto, "
+                  "e eu tiro suas dúvidas aqui no WhatsApp nos primeiros 7 dias.")
     partes.append("Quer que eu separe esse kit para você?")
     return "\n\n".join(partes)
 

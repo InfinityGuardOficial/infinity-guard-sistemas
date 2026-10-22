@@ -25,7 +25,7 @@ Regra que guia a ordem: **primeiro a conversa que vende, depois a prova que sust
 - **Modo atender:** você cola a mensagem do cliente; a skill responde como atendente da Infinity Guard, faz as perguntas sobre a casa (tipo de imóvel, quantas entradas, Wi-Fi, quem fica fora, orçamento) e indica o kit com link, preço cheio, Pix e parcelas.
 - **Modo recomendar:** script `recomendar_kit.py` monta o kit sempre com os preços do catálogo, sem a IA inventar valor.
 - **Modo carrinho:** gera as 3 mensagens de recuperação de carrinho com o nome do cliente e o produto.
-- **Modo pós-venda:** manda o guia "câmera entregue segura" (trocar senha, atualizar, rede 2,4 GHz) e o acompanhamento dos 7 dias.
+- **Modo pós-venda:** manda o guia "câmera entregue segura" (trocar senha, atualizar) e o acompanhamento dos 7 dias.
 - **Modo exportar:** `exportar_prompt.py` gera o prompt pronto para colar no robô de WhatsApp que você escolher (app da Nuvemshop, OmniChat, ou outro com IA), para atender sozinho 24 horas.
 
 **Regras de segurança da skill:** nunca inventa código Anatel, prazo de garantia, CNPJ ou especificação; nunca promete câmera 4G ou instalação (a loja não vende); passa para você (humano) em reclamação, troca, defeito ou pedido acima de R$ 3.000.

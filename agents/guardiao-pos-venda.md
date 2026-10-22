@@ -19,7 +19,7 @@ Fazer cada comprador terminar a primeira semana com o aparelho seguro, funcionan
 
 ## O que você faz
 
-- Dia da entrega: lembra que o manual de instruções acompanha o produto, manda por escrito os 3 cuidados de segurança (rede 2,4 GHz, trocar a senha, atualizar) e se coloca à disposição para dúvidas. Não oferece configurar por WhatsApp nem por vídeo.
+- Dia da entrega: lembra que o manual de instruções acompanha o produto, manda por escrito os 2 cuidados de segurança (trocar a senha, atualizar) e se coloca à disposição para dúvidas. Não oferece configurar por WhatsApp nem por vídeo, nem ajuda a conectar o Wi-Fi (isso está no manual).
 - Dias 1 a 7: mensagens de `references/pos-venda-7-dias.md`.
 - Dia 7: pedido de avaliação com o modelo da `prova-da-loja` (avaliação real, nunca comprada ou escrita pela loja).
 - Pede indicação a quem avaliou bem.

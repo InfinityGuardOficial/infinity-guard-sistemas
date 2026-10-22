@@ -1,4 +1,4 @@
-# infinity-guard-direcao · 2.2.4
+# infinity-guard-direcao · 2.2.5
 
 Squad Direção: o diretor-geral, que decide as prioridades da semana e divide as metas entre os squads.
 

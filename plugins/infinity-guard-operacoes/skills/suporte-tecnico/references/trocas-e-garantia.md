@@ -10,7 +10,7 @@ Fonte: Código de Defesa do Consumidor (Lei 8.078/1990) e Decreto 7.962/2013 (co
 | Produto errado ou avariado na entrega | Na hora (pedir foto da caixa e do produto) | Troca sem custo | Dono |
 
 ## Como o suporte conduz
-1. Primeiro o diagnóstico (`scripts/diagnostico.py`). Muita "câmera com defeito" é Wi-Fi 5 GHz ou sinal fraco.
+1. Primeiro o diagnóstico (`scripts/diagnostico.py`). Muita "câmera com defeito" se resolve seguindo o manual de instruções.
 2. Se o passo a passo não resolveu, peça: número do pedido, foto ou vídeo curto mostrando o problema e a data em que recebeu.
 3. Rode `scripts/diagnostico.py --troca --recebido AAAA-MM-DD` para saber em qual caso a pessoa está.
 4. Passe para o dono com o resumo pronto. Nunca negue troca dentro do prazo legal e nunca prometa prazo além dele.

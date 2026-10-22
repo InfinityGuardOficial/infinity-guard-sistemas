@@ -6,24 +6,20 @@
      "palavras": ["não conecta", "nao conecta", "não acha", "nao acha", "não encontra", "nao encontra", "wifi", "wi-fi", "rede", "pareamento", "parear", "configurar", "adicionar"],
      "titulo": "Não conecta no Wi-Fi na primeira configuração",
      "passos": [
-       "Confirme que o celular está numa rede **2,4 GHz** (a maioria das câmeras não conecta em 5 GHz). Se o roteador tiver uma rede só, veja no app da operadora (ou ligue para ela) como separar ou ativar a rede 2,4 GHz.",
-       "Deixe o aparelho a até 3 metros do roteador só para configurar; depois leve para o lugar.",
-       "Ao digitar a senha do Wi-Fi no app, confira maiúsculas e minúsculas (não precisa me mandar a senha).",
-       "Resete o aparelho (botão reset por 5 a 10 segundos, até ouvir o aviso ou a luz piscar rápido) e adicione de novo no app.",
-       "Permita no celular: localização ligada e permissão de rede local para o app."
+       "A conexão no Wi-Fi é explicada no manual de instruções que acompanha o produto: siga o passo a passo de lá, na ordem.",
+       "Se travar em algum passo, me diz em qual passo do manual parou e o que aparece na tela, que eu tiro a dúvida por mensagem."
      ],
-     "escalar_se": "Depois do reset e em 2,4 GHz ainda não conecta: pode ser defeito. Passe para o dono (caso de troca)."},
+     "escalar_se": "Seguiu o manual e ainda não conecta: pode ser defeito. Passe para o dono (caso de troca)."},
     {"id": "offline", "produtos": ["camera", "fechadura", "alarme"],
      "palavras": ["offline", "desconectada", "desconecta", "caiu", "sem sinal", "fica fora", "não aparece", "nao aparece", "parou"],
      "titulo": "Aparelho fica offline depois de funcionando",
      "passos": [
-       "Veja se o Wi-Fi chega bem no ponto: com o celular no lugar da câmera, abra um vídeo. Se travar, o sinal é fraco: aproxime o roteador ou use um repetidor.",
        "Desligue a câmera da tomada por 30 segundos e ligue de novo.",
-       "Reinicie o roteador. Se a operadora trocou o roteador ou a senha, o aparelho precisa ser adicionado de novo no app.",
+       "Se a internet da casa mudou (roteador ou senha novos), refaça a conexão seguindo o manual de instruções.",
        "Confira a fonte original: carregador de celular comum pode não dar corrente suficiente.",
        "Atualize o app e o firmware (no app: configurações do aparelho, atualização)."
      ],
-     "escalar_se": "Offline mesmo perto do roteador e com a fonte original: passe para o dono."},
+     "escalar_se": "Continua offline com a fonte original e seguindo o manual: passe para o dono."},
     {"id": "senha-fabrica", "produtos": ["camera", "fechadura", "alarme"],
      "palavras": ["senha", "invadida", "invadiram", "hacker", "alguém vendo", "alguem vendo", "segurança da conta", "privacidade"],
      "titulo": "Medo de câmera invadida / proteger a conta",
@@ -31,8 +27,7 @@
        "Troque a senha da conta do app por uma forte e única (não use a mesma do e-mail).",
        "Ative a verificação em duas etapas no app, se o app oferecer.",
        "Veja no app em 'compartilhar dispositivo' se só as pessoas da casa têm acesso; remova quem não deve.",
-       "Atualize o firmware do aparelho e o app.",
-       "Troque a senha do Wi-Fi se ela for a que veio no roteador."
+       "Atualize o firmware do aparelho e o app."
      ],
      "escalar_se": "Cliente diz que alguém estranho controlou o aparelho: passe para o dono na hora."},
     {"id": "visao-noturna", "produtos": ["camera"],

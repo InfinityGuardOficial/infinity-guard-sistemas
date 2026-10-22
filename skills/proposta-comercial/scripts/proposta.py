@@ -112,7 +112,7 @@ def para_md(p, contato=None):
         out.append(f"- Total: **{brl(p['total'])}**")
     out += [f"- No Pix: **{brl(p['pix'])}**", f"- Ou em até {p['parcelas']}x de {brl(p['parcela_valor'])} no cartão",
             "", "## O que está incluso", "",
-            "- Manual de instruções do fabricante em cada produto e os cuidados de segurança por escrito (rede 2,4 GHz, troca da senha de fábrica, atualização).",
+            "- Manual de instruções do fabricante em cada produto e os cuidados de segurança por escrito (troca da senha de fábrica, atualização).",
             "- Dúvidas respondidas no WhatsApp, com acompanhamento nos 7 dias depois da entrega.",
             f"- Troca em 7 dias e {p['condicoes']['garantia'].split('(')[0].strip().lower()}.",
             "", "## O que não está incluso", "",

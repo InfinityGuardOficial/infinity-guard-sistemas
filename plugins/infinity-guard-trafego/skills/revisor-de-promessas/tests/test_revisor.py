@@ -51,6 +51,23 @@ class Revisor(unittest.TestCase):
                       "Siga o manual para configurar a câmera no app."):
             self.assertNotIn("configuracao-pela-loja", self.ids(texto), msg=texto)
         self.assertEqual(rv.revisar("A loja não configura por WhatsApp nem por vídeo.", self.regras)["bloqueia"], 0)
+        for texto in ("Configuro junto com o cliente", "Eu faço a configuração com você"):
+            self.assertIn("configuracao-pela-loja", self.ids(texto), msg=texto)
+
+    def test_loja_nao_ajuda_com_wifi(self):
+        for texto in ("Antes da compra, a gente confere com você se o sinal chega onde a câmera vai ficar.",
+                      "Eu te ajudo a conectar o Wi-Fi",
+                      "A gente conecta o seu Wi-Fi junto com você",
+                      "Te ajudo com a rede Wi-Fi pelo WhatsApp",
+                      "Suporte pelo Wi-Fi"):
+            self.assertIn("wifi-pela-loja", self.ids(texto), msg=texto)
+            self.assertEqual(rv.revisar(texto, self.regras)["veredito"], "BLOQUEADO", msg=texto)
+        for texto in ("Kit 2 câmeras Wi-Fi dupla lente",
+                      "Precisa de Wi-Fi 2,4 GHz no local.",
+                      "A conexão no Wi-Fi é explicada no manual de instruções que acompanha o produto.",
+                      "Troque a senha do Wi-Fi se ela for a de fábrica"):
+            self.assertNotIn("wifi-pela-loja", self.ids(texto), msg=texto)
+        self.assertEqual(rv.revisar("A loja não ajuda a conectar o Wi-Fi.", self.regras)["bloqueia"], 0)
 
     def test_ajustar_nao_bloqueia(self):
         r = rv.revisar("A melhor câmera do Brasil, últimas 3 unidades!", self.regras)
