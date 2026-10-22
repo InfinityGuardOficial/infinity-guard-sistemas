@@ -50,7 +50,8 @@ Conteúdo semanal por rotina agendada, painel de vendas e o plugin no GitHub vê
 
 ## O que só você pode fazer (sem isso, nenhum sistema vende)
 
-1. Anatel: tarefa sua para as férias de novembro, só no app (Central → "Tarefa sua").
-2. Colocar no rodapé do site o CNPJ e o prazo de garantia por produto.
-3. Escolher e instalar o app de WhatsApp com IA na Nuvemshop (a skill gera o conteúdo; a instalação é sua).
-4. Revisar o preço dos itens que não aguentam a comparação (kit 2 câmeras e fechadura facial).
+1. Colocar no rodapé do site o CNPJ e o prazo de garantia por produto.
+2. Escolher e instalar o app de WhatsApp com IA na Nuvemshop (a skill gera o conteúdo; a instalação é sua).
+3. Revisar o preço dos itens que não aguentam a comparação (kit 2 câmeras e fechadura facial).
+
+Anatel saiu desta lista em 22/10 (decisão do dono): o fornecedor de dropshipping não fornece os códigos. Nenhum texto cita Anatel, e nada fica bloqueado por isso.

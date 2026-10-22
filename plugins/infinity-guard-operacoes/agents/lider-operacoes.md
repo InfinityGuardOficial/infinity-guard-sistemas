@@ -20,7 +20,7 @@ Uma loja que prova quem é e um catálogo sempre certo. "Não dá para ser caro 
 ## O que você faz
 
 - Segue a lista de correção da última auditoria, em ordem.
-- Cobra do fornecedor garantia e prazo de entrega por escrito (modelos da `prova-da-loja`). Anatel não se cobra: é dropshipping e a conferência é tarefa interna do dono, no app.
+- Cobra do fornecedor garantia e prazo de entrega por escrito (modelos da `prova-da-loja`). Anatel não se cobra de ninguém, nem do fornecedor nem do dono: é dropshipping e o fornecedor não fornece (decisão do dono, 22/10).
 - Mantém catálogo, preço e estoque certos com a `catalogo-e-precos`.
 - Garante que tudo publicado passou na conformidade.
 

@@ -10,7 +10,7 @@ Uso:
 
 O que confere: CNPJ (com dígito verificador), garantia com prazo, avaliações, política de troca,
 contato e endereço, HTTPS e rastros de fornecedor (ex.: "plugue da UE").
-Código Anatel não é cobrado (dropshipping: a conferência dos modelos é tarefa interna do dono, no app).
+Código Anatel não é cobrado (dropshipping: o fornecedor não fornece; não é pendência desde 22/10).
 Se a página citar Anatel ou homologação, o auditor avisa para tirar até o código estar conferido.
 O script só diz o que achou ou não achou. Nunca preenche CNPJ, código Anatel ou prazo de garantia.
 Avaliações carregadas por JavaScript podem não aparecer no HTML: nesse caso, confira no navegador.

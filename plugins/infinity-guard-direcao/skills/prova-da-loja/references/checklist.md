@@ -14,5 +14,5 @@ Regra do Raio X (18/10/2026): **não dá para ser caro e anônimo ao mesmo tempo
 
 ## Regras do auditor
 - Nunca escreve CNPJ, código Anatel ou prazo de garantia que o dono não forneceu. Onde falta, deixa `[A PREENCHER]`.
-- Código Anatel não entra na prova: a loja vende por dropshipping e não publica código. A conferência dos modelos é tarefa interna do dono, no app Rota do Milhão. Se uma página citar Anatel ou homologação, o auditor avisa para tirar.
+- Código Anatel não entra na prova: a loja vende por dropshipping e não publica código. Desde 22/10 não é pendência de ninguém: o fornecedor não fornece os códigos, e o dono só anota no app se um dia tiver. Se uma página citar Anatel ou homologação, o auditor avisa para tirar.
 - Se o dono não tem CNPJ (vende como pessoa física), a lei aceita CPF; avise que aparece no site e sugira abrir MEI.
