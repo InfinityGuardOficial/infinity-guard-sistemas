@@ -208,7 +208,7 @@ def loja(kind):
         talk(rosa, f(0.6), f(2.4)); talk(paulo, f(3.0), f(4.2))
         key(julia["armR"], "rotation_euler", f(0.5), (0, 0, 0)); key(julia["armR"], "rotation_euler", f(1.4), (-1.9, 0, 0))
         key(julia["armR"], "rotation_euler", f(4.0), (-1.9, 0, 0)); key(julia["armR"], "rotation_euler", f(4.8), (0, 0, 0))
-        aim_dof(cam, (3.2, 6.4, 3.1), (3.6, 4.5, 3.0), 1, 2.0)
+        aim_dof(cam, (1.2, 1.4, 2.5), (3.7, 4.3, 2.8), 1, 2.4)
         aim_dof(cam, (-0.2, -0.2, 2.1), (2.5, 2.2, 1.4), int(f(2.2)), 3.5)
         aim_dof(cam, (-0.5, -0.3, 2.0), (2.5, 2.2, 1.4), N, 3.5)
         cam.data.lens = 24

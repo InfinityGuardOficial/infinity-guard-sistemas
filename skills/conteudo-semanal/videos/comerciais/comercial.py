@@ -154,12 +154,14 @@ def selo_produto(cv, t, lt):
     k = eout(lt / 0.5)
     x, y = 60, 120 - 40 * (1 - k)
     cv.saveLayerAlpha(None, int(255 * k))
-    cv.drawRRect(rrect(x, y, 600, 170, 30), P(NAVY, 230)); cv.drawRRect(rrect(x, y, 600, 170, 30), P(GOLD, stroke=3))
+    cv.drawRRect(rrect(x, y, W - 120, 170, 30), P(NAVY, 230)); cv.drawRRect(rrect(x, y, W - 120, 170, 30), P(GOLD, stroke=3))
     pk = miniatura_produto(); s_ = min(170 / pk.width(), 130 / pk.height())
     cv.drawImageRect(pk, skia.Rect.MakeXYWH(x + 20, y + 20, pk.width() * s_, pk.height() * s_), SAMP)
     nome = PROD["nome"].split(" — ")[0]
     cv.drawString(nome, x + 210, y + 70, font("m8", 32), P(CREAM))
-    cv.drawString(", ".join(PROD["destaques"]), x + 210, y + 110, font("m5", 24), P(CREAM, 210))
+    dz = ", ".join(PROD["destaques"]); tam = 28
+    while font("m5", tam).measureText(dz) > W - 120 - 240 and tam > 16: tam -= 1
+    cv.drawString(dz, x + 210, y + 110, font("m5", tam), P(CREAM, 210))
     cv.drawString(EP["site"], x + 210, y + 145, font("m7", 26), P(GOLD2))
     cv.restore()
 
@@ -190,9 +192,11 @@ def encerramento(cv, t, lt):
     cv.restore()
     kk = back((lt - 0.4) / 0.5)
     cv.save(); cv.translate(W / 2, 1440); cv.scale(kk, kk)
-    f = font("m7", 38); w = f.measureText(EP["cta"]) + 70
+    tam = 38
+    while font("m7", tam).measureText(EP["cta"]) + 70 > W - 60 and tam > 22: tam -= 1  # CTA sempre cabe na tela
+    f = font("m7", tam); w = f.measureText(EP["cta"]) + 70
     cv.drawRRect(rrect(-w / 2, -45, w, 84, 42), P(GOLD))
-    text_c(cv, EP["cta"], 0, 12, f, P(NAVY))
+    text_c(cv, EP["cta"], 0, tam * 0.32, f, P(NAVY))
     cv.restore()
 
 # ---------------- motor de segmentos ----------------
