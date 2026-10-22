@@ -1,5 +1,5 @@
 # Central Infinity Guard
-_Gerada em 21/10/2026 16:51 por `tools/central.py`. Para atualizar: `python3 tools/central.py`._
+_Gerada em 22/10/2026 10:41 por `tools/central.py`. Para atualizar: `python3 tools/central.py`._
 
 **Segurança onde você estiver.** Tudo do sistema num lugar só: o que existe, onde está e como está hoje.
 
@@ -11,6 +11,7 @@ _Gerada em 21/10/2026 16:51 por `tools/central.py`. Para atualizar: `python3 too
 - Regra de suporte (21/10/2026): a loja tira dúvidas no WhatsApp e o manual de instruções acompanha o produto; ela não configura o produto por WhatsApp nem por vídeo (o revisor barra essa promessa).
 - Onde mora cada dado e quem cuida: [mapa-de-dados.md](mapa-de-dados.md).
 - O que roda sozinho e o que espera você: [mapa-da-autonomia.md](mapa-da-autonomia.md). No celular, a aba Central do app Rota do Milhão mostra o mesmo em tempo real.
+- Hábitos e decisões dos milionários que começaram do zero (pesquisa com fontes, aba Mente do app): [mente-de-milionario.md](mente-de-milionario.md).
 
 ## Como está hoje
 

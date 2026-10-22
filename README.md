@@ -54,7 +54,7 @@ Digite `/agents` no Claude Code para ver a equipe instalada.
 |---|---|
 | `agents/` | Os 22 funcionários. |
 | `.claude-plugin/` | Plugin "infinity-guard" com a equipe e as skills (instala com um comando, veja abaixo). |
-| `app/rota-do-milhao.html` | **Rota do Milhão**: app pessoal nas cores da marca, com Gestão (ERP, CRM, WMS, TMS, EDI e VMI integrados), os 22 funcionários (IA), radar e pauta diária, contrato sem volta, Kit da marca, estúdio de Reels e artes de anúncio, aba Publicar, trilha de 48 semanas e placar até R$ 1 milhão/ano. Página privada no claude.ai. |
+| `app/rota-do-milhao.html` | **Rota do Milhão**: app pessoal nas cores da marca, com Gestão (ERP, CRM, WMS, TMS, EDI e VMI integrados), os 22 funcionários (IA), radar e pauta diária, contrato sem volta, Kit da marca, estúdio de Reels e artes de anúncio, aba Publicar, trilha de 48 semanas, aba Mente (hábitos e metas dos milionários que começaram do zero, com fontes; ver `docs/mente-de-milionario.md`) e placar até R$ 1 milhão/ano. Página privada no claude.ai. |
 | `desktop/` | App do Windows x64 (Electron): abre o Rota do Milhão com o seu login e avisa nos turnos pela bandeja. |
 | `android/` | App Android (APK): abre o Rota do Milhão e avisa nos turnos. |
 | `.github/workflows/apps.yml` | Gera o instalador do Windows e o APK a cada mudança em `desktop/` ou `android/` (Actions → Apps). |
