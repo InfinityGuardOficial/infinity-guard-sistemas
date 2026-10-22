@@ -11,7 +11,7 @@ class Reuniao(unittest.TestCase):
     def test_prova_em_outubro_sem_cobrar_anatel(self):
         itens = rn.coletar(date(2026, 10, 19))
         textos = " ".join(i["texto"] for i in itens)
-        self.assertNotIn("Anatel", textos)  # dropshipping: Anatel é tarefa interna do dono, no app
+        self.assertNotIn("Anatel", textos)  # dropshipping: Anatel não é pendência
         self.assertIn("sem público frio", textos)
         self.assertEqual(itens[0]["prioridade"], 1)
 

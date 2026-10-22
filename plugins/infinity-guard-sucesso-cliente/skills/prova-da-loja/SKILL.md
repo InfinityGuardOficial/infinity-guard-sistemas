@@ -36,7 +36,7 @@ Antes de 11/11 e da Black Friday, rode o modo 1. Se CNPJ ou garantia estiverem �
 
 ## Regras
 - Nunca invente CNPJ, código Anatel, prazo de garantia, endereço ou avaliação. Nunca sugira avaliação falsa.
-- Anatel: a loja vende por dropshipping e não publica código. A conferência dos modelos é tarefa interna do dono, só no app Rota do Milhão. Não cobre do fornecedor nem sugira publicar.
+- Anatel: a loja vende por dropshipping e não publica código. Desde 22/10 não é pendência do dono (o fornecedor não fornece os códigos). Não cobre do fornecedor nem sugira publicar.
 - A garantia legal de 90 dias (CDC art. 26) vale sempre; qualquer prazo além disso só com documento do fornecedor.
 - Avaliação carregada por JavaScript pode não aparecer para o script: confira no navegador antes de dizer que não existe.
 - Testes: `python3 -m unittest discover -s tests`.

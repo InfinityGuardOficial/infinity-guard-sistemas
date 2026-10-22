@@ -8,7 +8,7 @@ Uso:
   python3 descrever.py --todos --saida paginas/          (um arquivo .html por produto ativo)
   ... --json
 
-A página nunca cita Anatel nem código de homologação (dropshipping: a conferência é tarefa interna do dono, no app).
+A página nunca cita Anatel nem código de homologação (dropshipping: o fornecedor não fornece os códigos).
 --garantia só com documento do fornecedor. Sem ele, a página diz "Garantia em todos os produtos".
 """
 import argparse

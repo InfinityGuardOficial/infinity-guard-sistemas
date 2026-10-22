@@ -36,7 +36,7 @@ class Pauta(unittest.TestCase):
         p = ps.pauta(date(2026, 12, 14), historico={})
         self.assertNotIn("black-friday-olhar", [r["tema"] for r in p["roteiros"]])
 
-    def test_nunca_pauta_anatel(self):  # dropshipping: Anatel é tarefa interna do dono, no app
+    def test_nunca_pauta_anatel(self):  # dropshipping: a loja não cita Anatel
         for i in range(12):
             s = date(2026, 10, 19) + timedelta(weeks=i)
             self.assertNotIn("anatel", [r["tema"] for r in ps.pauta(s, historico={})["roteiros"]])

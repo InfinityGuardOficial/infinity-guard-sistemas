@@ -47,3 +47,5 @@ A equipe inteira (22 funcionários, 7 squads) trabalhou sobre os dados reais do 
 2. Escolher a conta de anúncio com pagamento e ligar o Instagram a ela.
 3. Pedir ao fornecedor: garantia por escrito, código Anatel de cada item e prazo real.
 4. Colocar o CNPJ e a política de troca no rodapé da loja.
+
+> Atualização 22/10: o dono tirou o código Anatel das pendências (o fornecedor de dropshipping não fornece). Nas tarefas acima, vale só garantia por escrito e prazo real.
