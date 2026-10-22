@@ -9,7 +9,14 @@ brasileiro, formato vertical 1080x1920 e CTA para **infinityguard.com.br**. Usa 
 | Pasta | Título | Situação |
 |---|---|---|
 | `ep15-quem-deixou-isso-na-porta/` | Quem deixou isso na porta? (50 s) | roteiro, storyboard, legendas e render prontos; narração **provisória** (sem Dave) |
-| — | outros 4 episódios | aguardando `episodios.md` (não existe no repositório) |
+| `ep16-o-cliente-chegou-antes/` | O cliente chegou antes de todo mundo! (50 s, loja de bairro) | pronto, com efeitos sonoros, cortes de câmera e personagens mais expressivos; narração **provisória** (sem Dave) |
+| — | outros 3 episódios | aguardando `episodios.md` (não existe no repositório) |
+
+Cenários prontos: `varanda` (casa térrea com porta, encomenda e vizinho), `loja` (comércio de bairro com porta de
+enrolar, caixa e área privada) e `kit_dupla` (o produto no pedestal). Efeitos sonoros e ambiente saem de `sons.py`
+(lista `"sons"` no episodio.json). Opções do episodio.json: `tomadas` (vários cortes por segmento), `logo`
+(`circular` ou horizontal), `mostrar_frete` (só o cálculo por CEP, que é o que o catálogo confirma),
+`tomada_produto` e `qualidade` (`samples`, `resolucao_3d`).
 
 Cada episódio é uma pasta com três arquivos escritos à mão:
 
