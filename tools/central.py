@@ -101,7 +101,8 @@ def gerar(base, projeto=None, com_orquestrador=False, agora=None):
          "ela não configura o produto por WhatsApp nem por vídeo (o revisor barra essa promessa).",
          f"- Onde mora cada dado e quem cuida: {_link(REPO / 'docs/mapa-de-dados.md', base)}.",
          f"- O que roda sozinho e o que espera você: {_link(REPO / 'docs/mapa-da-autonomia.md', base)}. "
-         "No celular, a aba Central do app Rota do Milhão mostra o mesmo em tempo real.", "",
+         "No celular, a aba Central do app Rota do Milhão mostra o mesmo em tempo real.",
+         f"- Hábitos e decisões dos milionários que começaram do zero (pesquisa com fontes, aba Mente do app): {_link(REPO / 'docs/mente-de-milionario.md', base)}.", "",
          "## Como está hoje", "",
          f"- **Catálogo** ({cat.get('atualizado_em', 's/ data')}): {len(ativos)} produtos ativos, {len(seg)} de segurança: "
          + "; ".join(f"{_nome_curto(p, seg)} {_brl(p['preco'])}" for p in seg) + ".",

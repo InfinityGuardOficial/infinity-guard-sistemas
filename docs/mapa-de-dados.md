@@ -38,7 +38,7 @@ Tudo na área privada `data/users/<dono>/` do app (ninguém mais lê, nem quem r
 
 | Caminho | Conteúdo |
 |---|---|
-| `estado` | configurações, contrato, módulos entregues, conexões, ideias, status das pautas |
+| `estado` | configurações, contrato, módulos entregues, conexões, ideias, status das pautas, aba Mente (`mente`: hábitos, diário de erros, planos se-então, gatilhos) |
 | `estado/dias/AAAA-MM-DD` | missões com prova, motivos e números de cada dia |
 | `estado/radar/AAAA-MM-DD` | radar e ordens do dia |
 | `estado/pauta/AAAA-MM-DD` | pauta de publicação do dia |

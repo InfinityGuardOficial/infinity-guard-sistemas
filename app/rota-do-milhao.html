@@ -186,6 +186,7 @@ table.t td.n,table.t th.n{text-align:right;font-family:var(--f-mono);font-varian
     <button data-v="central"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Central</button>
     <button data-v="hoje"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Hoje</button>
     <button data-v="trilha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19h16M6 15l4-4 3 3 5-6"/></svg>Trilha</button>
+    <button data-v="mente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>Mente</button>
     <button data-v="equipe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.5c3 0 6 2 6 5.5"/></svg>Equipe</button>
     <button data-v="ia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Estúdio</button>
     <button data-v="publicar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l16-8-6 16-3-7z"/></svg>Publicar</button>
@@ -469,7 +470,7 @@ function sequencia(){ // dias seguidos com 80% ou mais das missões feitas (hoje
   return n }
 
 /* ============ VIEWS ============ */
-let view = (location.hash||"#central").slice(1); if(view==="agenda"||view==="biblioteca") view="mais"; if(view==="placar"){ view="gestao"; } if(!["central","hoje","trilha","equipe","gestao","ia","publicar","mais"].includes(view)) view="central";
+let view = (location.hash||"#central").slice(1); if(view==="agenda"||view==="biblioteca") view="mais"; if(view==="placar"){ view="gestao"; } if(!["central","hoje","trilha","mente","equipe","gestao","ia","publicar","mais"].includes(view)) view="central";
 document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>{view=b.dataset.v;render();window.scrollTo(0,0)});
 
 function renderStatus(){
@@ -1557,6 +1558,7 @@ function viewCentral(){ const k=ymd(new Date()); const als=alertasGestao(); cons
    ${card("Respostas da equipe",aguardandoTotal(),"conversas para responder","view='equipe';eqAba='conversas';eqFiltro='responder';eqChat=null;render()",aguardandoTotal()?"signal":"")}
    ${card("Ordens de hoje",`${feitas}/${ords.length}`,"concluídas pela equipe","view='equipe';eqAba='ordens';render()")}
    ${card("Missões",execucao(7).pct===null?"–":execucao(7).pct+"%","execução em 7 dias (meta 80%)","view='hoje';render()",(execucao(7).pct??100)<80?"signal":"")}
+   ${card("Mente",`${habitosFeitos(k)}/${MENTE_HABITOS.length}`,"hábitos de hoje · princípios dos milionários","view='mente';mtAba='hoje';render()",habitosFeitos(k)<MENTE_DIA_BOM?"signal":"ok")}
    ${card("Meta do mês",brl(fm),"de "+brl(mm),"irG('placar')")}
    ${card("Conexões",`${reqOk}/${req.length}`,"liberação do piloto automático","view='publicar';pubAba='conexoes';render()",reqOk<req.length?"signal":"")}
    ${card("Rotinas",rot.length?(rot.length-rotFalha)+"/"+rot.length:"–",rot.length?(rotFalha?rotFalha+" com problema":"todas em dia"):"o zelador confere às 07:07","ctAba='rotinas';render()",rotFalha?"danger":"")}
@@ -1641,6 +1643,239 @@ setInterval(()=>{ const n=new Date(), k=ymd(n), nm=nowMin(n);
   renderStatus(); if(n.getMinutes()%30===0&&n.getSeconds()<20) avisarGestao();
 },20000);
 
+/* ============ MENTE DE MILIONÁRIO ============ */
+/* Pesquisa de 22/10/2026. Cada número abaixo tem fonte em MENTE_FONTES; o relatório completo está em docs/mente-de-milionario.md. Nada de número ou biografia sem fonte. */
+const MENTE_FONTES = {
+ ramsey:["Ramsey Solutions · National Study of Millionaires (mais de 10 mil milionários dos EUA, pesquisa de nov/2017 a jan/2018)","https://www.ramseysolutions.com/retirement/the-national-study-of-millionaires-research"],
+ stanley:["Thomas J. Stanley e William Danko · O Milionário Mora ao Lado (1996), trecho do livro","https://dev.bookbrowse.com/excerpts/index.cfm/book_number/242/page_number/2/the-millionaire-next-door"],
+ azoulay:["Azoulay, Jones, Kim e Miranda · Age and High-Growth Entrepreneurship (NBER, 2018)","https://www.nber.org/papers/w24489"],
+ raffiee:["Raffiee e Feng · Should I Quit My Day Job? (Academy of Management Journal, 2014)","https://management-issues.com/news/6964/slow-burn-beats-big-bang"],
+ sarasvathy:["Saras Sarasvathy · os 5 princípios da Effectuation (como pensam empreendedores experientes)","https://effectuation.org/effectuation-principles"],
+ locke:["Locke e Latham · 35 anos de pesquisa sobre metas (American Psychologist, 2002)","https://goal-lab.psych.umn.edu/orgpsych/2020/readings/5.%20Motivation/Locke%20&%20Latham%20(2002).pdf"],
+ gollwitzer:["Gollwitzer e Sheeran · meta-análise de planos se-então (2006)","https://kops.uni-konstanz.de/entities/publication/2e749bfb-8533-437c-8203-7e788c910c5f"],
+ lally:["Lally e colegas · UCL, quanto tempo leva para formar um hábito","https://www.ucl.ac.uk/news/2009/aug/how-long-does-it-take-form-habit"],
+ cbinsights:["CB Insights · 111 startups que fecharam (2021), resumo da SmartCompany","https://www.smartcompany.com.au/startupsmart/analysis/startups-fail-founders-capital/"],
+ frank:["Robert H. Frank · Success and Luck (Knowledge at Wharton)","https://knowledge.wharton.upenn.edu/article/how-luck-is-the-silent-partner-of-success/"],
+ sebrae:["Sebrae · sinais de risco de fechamento de pequenos negócios (Diário do Comércio)","https://diariodocomercio.com.br/gestao/sobrevivencia-empresas-gestao/"],
+ walton:["Walmart · as 10 regras de Sam Walton para construir um negócio","https://corporate.walmart.com/about/sam-walton/10-rules-for-building-a-better-business"],
+ blakely:["Stanford GSB · Sara Blakely: comece pequeno, pense grande","https://gsb.stanford.edu/insights/sara-blakely-start-small-think-big-scale-fast"],
+ blakely2:["Entrepreneur · como Sara Blakely construiu a Spanx do zero","https://www.entrepreneur.com/article/238846"],
+ knight:["Simon & Schuster · descrição do livro A Marca da Vitória (Shoe Dog), de Phil Knight","https://www.simonandschuster.ca/books/Shoe-Dog/Phil-Knight/9781501135934"],
+ bezos:["Academy of Achievement · entrevista de Jeff Bezos (turma de 2001)","https://achievement.org/video/jeff-bezos-12/"],
+ buffett:["Quote Investigator · a origem da frase das 500 páginas de Warren Buffett","https://quoteinvestigator.com/2018/10/20/pages/"],
+ trajano:["InfoMoney · a trajetória de Luiza Trajano Donato, fundadora do Magazine Luiza","https://www.infomoney.com.br/?p=2373622"],
+ silvio:["BandNews FM · Silvio Santos foi de camelô a dono de emissora","https://www.band.com.br/bandnews-fm/noticias/maior-figura-da-tv-brasileira-silvio-santos-foi-de-camelo-a-dono-de-emissora-202408171130"],
+};
+const fonteLink = id=>{ const f=MENTE_FONTES[id]; return f?`<a href="${f[1]}" target="_blank" rel="noopener">${esc(f[0])}</a>`:"" };
+
+// p = princípio: o que a pesquisa diz, como aplicar na Infinity Guard, de onde vem o dado
+const MENTE_PRINCIPIOS = [
+ {id:"construida",t:"Riqueza se constrói, quase nunca se herda",
+  diz:"No maior levantamento com milionários dos EUA, 79% não receberam nenhuma herança e só 3% herdaram US$ 1 milhão ou mais. 93% disseram que chegaram lá por trabalho duro, não por salário alto. No livro O Milionário Mora ao Lado, cerca de 80% eram a primeira geração rica da família.",
+  faz:"Você não precisa de capital grande para começar. Precisa de constância nos números do Placar e nas missões do dia, semana após semana.",
+  dado:"Acumulado no Placar contra a meta do ano.", fontes:["ramsey","stanley"]},
+ {id:"gastar-menos",t:"Gaste menos do que entra, sempre",
+  diz:"94% dos milionários da pesquisa Ramsey vivem com menos do que ganham, e quase três em cada quatro nunca deixaram saldo no cartão de crédito. Os do livro O Milionário Mora ao Lado guardam pelo menos 15% da renda. Controlar despesas melhor que o concorrente é a regra 9 de Sam Walton.",
+  faz:"Na loja: resultado do mês no azul e despesas (apps, anúncios, trocas) abaixo da margem. Em casa: o salário do CLT paga a vida, o lucro da loja é reinvestido.",
+  dado:"Resultado e despesas do mês, da aba Gestão → Financeiro.", fontes:["ramsey","stanley","walton"]},
+ {id:"hibrido",t:"Não largue o emprego cedo demais",
+  diz:"Num estudo com cerca de 12.700 pessoas acompanhadas de 1994 a 2008, quem começou o negócio mantendo o emprego teve risco de fechar 33,3% menor do que quem largou tudo de uma vez.",
+  faz:"O seu CLT é vantagem, não atraso: ele paga as contas enquanto a loja prova que dá lucro. Defina abaixo o gatilho de saída (salário e meses seguidos de resultado) e só decida com o número na mão.",
+  dado:"Meses seguidos em que o resultado da loja cobriu o seu salário.", fontes:["raffiee"]},
+ {id:"perda-aceitavel",t:"Comece com o que tem e decida quanto pode perder",
+  diz:"Empreendedores experientes começam com o que já têm (quem são, o que sabem, quem conhecem) e decidem quanto aceitam perder, em vez de apostar no quanto esperam ganhar. Também fecham parcerias cedo e usam surpresas a favor.",
+  faz:"Escreva abaixo a sua perda aceitável por mês. Teste novo (anúncio, produto, canal) só entra se o pior caso couber nesse valor.",
+  dado:"Resultado do mês contra a perda aceitável que você definiu.", fontes:["sarasvathy"]},
+ {id:"experiencia",t:"Conhecer o mercado pesa mais que idade ou sorte de principiante",
+  diz:"Entre as empresas novas que mais cresceram nos EUA (as 0,1% do topo), a idade média do fundador era 45 anos. Experiência anterior no mesmo setor previu chances muito maiores de sucesso.",
+  faz:"Estude segurança eletrônica um pouco todo dia: o radar de concorrentes, as dúvidas dos clientes, os manuais dos produtos. Cada dia de estudo é experiência de setor que se acumula.",
+  dado:"Hábito diário: 20 minutos de estudo do mercado.", fontes:["azoulay","buffett"]},
+ {id:"meta-placar",t:"Meta específica e difícil, com placar",
+  diz:"35 anos de pesquisa mostram que metas específicas e difíceis rendem mais do que \"fazer o melhor possível\". E metas só funcionam com retorno: é preciso ver o progresso contra a meta para ajustar o esforço ou a estratégia.",
+  faz:"A meta do mês já está no app. Aqui você vê quanto falta e quanto precisa vender por dia para chegar. Anote o Placar toda noite: sem placar, a meta vira desejo.",
+  dado:"Meta do mês, feito até agora e ritmo por dia.", fontes:["locke"]},
+ {id:"se-entao",t:"Plano se-então para não depender de força de vontade",
+  diz:"Numa meta-análise de 94 testes, quem escreveu planos no formato \"se acontecer X, então eu faço Y\" atingiu mais as metas, com efeito de médio a grande (d = 0,65).",
+  faz:"Escreva abaixo 3 planos se-então para os momentos em que você costuma travar: depois do expediente, orçamento sem resposta, dia sem venda.",
+  dado:"Os seus planos se-então, salvos no app.", fontes:["gollwitzer"]},
+ {id:"habito-66",t:"Hábito leva semanas, e falhar um dia não quebra",
+  diz:"No estudo da UCL, um hábito novo levou em média 66 dias para ficar automático. Faltar uma vez não atrapalhou a formação do hábito; o que impediu foi a inconstância.",
+  faz:"Os hábitos de hoje contam um dia bom quando você cumpre 6 de 8. A sequência aqui tolera uma falha: só zera com dois dias ruins seguidos.",
+  dado:"Dias bons e o contador até 66.", fontes:["lally"]},
+ {id:"necessidade-caixa",t:"Resolva uma dor real e cuide do caixa",
+  diz:"Das 111 startups que fecharam, 38% citaram falta de dinheiro e 35% citaram falta de necessidade de mercado. No Brasil, o Sebrae aponta falta de planejamento, falta de capacitação e falta de diferencial como sinais de risco. Superar a expectativa do cliente é a regra 8 de Sam Walton.",
+  faz:"Ouça o cliente todo dia, responda rápido, faça o follow-up e entregue no prazo. O número que diz se a dor é real é a taxa de conversa que vira venda.",
+  dado:"Conversa → venda, follow-ups vencidos e entregas atrasadas.", fontes:["cbinsights","sebrae","walton"]},
+ {id:"erro-aula",t:"Erro anotado vira aula",
+  diz:"Sara Blakely, fundadora da Spanx, faz \"reuniões do ops\", onde a equipe conta os próprios erros, muitas vezes como histórias engraçadas. Na Effectuation, surpresa é matéria-prima (o princípio da limonada).",
+  faz:"Anote um erro por dia e o que você aprendeu. Toda segunda, releia a semana antes de planejar.",
+  dado:"Diário de erros, guardado no app.", fontes:["blakely","sarasvathy"]},
+ {id:"sorte",t:"Sorte existe: humildade e gratidão",
+  diz:"Quem venceu tende a lembrar do esforço e esquecer as ajudas e os acasos. Num experimento citado por Robert Frank, quem listou causas externas para um acontecimento bom doou 25% mais de um bônus do que quem listou só qualidades próprias.",
+  faz:"Histórias de milionários são inspiração, não fórmula: muita gente fez igual e não chegou lá. Agradeça a quem te ajuda (cliente, parceiro, família) e trate a sorte como algo que se aproveita, não que se espera.",
+  dado:"Hábito diário de gratidão.", fontes:["frank"]},
+];
+
+const MENTE_HISTORIAS = [
+ {n:"Sara Blakely",o:"Spanx",
+  fatos:["Vendeu aparelhos de fax de porta em porta por 7 anos antes da ideia da Spanx.","Abriu a empresa em 2000 com US$ 5 mil da poupança, sem experiência em varejo ou fábrica.","Não teve investidor de fora: a empresa deu lucro desde o começo e ela reinvestiu.","No início fazia tudo: embalava, enviava, vendia e escreveu a própria patente.","Foi pessoalmente às fábricas na Carolina do Norte depois que ninguém a levou a sério por telefone.","Conseguiu a Neiman Marcus pagando a própria passagem para uma reunião curta e demonstrando o produto ali mesmo."],
+  licao:"Pouco dinheiro, sem investidor, dono faz tudo no começo e reinveste o lucro. É exatamente a fase da Infinity Guard.",fontes:["blakely","blakely2"]},
+ {n:"Sam Walton",o:"Walmart",
+  fatos:["Deixou 10 regras para construir um negócio: comprometa-se com o negócio; divida o lucro com a equipe; motive; comunique tudo; reconheça o trabalho; comemore; ouça todo mundo; supere a expectativa do cliente; controle as despesas melhor que o concorrente; nade contra a corrente."],
+  licao:"As regras 8 e 9 (cliente acima do esperado e despesa sob controle) são as que valem desde o primeiro pedido.",fontes:["walton"]},
+ {n:"Phil Knight",o:"Nike",
+  fatos:["Saiu da escola de negócios com um empréstimo de US$ 50 do pai.","A ideia era importar tênis de corrida de boa qualidade e preço baixo do Japão.","Vendia os tênis no porta-malas do carro. O primeiro ano faturou US$ 8 mil."],
+  licao:"Revender produto importado, vender direto e começar pequeno: o começo da Nike parece mais com uma loja de dropshipping do que com uma multinacional.",fontes:["knight"]},
+ {n:"Jeff Bezos",o:"Amazon",
+  fatos:["Para decidir se largava o emprego em Wall Street (e o bônus anual) para vender livros pela internet, se imaginou com 80 anos olhando para trás.","Nas palavras dele: \"eu sabia que, se falhasse, não me arrependeria disso, mas sabia que a única coisa de que poderia me arrepender era nunca ter tentado\"."],
+  licao:"Teste dos 80 anos para decisões grandes. Mas lembre do princípio do emprego: ele tomou a decisão com o plano pronto, não por impulso.",fontes:["bezos"]},
+ {n:"Warren Buffett",o:"Berkshire Hathaway",
+  fatos:["Segundo Todd Combs, que era aluno dele por volta de 2002, Buffett mandou a turma ler 500 páginas por dia porque \"o conhecimento se acumula como juros compostos\".","O Quote Investigator considera que há evidência sólida da frase, mas ela depende da memória de Combs e só apareceu impressa em 2013."],
+  licao:"Você não precisa de 500 páginas. Precisa do estudo diário que se soma, como juros.",fontes:["buffett"]},
+ {n:"Luiza Trajano Donato",o:"Magazine Luiza",
+  fatos:["Antes de ter loja, foi compradora na mercearia do irmão a partir dos 17 anos e trabalhou 11 anos em outra loja.","Em 1957, em Franca (SP), comprou com o marido, Pelegrino Donato, uma loja de presentes chamada Cristaleira.","Fez um concurso na cidade para escolher o nome novo: chegaram mais de 800 cartas e venceu \"Magazine Luiza\".","No começo vendiam de porta em porta e, aos sábados, vendiam televisores por catálogo para usinas da região."],
+  licao:"Anos de experiência no varejo antes de abrir o próprio negócio, cliente envolvido desde o nome e venda ativa fora da loja.",fontes:["trajano"]},
+ {n:"Silvio Santos",o:"SBT e Grupo Silvio Santos",
+  fatos:["Aos 14 anos era camelô no centro do Rio de Janeiro, vendendo capas para título de eleitor.","O jeito de falar com o público rendeu um teste na Rádio Guanabara.","Em 1954 assinou o primeiro contrato de locutor na Rádio Nacional de São Paulo e, em 1961, começou na TV.","No fim dos anos 1950 virou sócio do Baú da Felicidade com Manoel da Nóbrega."],
+  licao:"Vender e falar com o público foi a habilidade que abriu todas as portas. Para a loja, é o WhatsApp e o Reel.",fontes:["silvio"]},
+];
+
+const MENTE_HABITOS = [
+ {id:"placar",t:"Anotei os números do dia no Placar",p:"meta-placar",auto:k=>DIAS_DB[k]?.log?.faturamento!==undefined},
+ {id:"cliente",t:"Falei com pelo menos 1 cliente ou lead",p:"necessidade-caixa",auto:k=>Number(DIAS_DB[k]?.log?.conversas||0)>0||lista("pedidos").some(p=>p.data===k)},
+ {id:"follow",t:"Zerei os follow-ups vencidos",p:"necessidade-caixa",auto:k=>k===ymd(new Date())&&lista("clientes").length>0&&followupsHoje().length===0},
+ {id:"estudo",t:"Estudei 20 minutos sobre o meu mercado",p:"experiencia"},
+ {id:"primeiro",t:"Fiz primeiro a tarefa mais importante, como no meu plano se-então",p:"se-entao"},
+ {id:"gasto",t:"Nenhum gasto fora do orçamento hoje",p:"gastar-menos"},
+ {id:"erro",t:"Anotei um erro e o que aprendi",p:"erro-aula",auto:k=>!!(S.mente?.dias?.[k]?.erro)},
+ {id:"gratidao",t:"Agradeci a alguém que me ajudou",p:"sorte"},
+];
+const MENTE_DIA_BOM = 6;
+
+function mente(){ if(!S.mente){ S.mente={}; setTimeout(persistEstado,0) } S.mente = Object.assign({inicio:ymd(new Date()), dias:{}, planos:[], perda:0, salario:0, mesesGatilho:6, conselho:null}, S.mente||{}); return S.mente }
+function menteDia(k){ const m=mente(); return m.dias[k] || (m.dias[k]={h:{}, erro:""}) }
+function habitoFeito(h,k){ return !!(S.mente?.dias?.[k]?.h?.[h.id]) || !!(h.auto&&h.auto(k)) }
+function habitosFeitos(k){ return MENTE_HABITOS.filter(h=>habitoFeito(h,k)).length }
+function diaBom(k){ return habitosFeitos(k)>=MENTE_DIA_BOM }
+function persistMente(){ const m=mente(); const lim=ymd(new Date(Date.now()-120*864e5)); Object.keys(m.dias).forEach(k=>{ if(k<lim) delete m.dias[k] }); persistEstado() }
+function marcarHabito(id){ const k=ymd(new Date()), d=menteDia(k); if(d.h[id]) delete d.h[id]; else d.h[id]=1; persistMente(); render() }
+// sequência que tolera 1 dia ruim (Lally: faltar uma vez não atrapalha); zera com 2 dias ruins seguidos
+function sequenciaMente(){ const ini=mente().inicio; let n=0, falhas=0; const d=new Date();
+  if(!diaBom(ymd(d))) d.setDate(d.getDate()-1);
+  for(let i=0;i<400;i++){ const k=ymd(d); if(k<ini) break; if(diaBom(k)){ n++; falhas=0 } else { falhas++; if(falhas>=2) break } d.setDate(d.getDate()-1) }
+  return n }
+function diasBons(n){ let c=0; const d=new Date(); for(let i=0;i<n;i++){ if(diaBom(ymd(d))) c++; d.setDate(d.getDate()-1) } return c }
+
+function salvarErro(){ const v=($("#mt-erro").value||"").trim(); if(v.length<5){toast("Escreva o erro e o que aprendeu.");return} menteDia(ymd(new Date())).erro=v.slice(0,600); persistMente(); toast("Anotado. Erro virou aula."); render() }
+function addPlano(se,entao){ se=(se??$("#pl-se").value??"").trim(); entao=(entao??$("#pl-entao").value??"").trim(); if(se.length<3||entao.length<3){toast("Preencha o se e o então.");return} const m=mente(); m.planos.push({id:novoId("P"),se:se.slice(0,200),entao:entao.slice(0,240),criado:ymd(new Date())}); persistMente(); toast("Plano salvo."); render() }
+function delPlano(id){ const m=mente(); m.planos=m.planos.filter(p=>p.id!==id); persistMente(); render() }
+function salvarGatilhos(){ const m=mente(); const n=id=>Math.max(0,parseNum($("#mg-"+id).value)); m.perda=n("perda"); m.salario=n("salario"); m.mesesGatilho=Math.max(1,Math.round(n("meses")||6)); persistMente(); toast("Gatilhos salvos."); render() }
+
+// ---- números da loja ligados aos princípios ----
+function ritmoMeta(){ const k=ymd(new Date()), m=mesDoPlano(k), mm=metaMes(m), fm=fatMes(m);
+  const fim=addMonths(parseYmd(S.inicio),m+1); const resta=Math.max(1,daysBetween(new Date(),fim));
+  return {m,mm,fm,resta,porDia:Math.max(0,mm-fm)/resta,pct:mm?fm/mm*100:0} }
+function mesesAnteriores(n){ const out=[]; const d=new Date(); d.setDate(1); for(let i=1;i<=n;i++){ const x=new Date(d); x.setMonth(d.getMonth()-i); out.push(ymd(x).slice(0,7)) } return out }
+function gatilhoCLT(){ const m=mente(); if(!(m.salario>0)) return null; let seguidos=0; for(const mes of mesesAnteriores(24)){ const r=dre(mes); if(r.receita>0&&r.resultado>=m.salario) seguidos++; else break } return {seguidos,alvo:m.mesesGatilho} }
+function conversao30(){ let v=0,c=0; const lim=ymd(new Date(Date.now()-30*864e5)); for(const k in DIAS_DB){ if(k<lim) continue; const l=DIAS_DB[k].log||{}; v+=+l.vendas||0; c+=+l.conversas||0 } return c?{pct:v/c*100,v,c}:null }
+
+function resumoMente(){ const k=ymd(new Date()), r=ritmoMeta(), d=dre(k.slice(0,7)), m=mente(), cv=conversao30();
+  return `Hábitos de hoje: ${habitosFeitos(k)} de ${MENTE_HABITOS.length} (faltam: ${MENTE_HABITOS.filter(h=>!habitoFeito(h,k)).map(h=>h.t).join("; ")||"nenhum"}). Sequência de dias bons: ${sequenciaMente()}. Meta do mês ${r.m+1} do plano: ${brl(r.mm)}, feito ${brl(r.fm)}, faltam ${r.resta} dias, ritmo necessário ${brl(r.porDia)} por dia. Mês ${k.slice(0,7)} na gestão: receita ${brl(d.receita)}, despesas ${brl(d.desp)}, resultado ${brl(d.resultado)}.${m.perda>0?` Perda aceitável por mês: ${brl(m.perda)}.`:""}${cv?` Conversa para venda em 30 dias: ${cv.pct.toFixed(1)}% (meta ${S.conv}%).`:""} Planos se-então: ${m.planos.map(p=>"se "+p.se+", então "+p.entao).join(" | ")||"nenhum ainda"}.` }
+
+let mtAba="hoje", mtBusy=false;
+function viewMente(){
+  const k=ymd(new Date()), feitos=habitosFeitos(k), seq=sequenciaMente(), m=mente();
+  const diaN=Math.min(66,Math.max(1,daysBetween(parseYmd(m.inicio),new Date())+1));
+  let h=`<div class="stack"><h2>Mente de milionário</h2><p class="muted">O que os estudos dizem sobre quem começou do zero e ficou rico, transformado em hábitos, metas e decisões da Infinity Guard. Cada número tem a fonte ao lado. Nada aqui é fórmula: é o que mais aparece nos estudos, aplicado aos seus dados.</p></div>
+  <div class="chips" role="group" aria-label="Partes da mente">${[["hoje","Hábitos de hoje"],["metas","Metas e números"],["principios","Princípios"],["historias","Histórias reais"],["fontes","Fontes"]].map(([a,t])=>`<button class="chip" aria-pressed="${mtAba===a}" onclick="mtAba='${a}';render()">${t}</button>`).join("")}</div>`;
+  if(mtAba==="metas") return h+menteMetas();
+  if(mtAba==="principios") return h+mentePrincipios();
+  if(mtAba==="historias") return h+menteHistorias();
+  if(mtAba==="fontes") return h+menteFontes();
+  h+=`<div class="kpis">
+   <div class="kpi"><span class="eyebrow">Hábitos de hoje</span><span class="v" style="color:var(--${feitos>=MENTE_DIA_BOM?"ok":"signal"})">${feitos}/${MENTE_HABITOS.length}</span><span class="s">dia bom com ${MENTE_DIA_BOM} ou mais</span></div>
+   <div class="kpi"><span class="eyebrow">Sequência</span><span class="v">${seq}</span><span class="s">dias bons (tolera 1 falha)</span></div>
+   <div class="kpi"><span class="eyebrow">Rumo ao hábito</span><span class="v">dia ${diaN}/66</span><span class="s">${diasBons(Math.min(66,diaN))} dias bons até agora</span></div>
+  </div>
+  <div class="card stack"><span class="eyebrow">Hábitos de hoje · ${new Date().toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"2-digit"})}</span>
+   ${MENTE_HABITOS.map(hb=>{ const f=habitoFeito(hb,k), au=!!(hb.auto&&hb.auto(k)), p=MENTE_PRINCIPIOS.find(x=>x.id===hb.p);
+     return `<div class="mission ${f?"done":""}"><span class="box">${f?`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M5 12l5 5 9-10"/></svg>`:""}</span><span class="t">${esc(hb.t)}</span>
+      <span class="d">${au?"Marcado sozinho pelos dados do app. ":""}Princípio: ${esc(p.t)}.</span>
+      ${au?"":`<span class="act"><button class="btn sm${f?"":" primary"}" onclick="marcarHabito('${hb.id}')">${f?"Desmarcar":"Feito"}</button></span>`}</div>` }).join("")}
+  </div>
+  <div class="card stack"><span class="eyebrow">Diário de erros (o erro de hoje vira a aula de amanhã)</span>
+   ${menteDia(k).erro?`<p style="background:var(--ok-soft);border-radius:6px;padding:8px">${esc(menteDia(k).erro)}</p>`:""}
+   <textarea id="mt-erro" placeholder="Ex.: demorei 3 horas para responder um orçamento e o cliente comprou em outro lugar. Aprendi: deixar a resposta rápida /kit pronta.">${esc(menteDia(k).erro||"")}</textarea>
+   <button class="btn" style="align-self:flex-start" onclick="salvarErro()">Salvar o erro de hoje</button>
+   ${menteErrosSemana()}
+  </div>
+  ${menteConselho()}`;
+  return h }
+
+function menteErrosSemana(){ const m=mente(); const ks=Object.keys(m.dias).filter(x=>m.dias[x].erro&&x<ymd(new Date())).sort().reverse().slice(0,7); if(!ks.length) return "";
+  return `<details><summary class="muted" style="cursor:pointer">Erros dos últimos dias (${ks.length})</summary><ul style="margin:8px 0 0;padding-left:20px;font-size:.9rem;display:flex;flex-direction:column;gap:4px">${ks.map(x=>`<li><b class="num">${x.slice(8,10)}/${x.slice(5,7)}</b> · ${esc(m.dias[x].erro)}</li>`).join("")}</ul></details>` }
+
+function menteConselho(){ const m=mente(), k=ymd(new Date()); const c=m.conselho&&m.conselho.data===k?m.conselho.texto:"";
+  return `<div class="card stack"><span class="eyebrow">Mentor do dia</span><p class="muted" style="font-size:.9rem">A IA lê os seus hábitos, a meta do mês e a gestão e diz as 3 ações de hoje, cada uma ligada a um princípio da pesquisa.</p>
+   <div class="out" id="mt-out">${esc(c)||'<span class="muted">Toque em Pedir conselho.</span>'}</div>
+   <div class="row"><button class="btn primary" id="mt-go" onclick="pedirConselho()" ${mtBusy||!sampleFn?"disabled":""}>${mtBusy?"Pensando…":"Pedir conselho"}</button><button class="btn" onclick="copiar(promptMente())">Copiar prompt</button></div>
+   ${sampleFn?"":`<p class="muted" style="font-size:.82rem">A IA não está liberada nesta visualização. Use Copiar prompt e cole no Claude.</p>`}</div>` }
+function promptMente(){ return `Você é o mentor de mentalidade do dono da Infinity Guard. Ele trabalha em regime CLT, vende nos horários livres e tem a meta de ${brl(S.meta)} por ano. Use só estes princípios, que vêm de pesquisas com fontes: ${MENTE_PRINCIPIOS.map(p=>p.t).join("; ")}. Situação de hoje: ${resumoMente()} ${resumoGestao()} ${REGRAS_CASA} Responda em português do Brasil, em no máximo 120 palavras: 3 ações concretas para hoje, numeradas, cada uma com o princípio entre parênteses. Não invente números: use só os que estão acima. Tom de tranquilidade, sem medo e sem promessa de ficar rico.` }
+async function pedirConselho(){ if(!sampleFn||mtBusy) return; mtBusy=true; render();
+  let txt=""; try{ const r=await sampleFn(promptMente(),{cache:false,onText:({text})=>{const o=$("#mt-out"); if(o) o.textContent=text}}); txt=r.text }
+  catch(e){ txt=e?.text||({not_granted:"Você não liberou a IA para este app. Use Copiar prompt.",rate_limited:"Muitos pedidos seguidos. Espere um minuto."}[e?.code]??"Não consegui agora. Tente de novo ou use Copiar prompt.") }
+  mtBusy=false; if(txt&&!/^Você não liberou|^Muitos pedidos|^Não consegui/.test(txt)){ mente().conselho={data:ymd(new Date()),texto:txt.slice(0,2000)}; persistMente() } else toast(txt); render() }
+
+function menteMetas(){ const r=ritmoMeta(), mes=ymd(new Date()).slice(0,7), d=dre(mes), m=mente(), g=gatilhoCLT(), cv=conversao30(), pg=pendenciasGestao();
+  const pctDesp=d.receita?d.desp/d.receita*100:null;
+  const card=(t,v,s,tom,pr)=>`<div class="kpi"><span class="eyebrow">${t}</span><span class="v" style="${tom?`color:var(--${tom})`:""}">${v}</span><span class="s">${s}</span><span class="s" style="margin-top:4px">Princípio: ${esc(MENTE_PRINCIPIOS.find(x=>x.id===pr).t)}</span></div>`;
+  let h=`<div class="kpis">
+   ${card("Meta do mês "+(r.m+1),brl(r.fm),`de ${brl(r.mm)} · ${r.pct.toFixed(0)}%`,r.fm>=r.mm?"ok":"","meta-placar")}
+   ${card("Ritmo necessário",r.fm>=r.mm?"meta batida":brl(r.porDia)+"/dia",`faltam ${r.resta} ${r.resta===1?"dia":"dias"} · ${(r.porDia/Math.max(1,S.ticket)).toFixed(1).replace(".",",")} vendas/dia com ticket de ${brl(S.ticket)}`,r.fm>=r.mm?"ok":"signal","meta-placar")}
+   ${card("Resultado do mês",brl(d.resultado),`receita ${brl(d.receita)} · despesas ${brl(d.desp)}`,d.resultado<0?"danger":d.receita?"ok":"","gastar-menos")}
+   ${card("Despesas sobre a receita",pctDesp===null?"–":pctDesp.toFixed(0)+"%",pctDesp===null?"sem venda lançada neste mês":"quanto da receita foi para apps, anúncios e outros",pctDesp!==null&&d.desp>d.margem?"danger":"","gastar-menos")}
+   ${card("Perda aceitável",m.perda>0?brl(m.perda)+"/mês":"defina abaixo",m.perda>0?(d.resultado<-m.perda?"o mês passou do limite: pare os testes":"dentro do limite: pode testar"):"quanto você aceita perder num mês ruim",m.perda>0&&d.resultado<-m.perda?"danger":m.perda>0?"ok":"signal","perda-aceitavel")}
+   ${card("Gatilho do CLT",g?`${g.seguidos}/${g.alvo} meses`:"defina abaixo",g?`meses seguidos com resultado acima de ${brl(m.salario)}`:"o salário que a loja precisa cobrir",g&&g.seguidos>=g.alvo?"ok":"","hibrido")}
+   ${card("Conversa → venda (30 dias)",cv?cv.pct.toFixed(1).replace(".",",")+"%":"–",cv?`${cv.v} vendas de ${cv.c} conversas · sua meta ${S.conv}%`:"anote conversas e vendas no Placar",cv&&cv.pct<S.conv?"signal":cv?"ok":"","necessidade-caixa")}
+   ${card("Cliente acima do esperado",String(pg.follow.length+pg.atrasos.length),`${pg.follow.length} follow-ups vencidos · ${pg.atrasos.length} entregas atrasadas`,pg.follow.length+pg.atrasos.length?"signal":"ok","necessidade-caixa")}
+  </div>
+  <div class="card stack"><span class="eyebrow">Gatilhos que você define</span>
+   <p class="muted" style="font-size:.88rem">Perda aceitável: quanto a loja pode perder num mês sem apertar a sua casa. Salário: o líquido do CLT que a loja precisa cobrir antes de você pensar em sair. Meses seguidos: o padrão do app é 6, é uma escolha sua, não um número de pesquisa.</p>
+   <div class="fields">
+    <label class="f">Perda aceitável por mês (R$)<input id="mg-perda" type="number" min="0" step="10" inputmode="decimal" value="${m.perda||""}"></label>
+    <label class="f">Salário líquido do CLT (R$)<input id="mg-salario" type="number" min="0" step="50" inputmode="decimal" value="${m.salario||""}"></label>
+    <label class="f">Meses seguidos para o gatilho<input id="mg-meses" type="number" min="1" max="24" step="1" value="${m.mesesGatilho||6}"></label>
+    <div style="display:flex;align-items:flex-end"><button class="btn primary" onclick="salvarGatilhos()">Salvar gatilhos</button></div>
+   </div></div>
+  <div class="card stack"><span class="eyebrow">Planos se-então</span>
+   <p class="muted" style="font-size:.88rem">Quem escreve \"se X, então Y\" cumpre mais as metas (${fonteLink("gollwitzer")}). Escreva para os momentos em que você trava.</p>
+   ${m.planos.length?`<ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px">${m.planos.map(p=>`<li><b>Se</b> ${esc(p.se)}, <b>então</b> ${esc(p.entao)} <button class="btn sm ghost" onclick="delPlano(${jsq(p.id)})" aria-label="Apagar plano">apagar</button></li>`).join("")}</ul>`:`<p class="muted">Nenhum plano ainda. Comece por um dos modelos abaixo.</p>`}
+   <div class="fields"><label class="f">Se…<input id="pl-se" placeholder="chegar 19:48 e eu não anotei os números"></label><label class="f">Então eu…<input id="pl-entao" placeholder="abro o Placar e anoto antes de jantar"></label><div style="display:flex;align-items:flex-end"><button class="btn primary" onclick="addPlano()">Salvar plano</button></div></div>
+   <div class="chips">${MENTE_MODELOS.filter(x=>!m.planos.some(p=>p.se===x[0])).map((x,i)=>`<button class="chip" onclick="addPlano(${jsq(x[0])},${jsq(x[1])})">+ ${esc(x[0])}</button>`).join("")}</div>
+  </div>`;
+  return h }
+const MENTE_MODELOS=[
+ ["chegar 19:48 e eu não anotei os números","abro o Placar e anoto antes de jantar"],
+ ["um orçamento ficar 1 dia sem resposta","mando o follow-up D1 do recuperador-de-carrinho no almoço"],
+ ["eu sair do expediente cansado","faço só a missão mais curta do turno da noite, por 15 minutos"],
+ ["o dia acabar sem nenhuma venda","escrevo no diário de erros o que travou e mando 3 mensagens para clientes antigos"],
+ ["eu tiver vontade de gastar com algo fora do plano","espero 48 horas e confiro se cabe na perda aceitável"],
+];
+
+function mentePrincipios(){ return `<div class="stack">${MENTE_PRINCIPIOS.map((p,i)=>`<div class="card stack"><span class="eyebrow">Princípio ${i+1}</span><h3>${esc(p.t)}</h3>
+  <div class="lesson"><div class="block"><b>O que a pesquisa diz.</b> ${esc(p.diz)}</div><div class="block task"><b>Na Infinity Guard.</b> ${esc(p.faz)}</div><div class="block proofb"><b>Onde ver no app.</b> ${esc(p.dado)}</div></div>
+  <p class="muted" style="font-size:.82rem">Fonte: ${p.fontes.map(fonteLink).join(" · ")}</p></div>`).join("")}</div>` }
+
+function menteHistorias(){ return `<div class="card flat stack"><span class="eyebrow">Antes de ler</span><p style="font-size:.9rem">Histórias de quem venceu escondem quem fez igual e não chegou (viés de sobrevivência). Use como inspiração e como exemplo de hábito, não como prova. Aqui só entram fatos com fonte, sem número de fortuna nem frase inventada.</p></div>
+  <div class="lib">${MENTE_HISTORIAS.map(s=>`<div class="card"><span class="eyebrow">${esc(s.o)}</span><h3>${esc(s.n)}</h3>
+   <ul style="margin:0;padding-left:18px;font-size:.9rem;display:flex;flex-direction:column;gap:4px">${s.fatos.map(f=>`<li>${esc(f)}</li>`).join("")}</ul>
+   <p style="font-size:.9rem"><b>Lição para a loja:</b> ${esc(s.licao)}</p>
+   <p class="muted" style="font-size:.8rem">Fonte: ${s.fontes.map(fonteLink).join(" · ")}</p></div>`).join("")}</div>` }
+
+function menteFontes(){ return `<div class="card stack"><span class="eyebrow">Fontes conferidas em 22/10/2026</span>
+  <ol style="margin:0;padding-left:22px;font-size:.9rem;display:flex;flex-direction:column;gap:6px">${Object.keys(MENTE_FONTES).map(id=>`<li>${fonteLink(id)}</li>`).join("")}</ol>
+  <p class="muted" style="font-size:.85rem">Os números foram lidos na própria fonte. Onde a fonte tinha uma ressalva (como a frase de Buffett, que depende da memória de um ex-aluno), a ressalva está no texto. O relatório completo fica no repositório, em docs/mente-de-milionario.md.</p></div>` }
+
 /* ============ RENDER ============ */
 let NIVEL=0;
 function render(){
@@ -1648,7 +1883,7 @@ function render(){
   renderStatus();
   if(bloqueado() && ["trilha","publicar","mais"].includes(view)){ $("#app").innerHTML=`<section class="view"><div class="debt"><h3>Bloqueado pelo contrato</h3><p>${NIVEL>=3?"Três semanas seguidas abaixo de 80%. ":""}Você tem ${dividas().length} missões vencidas sem prova. Esta área abre de novo quando você zerar as pendências em Hoje. Equipe, Estúdio e Placar continuam liberados para você trabalhar.</p><button class="btn primary" style="align-self:flex-start" onclick="view='hoje';render()">Ir para as pendências</button></div></section>`; return }
   if(view==="placar"){ view="gestao"; gAba="placar" }
-  const v={central:viewCentral,hoje:viewHoje,trilha:viewTrilha,equipe:viewEquipe,gestao:viewGestao,ia:viewIA,publicar:viewPublicar,mais:viewMais}[view];
+  const v={central:viewCentral,hoje:viewHoje,trilha:viewTrilha,mente:viewMente,equipe:viewEquipe,gestao:viewGestao,ia:viewIA,publicar:viewPublicar,mais:viewMais}[view];
   $("#app").innerHTML=`<section class="view">${v()}</section>`;
   if(view==="ia"&&iaAba==="anuncio") setTimeout(desenharAd,30);
   if(view==="ia"&&iaAba==="video") setTimeout(async()=>{ const c=$("#vd-prev"); if(c){ await garantirFonte(MARCA.fonte); desenharQuadro(c.getContext("2d"),planoVideo(VID.roteiro),0.6,MARCA,VID.midias) } },30);
