@@ -14,13 +14,22 @@ SKIN = {"morena": (176, 120, 86), "parda": (150, 98, 66), "negra": (98, 62, 42),
 HAIR = {"preto": (28, 22, 20), "castanho": (82, 50, 30), "grisalho": (175, 172, 168)}
 
 
+def aim_dof(cam, loc, look, frame, fstop=2.8):
+    """enquadra e foca no ponto olhado (fundo desfocado, como lente de cinema)"""
+    aim(cam, loc, look, frame)
+    cam.data.dof.use_dof = True; cam.data.dof.aperture_fstop = fstop
+    cam.data.dof.focus_distance = (Vector(look) - Vector(loc)).length
+    cam.data.dof.keyframe_insert("focus_distance", frame=frame)
+
+
 def key(o, prop, f, v):
     setattr(o, prop, v); o.keyframe_insert(prop, frame=max(1, int(round(f))))
 
 
 def make_person(loc, skin="morena", hair="preto", style="curto", shirt=(40, 110, 170), pants=(40, 50, 70),
-                height=1.0, rot=0.0):
-    """Personagem estilizado de frente para -Y. Retorna dict com root, head, armL, armR, mouth, hand_l, hand_r."""
+                height=1.0, rot=0.0, avental=None, bone=None):
+    """Personagem estilizado de frente para -Y. Retorna dict com root, head, armL, armR, mouth, hand_l, hand_r,
+    eyes, brows e torso. style: curto, longo, coque, rabo. avental/bone: cor (r, g, b) ou None."""
     s = height
     root = empty(loc); root.rotation_euler = (0, 0, rot); root.scale = (s, s, s)
     ms, mh = mat("skin_" + skin, SKIN[skin]), mat("hair_" + hair, HAIR[hair])
@@ -41,12 +50,23 @@ def make_person(loc, skin="morena", hair="preto", style="curto", shirt=(40, 110,
             box((x, -0.02, -0.02), (0.07, 0.2, 0.42), mh, 0.03, head)
     elif style == "coque":
         sphere((0, 0.14, 0.3), 0.08, mh, head, 16)
-    # face: anime eyes, brows, mouth
+    elif style == "rabo":  # rabo de cavalo
+        sphere((0, 0.17, 0.22), 0.06, mh, head, 12)
+        sphere((0, 0.22, 0.08), 0.075, mh, head, 14, scale=(0.8, 0.8, 1.9))
+    if bone:
+        mb = mat("bone%d%d%d" % bone, bone)
+        sphere((0, 0.01, 0.24), 0.185, mb, head, 20, scale=(1.02, 1.0, 0.62))
+        box((0, -0.2, 0.25), (0.26, 0.16, 0.025), mb, 0.02, head)
+    # rosto: olhos de anime (piscam), sobrancelhas (sobem ao falar), nariz e boca
     eye = mat("eye", (25, 25, 30), rough=0.2); white = mat("eyewhite", (255, 255, 255), emit=1.5)
+    eyes, brows = [], []
     for x in (-0.06, 0.06):
-        sphere((x, -0.155, 0.17), 0.028, eye, head, 12, scale=(0.8, 0.4, 1.25))
-        sphere((x + 0.01, -0.168, 0.185), 0.008, white, head, 8)
-        box((x, -0.16, 0.235), (0.06, 0.01, 0.012), mh, 0.0, head)
+        ep = empty((x, -0.155, 0.17)); ep.parent = head
+        sphere((0, 0, 0), 0.028, eye, ep, 12, scale=(0.8, 0.4, 1.25))
+        sphere((0.01, -0.013, 0.015), 0.008, white, ep, 8)
+        eyes.append(ep)
+        brows.append(box((x, -0.16, 0.235), (0.06, 0.012, 0.014), mh, 0.0, head, rot=(0, -0.15 if x < 0 else 0.15, 0)))
+    sphere((0, -0.17, 0.12), 0.016, ms, head, 8, scale=(0.8, 1, 1.2))
     mouth = sphere((0, -0.158, 0.075), 0.022, mat("mouth", (120, 40, 40)), head, 12, scale=(1.3, 0.3, 0.35))
     arms = []
     for side in (-1, 1):
@@ -54,10 +74,29 @@ def make_person(loc, skin="morena", hair="preto", style="curto", shirt=(40, 110,
         sphere((0, 0, 0), 0.085, mshirt, pv, 12)
         cyl((0, 0, -0.2), 0.072, 0.36, mshirt, verts=12, parent=pv)
         cyl((0, 0, -0.44), 0.058, 0.2, ms, verts=12, parent=pv)
-        hand = sphere((0, 0, -0.56), 0.065, ms, pv, 12)
+        hand = sphere((0, 0, -0.56), 0.065, ms, pv, 12, scale=(0.9, 1.1, 1.2))
         arms.append((pv, hand))
+    box((0, -0.12, 1.47), (0.2, 0.06, 0.05), mshirt, 0.02, root)  # gola
+    if avental:
+        ma = mat("avental%d%d%d" % avental, avental)
+        box((0, -0.15, 1.05), (0.42, 0.02, 0.7), ma, 0.03, root)
+        box((0, -0.16, 1.18), (0.16, 0.01, 0.1), mat("bolso", tuple(min(255, c + 40) for c in avental)), 0.01, root)
     return {"root": root, "head": head, "armL": arms[0][0], "armR": arms[1][0], "mouth": mouth,
-            "hand_l": arms[0][1], "hand_r": arms[1][1]}
+            "hand_l": arms[0][1], "hand_r": arms[1][1], "eyes": eyes, "brows": brows, "torso": torso}
+
+
+def vida(p, n, seed=0):
+    """animação de fundo: pisca a cada 2,5–4 s e respira (o peito sobe e desce)"""
+    rnd = random.Random(seed); f = rnd.randint(8, 30)
+    while f < n:
+        for e in p["eyes"]:
+            for df, z in ((0, 1.0), (1, 0.1), (2, 1.0)):
+                e.scale = (1, 1, z); e.keyframe_insert("scale", frame=f + df)
+        f += rnd.randint(30, 48)
+    t = p["torso"]
+    for f in range(1, n + 1, 6):
+        k = 1 + 0.018 * math.sin(f / 12 * 2 * math.pi / 3.5 + seed)
+        t.scale = (1, 1, k); t.keyframe_insert("scale", frame=f)
 
 
 def talk(p, f0, f1, fps=12):
@@ -67,6 +106,17 @@ def talk(p, f0, f1, fps=12):
         k = 0.35 + (0.9 if (f - f0) % 3 == 1 else 0.25 if (f - f0) % 3 == 2 else 0.5)
         m.scale = (1.3, 0.3, k); m.keyframe_insert("scale", frame=f)
     m.scale = (1.3, 0.3, 0.35); m.keyframe_insert("scale", frame=int(f1) + 1)
+    # sobrancelhas sobem no começo da fala e a cabeça acompanha com leves acenos
+    for b in p.get("brows", []):
+        z0 = b.location.z
+        for f, dz in ((f0 - 1, 0), (f0 + 2, 0.012), (f0 + 8, 0), ((f0 + f1) // 2, 0.008), ((f0 + f1) // 2 + 4, 0)):
+            b.location.z = z0 + dz; b.keyframe_insert("location", frame=max(1, int(f)))
+        b.location.z = z0
+    h = p["head"]; r0 = tuple(h.rotation_euler)
+    for i, f in enumerate(range(int(f0), int(f1) + 1, 5)):
+        h.rotation_euler = (r0[0] + (0.06 if i % 2 else -0.02), r0[1], r0[2] + (0.04 if i % 3 == 1 else 0))
+        h.keyframe_insert("rotation_euler", frame=f)
+    h.rotation_euler = r0; h.keyframe_insert("rotation_euler", frame=int(f1) + 2)
 
 
 def walk(p, f0, f1, a, b, arms=True):

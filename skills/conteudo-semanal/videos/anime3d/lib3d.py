@@ -13,7 +13,7 @@ T0 = time.time()
 from mathutils import Vector, Euler
 
 FPS = 12  # animação "em dois", como em anime
-RX, RY = 640, 1138
+RX, RY = map(int, os.environ.get("LIB3D_RES", "640x1138").split("x"))  # resolução das tomadas
 DUR, N = 1.0, 1
 
 bpy.ops.wm.read_factory_settings(use_empty=True)

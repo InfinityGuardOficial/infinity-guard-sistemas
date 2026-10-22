@@ -17,6 +17,7 @@ CAT = json.load(open(CATALOGO))
 PROD = next(p for p in CAT["produtos"] if p["id"] == EP["produto"])
 NOTAS = json.load(open(os.path.join(base.BUILD, "narracao_info.json")))
 SEGS = EP["segmentos"]
+TOMADA_PRODUTO = EP.get("tomada_produto", "P4")
 
 def brl(v):
     return "R$ " + f"{v:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
@@ -77,15 +78,19 @@ def header(cv):
 base.header = header
 
 # ---------------- peças reutilizáveis ----------------
-def callout(cv, texto, t0, t, y, icon=True):
+def callout(cv, texto, t0, t, y, icon=True, aviso=False):
     if t < t0: return
     k = eout((t - t0) / 0.4)
     f = font("m8", 44); w = f.measureText(texto) + (130 if icon else 70)
     x = W / 2 - w / 2
     cv.saveLayerAlpha(None, int(255 * k))
     cv.drawRRect(rrect(x, y - 52 + 20 * (1 - k), w, 92, 46), P(NAVY, 225))
-    cv.drawRRect(rrect(x, y - 52 + 20 * (1 - k), w, 92, 46), P(GOLD, 200, stroke=3))
-    if icon: check_icon(cv, x + 56, y - 6 + 20 * (1 - k), 26, (t - t0) / 0.5)
+    cv.drawRRect(rrect(x, y - 52 + 20 * (1 - k), w, 92, 46), P("#e05a4f" if aviso else GOLD, 220, stroke=3))
+    if icon and aviso:  # proibido: círculo vermelho com traço
+        cy = y - 6 + 20 * (1 - k)
+        cv.drawCircle(x + 56, cy, 26 * back((t - t0) / 0.5), P("#e05a4f"))
+        cv.drawLine(x + 42, cy, x + 70, cy, P(CREAM, stroke=6))
+    elif icon: check_icon(cv, x + 56, y - 6 + 20 * (1 - k), 26, (t - t0) / 0.5)
     cv.drawString(texto, x + (100 if icon else 35), y + 10 + 20 * (1 - k), f, P(CREAM))
     cv.restore()
 
@@ -93,8 +98,9 @@ def cartao_produto(cv, t, lt):
     k = eout(lt / 0.6)
     y0 = 980 + 60 * (1 - k)
     cv.saveLayerAlpha(None, int(255 * k))
-    cv.drawRRect(rrect(60, y0, W - 120, 520, 40), P(NAVY, 235))
-    cv.drawRRect(rrect(60, y0, W - 120, 520, 40), P(GOLD, stroke=3))
+    alt = 560 if EP.get("mostrar_frete") else 520
+    cv.drawRRect(rrect(60, y0, W - 120, alt, 40), P(NAVY, 235))
+    cv.drawRRect(rrect(60, y0, W - 120, alt, 40), P(GOLD, stroke=3))
     fn = font("m8", 40)
     y = y0 + 70
     for ln in wrap(PROD["nome"], fn, W - 200):
@@ -115,6 +121,9 @@ def cartao_produto(cv, t, lt):
     cv.drawString(f"Preços do site em {data}. Confira em {EP['site']}.", 100, y + 108, fs, P(CREAM, 200))
     req = " e ".join(PROD.get("requisitos", []))
     if req: cv.drawString(f"Requer {req}. Imagem ilustrativa.", 100, y + 142, fs, P(CREAM, 200))
+    if EP.get("mostrar_frete"):
+        # o catálogo só confirma o cálculo por CEP no site; não prometer frete grátis nem prazo
+        cv.drawString(f"Frete: calcule pelo seu CEP em {EP['site']}.", 100, y + 176, fs, P(CREAM, 200))
     cv.restore()
 
 LOGO_H = None
@@ -130,8 +139,8 @@ def miniatura_produto():
     """recorte automático das câmeras (partes claras) num quadro da tomada do produto"""
     global MINI
     if MINI is None:
-        n = base.NF.get("P4", 1)
-        im = Image.open(os.path.join(base.SHOTS, "P4", f"{max(1, n // 2):04d}.png")).convert("RGB")
+        n = base.NF.get(TOMADA_PRODUTO, 1)
+        im = Image.open(os.path.join(base.SHOTS, TOMADA_PRODUTO, f"{max(1, n // 2):04d}.png")).convert("RGB")
         a = np.asarray(im).astype(int).sum(axis=2)
         ys, xs = np.where(a[: int(im.height * 0.62)] > 600)
         x0, x1, y0, y1 = xs.min(), xs.max(), ys.min(), ys.max()
@@ -140,22 +149,44 @@ def miniatura_produto():
         MINI = base.load_img(np.array(im.convert("RGBA")))
     return MINI
 
+def selo_produto(cv, t, lt):
+    """selo do produto no canto de cima: miniatura, nome curto e site"""
+    k = eout(lt / 0.5)
+    x, y = 60, 120 - 40 * (1 - k)
+    cv.saveLayerAlpha(None, int(255 * k))
+    cv.drawRRect(rrect(x, y, 600, 170, 30), P(NAVY, 230)); cv.drawRRect(rrect(x, y, 600, 170, 30), P(GOLD, stroke=3))
+    pk = miniatura_produto(); s_ = min(170 / pk.width(), 130 / pk.height())
+    cv.drawImageRect(pk, skia.Rect.MakeXYWH(x + 20, y + 20, pk.width() * s_, pk.height() * s_), SAMP)
+    nome = PROD["nome"].split(" — ")[0]
+    cv.drawString(nome, x + 210, y + 70, font("m8", 32), P(CREAM))
+    cv.drawString(", ".join(PROD["destaques"]), x + 210, y + 110, font("m5", 24), P(CREAM, 210))
+    cv.drawString(EP["site"], x + 210, y + 145, font("m7", 26), P(GOLD2))
+    cv.restore()
+
 def encerramento(cv, t, lt):
     k = eout(lt / 0.6)
-    bg(cv, blurred("P4", base.NF.get("P4", 1), 0.35)); scrims(cv)
+    bg(cv, blurred(TOMADA_PRODUTO, base.NF.get(TOMADA_PRODUTO, 1), 0.35)); scrims(cv)
     cv.saveLayerAlpha(None, int(255 * k))
-    img = logo_original()
-    w = 880; h = w * img.height() / img.width()
-    cv.drawRRect(rrect(W / 2 - w / 2 - 30, 300 - 30, w + 60, h + 60, 36), P("#ffffff"))
-    cv.drawImageRect(img, skia.Rect.MakeXYWH(W / 2 - w / 2, 300, w, h), SAMP)
+    if EP.get("logo") == "circular":  # logo original navy e dourado
+        cv.save(); cv.translate(W / 2, 520); s_ = 0.94 + 0.06 * k; cv.scale(s_, s_)
+        pth = skia.Path(); pth.addCircle(0, 0, 330)
+        cv.save(); cv.clipPath(pth, skia.ClipOp.kIntersect, True)
+        cv.drawImageRect(base.LOGO, skia.Rect.MakeXYWH(-337, -337, 674, 674), SAMP)
+        cv.restore(); cv.restore()
+    else:
+        img = logo_original()
+        w = 880; h = w * img.height() / img.width()
+        cv.drawRRect(rrect(W / 2 - w / 2 - 30, 300 - 30, w + 60, h + 60, 36), P("#ffffff"))
+        cv.drawImageRect(img, skia.Rect.MakeXYWH(W / 2 - w / 2, 300, w, h), SAMP)
     pk = miniatura_produto()
-    cv.save(); cv.clipRRect(rrect(W / 2 - 230, 820, 460, 420, 30), True)
-    cv.drawRect(skia.Rect.MakeXYWH(W / 2 - 230, 820, 460, 420), P(NAVY))
-    s_ = min(460 / pk.width(), 420 / pk.height())
-    cv.drawImageRect(pk, skia.Rect.MakeXYWH(W / 2 - pk.width() * s_ / 2, 1030 - pk.height() * s_ / 2, pk.width() * s_, pk.height() * s_), SAMP)
+    my, mh = (900, 300) if EP.get("logo") == "circular" else (820, 420)
+    cv.save(); cv.clipRRect(rrect(W / 2 - 230, my, 460, mh, 30), True)
+    cv.drawRect(skia.Rect.MakeXYWH(W / 2 - 230, my, 460, mh), P(NAVY))
+    s_ = min(460 / pk.width(), mh / pk.height())
+    cv.drawImageRect(pk, skia.Rect.MakeXYWH(W / 2 - pk.width() * s_ / 2, my + mh / 2 - pk.height() * s_ / 2, pk.width() * s_, pk.height() * s_), SAMP)
     cv.restore()
-    cv.drawRRect(rrect(W / 2 - 230, 820, 460, 420, 30), P(GOLD, stroke=3))
-    text_c(cv, EP["site"], W / 2, 1330, font("m8", 58), P(GOLD2))
+    cv.drawRRect(rrect(W / 2 - 230, my, 460, mh, 30), P(GOLD, stroke=3))
+    text_c(cv, EP["site"], W / 2, 1310, font("m8", 58), P(GOLD2))
     cv.restore()
     kk = back((lt - 0.4) / 0.5)
     cv.save(); cv.translate(W / 2, 1440); cv.scale(kk, kk)
@@ -169,8 +200,11 @@ EXTRAS = {}  # segmento (1..n) -> função(cv, t, lt) desenhada por cima
 
 def make_seg(i, s):
     def draw(cv, t, lt):
-        if s.get("tomada"):
-            img = shot(s["tomada"], lt * SFPS + 1)
+        tom, lt_t = s.get("tomada"), lt
+        for sub in s.get("tomadas", []):  # cortes de câmera dentro do segmento
+            if sub["ini"] <= t < sub["fim"]: tom, lt_t = sub["tomada"], t - sub["ini"]
+        if tom:
+            img = shot(tom, lt_t * SFPS + 1)
             if any(x.get("tipo") == "produto" for x in s.get("tela", [])):
                 # produto: sobe o 3D para o cartão de preço não cobrir as câmeras
                 cv.drawImageRect(img, skia.Rect.MakeXYWH(0, -330, W, H), SAMP)
@@ -182,12 +216,13 @@ def make_seg(i, s):
             tipo = tl.get("tipo", "texto")
             if tipo == "produto": cartao_produto(cv, t, t - tl["ini"])
             elif tipo == "encerramento": encerramento(cv, t, t - tl["ini"])
+            elif tipo == "selo_produto": selo_produto(cv, t, t - tl["ini"])
             elif tipo == "texto" and t >= tl["ini"] and t < tl.get("fim", s["fim"]):
                 if i == 0: onscreen(cv, tl["texto"], tl["ini"] - s["ini"], lt, y=430, size=76)
                 else:
                     others = [x for x in s["tela"] if x.get("tipo", "texto") == "texto" and x["ini"] <= t]
                     pos = others.index(tl)
-                    callout(cv, tl["texto"], tl["ini"], t, 300 + pos * 120)
+                    callout(cv, tl["texto"], tl["ini"], t, 300 + pos * 120, aviso=tl.get("aviso", False))
     return draw
 
 def main():

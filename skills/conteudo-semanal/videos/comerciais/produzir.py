@@ -91,8 +91,14 @@ def validar(ep, quieto=False):
     if not d.get("cta"): erros.append("falta o CTA")
     if norm(d["site"]) not in norm(cat["site"]): erros.append(f"site {d['site']} diferente do catálogo ({cat['site']})")
     tomadas = set(re.findall(r'"(P\d+)":', open(os.path.join(ep, "shots3d.py")).read()))
+    tomadas = set(tomadas) | set(re.findall(r'"([A-Z]\w*)": \(', open(os.path.join(ep, "shots3d.py")).read()))
     for s in segs:
-        if s.get("tomada") and s["tomada"] not in tomadas: erros.append(f"tomada {s['tomada']} não existe em shots3d.py")
+        usadas = [s["tomada"]] if s.get("tomada") else [x["tomada"] for x in s.get("tomadas", [])]
+        for u in usadas:
+            if u not in tomadas: erros.append(f"tomada {u} não existe em shots3d.py")
+        subs = s.get("tomadas", [])
+        if subs and (abs(subs[0]["ini"] - s["ini"]) > 0.01 or abs(subs[-1]["fim"] - s["fim"]) > 0.01):
+            erros.append(f"as tomadas do segmento {s['ini']}–{s['fim']} não cobrem o segmento inteiro")
     if not quieto:
         print(f"== validar {os.path.basename(ep)}")
         for a in avisos: print("  aviso:", a)
@@ -159,7 +165,11 @@ def narrar(ep):
         for m in prog[i % 4]:
             fq = nota(m); pad[a0:b0] += env * (np.sin(2 * np.pi * fq * x) + 0.3 * np.sin(4 * np.pi * fq * x))
     pad = pad / np.max(np.abs(pad)) * 0.07 * np.minimum(1, tt / 2) * np.minimum(1, (T - tt) / 2)
-    mix = (trilha + pad); mix /= max(1, np.max(np.abs(mix)) / 0.95)
+    sfx = np.zeros(n, np.float32)
+    if d.get("sons"):
+        sys.path.insert(0, AQUI); import sons
+        sfx = sons.trilha_sons(d["sons"], T, sr)[:n]
+    mix = (trilha + pad + sfx); mix /= max(1, np.max(np.abs(mix)) / 0.95)
     sf.write(os.path.join(build, "audio_final.wav"), mix.astype(np.float32), sr)
     json.dump(marks, open(os.path.join(build, "marks.json"), "w"), ensure_ascii=False, indent=1)
     info = {"provisoria": dave is None, "narrador": "dave" if dave else "kokoro:" + d["vozes"]["narrador"]["provisoria"],
@@ -195,7 +205,8 @@ def documentos(ep):
          f"Narrador: {info['narrador']}" + (" — **PROVISÓRIA**: " + info["motivo"] if info["provisoria"] else ""), ""]
     for i, s in enumerate(d["segmentos"], 1):
         img = f"storyboard/seg{i}.png"
-        L += [f"## {i}. {s['titulo']} ({s['ini']:.0f}–{s['fim']:.0f} s · tomada {s.get('tomada') or 'cartela'})", "",
+        tom = s.get("tomada") or ", ".join(f"{x['tomada']} ({x['ini']}–{x['fim']} s)" for x in s.get("tomadas", [])) or "cartela"
+        L += [f"## {i}. {s['titulo']} ({s['ini']:.0f}–{s['fim']:.0f} s · tomada {tom})", "",
               f"![seg{i}]({img})" if os.path.exists(os.path.join(ep, img)) else "_(quadro gerado após o render)_", "",
               f"- **Ação:** {s['storyboard']}", f"- **Câmera:** {s['camera']}"]
         for f in s["falas"]: L.append(f"- **{f['quem']}** ({f['ini']} s): \"{f['texto']}\"")
@@ -214,7 +225,8 @@ def documentos(ep):
     for s in d["segmentos"]:
         falas = "<br>".join(f"{f['ini']} s **{f['quem']}**: {f['texto']}" for f in s["falas"])
         tela = "<br>".join(f"{t['ini']} s {t.get('texto') or t.get('tipo')}" for t in s.get("tela", []))
-        R.append(f"| {s['ini']:.0f}–{s['fim']:.0f} s | {s.get('tomada') or '—'} | {s['storyboard']} | {falas} | {tela} |")
+        tom = s.get("tomada") or ", ".join(x["tomada"] for x in s.get("tomadas", [])) or "—"
+        R.append(f"| {s['ini']:.0f}–{s['fim']:.0f} s | {tom} | {s['storyboard']} | {falas} | {tela} |")
     open(os.path.join(ep, "roteiro_de_cenas.md"), "w").write("\n".join(R) + "\n")
     print("== documentos: storyboard.md, roteiro_de_cenas.md, legendas.srt")
 
@@ -228,7 +240,10 @@ def tomadas(ep):
             return ast.literal_eval(node.value)
 
 
-def render(ep, samples=8):
+def render(ep):
+    q_ = carregar(ep)[0].get("qualidade", {})
+    samples = q_.get("samples", 8)
+    env = dict(os.environ, LIB3D_RES=q_.get("resolucao_3d", "640x1138"))
     shots = os.path.join(ep, "build", "shots"); os.makedirs(shots, exist_ok=True)
     for nome, (dur, *_r) in tomadas(ep).items():
         q = max(1, round(dur * 12))
@@ -238,7 +253,7 @@ def render(ep, samples=8):
         print(f"  {nome}: {q} quadros...", flush=True)
         with open(os.path.join(ep, "build", f"log_{nome}.txt"), "w") as log:
             r = subprocess.run([BLENDER_PY, os.path.join(ep, "shots3d.py"), nome, "--samples", str(samples), "--saida", shots],
-                               stdout=log, stderr=subprocess.STDOUT)
+                               stdout=log, stderr=subprocess.STDOUT, env=env)
         if r.returncode: sys.exit(f"falhou a tomada {nome} (veja build/log_{nome}.txt)")
     subprocess.run([sys.executable, os.path.join(ep, "montagem.py"), "video", saida_mp4(ep)], check=True)
     # quadros do storyboard: meio de cada segmento, já com as sobreposições
