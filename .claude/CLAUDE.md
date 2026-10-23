@@ -4,7 +4,7 @@ Este repositório é o sistema da Infinity Guard (https://infinityguard.com.br),
 
 ## Como o sistema é montado
 
-- `agents/`: os 22 funcionários (7 squads, um líder por squad, `diretor-geral` no topo). Edite aqui; `plugins/` é gerado por `scripts/gerar-plugins.py`.
+- `agents/`: os 23 funcionários (7 squads, um líder por squad, `diretor-geral` no topo). Edite aqui; `plugins/` é gerado por `scripts/gerar-plugins.py`.
 - `skills/`: as skills com os scripts que fazem as contas. Número sai de script, nunca de cabeça.
 - `core/`: orquestrador automático. `daemon_orchestrator.py` roda em ciclos, `event_queue.py` é a fila (`logs/queue.json`), `regras.py` transforma métricas em eventos, `rotinas.py` roda os scripts das skills que só leem (catálogo, gestão, conteúdo, radar, auditoria), `aprovacoes.py` cuida dos pedidos, `resumo.py` escreve `logs/resumo/AAAA-MM-DD.md`, `config.py` lê `config/orquestrador.json` + `config/orquestrador.local.json`.
 - `tools/`: coleta de métricas (`metricas_vendas.py` lê o CSV da Nuvemshop via `skills/painel-de-vendas`; `metricas_meta.py` lê o Meta Ads só em modo leitura, pela API ou pelo CSV do Gerenciador; `coletar_metricas.py` junta tudo em `logs/metrics.json`) o disparo dos agentes (`run_claude_agent.py` / `.sh`) e a central (`central.py` → `docs/central.md`; rode de novo quando mudar catálogo, equipe, skills ou docs).

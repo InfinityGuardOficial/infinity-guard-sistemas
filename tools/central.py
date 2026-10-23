@@ -140,7 +140,7 @@ def gerar(base, projeto=None, com_orquestrador=False, agora=None):
         ("docs/mapa-de-sistemas.md", "A ordem dos sistemas e o status de cada um"),
         ("docs/mapa-de-dados.md", "Fonte da verdade de cada dado"),
         ("docs/mapa-da-autonomia.md", "Nível de autonomia: o que roda sozinho, o que espera o seu \"pode\" e o que está bloqueado"),
-        ("docs/organograma.md", "Os 22 funcionários e quando chamar cada um"),
+        ("docs/organograma.md", "Os 23 funcionários e quando chamar cada um"),
         ("docs/reunioes", "Atas das reuniões da equipe"),
         ("skills/prova-da-loja/auditorias", "Auditorias do site"),
         ("skills/campanha-sazonal/campanhas", "Propostas de campanha (11.11 e Black Friday)"),

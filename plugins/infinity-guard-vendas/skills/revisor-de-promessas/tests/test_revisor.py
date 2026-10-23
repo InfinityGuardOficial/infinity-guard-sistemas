@@ -97,5 +97,11 @@ class Revisor(unittest.TestCase):
         self.assertEqual(a["linha"], 3)
 
 
+class EscassezSemNumero(unittest.TestCase):
+    def test_ultimas_unidades_sem_numero(self):
+        r = rv.revisar("Kit de câmeras: últimas unidades!", rv.carregar_regras())
+        self.assertIn("urgencia-falsa", [a["regra"] for a in r["achados"]])
+
+
 if __name__ == "__main__":
     unittest.main()

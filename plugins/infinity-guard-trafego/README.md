@@ -1,4 +1,4 @@
-# infinity-guard-trafego · 2.2.5
+# infinity-guard-trafego · 2.3.0
 
 Squad Tráfego Pago: criativos de anúncio, analista de mídia e o líder de tráfego.
 

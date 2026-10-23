@@ -14,14 +14,14 @@ Loja online de câmeras Wi-Fi, alarmes e fechaduras inteligentes, vendida por **
 ## Antes de mudar código
 
 - Mudança pequena: faça e teste. Mudança grande (vários arquivos, dados do app, rotinas): escreva o plano em poucas linhas antes e confirme com o dono.
-- Testes das skills: `bash scripts/empacotar-skills.sh` (roda os testes das 14 skills e só refaz os .zip se todos passarem).
+- Testes das skills: `bash scripts/empacotar-skills.sh` (roda os testes das 15 skills e só refaz os .zip se todos passarem).
 - Mudou `agents/` ou `skills/`? Rode `python3 scripts/gerar-plugins.py` para atualizar os plugins de squad e `claude plugin validate .`.
 - Servidor MCP: `python3 -m unittest discover -s mcp_servers/tests`.
 - O app (`app/rota-do-milhao.html`) é uma página privada no claude.ai; os dados dele ficam na área privada do dono (mapa em `docs/mapa-de-dados.md`). Não grave dados do dono no Git.
 
 ## Ferramentas disponíveis
 
-- **Equipe (plugin `infinity-guard`, já ativo neste projeto):** 22 funcionários em 7 squads e 14 skills. Chame pelo nome: "Use o gestor-de-catalogo: ...".
+- **Equipe (plugin `infinity-guard`, já ativo neste projeto):** 23 funcionários em 7 squads e 15 skills. Chame pelo nome: "Use o gestor-de-catalogo: ...".
 - **Trabalho em paralelo:** quando uma tarefa tem partes independentes (ex.: reunião geral, campanha com conteúdo + mídia + operação), dispare os funcionários de cada parte ao mesmo tempo como subagentes e junte as entregas no fim. Para orquestrações grandes, use o Workflow quando o dono pedir.
 - **Servidor MCP `infinity-guard`** (`.mcp.json`, aprovar na primeira vez): `revisar_texto`, `validar_catalogo`, `comparar_concorrentes`, `recomendar_kit`, `plano_de_midia`, `montar_campanha`, `pauta_da_semana`, `reuniao_semanal`, `vigiar_gestao`. Todas só leem e calculam.
 - **Rotinas agendadas** (fora do repositório, na conta do dono): 05:17 radar e pauta (com proposta de publicação), 05:52 cobrança da manhã, 06:13 de segunda diretor-geral (plano da semana, ordens e propostas), 07:07 zelador (confere as rotinas pelo resultado no app e avisa se algo faltou), 11:43 e 16:43 vigia da gestão, 19:48 cobrança da noite. Elas leem o app e avisam no celular.

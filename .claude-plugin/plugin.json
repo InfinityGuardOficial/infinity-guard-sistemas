@@ -1,7 +1,7 @@
 {
   "name": "infinity-guard",
-  "version": "2.2.5",
-  "description": "Equipe Infinity Guard (segurança residencial): 22 funcionários em 7 squads (direção, vendas, sucesso do cliente, marketing, tráfego pago, operações e dados) e 14 skills: atendente de WhatsApp, suporte técnico, proposta B2B, prova da loja, catálogo e preços, conformidade, campanhas, conteúdo, páginas de produto, plano de mídia, radar de concorrentes, painel, reunião semanal e monitor de gestão (alertas do ERP, CRM, WMS, TMS e VMI).",
+  "version": "2.3.0",
+  "description": "Equipe Infinity Guard (segurança residencial): 23 funcionários em 7 squads (direção, vendas, sucesso do cliente, marketing, tráfego pago, operações e dados) e 15 skills: atendente de WhatsApp, estrategista de vendas (método do luxo), suporte técnico, proposta B2B, prova da loja, catálogo e preços, conformidade, campanhas, conteúdo, páginas de produto, plano de mídia, radar de concorrentes, painel, reunião semanal e monitor de gestão (alertas do ERP, CRM, WMS, TMS e VMI).",
   "author": {
     "name": "Infinity Guard",
     "url": "https://infinityguard.com.br"
@@ -10,6 +10,7 @@
   "keywords": [
     "agentes",
     "black-friday",
+    "clienteling",
     "meta-ads",
     "nuvemshop",
     "seguranca",

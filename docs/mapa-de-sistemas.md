@@ -16,6 +16,7 @@ Regra que guia a ordem: **primeiro a conversa que vende, depois a prova que sust
 | 6 | Painel de vendas | Artifact com dados da Nuvemshop | Conversas, kits indicados, carrinhos recuperados, vendas por canal | Depois das primeiras 20 vendas | **Construído** (`skills/painel-de-vendas/`); falta o CSV de pedidos |
 | 7 | Plugin "Infinity Guard" | Plugin do Claude Code no GitHub | Junta as skills num pacote só, instalável com um comando | Thread 4 do plano | **Construído** (`.claude-plugin/` no pacote do repositório); falta publicar no GitHub |
 | 8 | **Equipe Infinity Guard** | 22 agentes do plugin em 7 squads + 8 skills novas (suporte-tecnico, proposta-comercial, catalogo-e-precos, revisor-de-promessas, descricao-de-produto, plano-de-midia, radar-de-concorrentes, reuniao-semanal) | Cada trabalho tem um "funcionário" com cargo, regras e skills; o diretor-geral distribui a semana | 19/10 | **Construído** (`agents/`, organograma em `docs/organograma.md`) |
+| 9 | **Estrategista de Vendas (método do luxo)** | Skill `estrategista-de-vendas` + agente no squad Vendas | Copia das marcas de luxo o ritual de boutique, a curadoria, o preço que não cai, o clienteling, o pós-venda e a comunidade (lista Primeira Fila), com escassez só com dado real | 23/10 | **Construído** (`skills/estrategista-de-vendas/`, `agents/estrategista-de-vendas.md`) |
 
 ## 1. Atendente de Vendas WhatsApp (prioridade máxima)
 

@@ -1,4 +1,4 @@
-# infinity-guard-dados · 2.2.5
+# infinity-guard-dados · 2.3.0
 
 Squad Dados e Inteligência: analista de vendas, detetive de mercado e o líder de dados.
 
