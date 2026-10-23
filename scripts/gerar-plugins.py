@@ -14,7 +14,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 BASE = ["atendente-infinity-guard", "revisor-de-promessas"]
 SQUADS = {
     "Direção": ("direcao", "Squad Direção: o diretor-geral, que decide as prioridades da semana e divide as metas entre os squads."),
-    "Vendas": ("vendas", "Squad Vendas: consultor de WhatsApp, recuperador de carrinho, vendedor B2B e o líder de vendas."),
+    "Vendas": ("vendas", "Squad Vendas: estrategista de vendas (método do luxo), consultor de WhatsApp, recuperador de carrinho, vendedor B2B e o líder de vendas."),
     "Sucesso do Cliente": ("sucesso-cliente", "Squad Sucesso do Cliente: técnico de suporte, guardião do pós-venda e o líder do squad."),
     "Marketing e Conteúdo": ("marketing", "Squad Marketing e Conteúdo: roteirista de Reels, copywriter da loja, social media e o líder de marketing."),
     "Tráfego Pago": ("trafego", "Squad Tráfego Pago: criativos de anúncio, analista de mídia e o líder de tráfego."),

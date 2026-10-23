@@ -50,8 +50,8 @@ class Agente(Sandbox):
         with self.assertRaises(ValueError):
             rca.comando("estagiario", "x")
 
-    def test_todos_os_22_agentes(self):
-        self.assertEqual(len(rca.AGENTES), 22)
+    def test_todos_os_23_agentes(self):
+        self.assertEqual(len(rca.AGENTES), 23)
 
     def test_extrai_pedidos_de_aprovacao(self):
         self.assertEqual(rca.pedidos_de_aprovacao(RESPOSTA),

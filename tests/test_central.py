@@ -16,7 +16,7 @@ class Central(Sandbox):
     def test_repositorio_com_links_que_existem(self):
         f = central.salvar(self.home / "docs" / "central.md")
         texto = f.read_text(encoding="utf-8")
-        self.assertIn("22 funcionários em 7 squads", texto)
+        self.assertIn("23 funcionários em 7 squads", texto)
         self.assertIn("produtos ativos", texto)
         # todo link relativo aponta para um arquivo de verdade do repositório
         saida_no_repo = REPO / "docs" / "central-teste.md"

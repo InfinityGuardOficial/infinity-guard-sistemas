@@ -6,8 +6,8 @@ Tudo num lugar só: o que a equipe faz sozinha, o que espera o "pode" do dono e 
 
 | Nível | O que significa | Situação |
 |---|---|---|
-| 1 · Ferramentas | Skills e scripts que o dono roda | ✓ 14 skills, servidor MCP com 9 ferramentas |
-| 2 · Assistida | Equipe de IA que trabalha quando chamada | ✓ 22 funcionários, conversas por etapa no app |
+| 1 · Ferramentas | Skills e scripts que o dono roda | ✓ 15 skills, servidor MCP com 9 ferramentas |
+| 2 · Assistida | Equipe de IA que trabalha quando chamada | ✓ 23 funcionários, conversas por etapa no app |
 | 3 · Agendada | Trabalho que roda sozinho em horário fixo | ✓ 7 rotinas (abaixo) |
 | 4 · Autônoma com aprovação | A equipe planeja, produz e se vigia; o dono só aprova o que envolve dinheiro, publicação ou cliente | ✓ Central, caixa de aprovações, diretor-geral semanal e zelador diário |
 | 5 · Sem humano | Gasta, publica e fala com cliente sozinha | ✗ fora de propósito: a regra da casa exige o "pode" do dono para gasto, publicação, mensagem a cliente e mudança no site |

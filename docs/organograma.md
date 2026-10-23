@@ -1,6 +1,6 @@
 # Organograma Infinity Guard
 
-22 funcionários em 7 squads. Cada funcionário é um agente do plugin `infinity-guard` (pasta `agents/`) com as skills do trabalho dele já carregadas.
+23 funcionários em 7 squads. Cada funcionário é um agente do plugin `infinity-guard` (pasta `agents/`) com as skills do trabalho dele já carregadas.
 
 No Claude Code, peça pelo nome ("use o lider-vendas para...") ou só descreva o trabalho: o Claude escolhe o funcionário pela descrição. Trabalho que atravessa squads começa no `diretor-geral`.
 
@@ -14,7 +14,8 @@ No Claude Code, peça pelo nome ("use o lider-vendas para...") ou só descreva o
 
 | Funcionário | Cargo | Skills | Chame quando |
 |---|---|---|---|
-| **lider-vendas** (líder) | Head de Vendas | atendente-infinity-guard, proposta-comercial, painel-de-vendas, revisor-de-promessas | Para metas de venda, organizar o atendimento no WhatsApp, revisar conversas que não fecharam, montar o roteiro de vendas de uma campanha ou distribuir trabalho entre consultor, recuperador de carrinho e vendedor B2B |
+| **lider-vendas** (líder) | Head de Vendas | atendente-infinity-guard, proposta-comercial, painel-de-vendas, revisor-de-promessas | Para metas de venda, organizar o atendimento no WhatsApp, revisar conversas que não fecharam, montar o roteiro de vendas de uma campanha ou distribuir trabalho entre estrategista, consultor, recuperador de carrinho e vendedor B2B |
+| estrategista-de-vendas | Estrategista de Vendas (método do luxo) | estrategista-de-vendas, atendente-infinity-guard, painel-de-vendas, revisor-de-promessas | Para desenhar a estratégia de vendas, o ritual de atendimento de boutique no WhatsApp, o dossiê de um cliente, o calendário de relacionamento pós-compra (clienteling), a política de preço que não cai, a lista Primeira Fila, ou para decidir se uma frase de escassez pode ser usada |
 | consultor-whatsapp | Consultor de Vendas WhatsApp | atendente-infinity-guard, revisor-de-promessas | Quando o dono colar a mensagem de um cliente, pedir a próxima resposta, indicar kit de câmera, alarme ou fechadura para a casa de alguém, ou responder uma objeção (está caro, vou pensar, é confiável?) |
 | recuperador-de-carrinho | Especialista em Recuperação de Carrinho e Follow-up | atendente-infinity-guard, campanha-sazonal, revisor-de-promessas | Para gerar as mensagens de carrinho (30-60 min, dia seguinte, 3 dias), follow-up de orçamento sem resposta e reativar a lista de quem já conversou antes de campanha |
 | vendedor-b2b | Executivo de Vendas B2B (comércio, escritório e condomínio) | proposta-comercial, atendente-infinity-guard, revisor-de-promessas | Quando um comércio, escritório, condomínio ou alguém comprando várias unidades pedir orçamento, cotação, proposta formal ou condição para quantidade |

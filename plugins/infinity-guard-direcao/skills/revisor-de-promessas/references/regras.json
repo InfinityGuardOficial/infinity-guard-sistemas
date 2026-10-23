@@ -26,7 +26,7 @@
     {"id": "preco-de-maquiado", "gravidade": "bloqueia", "padrao": "de r\\$ ?[\\d.,]+ por (apenas )?r\\$|era r\\$ ?[\\d.,]+ agora|antes r\\$ ?[\\d.,]+",
      "porque": "'De/por' só com o preço que foi praticado de verdade. Na campanha, o 'de' é a soma dos preços atuais (regra da campanha-sazonal), nunca o riscado da vitrine.",
      "reescrever": "Confira o 'de' com o script da campanha-sazonal antes de publicar."},
-    {"id": "urgencia-falsa", "gravidade": "ajustar", "padrao": "[uú]ltimas? \\d+ unidades|s[oó] (hoje|at[eé] meia-?noite)|estoque acabando|corre que (vai )?acaba",
+    {"id": "urgencia-falsa", "gravidade": "ajustar", "padrao": "[uú]ltimas? (\\d+ )?unidades|s[oó] (hoje|at[eé] meia-?noite)|estoque acabando|corre que (vai )?acaba",
      "porque": "Escassez inventada é prática abusiva. Só use com prazo ou estoque reais.",
      "reescrever": "Use a data real do evento: 'oferta válida de 26 a 29/11'."},
     {"id": "frete-prazo-prometido", "gravidade": "ajustar", "padrao": "entrega em (at[eé] )?\\d+ (dias|horas)|chega (amanh[aã]|em \\d+)|frete gr[aá]tis para todo (o )?brasil",

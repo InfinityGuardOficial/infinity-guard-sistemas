@@ -4,55 +4,55 @@
     "name": "Infinity Guard",
     "url": "https://infinityguard.com.br"
   },
-  "description": "Equipe e skills da Infinity Guard para vender segurança residencial: 22 funcionários em 7 squads e 14 skills.",
+  "description": "Equipe e skills da Infinity Guard para vender segurança residencial: 23 funcionários em 7 squads e 15 skills.",
   "plugins": [
     {
       "name": "infinity-guard",
       "source": "./",
-      "description": "A equipe Infinity Guard inteira (22 agentes, 14 skills) num pacote só.",
-      "version": "2.2.5"
+      "description": "A equipe Infinity Guard inteira (23 agentes, 15 skills) num pacote só.",
+      "version": "2.3.0"
     },
     {
       "name": "infinity-guard-direcao",
       "source": "./plugins/infinity-guard-direcao",
       "description": "Squad Direção: o diretor-geral, que decide as prioridades da semana e divide as metas entre os squads.",
-      "version": "2.2.5"
+      "version": "2.3.0"
     },
     {
       "name": "infinity-guard-vendas",
       "source": "./plugins/infinity-guard-vendas",
-      "description": "Squad Vendas: consultor de WhatsApp, recuperador de carrinho, vendedor B2B e o líder de vendas.",
-      "version": "2.2.5"
+      "description": "Squad Vendas: estrategista de vendas (método do luxo), consultor de WhatsApp, recuperador de carrinho, vendedor B2B e o líder de vendas.",
+      "version": "2.3.0"
     },
     {
       "name": "infinity-guard-sucesso-cliente",
       "source": "./plugins/infinity-guard-sucesso-cliente",
       "description": "Squad Sucesso do Cliente: técnico de suporte, guardião do pós-venda e o líder do squad.",
-      "version": "2.2.5"
+      "version": "2.3.0"
     },
     {
       "name": "infinity-guard-marketing",
       "source": "./plugins/infinity-guard-marketing",
       "description": "Squad Marketing e Conteúdo: roteirista de Reels, copywriter da loja, social media e o líder de marketing.",
-      "version": "2.2.5"
+      "version": "2.3.0"
     },
     {
       "name": "infinity-guard-trafego",
       "source": "./plugins/infinity-guard-trafego",
       "description": "Squad Tráfego Pago: criativos de anúncio, analista de mídia e o líder de tráfego.",
-      "version": "2.2.5"
+      "version": "2.3.0"
     },
     {
       "name": "infinity-guard-operacoes",
       "source": "./plugins/infinity-guard-operacoes",
       "description": "Squad Operações e Loja: auditor da loja, gestor de catálogo, guardião de conformidade e o líder de operações.",
-      "version": "2.2.5"
+      "version": "2.3.0"
     },
     {
       "name": "infinity-guard-dados",
       "source": "./plugins/infinity-guard-dados",
       "description": "Squad Dados e Inteligência: analista de vendas, detetive de mercado e o líder de dados.",
-      "version": "2.2.5"
+      "version": "2.3.0"
     }
   ]
 }

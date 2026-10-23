@@ -4,14 +4,14 @@
 
 **Tudo num lugar só:** [`docs/central.md`](docs/central.md) junta o estado de hoje e o índice de tudo (atualize com `python3 tools/central.py`; no seu computador o orquestrador mantém `logs/central.md` com o resumo do dia e as aprovações).
 
-## A equipe (22 funcionários em 7 squads)
+## A equipe (23 funcionários em 7 squads)
 
 Cada funcionário é um agente do Claude Code (pasta `agents/`) com cargo, missão, regras e as skills do trabalho dele já carregadas. Quem lidera cada squad distribui o trabalho; o `diretor-geral` decide as prioridades da semana. Organograma completo: [`docs/organograma.md`](docs/organograma.md).
 
 | Squad | Líder | Funcionários |
 |---|---|---|
 | Direção | `diretor-geral` | coordena os 6 líderes |
-| Vendas | `lider-vendas` | `consultor-whatsapp`, `recuperador-de-carrinho`, `vendedor-b2b` |
+| Vendas | `lider-vendas` | `estrategista-de-vendas`, `consultor-whatsapp`, `recuperador-de-carrinho`, `vendedor-b2b` |
 | Sucesso do Cliente | `lider-sucesso-cliente` | `tecnico-de-suporte`, `guardiao-pos-venda` |
 | Marketing e Conteúdo | `lider-marketing` | `roteirista-de-reels`, `copywriter-de-loja`, `social-media` |
 | Tráfego Pago | `lider-trafego` | `criativos-de-anuncio`, `analista-de-midia` |
@@ -22,18 +22,20 @@ Cada funcionário é um agente do Claude Code (pasta `agents/`) com cargo, miss�
 
 > Use o diretor-geral: quais as 3 prioridades desta semana?
 > Use o tecnico-de-suporte: a cliente diz que a câmera não conecta no Wi-Fi.
+> Use o estrategista-de-vendas: monte o dossiê da Ana, que mora em apartamento e quer uma fechadura.
 > Use o vendedor-b2b: a padaria do bairro quer 2 kits de câmera e um alarme.
 
 Digite `/agents` no Claude Code para ver a equipe instalada.
 
 **Regras que valem para todos:** preço só sai de script (catálogo único), nada de Anatel, garantia, CNPJ ou depoimento inventado, nada de instalação ou câmera 4G, todo texto para a rua passa pelo `revisor-de-promessas`, e gasto, publicação ou mensagem para cliente real só com o seu "pode".
 
-## As skills (14)
+## As skills (15)
 
 | Pasta | O que é | Quem usa |
 |---|---|---|
 | `skills/atendente-infinity-guard/` | Atendente do WhatsApp: indica o kit certo, quebra objeções, recupera carrinho, pós-venda de 7 dias e prompt do robô. **Guarda o catálogo único de preços.** | Vendas, Sucesso |
 | `skills/suporte-tecnico/` | Diagnóstico de câmera, alarme e fechadura com passo a passo para o WhatsApp; trocas e garantia pelo CDC. | Sucesso, Conformidade |
+| `skills/estrategista-de-vendas/` | Método das marcas de luxo adaptado à loja: ritual de boutique no WhatsApp, dossiê do cliente, calendário de relacionamento (clienteling), preço que não cai, escassez só com dado real e lista Primeira Fila. | Vendas, Sucesso |
 | `skills/proposta-comercial/` | Proposta para comércio, escritório e condomínio com preço, Pix, parcelas, validade e limite de desconto. | Vendas B2B |
 | `skills/prova-da-loja/` | Auditor do site: CNPJ, garantia, avaliações, troca, contato e rastros de fornecedor. | Operações |
 | `skills/catalogo-e-precos/` | Valida e atualiza o catálogo (Pix, parcelas, data), margem por produto e estoque. | Operações |
@@ -52,9 +54,9 @@ Digite `/agents` no Claude Code para ver a equipe instalada.
 
 | Pasta | O que é |
 |---|---|
-| `agents/` | Os 22 funcionários. |
+| `agents/` | Os 23 funcionários. |
 | `.claude-plugin/` | Plugin "infinity-guard" com a equipe e as skills (instala com um comando, veja abaixo). |
-| `app/rota-do-milhao.html` | **Rota do Milhão**: app pessoal nas cores da marca, com Gestão (ERP, CRM, WMS, TMS, EDI e VMI integrados), os 22 funcionários (IA), radar e pauta diária, contrato sem volta, Kit da marca, estúdio de Reels e artes de anúncio, aba Publicar, trilha de 48 semanas, aba Mente (hábitos e metas dos milionários que começaram do zero, com fontes; ver `docs/mente-de-milionario.md`) e placar até R$ 1 milhão/ano. Página privada no claude.ai. |
+| `app/rota-do-milhao.html` | **Rota do Milhão**: app pessoal nas cores da marca, com Gestão (ERP, CRM, WMS, TMS, EDI e VMI integrados), os 23 funcionários (IA), radar e pauta diária, contrato sem volta, Kit da marca, estúdio de Reels e artes de anúncio, aba Publicar, trilha de 48 semanas, aba Mente (hábitos e metas dos milionários que começaram do zero, com fontes; ver `docs/mente-de-milionario.md`) e placar até R$ 1 milhão/ano. Página privada no claude.ai. |
 | `desktop/` | App do Windows x64 (Electron): abre o Rota do Milhão com o seu login e avisa nos turnos pela bandeja. |
 | `android/` | App Android (APK): abre o Rota do Milhão e avisa nos turnos. |
 | `.github/workflows/apps.yml` | Gera o instalador do Windows e o APK a cada mudança em `desktop/` ou `android/` (Actions → Apps). |
@@ -69,7 +71,7 @@ Digite `/agents` no Claude Code para ver a equipe instalada.
 
 ## Já ativado neste projeto
 
-O arquivo `.claude/settings.json` ativa o plugin `infinity-guard` (22 funcionários e 14 skills) para quem abrir esta pasta no Claude Code, no computador ou na nuvem. Na primeira vez, o Claude Code pergunta se você confia no projeto e se quer instalar o plugin: responda que sim. Confira com `/agents` e `/skills`.
+O arquivo `.claude/settings.json` ativa o plugin `infinity-guard` (23 funcionários e 15 skills) para quem abrir esta pasta no Claude Code, no computador ou na nuvem. Na primeira vez, o Claude Code pergunta se você confia no projeto e se quer instalar o plugin: responda que sim. Confira com `/agents` e `/skills`.
 
 ## Servidor MCP
 
@@ -90,7 +92,7 @@ No Claude Code, em qualquer pasta (por exemplo a pasta do projeto "Workshop IA a
 /plugin marketplace add InfinityGuardOficial/infinity-guard-sistemas
 /plugin install infinity-guard@infinity-guard-sistemas
 ```
-Isso instala os 22 funcionários e as 14 skills. Se o repositório estiver privado, o Claude Code precisa estar logado no GitHub com uma conta que tenha acesso (`gh auth login`). Para atualizar depois: `/plugin marketplace update infinity-guard-sistemas`.
+Isso instala os 23 funcionários e as 15 skills. Se o repositório estiver privado, o Claude Code precisa estar logado no GitHub com uma conta que tenha acesso (`gh auth login`). Para atualizar depois: `/plugin marketplace update infinity-guard-sistemas`.
 
 Para instalar só num projeto (e quem abrir a pasta também ter), rode os comandos acima e escolha "project" quando o Claude Code perguntar o escopo.
 
@@ -101,7 +103,7 @@ Prefere levar só uma parte da equipe? Cada squad é um plugin separado, com os 
 | Plugin | Funcionários |
 |---|---|
 | `infinity-guard-direcao` | diretor-geral (com as skills que a reunião semanal lê) |
-| `infinity-guard-vendas` | lider-vendas, consultor-whatsapp, recuperador-de-carrinho, vendedor-b2b |
+| `infinity-guard-vendas` | lider-vendas, estrategista-de-vendas, consultor-whatsapp, recuperador-de-carrinho, vendedor-b2b |
 | `infinity-guard-sucesso-cliente` | lider-sucesso-cliente, tecnico-de-suporte, guardiao-pos-venda |
 | `infinity-guard-marketing` | lider-marketing, roteirista-de-reels, copywriter-de-loja, social-media |
 | `infinity-guard-trafego` | lider-trafego, criativos-de-anuncio, analista-de-midia |
