@@ -97,8 +97,50 @@ def transicao(dur=0.5):
     return _norm(x, 0.1)
 
 
+def bip(dur=0.35):
+    """bipe curto de leitura (dois tons)"""
+    n = int(dur * SR); t = np.arange(n) / SR; x = np.zeros(n, np.float32)
+    for k, (fq, t0, d) in enumerate(((2400, 0.0, 0.08), (3200, 0.11, 0.12))):
+        j = int(t0 * SR); m = int(d * SR); tt = np.arange(m) / SR
+        x[j:j + m] += np.sin(2 * np.pi * fq * tt) * np.hanning(m)
+    return _norm(x, 0.16)
+
+
+def fechadura(dur=0.9):
+    """motor da lingueta recolhendo + clique metálico"""
+    n = int(dur * SR); t = np.arange(n) / SR
+    motor = _banda(RNG.standard_normal(n), 300, 2200) * (0.5 + 0.5 * np.sin(2 * np.pi * 140 * t)) * (t < 0.55)
+    x = _norm(motor * np.minimum(1, t / 0.05), 0.12)
+    j = int(0.58 * SR); m = int(0.06 * SR)
+    x[j:j + m] += _norm(_banda(RNG.standard_normal(m), 1500, 7000) * _env(m, 0.001, 0.012), 0.3)
+    return x
+
+
+def trilha_piano(dur, sr=SR):
+    """trilha instrumental suave original (arpejos de piano sintetizado sobre acordes longos)"""
+    n = int(dur * sr); t = np.arange(n) / sr; out = np.zeros(n, np.float32)
+    nota = lambda m: 440 * 2 ** ((m - 69) / 12)
+    prog = [[50, 57, 62, 66, 69], [47, 54, 59, 62, 66], [43, 50, 55, 59, 62], [45, 52, 57, 61, 64]]  # D Bm G A
+    passo = 0.42
+    for i in range(int(dur / passo)):
+        acorde = prog[(i // 8) % 4]; m = acorde[[0, 2, 3, 4, 3, 2, 1, 2][i % 8]] + 12
+        j = int(i * passo * sr); L = min(n - j, int(1.6 * sr)); tt = np.arange(L) / sr
+        fq = nota(m)
+        tom = (np.sin(2 * np.pi * fq * tt) + 0.35 * np.sin(4 * np.pi * fq * tt) + 0.12 * np.sin(6 * np.pi * fq * tt))
+        out[j:j + L] += (tom * np.exp(-tt / 0.6) * np.minimum(1, tt / 0.005)).astype(np.float32) * 0.5
+    for i in range(int(dur / (8 * passo)) + 1):  # acordes de fundo
+        acorde = prog[i % 4]; j = int(i * 8 * passo * sr); L = min(n - j, int(8 * passo * sr * 1.1))
+        if L <= 0: break
+        tt = np.arange(L) / sr; env = np.minimum(1, tt / 0.8) * np.minimum(1, (L / sr - tt) / 0.8)
+        for m in acorde[:3]:
+            out[j:j + L] += (0.18 * env * np.sin(2 * np.pi * nota(m) * tt)).astype(np.float32)
+    out *= np.minimum(1, t / 1.5) * np.minimum(1, (dur - t) / 2.0)
+    return _norm(out, 0.09)
+
+
 TIPOS = {"ambiente_rua": ambiente_rua, "ambiente_loja": ambiente_loja, "passos": passos, "porta_enrolar": porta_enrolar,
-         "sino": sino, "caixa": caixa, "sacola": sacola, "transicao": transicao}
+         "sino": sino, "caixa": caixa, "sacola": sacola, "transicao": transicao,
+         "bip": bip, "fechadura": fechadura}
 
 
 def trilha_sons(lista, duracao, sr=SR):

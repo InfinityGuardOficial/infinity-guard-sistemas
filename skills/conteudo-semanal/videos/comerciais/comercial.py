@@ -18,6 +18,10 @@ PROD = next(p for p in CAT["produtos"] if p["id"] == EP["produto"])
 NOTAS = json.load(open(os.path.join(base.BUILD, "narracao_info.json")))
 SEGS = EP["segmentos"]
 TOMADA_PRODUTO = EP.get("tomada_produto", "P4")
+if EP.get("cores"):  # cores da marca pedidas no briefing
+    NAVY, GOLD = EP["cores"]["navy"], EP["cores"]["dourado"]
+    NAVY2 = EP["cores"].get("navy2", NAVY); GOLD2 = EP["cores"].get("dourado_claro", GOLD2)
+DESTAQUES = [d for d in PROD["destaques"] if d not in EP.get("nao_destacar", [])]
 
 def brl(v):
     return "R$ " + f"{v:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
@@ -107,7 +111,7 @@ def cartao_produto(cv, t, lt):
         cv.drawString(ln, 100, y, fn, P(CREAM)); y += 50
     y += 10; x = 100
     fc = font("m7", 30)
-    for d in PROD["destaques"]:
+    for d in DESTAQUES:
         w = fc.measureText(d) + 40
         if x + w > W - 100: x = 100; y += 60
         cv.drawRRect(rrect(x, y - 34, w, 48, 24), P(GOLD))
@@ -159,11 +163,89 @@ def selo_produto(cv, t, lt):
     cv.drawImageRect(pk, skia.Rect.MakeXYWH(x + 20, y + 20, pk.width() * s_, pk.height() * s_), SAMP)
     nome = PROD["nome"].split(" — ")[0]
     cv.drawString(nome, x + 210, y + 70, font("m8", 32), P(CREAM))
-    dz = ", ".join(PROD["destaques"]); tam = 28
+    dz = ", ".join(DESTAQUES); tam = 28
     while font("m5", tam).measureText(dz) > W - 120 - 240 and tam > 16: tam -= 1
     cv.drawString(dz, x + 210, y + 110, font("m5", tam), P(CREAM, 210))
     cv.drawString(EP["site"], x + 210, y + 145, font("m7", 26), P(GOLD2))
     cv.restore()
+
+FOTO = None
+def foto_produto():
+    """foto real do produto (fiel à aparência), recortada para tirar selos e textos de fornecedor"""
+    global FOTO
+    if FOTO is None:
+        im = Image.open(os.path.join(base.VIDEO, EP["foto_produto"])).convert("RGBA")
+        if EP.get("foto_recorte"): im = im.crop(tuple(EP["foto_recorte"]))
+        FOTO = base.load_img(np.array(im))
+    return FOTO
+
+def fundo_marca(cv, t):
+    sh = skia.GradientShader.MakeLinear([skia.Point(0, 0), skia.Point(0, H)], [col(NAVY), col(NAVY2)])
+    cv.drawRect(skia.Rect.MakeWH(W, H), P(NAVY, shader=sh))
+    rng = np.random.default_rng(3)
+    for i in range(30):
+        x0, y0, sp, r = rng.uniform(0, W), rng.uniform(0, H), rng.uniform(8, 22), rng.uniform(1.5, 3.5)
+        cv.drawCircle(x0, (y0 - t * sp) % H, r, P(GOLD, 45))
+
+def logo_circular(cv, cx, cy, r):
+    pth = skia.Path(); pth.addCircle(cx, cy, r)
+    cv.save(); cv.clipPath(pth, skia.ClipOp.kIntersect, True)
+    cv.drawImageRect(base.LOGO, skia.Rect.MakeXYWH(cx - r * 1.02, cy - r * 1.02, r * 2.04, r * 2.04), SAMP)
+    cv.restore()
+
+def packshot(cv, t, lt):
+    """produto (foto real), logo original, slogan e oferta do catálogo"""
+    fundo_marca(cv, t)
+    k = eout(lt / 0.7)
+    cv.saveLayerAlpha(None, int(255 * k))
+    logo_circular(cv, W / 2, 170, 105)
+    text_c(cv, CAT["slogan"], W / 2, 328, font("pf", 38), P(GOLD2))
+    img = foto_produto(); fw = 500; fh = fw * img.height() / img.width()
+    y0 = 375 + 30 * (1 - k)
+    cv.drawRRect(rrect(W / 2 - fw / 2 - 20, y0 - 20, fw + 40, fh + 40, 32), P("#ffffff"))
+    cv.drawRRect(rrect(W / 2 - fw / 2 - 20, y0 - 20, fw + 40, fh + 40, 32), P(GOLD, stroke=4))
+    cv.drawImageRect(img, skia.Rect.MakeXYWH(W / 2 - fw / 2, y0, fw, fh), SAMP)
+    cv.drawString("Imagem do produto", W / 2 + fw / 2 - 210, y0 + fh + 8, font("m5", 22), P("#8a8a92"))
+    y = y0 + fh + 78
+    fn = font("m8", 36)
+    for ln in wrap(PROD["nome"], fn, W - 160):
+        text_c(cv, ln, W / 2, y, fn, P(CREAM)); y += 46
+    fc = font("m7", 30); ws = [fc.measureText(d) + 40 for d in DESTAQUES]; x = W / 2 - (sum(ws) + 14 * (len(ws) - 1)) / 2
+    for d, w_ in zip(DESTAQUES, ws):
+        cv.drawRRect(rrect(x, y - 30, w_, 46, 23), P(GOLD)); cv.drawString(d, x + 20, y + 3, fc, P(NAVY)); x += w_ + 14
+    y += 82
+    text_c(cv, brl(PROD["preco"]), W / 2, y, font("m8", 72), P(GOLD2))
+    text_c(cv, f"ou {PROD['parcelas']}x de {brl(PROD['parcela_valor'])}   ·   {brl(PROD['pix'])} no Pix", W / 2, y + 54, font("m7", 34), P(CREAM))
+    fs = font("m5", 25); data = "/".join(reversed(CAT["atualizado_em"].split("-")))
+    linhas = [f"Frete: calcule pelo seu CEP em {EP['site']}." if EP.get("mostrar_frete") else None,
+              ("Porta compatível: " + PROD["requisitos"][0].split(": ", 1)[-1] + ".") if PROD.get("requisitos") else None,
+              f"Preços do site em {data}. Confira em {EP['site']}."]
+    for i, ln in enumerate(l_ for l_ in linhas if l_):
+        text_c(cv, ln, W / 2, y + 100 + i * 33, fs, P(CREAM, 210))
+    cv.restore()
+    kk = back((lt - 0.8) / 0.5)
+    if kk > 0:
+        cv.save(); cv.translate(W / 2, 1448); cv.scale(kk, kk)
+        tam = 40
+        while font("m8", tam).measureText(EP["cta"]) + 80 > W - 80 and tam > 22: tam -= 1
+        f_ = font("m8", tam); w_ = f_.measureText(EP["cta"]) + 80
+        cv.drawRRect(rrect(-w_ / 2, -44, w_, 84, 42), P(GOLD)); text_c(cv, EP["cta"], 0, tam * 0.35, f_, P(NAVY))
+        cv.restore()
+
+def capa():
+    """capa 9:16 com o título do briefing sobre um quadro 3D"""
+    c = EP["capa"]; surf = skia.Surface(W, H); cv = surf.getCanvas()
+    bg(cv, shot(c["tomada"], c.get("quadro", 1))); scrims(cv)
+    sh = skia.GradientShader.MakeLinear([skia.Point(0, H * 0.45), skia.Point(0, H)], [skia.Color(0, 0, 0, 0), col(NAVY, 245)])
+    cv.drawRect(skia.Rect.MakeXYWH(0, H * 0.45, W, H * 0.55), P(NAVY, shader=sh))
+    f = font("m8", 104); lines = wrap(c["titulo"], f, W - 140); y = 1240 - (len(lines) - 1) * 60
+    for ln in lines:
+        text_c(cv, ln, W / 2, y, f, P(GOLD2 if ln == lines[-1] else CREAM), outline=P("#000000", 160, stroke=10)); y += 120
+    logo_circular(cv, W / 2, 1640, 95)
+    text_c(cv, EP["site"], W / 2, 1790, font("m7", 36), P(GOLD2))
+    out = os.path.join(base.VIDEO, "capa.png")
+    Image.fromarray(surf.makeImageSnapshot().toarray(colorType=skia.kRGBA_8888_ColorType)).convert("RGB").save(out)
+    print("capa:", out)
 
 def encerramento(cv, t, lt):
     k = eout(lt / 0.6)
@@ -216,11 +298,13 @@ def make_seg(i, s):
                 bg(cv, img)
             scrims(cv)
         if i + 1 in EXTRAS: EXTRAS[i + 1](cv, t, lt)
+        selo_simulacao(cv, t)
         for tl in s.get("tela", []):
             tipo = tl.get("tipo", "texto")
             if tipo == "produto": cartao_produto(cv, t, t - tl["ini"])
             elif tipo == "encerramento": encerramento(cv, t, t - tl["ini"])
             elif tipo == "selo_produto": selo_produto(cv, t, t - tl["ini"])
+            elif tipo == "packshot": packshot(cv, t, t - tl["ini"])
             elif tipo == "texto" and t >= tl["ini"] and t < tl.get("fim", s["fim"]):
                 if i == 0: onscreen(cv, tl["texto"], tl["ini"] - s["ini"], lt, y=tl.get("y", 430), size=76)
                 else:
@@ -229,5 +313,14 @@ def make_seg(i, s):
                     callout(cv, tl["texto"], tl["ini"], t, 300 + pos * 120, aviso=tl.get("aviso", False))
     return draw
 
+def selo_simulacao(cv, t):
+    for a, b in EP.get("simulacao", []):
+        if a <= t < b:
+            f = font("m7", 28); w = f.measureText("Simulação ilustrativa") + 40
+            cv.drawRRect(rrect(W - w - 40, 60, w, 48, 24), P("#000000", 150))
+            cv.drawString("Simulação ilustrativa", W - w - 20, 94, f, P(CREAM, 230))
+
 def main():
+    if len(sys.argv) > 1 and sys.argv[1] == "capa":
+        return capa()
     base.main({i + 1: make_seg(i, s) for i, s in enumerate(SEGS)})

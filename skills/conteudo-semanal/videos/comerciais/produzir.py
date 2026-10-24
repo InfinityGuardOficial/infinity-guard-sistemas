@@ -25,7 +25,7 @@ MAX_IDADE_CATALOGO = 7  # dias
 # termos que não podem aparecer em fala ou texto de tela (não confirmados ou proibidos pelas regras da loja)
 PROIBIDOS = {
     "gravação/gravar": r"\bgrav(a|am|ação|ações|ar|ando|ada|ado|e)\b", "áudio": r"\báudio\b", "alerta": r"\balerta",
-    "notificação": r"\bnotifica", "aplicativo": r"\b(aplicativo|app)\b", "Anatel": r"anatel", "garantia": r"garantia",
+    "notificação": r"\bnotifica", "Anatel": r"anatel", "garantia": r"garantia",
     "instalação": r"\binstala(ção|mos|dor)\b", "4G": r"\b4g\b", "sem juros": r"sem juros", "frete": r"\bfrete\b",
     "promoção/desconto": r"promo(ção|cional)|desconto|oferta|só hoje|últimas unidades|black friday",
     "identificação de pessoa": r"identific|reconhec|detect", "100%": r"100 ?%|totalmente seguro|à prova",
@@ -35,7 +35,48 @@ PROIBIDOS = {
 # recursos de câmera: só podem ser citados se estiverem no nome ou nos destaques do produto
 RECURSOS = {"visão noturna": r"visão noturna", "dupla lente": r"dupla lente|lente dupla",
             "wi-fi": r"wi-?fi", "zoom": r"\bzoom", "rastreamento": r"rastrea", "kit com 2": r"duas câmeras|2 câmeras|kit com 2",
-            "monitoramento duplo": r"monitoramento duplo", "sensor": r"\bsensor"}
+            "monitoramento duplo": r"monitoramento duplo", "sensor": r"\bsensor",
+            "aplicativo": r"\b(aplicativo|app)\b", "cartão": r"\bcart(ão|ões)\b", "senha": r"\bsenha",
+            "impressão digital": r"biometr|impress(ão|ões) digita|\bdigital\b", "bluetooth": r"bluetooth"}
+# recurso que o catálogo chama por outro nome
+SINONIMOS = {"aplicativo": "app"}
+
+
+def brl(v):
+    return "R$ " + f"{v:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+
+def por_extenso(n):
+    """inteiro de 0 a 999.999 por extenso (pt-BR), para a voz ler preços"""
+    u = "zero um dois três quatro cinco seis sete oito nove dez onze doze treze quatorze quinze dezesseis dezessete dezoito dezenove".split()
+    d = "_ _ vinte trinta quarenta cinquenta sessenta setenta oitenta noventa".split()
+    c = "_ cento duzentos trezentos quatrocentos quinhentos seiscentos setecentos oitocentos novecentos".split()
+    def ate999(x):
+        if x == 100: return "cem"
+        p = []
+        if x >= 100: p.append(c[x // 100]); x %= 100
+        if x >= 20: p.append(d[x // 10]); x %= 10
+        if x or not p: p.append(u[x])
+        return " e ".join(q for q in p if q)
+    if n < 1000: return ate999(n)
+    mil, resto = divmod(n, 1000)
+    txt = "mil" if mil == 1 else ate999(mil) + " mil"
+    if resto: txt += (" e " if resto < 100 or resto % 100 == 0 else " ") + ate999(resto)
+    return txt
+
+
+def reais_falado(v):
+    r, c = int(v), int(round((v - int(v)) * 100))
+    t = f"{por_extenso(r)} {'real' if r == 1 else 'reais'}"
+    if c: t += f" e {por_extenso(c)}"  # como em locução de anúncio: "... reais e cinquenta e quatro"
+    return t
+
+
+def preencher(texto, prod, falado=False):
+    """troca {preco}, {pix}, {parcelas} e {parcela} pelos valores do catálogo"""
+    f = reais_falado if falado else brl
+    return (texto.replace("{preco}", f(prod["preco"])).replace("{pix}", f(prod["pix"]))
+            .replace("{parcela}", f(prod["parcela_valor"])).replace("{parcelas}", str(prod["parcelas"])))
 
 
 def norm(s):
@@ -69,12 +110,18 @@ def validar(ep, quieto=False):
     else:
         avisos.append(f"preço do catálogo de {cat['atualizado_em']} ({idade} dias); o site não foi lido agora: reconfira antes de publicar")
     confirmados = norm(prod["nome"] + " " + " ".join(prod.get("destaques", []))) if prod else ""
+    informados = set(d.get("recursos_informados", []))
+    for r_ in informados:
+        avisos.append(f"recurso '{r_}' informado pelo dono e não listado no catálogo: confira na página do produto antes de publicar")
     for onde, txt in textos(d):
         t = norm(txt)
+        for ph in re.findall(r"\{(\w+)\}", txt):
+            if ph not in ("preco", "pix", "parcelas", "parcela"): erros.append(f"{onde}: campo desconhecido {{{ph}}}")
         for nome, rx in PROIBIDOS.items():
             if re.search(rx, t): erros.append(f"{onde}: '{nome}' não pode aparecer — \"{txt}\"")
         for nome, rx in RECURSOS.items():
-            if re.search(rx, t) and not re.search(rx, confirmados):
+            if nome in informados: continue
+            if re.search(rx, t) and not re.search(rx, confirmados) and SINONIMOS.get(nome, "§") not in confirmados:
                 erros.append(f"{onde}: recurso '{nome}' não confirmado para {d['produto']} — \"{txt}\"")
         if re.search(r"r\$ ?\d", t): erros.append(f"{onde}: preço escrito à mão; o preço sai só do catálogo")
     # estrutura
@@ -86,7 +133,7 @@ def validar(ep, quieto=False):
     for s in segs:
         for f in s["falas"]:
             if not (s["ini"] <= f["ini"] < s["fim"]): erros.append(f"fala fora do segmento: {f['texto'][:30]}")
-    if not any(t.get("tipo") == "encerramento" for s in segs for t in s.get("tela", [])):
+    if not any(t.get("tipo") in ("encerramento", "packshot") for s in segs for t in s.get("tela", [])):
         erros.append("falta o encerramento com o site, o logo e o CTA")
     if not d.get("cta"): erros.append("falta o CTA")
     if norm(d["site"]) not in norm(cat["site"]): erros.append(f"site {d['site']} diferente do catálogo ({cat['site']})")
@@ -119,7 +166,8 @@ def voz_dave(ep, d):
 
 def narrar(ep):
     import numpy as np, soundfile as sf
-    d, _ = carregar(ep)
+    d, cat = carregar(ep)
+    prod = next(p for p in cat["produtos"] if p["id"] == d["produto"])
     build = os.path.join(ep, "build"); os.makedirs(build, exist_ok=True)
     dave = voz_dave(ep, d)
     kok = None
@@ -141,7 +189,7 @@ def narrar(ep):
                 kok = Kokoro(os.path.join(ANIME, "modelos", "kokoro-v1.0.onnx"), os.path.join(ANIME, "modelos", "voices-v1.0.bin"))
             vel = cfg.get("velocidade", 1.0)
             while True:
-                a, _ = kok.create(f.get("fala") or f["texto"], voice=cfg["provisoria"], speed=vel, lang="pt-br")
+                a, _ = kok.create(preencher(f.get("fala") or f["texto"], prod, falado=True), voice=cfg["provisoria"], speed=vel, lang="pt-br")
                 a = a.astype(np.float32); idx = np.where(np.abs(a) > 0.01)[0]
                 a = a[max(0, idx[0] - int(sr * 0.06)):idx[-1] + int(sr * 0.12)]
                 if f["ini"] + len(a) / sr <= limite or vel >= 1.2: break
@@ -151,7 +199,7 @@ def narrar(ep):
             erros.append(f"fala não cabe no horário ({f['ini']}s + {dur:.2f}s > {limite:.2f}s): {f['texto']}")
         i0 = int(f["ini"] * sr); trilha[i0:i0 + len(a)] += a[:max(0, len(trilha) - i0)]
         marks.append({"cena": next(k + 1 for k, s in enumerate(d["segmentos"]) if f in s["falas"]), "quem": f["quem"],
-                      "texto": f["texto"], "ini": f["ini"], "fim": round(f["ini"] + dur, 3)})
+                      "texto": preencher(f["texto"], prod), "ini": f["ini"], "fim": round(f["ini"] + dur, 3)})
     trilha = trilha / max(1e-6, np.max(np.abs(trilha))) * 0.89
     # trilha musical suave gerada por código (sem direitos autorais)
     n = len(trilha); tt = np.arange(n) / sr
@@ -165,6 +213,9 @@ def narrar(ep):
         for m in prog[i % 4]:
             fq = nota(m); pad[a0:b0] += env * (np.sin(2 * np.pi * fq * x) + 0.3 * np.sin(4 * np.pi * fq * x))
     pad = pad / np.max(np.abs(pad)) * 0.07 * np.minimum(1, tt / 2) * np.minimum(1, (T - tt) / 2)
+    if d.get("trilha") == "piano":
+        sys.path.insert(0, AQUI); import sons
+        pad = sons.trilha_piano(T, sr)[:n]
     sfx = np.zeros(n, np.float32)
     if d.get("sons"):
         sys.path.insert(0, AQUI); import sons
@@ -256,6 +307,8 @@ def render(ep):
                                stdout=log, stderr=subprocess.STDOUT, env=env)
         if r.returncode: sys.exit(f"falhou a tomada {nome} (veja build/log_{nome}.txt)")
     subprocess.run([sys.executable, os.path.join(ep, "montagem.py"), "video", saida_mp4(ep)], check=True)
+    if carregar(ep)[0].get("capa"):
+        subprocess.run([sys.executable, os.path.join(ep, "montagem.py"), "capa"], check=True)
     # quadros do storyboard: meio de cada segmento, já com as sobreposições
     d, _ = carregar(ep)
     os.makedirs(os.path.join(ep, "storyboard"), exist_ok=True)
