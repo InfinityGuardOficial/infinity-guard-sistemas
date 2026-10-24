@@ -263,9 +263,16 @@ def camera(loc, look, lens=35):
     d = Vector(look) - Vector(loc); c.rotation_euler = d.to_track_quat("-Z", "Y").to_euler()
     sc.camera = c; return c
 
+_ULTIMO_EULER = {}
+
 def aim(c, loc, look, frame):
+    """posiciona a câmera olhando para `look`; os ângulos ficam compatíveis com o quadro-chave anterior,
+    senão a interpolação dá a volta inteira quando o ângulo cruza ±180° (a câmera gira para o lado errado)"""
     c.location = loc; d = Vector(look) - Vector(loc)
-    c.rotation_euler = d.to_track_quat("-Z", "Y").to_euler()
+    e = d.to_track_quat("-Z", "Y").to_euler()
+    if c.name in _ULTIMO_EULER: e.make_compatible(_ULTIMO_EULER[c.name])
+    _ULTIMO_EULER[c.name] = e.copy()
+    c.rotation_euler = e
     c.keyframe_insert("location", frame=frame); c.keyframe_insert("rotation_euler", frame=frame)
 
 def spin_wheels(wheels, dist_fn, nframes, r=0.4):
