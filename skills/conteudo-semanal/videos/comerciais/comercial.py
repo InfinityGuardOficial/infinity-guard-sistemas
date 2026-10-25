@@ -200,14 +200,14 @@ def packshot(cv, t, lt):
     k = eout(lt / 0.7)
     cv.saveLayerAlpha(None, int(255 * k))
     if EP.get("logo") == "horizontal":  # logo original fornecido (preto sobre branco), sem alterar
-        img = logo_original(); lw = 560; lh = lw * img.height() / img.width()
+        img = logo_original(); lw = 500; lh = lw * img.height() / img.width()
         cv.drawRRect(rrect(W / 2 - lw / 2 - 24, 70, lw + 48, lh + 40, 26), P("#ffffff"))
         cv.drawImageRect(img, skia.Rect.MakeXYWH(W / 2 - lw / 2, 90, lw, lh), SAMP)
     else:
         logo_circular(cv, W / 2, 170, 105)
         text_c(cv, CAT["slogan"], W / 2, 328, font("pf", 38), P(GOLD2))
     img = foto_produto(); fw = 500; fh = fw * img.height() / img.width()
-    y0 = 375 + 30 * (1 - k)
+    y0 = (420 if EP.get("logo") == "horizontal" else 375) + 30 * (1 - k)
     cv.drawRRect(rrect(W / 2 - fw / 2 - 20, y0 - 20, fw + 40, fh + 40, 32), P("#ffffff"))
     cv.drawRRect(rrect(W / 2 - fw / 2 - 20, y0 - 20, fw + 40, fh + 40, 32), P(GOLD, stroke=4))
     cv.drawImageRect(img, skia.Rect.MakeXYWH(W / 2 - fw / 2, y0, fw, fh), SAMP)

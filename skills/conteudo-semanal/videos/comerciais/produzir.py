@@ -384,6 +384,22 @@ def exportar(ep):
     nome = os.path.basename(ep) + ("_PROVISORIO" if info["provisoria"] else "") + ".mp4"
     shutil.copy(saida_mp4(ep), os.path.join(out, nome))
     shutil.copy(os.path.join(ep, "legendas.srt"), os.path.join(out, os.path.basename(ep) + ".srt"))
+    for extra in ("capa.png", "descricao.md"):
+        if os.path.exists(os.path.join(ep, extra)):
+            shutil.copy(os.path.join(ep, extra), os.path.join(out, os.path.basename(ep) + "-" + extra))
+    # arquivo de projeto: roteiro, scripts, imagens, áudio e as cenas do Blender (.blend) de cada tomada
+    import zipfile
+    zp = os.path.join(out, os.path.basename(ep) + "-projeto.zip")
+    with zipfile.ZipFile(zp, "w", zipfile.ZIP_DEFLATED) as z:
+        for raiz, _dirs, arqs in os.walk(ep):
+            rel = os.path.relpath(raiz, ep)
+            if rel.startswith(os.path.join("build", "shots")) or rel.startswith("storyboard"): continue
+            for a_ in arqs:
+                if a_.endswith(".mp4") or a_.startswith("quadro_") or a_.startswith("log_"): continue
+                z.write(os.path.join(raiz, a_), os.path.join(os.path.basename(ep), rel, a_))
+        for f_ in ("cenarios.py", "cenarios_loja.py", "cenarios_ape.py", "cenarios_inauguracao.py", "comercial.py", "produzir.py", "sons.py"):
+            if os.path.exists(os.path.join(AQUI, f_)): z.write(os.path.join(AQUI, f_), os.path.join("pipeline", f_))
+    print("== projeto:", zp)
     print("== exportado:", os.path.join(out, nome))
 
 
