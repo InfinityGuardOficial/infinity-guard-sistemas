@@ -14,14 +14,15 @@ from base import (skia, P, font, text_c, wrap, rrect, check_icon, clamp, ease, e
 CATALOGO = os.path.join(AQUI, "..", "..", "..", "atendente-infinity-guard", "references", "catalogo.json")
 EP = json.load(open(os.path.join(base.VIDEO, "episodio.json")))
 CAT = json.load(open(CATALOGO))
-PROD = next(p for p in CAT["produtos"] if p["id"] == EP["produto"])
+PROD = next((p for p in CAT["produtos"] if p["id"] == EP.get("produto")), None)  # None: produto fora do catálogo
 NOTAS = json.load(open(os.path.join(base.BUILD, "narracao_info.json")))
 SEGS = EP["segmentos"]
 TOMADA_PRODUTO = EP.get("tomada_produto", "P4")
 if EP.get("cores"):  # cores da marca pedidas no briefing
     NAVY, GOLD = EP["cores"]["navy"], EP["cores"]["dourado"]
     NAVY2 = EP["cores"].get("navy2", NAVY); GOLD2 = EP["cores"].get("dourado_claro", GOLD2)
-DESTAQUES = [d for d in PROD["destaques"] if d not in EP.get("nao_destacar", [])]
+DESTAQUES = [d for d in PROD["destaques"] if d not in EP.get("nao_destacar", [])] if PROD else []
+NOME_PRODUTO = PROD["nome"] if PROD else EP["produto_ilustrativo"]["nome"]
 
 def brl(v):
     return "R$ " + f"{v:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
@@ -198,8 +199,13 @@ def packshot(cv, t, lt):
     fundo_marca(cv, t)
     k = eout(lt / 0.7)
     cv.saveLayerAlpha(None, int(255 * k))
-    logo_circular(cv, W / 2, 170, 105)
-    text_c(cv, CAT["slogan"], W / 2, 328, font("pf", 38), P(GOLD2))
+    if EP.get("logo") == "horizontal":  # logo original fornecido (preto sobre branco), sem alterar
+        img = logo_original(); lw = 560; lh = lw * img.height() / img.width()
+        cv.drawRRect(rrect(W / 2 - lw / 2 - 24, 70, lw + 48, lh + 40, 26), P("#ffffff"))
+        cv.drawImageRect(img, skia.Rect.MakeXYWH(W / 2 - lw / 2, 90, lw, lh), SAMP)
+    else:
+        logo_circular(cv, W / 2, 170, 105)
+        text_c(cv, CAT["slogan"], W / 2, 328, font("pf", 38), P(GOLD2))
     img = foto_produto(); fw = 500; fh = fw * img.height() / img.width()
     y0 = 375 + 30 * (1 - k)
     cv.drawRRect(rrect(W / 2 - fw / 2 - 20, y0 - 20, fw + 40, fh + 40, 32), P("#ffffff"))
@@ -208,8 +214,16 @@ def packshot(cv, t, lt):
     cv.drawString("Imagem do produto", W / 2 + fw / 2 - 210, y0 + fh + 8, font("m5", 22), P("#8a8a92"))
     y = y0 + fh + 78
     fn = font("m8", 36)
-    for ln in wrap(PROD["nome"], fn, W - 160):
+    for ln in wrap(NOME_PRODUTO, fn, W - 160):
         text_c(cv, ln, W / 2, y, fn, P(CREAM)); y += 46
+    if not PROD:  # fora do catálogo: nada de preço, recurso ou frete
+        y += 30
+        for ln in EP["produto_ilustrativo"].get("linhas", ["Modelos e preços: link na bio"]):
+            text_c(cv, ln, W / 2, y, font("m7", 34), P(CREAM, 225)); y += 48
+        cv.restore()
+        selo_campanha(cv, t, lt)
+        cta_botao(cv, lt)
+        return
     fc = font("m7", 30); ws = [fc.measureText(d) + 40 for d in DESTAQUES]; x = W / 2 - (sum(ws) + 14 * (len(ws) - 1)) / 2
     for d, w_ in zip(DESTAQUES, ws):
         cv.drawRRect(rrect(x, y - 30, w_, 46, 23), P(GOLD)); cv.drawString(d, x + 20, y + 3, fc, P(NAVY)); x += w_ + 14
@@ -223,14 +237,30 @@ def packshot(cv, t, lt):
     for i, ln in enumerate(l_ for l_ in linhas if l_):
         text_c(cv, ln, W / 2, y + 100 + i * 33, fs, P(CREAM, 210))
     cv.restore()
+    cta_botao(cv, lt)
+
+def cta_botao(cv, lt, y=1448):
     kk = back((lt - 0.8) / 0.5)
     if kk > 0:
-        cv.save(); cv.translate(W / 2, 1448); cv.scale(kk, kk)
+        cv.save(); cv.translate(W / 2, y); cv.scale(kk, kk)
         tam = 40
         while font("m8", tam).measureText(EP["cta"]) + 80 > W - 80 and tam > 22: tam -= 1
         f_ = font("m8", tam); w_ = f_.measureText(EP["cta"]) + 80
         cv.drawRRect(rrect(-w_ / 2, -44, w_, 84, 42), P(GOLD)); text_c(cv, EP["cta"], 0, tam * 0.35, f_, P(NAVY))
         cv.restore()
+
+def selo_campanha(cv, t, lt, y=1290):
+    """campanha (ex.: Black Friday): sem confirmação, só nome, datas e link na bio"""
+    c = EP.get("campanha")
+    if not c: return
+    k = eout((lt - 0.5) / 0.5)
+    if k <= 0: return
+    cv.saveLayerAlpha(None, int(255 * k))
+    cv.drawRRect(rrect(110, y - 70, W - 220, 150, 28), P("#000000"))
+    cv.drawRRect(rrect(110, y - 70, W - 220, 150, 28), P(GOLD, stroke=4))
+    text_c(cv, c["nome"].upper(), W / 2, y - 6, font("m8", 56), P(GOLD2))
+    text_c(cv, c["chamada"], W / 2, y + 50, font("m7", 32), P(CREAM))
+    cv.restore()
 
 def capa():
     """capa 9:16 com o título do briefing sobre um quadro 3D"""

@@ -74,6 +74,7 @@ def reais_falado(v):
 
 def preencher(texto, prod, falado=False):
     """troca {preco}, {pix}, {parcelas} e {parcela} pelos valores do catálogo"""
+    if not prod: return texto
     f = reais_falado if falado else brl
     return (texto.replace("{preco}", f(prod["preco"])).replace("{pix}", f(prod["pix"]))
             .replace("{parcela}", f(prod["parcela_valor"])).replace("{parcelas}", str(prod["parcelas"])))
@@ -101,8 +102,11 @@ def textos(d):
 def validar(ep, quieto=False):
     d, cat = carregar(ep)
     erros, avisos = [], []
-    prod = next((p for p in cat["produtos"] if p["id"] == d["produto"]), None)
-    if not prod: erros.append(f"produto {d['produto']} não existe no catálogo")
+    prod = next((p for p in cat["produtos"] if p["id"] == d.get("produto")), None)
+    if d.get("produto") is None and d.get("produto_ilustrativo"):
+        avisos.append(f"produto fora do catálogo ({d['produto_ilustrativo']['nome']}): o vídeo não mostra preço nem recursos; "
+                      "cadastre o produto no catálogo para exibir a oferta")
+    elif not prod: erros.append(f"produto {d['produto']} não existe no catálogo")
     elif not prod.get("ativo"): erros.append(f"produto {d['produto']} está inativo (esgotado?)")
     idade = (datetime.date.today() - datetime.date.fromisoformat(cat["atualizado_em"])).days
     if idade > MAX_IDADE_CATALOGO:
@@ -115,6 +119,7 @@ def validar(ep, quieto=False):
         avisos.append(f"recurso '{r_}' informado pelo dono e não listado no catálogo: confira na página do produto antes de publicar")
     for onde, txt in textos(d):
         t = norm(txt)
+        if not prod and re.search(r"\{\w+\}", txt): erros.append(f"{onde}: preço do catálogo pedido, mas o produto não está no catálogo")
         for ph in re.findall(r"\{(\w+)\}", txt):
             if ph not in ("preco", "pix", "parcelas", "parcela"): erros.append(f"{onde}: campo desconhecido {{{ph}}}")
         for nome, rx in PROIBIDOS.items():
@@ -136,6 +141,15 @@ def validar(ep, quieto=False):
     if not any(t.get("tipo") in ("encerramento", "packshot") for s in segs for t in s.get("tela", [])):
         erros.append("falta o encerramento com o site, o logo e o CTA")
     if not d.get("cta"): erros.append("falta o CTA")
+    if not prod and any(t.get("tipo") in ("produto", "selo_produto") for s_ in segs for t in s_.get("tela", [])):
+        erros.append("cartão ou selo com preço pedido para um produto fora do catálogo")
+    camp = d.get("campanha")
+    if camp:
+        if camp.get("confirmada"):
+            avisos.append(f"campanha {camp['nome']} marcada como confirmada: confira cupom e preços na loja")
+        else:
+            avisos.append(f"campanha {camp['nome']} não confirmada: só nome, datas e link na bio (sem preço, desconto ou cupom)")
+            if any(camp.get(k) for k in ("preco", "desconto", "cupom")): erros.append("campanha não confirmada não pode ter preço, desconto ou cupom")
     if norm(d["site"]) not in norm(cat["site"]): erros.append(f"site {d['site']} diferente do catálogo ({cat['site']})")
     tomadas = set(re.findall(r'"(P\d+)":', open(os.path.join(ep, "shots3d.py")).read()))
     tomadas = set(tomadas) | set(re.findall(r'"([A-Z]\w*)": \(', open(os.path.join(ep, "shots3d.py")).read()))
@@ -167,7 +181,7 @@ def voz_dave(ep, d):
 def narrar(ep):
     import numpy as np, soundfile as sf
     d, cat = carregar(ep)
-    prod = next(p for p in cat["produtos"] if p["id"] == d["produto"])
+    prod = next((p for p in cat["produtos"] if p["id"] == d.get("produto")), None)
     build = os.path.join(ep, "build"); os.makedirs(build, exist_ok=True)
     dave = voz_dave(ep, d)
     kok = None
@@ -241,7 +255,7 @@ def srt_t(x):
 
 def documentos(ep):
     d, cat = carregar(ep)
-    prod = next(p for p in cat["produtos"] if p["id"] == d["produto"])
+    prod = next((p for p in cat["produtos"] if p["id"] == d.get("produto")), None)
     marks = json.load(open(os.path.join(ep, "build", "marks.json")))
     info = json.load(open(os.path.join(ep, "build", "narracao_info.json")))
     # legendas
@@ -250,8 +264,9 @@ def documentos(ep):
             quem = "" if m["quem"] == "narrador" else f"{m['quem'].upper()}: "
             fo.write(f"{i}\n{srt_t(m['ini'])} --> {srt_t(m['fim'] + 0.3)}\n{quem}{m['texto']}\n\n")
     # storyboard
+    nome_prod = prod["nome"] if prod else d["produto_ilustrativo"]["nome"] + " (fora do catálogo: sem preço nem recursos)"
     L = [f"# Storyboard — {d['titulo']}", "",
-         f"{d['formato']} · {d['duracao']:.0f} s · produto: {prod['nome']} · CTA: {d['cta']} · {d['site']}", "",
+         f"{d['formato']} · {d['duracao']:.0f} s · produto: {nome_prod} · CTA: {d['cta']} · {d['site']}", "",
          "Personagens fictícios: " + "; ".join(f"**{k}** — {v}" for k, v in d["personagens"].items()), "",
          f"Narrador: {info['narrador']}" + (" — **PROVISÓRIA**: " + info["motivo"] if info["provisoria"] else ""), ""]
     for i, s in enumerate(d["segmentos"], 1):
@@ -264,13 +279,19 @@ def documentos(ep):
         for t in s.get("tela", []):
             if t.get("texto"): L.append(f"- **Tela** ({t['ini']} s): {t['texto']}")
             elif t.get("tipo") == "produto":
-                L.append(f"- **Tela** ({t['ini']} s): cartão do produto — {prod['nome']}; destaques: {', '.join(prod['destaques'])}; "
+                L.append(f"- **Tela** ({t['ini']} s): cartão do produto — {nome_prod}; destaques: {', '.join(prod['destaques']) if prod else '—'}; "
                          f"preço do catálogo de {cat['atualizado_em']}; requisitos: {', '.join(prod.get('requisitos', []))}")
+            elif t.get("tipo") == "packshot":
+                L.append(f"- **Tela** ({t['ini']} s): packshot com a foto do produto, logo original, " +
+                         ("preço e condições do catálogo" if prod else "sem preço (produto fora do catálogo)") +
+                         (f", selo {d['campanha']['nome']}: {d['campanha']['chamada']}" if d.get("campanha") else "") + f" e o CTA \"{d['cta']}\"")
             elif t.get("tipo") == "encerramento":
                 L.append(f"- **Tela** ({t['ini']} s): kit, logo original com o slogan, {d['site']} e o CTA")
         L.append("")
     L += ["## Regras do episódio", ""] + [f"- {r}" for r in d.get("regras_do_episodio", [])]
     open(os.path.join(ep, "storyboard.md"), "w").write("\n".join(L) + "\n")
+    if d.get("descricao"):
+        open(os.path.join(ep, "descricao.md"), "w").write(f"# Descrição do post — {d['titulo']}\n\n" + d["descricao"].strip() + "\n")
     # roteiro de cenas (para animação e áudio)
     R = [f"# Roteiro de cenas — {d['titulo']}", "", "| Tempo | Tomada 3D | O que acontece | Fala | Tela |", "|---|---|---|---|---|"]
     for s in d["segmentos"]:
@@ -279,7 +300,7 @@ def documentos(ep):
         tom = s.get("tomada") or ", ".join(x["tomada"] for x in s.get("tomadas", [])) or "—"
         R.append(f"| {s['ini']:.0f}–{s['fim']:.0f} s | {tom} | {s['storyboard']} | {falas} | {tela} |")
     open(os.path.join(ep, "roteiro_de_cenas.md"), "w").write("\n".join(R) + "\n")
-    print("== documentos: storyboard.md, roteiro_de_cenas.md, legendas.srt")
+    print("== documentos: storyboard.md, roteiro_de_cenas.md, legendas.srt" + (", descricao.md" if d.get("descricao") else ""))
 
 
 # ---------------- render ----------------

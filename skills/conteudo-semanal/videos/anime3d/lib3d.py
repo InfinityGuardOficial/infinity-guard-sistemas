@@ -578,6 +578,9 @@ def main(tomadas):
         sc.frame_set(still); r.filepath = os.path.join(saida, f"teste_{nome}_{still}.png")
         bpy.ops.render.render(write_still=True); print("RENDER", round(time.time() - T1, 1))
     else:
+        # arquivo de projeto: a cena de cada tomada também fica salva em .blend (abre no Blender)
+        os.makedirs(os.path.join(saida, "..", "projeto"), exist_ok=True)
+        bpy.ops.wm.save_as_mainfile(filepath=os.path.abspath(os.path.join(saida, "..", "projeto", f"{nome}.blend")), compress=True)
         r.filepath = out + "####"
         bpy.ops.render.render(animation=True)
 

@@ -72,7 +72,7 @@ def col(h, a=255):
 NAVY, NAVY2, GOLD, GOLD2, CREAM = "#0a1630", "#13264a", "#d4aa52", "#f0d48a", "#f5f1e8"
 FD = os.path.join(AQUI, "fonts") + "/"
 TF = {k: skia.Typeface.MakeFromFile(FD + f) for k, f in
-      {"m5": "Montserrat-500.ttf", "m7": "Montserrat-700.ttf", "m8": "Montserrat-800.ttf", "pf": "Playfair-700.ttf"}.items()}
+      {"m5": "Montserrat-500.ttf", "m7": "Montserrat-700.ttf", "m8": "Montserrat-800.ttf", "pf": "Playfair-700.ttf", "cv": "Caveat-600.ttf"}.items()}
 
 def font(k, s): return skia.Font(TF[k], s)
 
