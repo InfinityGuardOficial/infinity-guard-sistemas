@@ -1,0 +1,9 @@
+# Roteiro de cenas — O primeiro presente da loja
+
+| Tempo | Tomada 3D | O que acontece | Fala | Tela |
+|---|---|---|---|---|
+| 0–5 s | I1 | Dia da inauguração do Ateliê da Bia: balões navy e dourados, faixa 'INAUGURAÇÃO'. Bia abre no balcão uma caixa azul-marinho com fita dourada; na tampa, um bilhete. | 0.12 s **narrador**: Ela passou cinco anos sonhando com aquela loja. Mas não esperava receber isso no primeiro dia. | 2.4 s bilhete |
+| 5–17 s | I2, I3 | Lembrança (tom sépia): na véspera, à noite, Bia arruma sozinha as prateleiras entre caixas de papelão. De volta ao presente: close dela lendo o bilhete, reconhece a letra da mãe e se emociona. | 5.6 s **narrador**: Cada prateleira tinha uma história. Cada detalhe, um sacrifício. E alguém tinha percebido isso. | 5.2 s Na véspera<br>11.3 s bilhete |
+| 17–37 s | I4, I5, I6 | Dentro da caixa, sobre papel de seda, a câmera dome branca. A mãe, Dona Lúcia, chega e as duas se abraçam. A câmera aparece girando em estúdio, fiel à foto do produto. | 17.5 s **narrador**: Não era um presente para decorar a loja. Era uma forma de participar daquele sonho.<br>24.4 s **narrador**: Uma câmera para ajudar a acompanhar o espaço que ela acabava de conquistar. |  |
+| 37–45 s | I7 | A câmera dome instalada no teto, dentro da loja, no canto do balcão, com o campo de visão no caixa e na entrada. Bia atende a primeira cliente. | 37.5 s **narrador**: Porque apoiar uma conquista também é pensar nos próximos dias dela. | 38.2 s Dentro da loja<br>39.6 s De olho no caixa e na entrada |
+| 45–55 s | — | Packshot: logo original, foto da câmera dome, selo Black Friday (26 a 29/11, link na bio) e o CTA 'Link na bio'. | 45.2 s **narrador**: Uma conquista merece atenção em cada detalhe. Conheça as câmeras de segurança da Infinity Guard. Acesse infinityguard.com.br. | 45.0 s packshot |

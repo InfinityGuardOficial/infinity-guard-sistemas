@@ -297,11 +297,16 @@ def capa():
     bg(cv, shot(c["tomada"], c.get("quadro", 1))); scrims(cv)
     sh = skia.GradientShader.MakeLinear([skia.Point(0, H * 0.45), skia.Point(0, H)], [skia.Color(0, 0, 0, 0), col(NAVY, 245)])
     cv.drawRect(skia.Rect.MakeXYWH(0, H * 0.45, W, H * 0.55), P(NAVY, shader=sh))
-    f = font("m8", 104); lines = wrap(c["titulo"], f, W - 140); y = 1240 - (len(lines) - 1) * 60
+    f = font("m8", 92); lines = wrap(c["titulo"], f, W - 140); y = c.get("y_titulo", 1240 - (len(lines) - 1) * 60)
     for ln in lines:
-        text_c(cv, ln, W / 2, y, f, P(GOLD2 if ln == lines[-1] else CREAM), outline=P("#000000", 160, stroke=10)); y += 120
-    logo_circular(cv, W / 2, 1640, 95)
-    text_c(cv, EP["site"], W / 2, 1790, font("m7", 36), P(GOLD2))
+        text_c(cv, ln, W / 2, y, f, P(GOLD2 if ln == lines[-1] else CREAM), outline=P("#000000", 160, stroke=10)); y += 106
+    if EP.get("logo") == "horizontal":  # só o logo original fornecido
+        img = logo_original(); lw = 380; lh = lw * img.height() / img.width()
+        cv.drawRRect(rrect(W / 2 - lw / 2 - 18, 1655, lw + 36, lh + 30, 20), P("#ffffff"))
+        cv.drawImageRect(img, skia.Rect.MakeXYWH(W / 2 - lw / 2, 1670, lw, lh), SAMP)
+    else:
+        logo_circular(cv, W / 2, 1640, 95)
+        text_c(cv, EP["site"], W / 2, 1790, font("m7", 36), P(GOLD2))
     out = os.path.join(base.VIDEO, "capa.png")
     Image.fromarray(surf.makeImageSnapshot().toarray(colorType=skia.kRGBA_8888_ColorType)).convert("RGB").save(out)
     print("capa:", out)

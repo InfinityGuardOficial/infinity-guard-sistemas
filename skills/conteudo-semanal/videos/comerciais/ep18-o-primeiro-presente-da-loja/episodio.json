@@ -24,7 +24,8 @@
  "capa": {
   "titulo": "ELA GANHOU UMA CAIXA. E COMEÇOU A CHORAR.",
   "tomada": "I3",
-  "quadro": 46
+  "quadro": 50,
+  "y_titulo": 1290
  },
  "qualidade": {
   "samples": 12,
@@ -97,10 +98,10 @@
      "texto": "Na véspera"
     },
     {
-     "ini": 12.0,
-     "fim": 16.6,
+     "ini": 11.3,
+     "fim": 13.5,
      "tipo": "bilhete",
-     "y": 1180
+     "y": 1480
     }
    ]
   },
