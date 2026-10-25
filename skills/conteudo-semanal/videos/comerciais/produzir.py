@@ -29,7 +29,7 @@ PROIBIDOS = {
     "instalação": r"\binstala(ção|mos|dor)\b", "4G": r"\b4g\b", "sem juros": r"sem juros", "frete": r"\bfrete\b",
     "promoção/desconto": r"promo(ção|cional)|desconto|oferta|só hoje|últimas unidades|black friday",
     "identificação de pessoa": r"identific|reconhec|detect", "100%": r"100 ?%|totalmente seguro|à prova",
-    "resolução não confirmada": r"\b(2k|4k|full ?hd|1080p)\b", "nuvem": r"\bnuvem\b",
+    "nuvem": r"\bnuvem\b",
     "rosto do proprietário": r"maximiliano",
 }
 # recursos de câmera: só podem ser citados se estiverem no nome ou nos destaques do produto
@@ -37,7 +37,8 @@ RECURSOS = {"visão noturna": r"visão noturna", "dupla lente": r"dupla lente|le
             "wi-fi": r"wi-?fi", "zoom": r"\bzoom", "rastreamento": r"rastrea", "kit com 2": r"duas câmeras|2 câmeras|kit com 2",
             "monitoramento duplo": r"monitoramento duplo", "sensor": r"\bsensor",
             "aplicativo": r"\b(aplicativo|app)\b", "cartão": r"\bcart(ão|ões)\b", "senha": r"\bsenha",
-            "impressão digital": r"biometr|impress(ão|ões) digita|\bdigital\b", "bluetooth": r"bluetooth"}
+            "impressão digital": r"biometr|impress(ão|ões) digita|\bdigital\b", "bluetooth": r"bluetooth",
+            "resolução": r"\b(2k|4k|full ?hd|1080p|\d+ ?mp)\b", "poe": r"\bpoe\b"}
 # recurso que o catálogo chama por outro nome
 SINONIMOS = {"aplicativo": "app"}
 
@@ -108,11 +109,12 @@ def validar(ep, quieto=False):
                       "cadastre o produto no catálogo para exibir a oferta")
     elif not prod: erros.append(f"produto {d['produto']} não existe no catálogo")
     elif not prod.get("ativo"): erros.append(f"produto {d['produto']} está inativo (esgotado?)")
-    idade = (datetime.date.today() - datetime.date.fromisoformat(cat["atualizado_em"])).days
+    data_preco = (prod or {}).get("conferido_em", cat["atualizado_em"])  # produto conferido no site depois do catálogo
+    idade = (datetime.date.today() - datetime.date.fromisoformat(data_preco)).days
     if idade > MAX_IDADE_CATALOGO:
-        erros.append(f"catálogo com {idade} dias: atualize os preços (skill catalogo-e-precos) antes de produzir")
+        erros.append(f"preço com {idade} dias: atualize os preços (skill catalogo-e-precos) antes de produzir")
     else:
-        avisos.append(f"preço do catálogo de {cat['atualizado_em']} ({idade} dias); o site não foi lido agora: reconfira antes de publicar")
+        avisos.append(f"preço do catálogo de {data_preco} ({idade} dias): reconfira no site antes de publicar")
     confirmados = norm(prod["nome"] + " " + " ".join(prod.get("destaques", []))) if prod else ""
     informados = set(d.get("recursos_informados", []))
     for r_ in informados:

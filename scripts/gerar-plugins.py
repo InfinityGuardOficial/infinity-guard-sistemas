@@ -26,7 +26,9 @@ DEPENDE = {
     "reuniao-semanal": ["atendente-infinity-guard", "campanha-sazonal", "conteudo-semanal", "painel-de-vendas",
                         "prova-da-loja", "radar-de-concorrentes", "suporte-tecnico"],
 }
-IGNORAR = shutil.ignore_patterns("__pycache__", "*.pyc", "custos.json", "estoque.json")
+# o que é gerado pelos vídeos (renders, exportações, ambiente do Blender, modelo de voz) não vai para os plugins
+IGNORAR = shutil.ignore_patterns("__pycache__", "*.pyc", "custos.json", "estoque.json",
+                                 "build", "exports", "tmp", "clips", ".venv-blender", "modelos", "*.mp4")
 
 
 def ler_agente(caminho):

@@ -1,0 +1,92 @@
+{
+ "voz": "pm_alex",
+ "velocidade": 0.95,
+ "frases": [
+  {
+   "cena": 1,
+   "texto": "Você está a quarenta quilômetros de casa e bate a dúvida:"
+  },
+  {
+   "cena": 1,
+   "texto": "eu tranquei o portão?"
+  },
+  {
+   "cena": 2,
+   "texto": "Fim de ano, carro cheio, todo mundo animado."
+  },
+  {
+   "cena": 2,
+   "texto": "E ninguém lembra quem fechou o portão."
+  },
+  {
+   "cena": 3,
+   "texto": "Você liga pro vizinho e ele não atende."
+  },
+  {
+   "cena": 3,
+   "texto": "O clima no carro muda, e a viagem que era pra descansar vira uma hora de preocupação."
+  },
+  {
+   "cena": 4,
+   "texto": "Agora volta a cena."
+  },
+  {
+   "cena": 5,
+   "texto": "Mesma estrada, mesma dúvida."
+  },
+  {
+   "cena": 5,
+   "texto": "Só que dessa vez você abre o celular, toca na câmera da entrada e vê:"
+  },
+  {
+   "cena": 5,
+   "texto": "portão fechado, rua calma."
+  },
+  {
+   "cena": 6,
+   "texto": "Dez segundos depois, a viagem continua."
+  },
+  {
+   "cena": 6,
+   "texto": "É pra isso que serve uma câmera em casa."
+  },
+  {
+   "cena": 6,
+   "texto": "Não é pra viver vigiando."
+  },
+  {
+   "cena": 6,
+   "texto": "É pra tirar a dúvida na hora que ela aparece, de onde você estiver, de dia ou de noite."
+  },
+  {
+   "cena": 7,
+   "texto": "Eu acredito que segurança boa começa pela casa de quem vai usar."
+  },
+  {
+   "cena": 7,
+   "texto": "A sua dúvida é o portão?"
+  },
+  {
+   "cena": 7,
+   "texto": "Então a primeira câmera vai na entrada."
+  },
+  {
+   "cena": 8,
+   "texto": "Dezembro está chegando."
+  },
+  {
+   "cena": 8,
+   "texto": "Se você vai viajar, instala antes e testa com calma."
+  },
+  {
+   "cena": 8,
+   "texto": "O kit com duas câmeras está no link da bio.",
+   "fala": "O quít com duas câmeras está no línqui da bío."
+  },
+  {
+   "cena": 8,
+   "texto": "Eu sou o Maximiliano, da Infinity Guard, e te ajudo a escolher pelo WhatsApp.",
+   "fala": "Eu sou o Massimiliano, da Infíniti Gárd, e te ajudo a escolher pelo uótsápi."
+  }
+ ]
+}

@@ -55,7 +55,8 @@ def validar(cat, hoje=None):
     for dup in {i for i in ids if ids.count(i) > 1}:
         erros.append(f"id repetido: {dup}")
     for p in cat["produtos"]:
-        esp = derivados(p["preco"], cond["desconto_pix"], cond["parcelas_max"])
+        # parcelas_max por produto: o site limita as parcelas de alguns produtos (ex.: 7x, 8x)
+        esp = derivados(p["preco"], cond["desconto_pix"], p.get("parcelas_max", cond["parcelas_max"]))
         for campo, valor in esp.items():
             if abs(p[campo] - valor) > 0.011:
                 erros.append(f"{p['id']}: {campo} = {p[campo]}, deveria ser {valor}")
@@ -81,7 +82,7 @@ def atualizar(cat, pid, preco=None, preco_de=None, ativo=None, hoje=None):
         if preco <= 0:
             raise ValueError("preço precisa ser positivo")
         p["preco"] = round(preco, 2)
-        p.update(derivados(p["preco"], cat["condicoes"]["desconto_pix"], cat["condicoes"]["parcelas_max"]))
+        p.update(derivados(p["preco"], cat["condicoes"]["desconto_pix"], p.get("parcelas_max", cat["condicoes"]["parcelas_max"])))
     if preco_de is not None:
         p["preco_de"] = round(preco_de, 2)
     if ativo is not None:

@@ -1,0 +1,257 @@
+{
+ "id": "ep17",
+ "titulo": "O presente que ninguém esperava",
+ "duracao": 55.0,
+ "formato": "1080x1920 (9:16), 24 fps",
+ "produto": "fechadura-bio",
+ "sku_informado": "IG-LOCK-003",
+ "foto_produto": "foto-fechadura-preta.png",
+ "foto_recorte": [
+  100,
+  160,
+  735,
+  870
+ ],
+ "recursos_informados": [
+  "cartão",
+  "senha"
+ ],
+ "nao_destacar": [
+  "impressão digital"
+ ],
+ "mostrar_frete": true,
+ "logo": "circular",
+ "cores": {
+  "navy": "#0E1A2B",
+  "dourado": "#C9A24D",
+  "navy2": "#17283f",
+  "dourado_claro": "#E2C27A"
+ },
+ "trilha": "piano",
+ "simulacao": [
+  [
+   18,
+   44
+  ]
+ ],
+ "site": "infinityguard.com.br",
+ "cta": "Conheça em infinityguard.com.br",
+ "capa": {
+  "titulo": "ELA ENTREGOU UM CARTÃO. POR QUÊ?",
+  "tomada": "A2",
+  "quadro": 34
+ },
+ "qualidade": {
+  "samples": 12,
+  "resolucao_3d": "720x1280"
+ },
+ "vozes": {
+  "narrador": {
+   "pedida": "dave",
+   "provisoria": "pm_alex",
+   "velocidade": 0.95
+  }
+ },
+ "personagens": {
+  "Ela": "mulher adulta, pele morena, cabelo castanho longo, blusa dourada (fictícia)",
+  "Ele": "marido, pele parda, cabelo curto, camisa branca (fictício)"
+ },
+ "segmentos": [
+  {
+   "ini": 0,
+   "fim": 5,
+   "tomada": "A1",
+   "titulo": "O cartão",
+   "storyboard": "Sala de apartamento à noite, luz quente, bolo de aniversário na mesa de centro. Ela entrega uma caixinha azul-marinho com fita dourada; ele abre e tira um pequeno cartão preto.",
+   "camera": "Plano médio dos dois, aproximação lenta, fundo desfocado.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 0.2,
+     "texto": "No aniversário dele, ela entregou um cartão. Mas não era de banco. Nem de presente."
+    }
+   ],
+   "tela": []
+  },
+  {
+   "ini": 5,
+   "fim": 18,
+   "titulo": "O mistério",
+   "tomadas": [
+    {
+     "tomada": "A2",
+     "ini": 5,
+     "fim": 11
+    },
+    {
+     "tomada": "A3",
+     "ini": 11,
+     "fim": 18
+    }
+   ],
+   "storyboard": "Close nele virando o cartão, intrigado. Ela se vira e aponta para a porta; a câmera atravessa a sala até a porta de entrada, na parede azul-marinho com friso dourado, onde há uma fechadura nova.",
+   "camera": "Close com fundo desfocado; depois movimento contínuo da sala até a porta.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 5.6,
+     "texto": "Ele procurou uma mensagem, um valor, uma explicação. Até perceber que o presente estava bem na frente dele."
+    }
+   ],
+   "tela": []
+  },
+  {
+   "ini": 18,
+   "fim": 37,
+   "titulo": "A revelação",
+   "tomadas": [
+    {
+     "tomada": "A4",
+     "ini": 18,
+     "fim": 27
+    },
+    {
+     "tomada": "A5",
+     "ini": 27,
+     "fim": 37
+    }
+   ],
+   "storyboard": "Lado de fora da porta: a fechadura preta (painel com anel do leitor, teclado de toque e puxador redondo) revelada em close, o teclado acende. Simulação ilustrativa: o cartão se aproxima do teclado, bipe, a lingueta recolhe e a porta abre para a sala.",
+   "camera": "Close macro girando devagar em volta da fechadura; depois plano do cartão no teclado e a porta abrindo.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 18.6,
+     "texto": "Ela escolheu uma forma diferente de presentear: mais praticidade para os dias que ainda estão por vir."
+    },
+    {
+     "quem": "narrador",
+     "ini": 25.6,
+     "texto": "Uma fechadura inteligente com acesso por cartão, senha e recursos pelo aplicativo."
+    }
+   ],
+   "tela": [
+    {
+     "ini": 28.6,
+     "fim": 37,
+     "texto": "Cartão"
+    },
+    {
+     "ini": 30.0,
+     "fim": 37,
+     "texto": "Senha"
+    },
+    {
+     "ini": 31.4,
+     "fim": 37,
+     "texto": "Recursos pelo aplicativo"
+    }
+   ]
+  },
+  {
+   "ini": 37,
+   "fim": 44.0,
+   "titulo": "Para usar todos os dias",
+   "tomadas": [
+    {
+     "tomada": "A6",
+     "ini": 37,
+     "fim": 41
+    },
+    {
+     "tomada": "A7",
+     "ini": 41,
+     "fim": 44.0
+    }
+   ],
+   "storyboard": "O casal sorri junto à porta aberta. Close no cartão diante da fechadura.",
+   "camera": "Plano médio do casal; corte para close com fundo desfocado.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 37.5,
+     "texto": "Porque alguns presentes não são feitos para guardar. São feitos para usar todos os dias."
+    }
+   ],
+   "tela": []
+  },
+  {
+   "ini": 44.0,
+   "fim": 55,
+   "titulo": "Packshot e oferta",
+   "storyboard": "Fundo azul-marinho com partículas douradas: logo original, slogan, foto real da fechadura preta, nome do produto, destaques e oferta do catálogo, site.",
+   "camera": "Cartela com entrada suave.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 44.2,
+     "texto": "Fechadura Inteligente Infinity Guard. {preco} ou {pix} no Pix. Conheça em infinityguard.com.br.",
+     "fala": "Fechadura Inteligente Infíniti Gárd. {preco}, ou {pix} no Pix. Conheça em infíniti gárd ponto com ponto bê érre."
+    }
+   ],
+   "tela": [
+    {
+     "ini": 44.0,
+     "tipo": "packshot"
+    }
+   ]
+  }
+ ],
+ "sons": [
+  {
+   "t": 0.6,
+   "tipo": "sacola",
+   "dur": 0.6
+  },
+  {
+   "t": 2.6,
+   "tipo": "sacola",
+   "dur": 0.4,
+   "volume": 0.7
+  },
+  {
+   "t": 4.8,
+   "tipo": "transicao"
+  },
+  {
+   "t": 10.8,
+   "tipo": "transicao",
+   "volume": 0.6
+  },
+  {
+   "t": 17.8,
+   "tipo": "transicao"
+  },
+  {
+   "t": 21.0,
+   "tipo": "bip",
+   "volume": 0.5
+  },
+  {
+   "t": 28.9,
+   "tipo": "bip"
+  },
+  {
+   "t": 29.3,
+   "tipo": "fechadura"
+  },
+  {
+   "t": 36.8,
+   "tipo": "transicao",
+   "volume": 0.6
+  },
+  {
+   "t": 43.8,
+   "tipo": "transicao"
+  }
+ ],
+ "regras_do_episodio": [
+  "Personagens fictícios; sem foto ou avatar do proprietário; sem diálogos além do narrador.",
+  "A abertura por cartão é simulação ilustrativa (selo na tela de 18 a 45 s).",
+  "Não mostrar abertura remota pelo celular nem por Wi-Fi; aplicativo só citado.",
+  "Biometria não é demonstrada (o produto aparece como é, com o leitor, mas ninguém usa).",
+  "Cartão e senha foram informados pelo dono e não estão nos destaques do catálogo: conferir na página do produto.",
+  "Sem 'sem juros' e sem 'frete grátis' (não confirmados no catálogo); frete pelo CEP.",
+  "Compatibilidade da porta: o catálogo pede confirmar as medidas com a loja (a faixa de 38 a 55 mm do briefing não está no catálogo)."
+ ]
+}

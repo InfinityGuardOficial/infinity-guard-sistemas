@@ -1,0 +1,261 @@
+{
+ "id": "ep18",
+ "titulo": "O primeiro presente da loja",
+ "duracao": 55.0,
+ "formato": "1080x1920 (9:16), 24 fps",
+ "produto": null,
+ "produto_ilustrativo": {
+  "nome": "Câmera de segurança dome",
+  "linhas": [
+   "Modelos e preços: link na bio"
+  ],
+  "motivo": "a câmera das imagens de referência (dome branca, PoE) não está no catálogo"
+ },
+ "foto_produto": "foto-camera-dome.png",
+ "tomada_produto": "I6",
+ "logo": "horizontal",
+ "cores": {
+  "navy": "#0E1A2B",
+  "dourado": "#C9A24D",
+  "navy2": "#17283f",
+  "dourado_claro": "#E2C27A"
+ },
+ "trilha": "piano",
+ "campanha": {
+  "nome": "Black Friday",
+  "chamada": "26 a 29/11 · acompanhe pelo link da bio",
+  "confirmada": false
+ },
+ "site": "infinityguard.com.br",
+ "cta": "Link na bio · infinityguard.com.br",
+ "capa": {
+  "titulo": "ELA GANHOU UMA CAIXA. E COMEÇOU A CHORAR.",
+  "tomada": "I3",
+  "quadro": 46
+ },
+ "qualidade": {
+  "samples": 12,
+  "resolucao_3d": "720x1280"
+ },
+ "vozes": {
+  "narrador": {
+   "pedida": "dave",
+   "provisoria": "pm_alex",
+   "velocidade": 0.93
+  }
+ },
+ "personagens": {
+  "Bia": "empreendedora, dona do Ateliê da Bia, pele parda, cabelo preto longo, blusa coral (fictícia)",
+  "Dona Lúcia": "mãe da Bia, cabelo grisalho em coque, blusa lilás (fictícia)",
+  "Cliente": "primeira cliente da loja (fictícia)"
+ },
+ "segmentos": [
+  {
+   "ini": 0,
+   "fim": 5,
+   "tomada": "I1",
+   "titulo": "Gancho: a caixa",
+   "storyboard": "Dia da inauguração do Ateliê da Bia: balões navy e dourados, faixa 'INAUGURAÇÃO'. Bia abre no balcão uma caixa azul-marinho com fita dourada; na tampa, um bilhete.",
+   "camera": "Plano médio do balcão, aproximação lenta, fundo desfocado.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 0.12,
+     "texto": "Ela passou cinco anos sonhando com aquela loja. Mas não esperava receber isso no primeiro dia."
+    }
+   ],
+   "tela": [
+    {
+     "ini": 2.4,
+     "fim": 5.0,
+     "tipo": "bilhete"
+    }
+   ]
+  },
+  {
+   "ini": 5,
+   "fim": 17,
+   "titulo": "Início: a véspera e o bilhete",
+   "tomadas": [
+    {
+     "tomada": "I2",
+     "ini": 5,
+     "fim": 11
+    },
+    {
+     "tomada": "I3",
+     "ini": 11,
+     "fim": 17
+    }
+   ],
+   "storyboard": "Lembrança (tom sépia): na véspera, à noite, Bia arruma sozinha as prateleiras entre caixas de papelão. De volta ao presente: close dela lendo o bilhete, reconhece a letra da mãe e se emociona.",
+   "camera": "Plano interno com luz baixa; corte para close com fundo desfocado.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 5.6,
+     "texto": "Cada prateleira tinha uma história. Cada detalhe, um sacrifício. E alguém tinha percebido isso."
+    }
+   ],
+   "tela": [
+    {
+     "ini": 5.2,
+     "fim": 11,
+     "texto": "Na véspera"
+    },
+    {
+     "ini": 12.0,
+     "fim": 16.6,
+     "tipo": "bilhete"
+    }
+   ]
+  },
+  {
+   "ini": 17,
+   "fim": 37,
+   "titulo": "Desenvolvimento: o presente",
+   "tomadas": [
+    {
+     "tomada": "I4",
+     "ini": 17,
+     "fim": 24
+    },
+    {
+     "tomada": "I5",
+     "ini": 24,
+     "fim": 31
+    },
+    {
+     "tomada": "I6",
+     "ini": 31,
+     "fim": 37
+    }
+   ],
+   "storyboard": "Dentro da caixa, sobre papel de seda, a câmera dome branca. A mãe, Dona Lúcia, chega e as duas se abraçam. A câmera aparece girando em estúdio, fiel à foto do produto.",
+   "camera": "Close da caixa; plano médio do abraço; produto girando em fundo azul-marinho.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 17.5,
+     "texto": "Não era um presente para decorar a loja. Era uma forma de participar daquele sonho."
+    },
+    {
+     "quem": "narrador",
+     "ini": 24.4,
+     "texto": "Uma câmera para ajudar a acompanhar o espaço que ela acabava de conquistar."
+    }
+   ],
+   "tela": []
+  },
+  {
+   "ini": 37,
+   "fim": 45,
+   "tomada": "I7",
+   "titulo": "Transformação: instalada",
+   "storyboard": "A câmera dome instalada no teto, dentro da loja, no canto do balcão, com o campo de visão no caixa e na entrada. Bia atende a primeira cliente.",
+   "camera": "Detalhe da câmera no teto, depois plano aberto do balcão.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 37.5,
+     "texto": "Porque apoiar uma conquista também é pensar nos próximos dias dela."
+    }
+   ],
+   "tela": [
+    {
+     "ini": 38.2,
+     "fim": 45,
+     "texto": "Dentro da loja"
+    },
+    {
+     "ini": 39.6,
+     "fim": 45,
+     "texto": "De olho no caixa e na entrada"
+    }
+   ]
+  },
+  {
+   "ini": 45,
+   "fim": 55,
+   "titulo": "Encerramento",
+   "storyboard": "Packshot: logo original, foto da câmera dome, selo Black Friday (26 a 29/11, link na bio) e o CTA 'Link na bio'.",
+   "camera": "Cartela com entrada suave.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 45.2,
+     "texto": "Uma conquista merece atenção em cada detalhe. Conheça as câmeras de segurança da Infinity Guard. Acesse infinityguard.com.br.",
+     "fala": "Uma conquista merece atenção em cada detalhe. Conheça as câmeras de segurança da Infíniti Gárd. Acesse infíniti gárd ponto com ponto bê érre."
+    }
+   ],
+   "tela": [
+    {
+     "ini": 45.0,
+     "tipo": "packshot"
+    }
+   ]
+  }
+ ],
+ "sons": [
+  {
+   "t": 0.4,
+   "tipo": "ambiente_loja",
+   "dur": 4.6
+  },
+  {
+   "t": 1.0,
+   "tipo": "sacola",
+   "dur": 0.5,
+   "volume": 0.6
+  },
+  {
+   "t": 4.8,
+   "tipo": "transicao"
+  },
+  {
+   "t": 10.8,
+   "tipo": "transicao",
+   "volume": 0.6
+  },
+  {
+   "t": 11,
+   "tipo": "ambiente_loja",
+   "dur": 26
+  },
+  {
+   "t": 16.8,
+   "tipo": "transicao"
+  },
+  {
+   "t": 30.8,
+   "tipo": "transicao",
+   "volume": 0.6
+  },
+  {
+   "t": 36.8,
+   "tipo": "transicao"
+  },
+  {
+   "t": 37,
+   "tipo": "ambiente_loja",
+   "dur": 8
+  },
+  {
+   "t": 41.0,
+   "tipo": "caixa",
+   "volume": 0.7
+  },
+  {
+   "t": 44.8,
+   "tipo": "transicao"
+  }
+ ],
+ "descricao": "Ela passou cinco anos construindo a própria loja. No dia da inauguração, a mãe chegou com uma caixa e um bilhete: \"Para cuidar do que você levou anos para construir.\" 💛\n\nApoiar uma conquista também é pensar nos próximos dias dela.\n\nConheça as câmeras de segurança da Infinity Guard: link na bio.\nBlack Friday Infinity Guard: 26 a 29/11. Acompanhe pelo link da bio.\n\nPersonagens fictícios · animação 3D\n\n#empreendedorismo #lojadebairro #inauguração #infinityguard #blackfriday",
+ "regras_do_episodio": [
+  "Personagens fictícios; sem foto, rosto, clone ou avatar do proprietário.",
+  "A câmera das referências (dome branca, PoE) não está no catálogo: o vídeo não mostra preço, frete, oferta nem recursos (resolução, PoE, microfone, LEDs).",
+  "Câmera instalada dentro da loja, no teto, mirando caixa e entrada (sem uso externo).",
+  "Black Friday ainda é proposta (cupom e preços não confirmados): só nome, datas e link na bio.",
+  "Sem medo nem violência como gatilho."
+ ]
+}

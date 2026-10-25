@@ -1,0 +1,194 @@
+{
+ "id": "ep15",
+ "titulo": "Quem deixou isso na porta?",
+ "duracao": 50.0,
+ "formato": "1080x1920 (9:16), 24 fps",
+ "produto": "kit-cam-2",
+ "site": "infinityguard.com.br",
+ "cta": "Veja os modelos disponíveis e escolha o seu.",
+ "vozes": {
+  "narrador": {
+   "pedida": "dave",
+   "provisoria": "pm_alex",
+   "velocidade": 0.95
+  },
+  "Ana": {
+   "provisoria": "pf_dora",
+   "velocidade": 1.0
+  },
+  "Marcos": {
+   "provisoria": "pm_santa",
+   "velocidade": 1.0
+  },
+  "Seu Joaquim": {
+   "provisoria": "pm_santa",
+   "velocidade": 0.88
+  }
+ },
+ "personagens": {
+  "Ana": "moradora, 30 e poucos anos, pele parda, cabelo preto longo, blusa coral (fictícia)",
+  "Marcos": "marido da Ana, pele negra, cabelo curto, camisa verde (fictício)",
+  "Seu Joaquim": "vizinho da casa ao lado, pele clara, cabelo grisalho, camisa clara (fictício)"
+ },
+ "segmentos": [
+  {
+   "ini": 0,
+   "fim": 5,
+   "tomada": "P1",
+   "titulo": "A encomenda na porta",
+   "storyboard": "Varanda de casa térrea com piso de cerâmica vermelha. A porta abre, Ana aparece e olha para uma caixa no tapete.",
+   "camera": "Câmera baixa na varanda, ao lado da caixa, subindo devagar até o rosto de Ana.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 0.5,
+     "texto": "Você abriria uma encomenda que não pediu?"
+    }
+   ],
+   "tela": [
+    {
+     "ini": 0.5,
+     "texto": "Quem deixou isso na porta?"
+    }
+   ]
+  },
+  {
+   "ini": 5,
+   "fim": 14,
+   "tomada": "P2",
+   "titulo": "A etiqueta",
+   "storyboard": "Ana segura a caixa e lê a etiqueta (inserção em close: destinatário Joaquim Ribeiro, casa 14). Marcos chega à porta e comenta.",
+   "camera": "Plano médio dos dois na porta, leve aproximação.",
+   "falas": [
+    {
+     "quem": "Ana",
+     "ini": 5.6,
+     "texto": "Joaquim Ribeiro? Não mora ninguém com esse nome aqui."
+    },
+    {
+     "quem": "Marcos",
+     "ini": 9.6,
+     "texto": "Seria útil acompanhar as movimentações aqui da entrada, né?"
+    }
+   ],
+   "tela": [
+    {
+     "ini": 6.0,
+     "fim": 9.4,
+     "tipo": "etiqueta",
+     "texto": "Para: Joaquim Ribeiro · Rua das Acácias, 14"
+    }
+   ]
+  },
+  {
+   "ini": 14,
+   "fim": 27,
+   "tomada": "P3",
+   "titulo": "Câmera bem posicionada",
+   "storyboard": "Vista de fora: câmera Wi-Fi na parede acima da porta, com o campo de visão desenhado cobrindo só a varanda e o portão da própria casa; a casa do vizinho fica fora. O dia vira noite.",
+   "camera": "Plano aberto do lado de fora, aproximação lenta.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 14.5,
+     "texto": "Uma câmera Wi-Fi bem posicionada mostra a entrada da sua casa, sem invadir o espaço do vizinho.",
+     "fala": "Uma câmera Uái-Fái bem posicionada mostra a entrada da sua casa, sem invadir o espaço do vizinho."
+    },
+    {
+     "quem": "narrador",
+     "ini": 21.8,
+     "texto": "E, com visão noturna, a entrada continua à vista também à noite."
+    }
+   ],
+   "tela": [
+    {
+     "ini": 15.5,
+     "texto": "Câmera Wi-Fi na entrada"
+    },
+    {
+     "ini": 18.0,
+     "texto": "Campo de visão: só a sua entrada"
+    },
+    {
+     "ini": 22.0,
+     "texto": "Visão noturna"
+    }
+   ]
+  },
+  {
+   "ini": 27,
+   "fim": 39,
+   "tomada": "P4",
+   "titulo": "O produto",
+   "storyboard": "Kit com 2 câmeras de lente dupla girando num pedestal dourado; cartão com nome, destaques confirmados e preço do catálogo.",
+   "camera": "Câmera de estúdio girando devagar em volta do pedestal.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 27.5,
+     "texto": "Quer acompanhar melhor a entrada da sua casa? Conheça nossas câmeras de segurança."
+    },
+    {
+     "quem": "narrador",
+     "ini": 33.2,
+     "texto": "Câmera Wi-Fi Infinity Guard: kit com duas câmeras, dupla lente e visão noturna.",
+     "fala": "Câmera Uái-Fái Infíniti Gárd: quít com duas câmeras, dupla lente e visão noturna."
+    }
+   ],
+   "tela": [
+    {
+     "ini": 28.0,
+     "tipo": "produto"
+    }
+   ]
+  },
+  {
+   "ini": 39,
+   "fim": 47,
+   "tomada": "P5",
+   "titulo": "Entrega certa",
+   "storyboard": "Ana leva a caixa até o portão da casa ao lado e entrega ao Seu Joaquim, que agradece. Ela acena.",
+   "camera": "Acompanha Ana pela calçada e para de lado, com os dois de perfil.",
+   "falas": [
+    {
+     "quem": "Ana",
+     "ini": 39.6,
+     "texto": "Seu Joaquim, isso chegou lá em casa por engano!"
+    },
+    {
+     "quem": "Seu Joaquim",
+     "ini": 43.0,
+     "texto": "Ah, muito obrigado, Ana!"
+    }
+   ],
+   "tela": []
+  },
+  {
+   "ini": 47,
+   "fim": 50,
+   "tomada": null,
+   "titulo": "Encerramento",
+   "storyboard": "Cartela: o kit, o logo original com o slogan, o site e o CTA.",
+   "camera": "Cartela fixa com entrada suave.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 47.1,
+     "texto": "Veja os modelos disponíveis e escolha o seu."
+    }
+   ],
+   "tela": [
+    {
+     "ini": 47.0,
+     "tipo": "encerramento"
+    }
+   ]
+  }
+ ],
+ "regras_do_episodio": [
+  "Não usar rosto ou avatar do proprietário.",
+  "Não mostrar consulta de imagens no aplicativo: a função não está confirmada no catálogo para este modelo.",
+  "Não afirmar que a câmera identificou o entregador.",
+  "Preço, nome e destaques saem do catálogo; nada de promoção, frete, garantia ou parcelamento sem juros."
+ ]
+}

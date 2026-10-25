@@ -23,8 +23,17 @@ class Catalogo(unittest.TestCase):
         c["produtos"][0]["pix"] = 1.0
         self.assertFalse(cg.validar(c, HOJE)["ok"])
 
+    def test_parcelas_max_por_produto(self):
+        c = copy.deepcopy(self.cat)
+        p = next(x for x in c["produtos"] if x["id"] == "kit-cam-2")
+        p.update({"parcelas_max": 7, "preco": 392.35, "pix": 353.12, "parcelas": 7, "parcela_valor": 56.05})
+        self.assertTrue(cg.validar(c, HOJE)["ok"])
+        p["parcelas"], p["parcela_valor"] = 12, 32.70
+        self.assertFalse(cg.validar(c, HOJE)["ok"])
+
     def test_atualizar_recalcula(self):
         c = copy.deepcopy(self.cat)
+        next(x for x in c["produtos"] if x["id"] == "kit-cam-2").pop("parcelas_max", None)  # regra geral (até 12x, mínimo R$ 30)
         mud = cg.atualizar(c, "kit-cam-2", preco=300.0, hoje=HOJE)
         p = next(x for x in c["produtos"] if x["id"] == "kit-cam-2")
         self.assertEqual(p["pix"], 270.0)

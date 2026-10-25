@@ -1,0 +1,9 @@
+# Roteiro de cenas — O presente que ninguém esperava
+
+| Tempo | Tomada 3D | O que acontece | Fala | Tela |
+|---|---|---|---|---|
+| 0–5 s | A1 | Sala de apartamento à noite, luz quente, bolo de aniversário na mesa de centro. Ela entrega uma caixinha azul-marinho com fita dourada; ele abre e tira um pequeno cartão preto. | 0.2 s **narrador**: No aniversário dele, ela entregou um cartão. Mas não era de banco. Nem de presente. |  |
+| 5–18 s | A2, A3 | Close nele virando o cartão, intrigado. Ela se vira e aponta para a porta; a câmera atravessa a sala até a porta de entrada, na parede azul-marinho com friso dourado, onde há uma fechadura nova. | 5.6 s **narrador**: Ele procurou uma mensagem, um valor, uma explicação. Até perceber que o presente estava bem na frente dele. |  |
+| 18–37 s | A4, A5 | Lado de fora da porta: a fechadura preta (painel com anel do leitor, teclado de toque e puxador redondo) revelada em close, o teclado acende. Simulação ilustrativa: o cartão se aproxima do teclado, bipe, a lingueta recolhe e a porta abre para a sala. | 18.6 s **narrador**: Ela escolheu uma forma diferente de presentear: mais praticidade para os dias que ainda estão por vir.<br>25.6 s **narrador**: Uma fechadura inteligente com acesso por cartão, senha e recursos pelo aplicativo. | 28.6 s Cartão<br>30.0 s Senha<br>31.4 s Recursos pelo aplicativo |
+| 37–44 s | A6, A7 | O casal sorri junto à porta aberta. Close no cartão diante da fechadura. | 37.5 s **narrador**: Porque alguns presentes não são feitos para guardar. São feitos para usar todos os dias. |  |
+| 44–55 s | — | Fundo azul-marinho com partículas douradas: logo original, slogan, foto real da fechadura preta, nome do produto, destaques e oferta do catálogo, site. | 44.2 s **narrador**: Fechadura Inteligente Infinity Guard. {preco} ou {pix} no Pix. Conheça em infinityguard.com.br. | 44.0 s packshot |
