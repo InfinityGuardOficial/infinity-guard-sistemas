@@ -21,7 +21,7 @@
      "tela": ["Câmera offline?", "Manual na caixa", "Suporte que responde"],
      "legenda": "Ficou dúvida? Me chama no WhatsApp."},
     {"id": "casa-certa", "formato": "tese", "produto": "kit-casa-vigiada", "fonte": "Tese do Posicionamento (17/10/2026)",
-     "gancho": ["Segurança boa começa pela sua casa, não pela vitrine.", "Pare de escolher câmera pela promoção.", "A câmera mais vendida pode ser a errada pra você."],
+     "gancho": ["Segurança boa começa pela sua casa, não pela vitrine.", "Pare de escolher câmera pela promoção.", "A câmera da promoção pode ser a errada pra você."],
      "fala": ["Todo mundo vende câmera pela especificação. Eu começo perguntando como é a sua casa.", "Apartamento pede uma coisa, casa com portão pede outra, sítio pede outra.", "Quantas entradas, se o Wi-Fi chega, se a casa fica vazia de dia: isso decide o kit.", "São 3 perguntas e você sai com o kit certo."],
      "tela": ["Casa certa > vitrine", "Apartamento ≠ casa ≠ sítio", "3 perguntas"],
      "legenda": "Segurança boa começa pela casa de quem vai usar."},
