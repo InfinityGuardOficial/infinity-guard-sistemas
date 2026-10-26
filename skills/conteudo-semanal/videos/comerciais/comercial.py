@@ -219,11 +219,13 @@ def packshot(cv, t, lt):
         logo_circular(cv, W / 2, 170, 105)
         text_c(cv, CAT["slogan"], W / 2, 328, font("pf", 38), P(GOLD2))
     img = foto_produto(); fw = 500; fh = fw * img.height() / img.width()
+    if fh > 410:  # foto vertical: limita a altura para o preço e o CTA caberem acima da legenda
+        fh = 410; fw = fh * img.width() / img.height()
     y0 = (420 if EP.get("logo") in ("horizontal", "arquivo") else 375) + 30 * (1 - k)
     cv.drawRRect(rrect(W / 2 - fw / 2 - 20, y0 - 20, fw + 40, fh + 40, 32), P("#ffffff"))
     cv.drawRRect(rrect(W / 2 - fw / 2 - 20, y0 - 20, fw + 40, fh + 40, 32), P(GOLD, stroke=4))
     cv.drawImageRect(img, skia.Rect.MakeXYWH(W / 2 - fw / 2, y0, fw, fh), SAMP)
-    cv.drawString("Imagem do produto", W / 2 + fw / 2 - 210, y0 + fh + 8, font("m5", 22), P("#8a8a92"))
+    text_c(cv, "Imagem do produto", W / 2, y0 + fh + 8, font("m5", 22), P("#8a8a92"))
     y = y0 + fh + 78
     fn = font("m8", 36)
     for ln in wrap(NOME_PRODUTO, fn, W - 160):
