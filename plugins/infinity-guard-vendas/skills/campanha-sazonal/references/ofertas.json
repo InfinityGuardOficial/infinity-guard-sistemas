@@ -1,6 +1,6 @@
 {
   "atualizado_em": "2026-10-18",
-  "nota": "Kits montados com os produtos ativos do catálogo da atendente-infinity-guard. Preço 'de' = soma dos preços atuais, nunca o preco_de da vitrine.",
+  "nota": "Kits montados com os produtos ativos do catálogo da atendente-infinity-guard. Preço 'de' = soma dos preços atuais, nunca o preco_de da vitrine. 26/10: a Câmera ASECAM com rastreamento (cam-asecam-ptz) esgotou e saiu do Kit Casa Completa; a nova PTZ 4K 8MP (cam-asecam-ptz-8mp, R$ 2.110,07) pode entrar se o dono decidir.",
   "kits": [
     {
       "id": "kit-apto",
@@ -36,7 +36,6 @@
       "nome": "Kit Casa Completa",
       "para": "casa grande, sítio com Wi-Fi ou quem viaja muito",
       "itens": {
-        "cam-asecam-ptz": 1,
         "kit-cam-2": 1,
         "alarme-ikerui": 1,
         "fechadura-bio": 1,

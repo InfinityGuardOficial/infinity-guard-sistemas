@@ -114,8 +114,8 @@ def inauguracao(kind):
         key(gota, "location", f(2.6), (0.075, -0.15, 0.13)); key(gota, "location", f(4.6), (0.08, -0.13, 0.04))
         for t_, e in ((0, 0), (2.5, 0), (2.8, 1.6), (4.6, 1.6), (4.8, 0)):
             lag_s.default_value = e; lag_s.keyframe_insert("default_value", frame=int(f(t_)))
-        aim_dof(cam, (2.35, 1.95, 1.62), (3.33, 1.95, 1.62), 1, 1.8)
-        aim_dof(cam, (2.5, 1.95, 1.63), (3.33, 1.95, 1.62), N, 1.8)
+        aim_dof(cam, (2.25, 1.95, 1.74), (3.33, 1.95, 1.76), 1, 1.8)  # rosto inteiro no quadro (olhos e lágrima)
+        aim_dof(cam, (2.4, 1.95, 1.75), (3.33, 1.95, 1.76), N, 1.8)
         lens(50)
     elif kind == "revela":       # 17–24 s: dentro da caixa, a câmera dome sobre o papel de seda
         g, tampa = caixa_presente((bal[0] - 0.15, bal[1], bal[2])); tampa.rotation_euler = (math.radians(-115), 0, 0)

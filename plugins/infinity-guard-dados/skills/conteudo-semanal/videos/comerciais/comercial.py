@@ -119,16 +119,18 @@ def cartao_produto(cv, t, lt):
         cv.drawString(d, x + 20, y, fc, P(NAVY)); x += w + 14
     y += 85
     cv.drawString(brl(PROD["preco"]), 100, y, font("m8", 64), P(GOLD2))
-    cv.drawString(f"ou {PROD['parcelas']}x de {brl(PROD['parcela_valor'])}", 100, y + 52, font("m7", 34), P(CREAM))
+    sj = " sem juros" if PROD.get("sem_juros") else ""  # só quando a página do produto confirma
+    cv.drawString(f"ou {PROD['parcelas']}x de {brl(PROD['parcela_valor'])}{sj}", 100, y + 52, font("m7", 34), P(CREAM))
     cv.drawString(f"{brl(PROD['pix'])} no Pix", 560, y, font("m8", 44), P(CREAM))
     fs = font("m5", 26)
-    data = "/".join(reversed(CAT["atualizado_em"].split("-")))
+    data = "/".join(reversed(PROD.get("conferido_em", CAT["atualizado_em"]).split("-")))
     cv.drawString(f"Preços do site em {data}. Confira em {EP['site']}.", 100, y + 108, fs, P(CREAM, 200))
     req = " e ".join(PROD.get("requisitos", []))
     if req: cv.drawString(f"Requer {req}. Imagem ilustrativa.", 100, y + 142, fs, P(CREAM, 200))
     if EP.get("mostrar_frete"):
-        # o catálogo só confirma o cálculo por CEP no site; não prometer frete grátis nem prazo
-        cv.drawString(f"Frete: calcule pelo seu CEP em {EP['site']}.", 100, y + 176, fs, P(CREAM, 200))
+        # frete grátis só quando a página do produto mostra; senão, cálculo por CEP
+        cv.drawString("Frete grátis (conforme o site)." if PROD.get("frete_gratis") else f"Frete: calcule pelo seu CEP em {EP['site']}.",
+                      100, y + 176, fs, P(CREAM, 200))
     cv.restore()
 
 LOGO_H = None
@@ -224,20 +226,47 @@ def packshot(cv, t, lt):
         selo_campanha(cv, t, lt)
         cta_botao(cv, lt)
         return
-    fc = font("m7", 30); ws = [fc.measureText(d) + 40 for d in DESTAQUES]; x = W / 2 - (sum(ws) + 14 * (len(ws) - 1)) / 2
-    for d, w_ in zip(DESTAQUES, ws):
-        cv.drawRRect(rrect(x, y - 30, w_, 46, 23), P(GOLD)); cv.drawString(d, x + 20, y + 3, fc, P(NAVY)); x += w_ + 14
+    fc = font("m7", 28); linhas_ch, atual = [], []
+    for d in DESTAQUES:  # quebra os destaques em linhas que cabem na tela
+        if atual and sum(fc.measureText(q) + 54 for q in atual + [d]) > W - 120: linhas_ch.append(atual); atual = []
+        atual.append(d)
+    if atual: linhas_ch.append(atual)
+    for li, lin in enumerate(linhas_ch):
+        ws = [fc.measureText(d) + 40 for d in lin]; x = W / 2 - (sum(ws) + 14 * (len(ws) - 1)) / 2
+        for d, w_ in zip(lin, ws):
+            cv.drawRRect(rrect(x, y - 30, w_, 44, 22), P(GOLD)); cv.drawString(d, x + 20, y + 2, fc, P(NAVY)); x += w_ + 14
+        if li < len(linhas_ch) - 1: y += 54
     y += 82
     text_c(cv, brl(PROD["preco"]), W / 2, y, font("m8", 72), P(GOLD2))
-    text_c(cv, f"ou {PROD['parcelas']}x de {brl(PROD['parcela_valor'])}   ·   {brl(PROD['pix'])} no Pix", W / 2, y + 54, font("m7", 34), P(CREAM))
-    fs = font("m5", 25); data = "/".join(reversed(CAT["atualizado_em"].split("-")))
-    linhas = [f"Frete: calcule pelo seu CEP em {EP['site']}." if EP.get("mostrar_frete") else None,
-              ("Porta compatível: " + PROD["requisitos"][0].split(": ", 1)[-1] + ".") if PROD.get("requisitos") else None,
-              f"Preços do site em {data}. Confira em {EP['site']}."]
+    sj = " sem juros" if PROD.get("sem_juros") else ""  # só quando a página do produto confirma
+    text_c(cv, f"ou {PROD['parcelas']}x de {brl(PROD['parcela_valor'])}{sj}   ·   {brl(PROD['pix'])} no Pix", W / 2, y + 54, font("m7", 34), P(CREAM))
+    fs = font("m5", 25); data = "/".join(reversed(PROD.get("conferido_em", CAT["atualizado_em"]).split("-")))
+    frete = None
+    if EP.get("mostrar_frete"):
+        frete = "Frete grátis (conforme o site)." if PROD.get("frete_gratis") else f"Frete: calcule pelo seu CEP em {EP['site']}."
+    req = None
+    if PROD.get("requisitos"):
+        r0 = PROD["requisitos"][0]
+        req = (r0[0].upper() + r0[1:] + ".") if ": " in r0 else f"Requer {r0}."
+    linhas = [frete, req, f"Preços do site em {data}. Confira em {EP['site']}."]
     for i, ln in enumerate(l_ for l_ in linhas if l_):
         text_c(cv, ln, W / 2, y + 100 + i * 33, fs, P(CREAM, 210))
     cv.restore()
+    faixa_campanha(cv, lt, y0 - 4)
     cta_botao(cv, lt)
+
+def faixa_campanha(cv, lt, y):
+    """selo da campanha como faixa sobre a foto (sem preço nem desconto enquanto não estiver confirmada)"""
+    c = EP.get("campanha")
+    if not c: return
+    k = back((lt - 0.6) / 0.5)
+    if k <= 0: return
+    txt = f"{c['nome'].upper()} · {c['chamada'].split(' · ')[0]}"
+    f = font("m8", 30); w = f.measureText(txt) + 50
+    cv.save(); cv.translate(W / 2, y); cv.scale(k, k)
+    cv.drawRRect(rrect(-w / 2, -26, w, 52, 26), P("#000000")); cv.drawRRect(rrect(-w / 2, -26, w, 52, 26), P(GOLD, stroke=3))
+    text_c(cv, txt, 0, 11, f, P(GOLD2))
+    cv.restore()
 
 def cta_botao(cv, lt, y=1448):
     kk = back((lt - 0.8) / 0.5)
@@ -268,11 +297,16 @@ def capa():
     bg(cv, shot(c["tomada"], c.get("quadro", 1))); scrims(cv)
     sh = skia.GradientShader.MakeLinear([skia.Point(0, H * 0.45), skia.Point(0, H)], [skia.Color(0, 0, 0, 0), col(NAVY, 245)])
     cv.drawRect(skia.Rect.MakeXYWH(0, H * 0.45, W, H * 0.55), P(NAVY, shader=sh))
-    f = font("m8", 104); lines = wrap(c["titulo"], f, W - 140); y = 1240 - (len(lines) - 1) * 60
+    f = font("m8", 92); lines = wrap(c["titulo"], f, W - 140); y = c.get("y_titulo", 1240 - (len(lines) - 1) * 60)
     for ln in lines:
-        text_c(cv, ln, W / 2, y, f, P(GOLD2 if ln == lines[-1] else CREAM), outline=P("#000000", 160, stroke=10)); y += 120
-    logo_circular(cv, W / 2, 1640, 95)
-    text_c(cv, EP["site"], W / 2, 1790, font("m7", 36), P(GOLD2))
+        text_c(cv, ln, W / 2, y, f, P(GOLD2 if ln == lines[-1] else CREAM), outline=P("#000000", 160, stroke=10)); y += 106
+    if EP.get("logo") == "horizontal":  # só o logo original fornecido
+        img = logo_original(); lw = 380; lh = lw * img.height() / img.width()
+        cv.drawRRect(rrect(W / 2 - lw / 2 - 18, 1655, lw + 36, lh + 30, 20), P("#ffffff"))
+        cv.drawImageRect(img, skia.Rect.MakeXYWH(W / 2 - lw / 2, 1670, lw, lh), SAMP)
+    else:
+        logo_circular(cv, W / 2, 1640, 95)
+        text_c(cv, EP["site"], W / 2, 1790, font("m7", 36), P(GOLD2))
     out = os.path.join(base.VIDEO, "capa.png")
     Image.fromarray(surf.makeImageSnapshot().toarray(colorType=skia.kRGBA_8888_ColorType)).convert("RGB").save(out)
     print("capa:", out)

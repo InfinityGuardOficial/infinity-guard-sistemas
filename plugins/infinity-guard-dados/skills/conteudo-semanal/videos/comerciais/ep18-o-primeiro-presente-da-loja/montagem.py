@@ -13,7 +13,7 @@ def bilhete(cv, t, lt):
         for tl in s.get("tela", []):
             if tl.get("tipo") == "bilhete" and tl["ini"] <= t < tl["fim"]:
                 k = back((t - tl["ini"]) / 0.45) * (1 - clamp((t - tl["fim"] + 0.3) / 0.3))
-                cv.save(); cv.translate(W / 2, 560); cv.scale(k, k); cv.rotate(-4)
+                cv.save(); cv.translate(W / 2, tl.get("y", 560)); cv.scale(k, k); cv.rotate(-4)
                 cv.drawRRect(rrect(-392, -182, 800, 380, 16), P("#000000", 80))
                 cv.drawRRect(rrect(-400, -190, 800, 380, 16), P("#fbf6ea"))
                 for i in range(5): cv.drawLine(-360, -90 + i * 62, 360, -90 + i * 62, P("#d9cdb2", stroke=2))

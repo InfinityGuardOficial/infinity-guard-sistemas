@@ -3,14 +3,7 @@
  "titulo": "O primeiro presente da loja",
  "duracao": 55.0,
  "formato": "1080x1920 (9:16), 24 fps",
- "produto": null,
- "produto_ilustrativo": {
-  "nome": "Câmera de segurança dome",
-  "linhas": [
-   "Modelos e preços: link na bio"
-  ],
-  "motivo": "a câmera das imagens de referência (dome branca, PoE) não está no catálogo"
- },
+ "produto": "cam-dome-asecam-8mp",
  "foto_produto": "foto-camera-dome.png",
  "tomada_produto": "I6",
  "logo": "horizontal",
@@ -31,7 +24,8 @@
  "capa": {
   "titulo": "ELA GANHOU UMA CAIXA. E COMEÇOU A CHORAR.",
   "tomada": "I3",
-  "quadro": 46
+  "quadro": 50,
+  "y_titulo": 1290
  },
  "qualidade": {
   "samples": 12,
@@ -104,9 +98,10 @@
      "texto": "Na véspera"
     },
     {
-     "ini": 12.0,
-     "fim": 16.6,
-     "tipo": "bilhete"
+     "ini": 11.3,
+     "fim": 13.5,
+     "tipo": "bilhete",
+     "y": 1480
     }
    ]
   },
@@ -250,12 +245,13 @@
    "tipo": "transicao"
   }
  ],
- "descricao": "Ela passou cinco anos construindo a própria loja. No dia da inauguração, a mãe chegou com uma caixa e um bilhete: \"Para cuidar do que você levou anos para construir.\" 💛\n\nApoiar uma conquista também é pensar nos próximos dias dela.\n\nConheça as câmeras de segurança da Infinity Guard: link na bio.\nBlack Friday Infinity Guard: 26 a 29/11. Acompanhe pelo link da bio.\n\nPersonagens fictícios · animação 3D\n\n#empreendedorismo #lojadebairro #inauguração #infinityguard #blackfriday",
+ "descricao": "Ela passou cinco anos construindo a própria loja. No dia da inauguração, a mãe chegou com uma caixa e um bilhete: \"Para cuidar do que você levou anos para construir.\" 💛\n\nApoiar uma conquista também é pensar nos próximos dias dela.\n\nCâmera Dome ASECAM 8MP 4K PoE e outros modelos de câmeras de segurança da Infinity Guard: link na bio.\nBlack Friday Infinity Guard: 26 a 29/11. Acompanhe pelo link da bio.\n\nPersonagens fictícios · animação 3D\n\n#empreendedorismo #lojadebairro #inauguração #infinityguard #blackfriday",
  "regras_do_episodio": [
   "Personagens fictícios; sem foto, rosto, clone ou avatar do proprietário.",
-  "A câmera das referências (dome branca, PoE) não está no catálogo: o vídeo não mostra preço, frete, oferta nem recursos (resolução, PoE, microfone, LEDs).",
+  "Produto do catálogo (página lida em 25/10/2026): nome, preço, Pix, 8x sem juros, frete grátis, destaques e requisito (cabo de rede com equipamento PoE) saem do catálogo; a narração não cita recursos.",
   "Câmera instalada dentro da loja, no teto, mirando caixa e entrada (sem uso externo).",
   "Black Friday ainda é proposta (cupom e preços não confirmados): só nome, datas e link na bio.",
   "Sem medo nem violência como gatilho."
- ]
+ ],
+ "mostrar_frete": true
 }
