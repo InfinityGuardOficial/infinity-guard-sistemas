@@ -182,6 +182,7 @@ def jardim(kind):
         for i in range(4):
             key(ele["armR"], "rotation_euler", f(0.3 + i * 1.1), (-1.0, 0, 0)); key(ele["armR"], "rotation_euler", f(0.85 + i * 1.1), (-1.5, 0, 0))
         look(ele, 1, 0.6, 0)
+        ela["root"].location = (-1.2, -4.6, 0.03)  # walk() mantém a altura atual: tira do esconderijo antes
         walk(ela, 1, f(2.0), (-1.2, -4.6), (-2.4, -6.4))
         key(ela["root"], "rotation_euler", 1, (0, 0, math.radians(-60)))
         key(ela["root"], "rotation_euler", f(2.2), (0, 0, math.radians(-132)))
