@@ -8,6 +8,8 @@ Antes de escolher, meça a fechadura atual da sua porta (guia de medidas na pág
 
 Conheça o modelo e as condições de pagamento: link na bio · infinityguard.com.br
 
+Qual foi o primeiro detalhe que você escolheu para a sua casa? 👇
+
 Personagens fictícios · animação 3D · demonstração ilustrativa
 
 #primeiroape #casanova #fechaduradigital #infinityguard
