@@ -8,7 +8,7 @@ Narrador: kokoro:pm_alex — **PROVISÓRIA**: voz Dave não disponível: nenhuma
 
 ## 1. Gancho: sete anos (0–5 s · tomada Q1)
 
-_(quadro gerado após o render)_
+![seg1](storyboard/seg1.png)
 
 - **Ação:** Corredor do prédio no fim da tarde. Ela caminha de costas para a câmera e para diante da porta 302, numa parede azul-marinho com friso dourado.
 - **Câmera:** Atrás dela, lente baixa, aproximação lenta.
@@ -16,7 +16,7 @@ _(quadro gerado após o render)_
 
 ## 2. Lembranças: estudo, trabalho e planos (5–18 s · tomada Q2 (5–9.5 s), Q3 (9.5–13.5 s), Q4 (13.5–16 s), Q5 (16–18 s))
 
-_(quadro gerado após o render)_
+![seg2](storyboard/seg2.png)
 
 - **Ação:** Em tom sépia: ela estudando à noite com livros e abajur; trabalhando no notebook de dia; anotando contas e guardando moedas no pote, com o calendário riscado. Volta ao presente: as chaves com a etiqueta 302 balançam diante da porta.
 - **Câmera:** Planos médios na escrivaninha com fundo desfocado; close macro nas chaves.
@@ -24,7 +24,7 @@ _(quadro gerado após o render)_
 
 ## 3. A escolha e a demonstração (18–38 s · tomada Q6 (18–24 s), Q7 (24–30 s), Q8 (30–38 s))
 
-_(quadro gerado após o render)_
+![seg3](storyboard/seg3.png)
 
 - **Ação:** Sala vazia com caixas de mudança: ela mede a porta e a fechadura antiga antes de escolher. Um técnico troca a maçaneta antiga pela fechadura preta de alavanca; o teclado acende. Simulação: o cartão encosta no teclado, bipe e a lingueta recolhe; depois um dedo digita a senha.
 - **Câmera:** Plano médio na sala; plano da porta pelo corredor; close macro no painel.
@@ -36,7 +36,7 @@ _(quadro gerado após o render)_
 
 ## 4. A primeira entrada (38–48 s · tomada Q9 (38–44 s), Q10 (44–48 s))
 
-_(quadro gerado após o render)_
+![seg4](storyboard/seg4.png)
 
 - **Ação:** Ela digita a senha, o teclado confirma, ela abaixa a alavanca e a porta abre. De dentro, ela entra sorrindo na sala com luz de fim de tarde.
 - **Câmera:** Plano médio pelo corredor; contraplano de dentro da sala.
@@ -44,7 +44,7 @@ _(quadro gerado após o render)_
 
 ## 5. Packshot (48–60 s · tomada cartela)
 
-_(quadro gerado após o render)_
+![seg5](storyboard/seg5.png)
 
 - **Ação:** Fundo azul-marinho com partículas douradas: logo original com o slogan, foto real da fechadura (sem a marca do fornecedor), nome, recursos da página, preço, Pix, parcelas sem juros, frete grátis, medida da porta e CTA.
 - **Câmera:** Cartela com entrada suave.

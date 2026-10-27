@@ -30,8 +30,9 @@
  "cta": "Acesse agora o link da bio",
  "capa": {
   "titulo": "ELA ESPEROU 7 ANOS... POR ESTE MOMENTO!",
-  "tomada": "Q9",
-  "quadro": 50
+  "tomada": "Q10",
+  "quadro": 34,
+  "y_titulo": 1260
  },
  "qualidade": {
   "samples": 12,
