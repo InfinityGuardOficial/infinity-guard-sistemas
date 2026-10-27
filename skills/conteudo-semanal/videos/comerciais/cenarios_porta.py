@@ -209,7 +209,7 @@ def porta(kind):
         lens(60)
     elif kind == "medir":        # 18–24 s: na sala vazia, ela mede a porta antes de escolher a fechadura
         abre(1, 2, -35)
-        ela["root"].location = (0.75, 4.0, 0.02); ela["root"].rotation_euler = (0, 0, math.radians(225))
+        ela["root"].location = (0.81, 4.31, 0.02); ela["root"].rotation_euler = (0, 0, math.radians(225))
         trena = box((0, 0, -0.62), (0.07, 0.07, 0.07), mat("trena", (240, 200, 40)), 0.01, ela["armR"])
         key(ela["armR"], "rotation_euler", 1, (-0.9, 0, 0.3)); key(ela["armR"], "rotation_euler", f(2.0), (-1.2, 0, 0.45))
         key(ela["armR"], "rotation_euler", f(4.0), (-1.2, 0, 0.45)); key(ela["armR"], "rotation_euler", f(4.8), (-0.6, 0, 0.2))
@@ -259,16 +259,17 @@ def porta(kind):
         aim_dof(cam, (LXW - 0.04, 5.4, 1.17), (LXW, 5.04, 1.15), N, 1.6)
         lens(55)
     elif kind == "senha":        # 38–44 s: ela digita a senha, abaixa a alavanca e a porta abre
-        ela["root"].location = (0.1, 5.6, 0.02); ela["root"].rotation_euler = (0, 0, math.radians(-12))
-        key(ela["armR"], "rotation_euler", 1, (0, 0, 0)); key(ela["armR"], "rotation_euler", f(0.8), (-1.45, 0, 0.25))
+        ela["root"].location = (0.15, 5.6, 0.02); ela["root"].rotation_euler = (0, 0, math.radians(-8))
+        key(ela["armR"], "rotation_euler", 1, (0, 0, 0)); key(ela["armR"], "rotation_euler", f(0.8), (-1.25, 0, 0.08))
         for k_, i in enumerate((6, 1, 8, 3, 5, 0)):
             t_ = 1.0 + k_ * 0.4
-            key(ela["armR"], "rotation_euler", f(t_), (-1.45 - 0.05 * (k_ % 2), 0, 0.25)); aperta(t_, i)
+            key(ela["armR"], "rotation_euler", f(t_), (-1.25 - 0.04 * (k_ % 2), 0, 0.08)); aperta(t_, i)
         pisca(lk["dig"], 3.4, 4.0, dur=0.8); pisca(lk["azul"], 3.4, 9.0, base=2.5, dur=0.8); destrava(3.5)
         key(ela["armR"], "rotation_euler", f(3.8), (-0.8, 0, 0.1))
         key(lk["alav_e"], "rotation_euler", f(3.9), (0, 0, 0)); key(lk["alav_e"], "rotation_euler", f(4.2), (0, math.radians(-30), 0))
         key(lk["alav_e"], "rotation_euler", f(5.2), (0, math.radians(-30), 0)); key(lk["alav_e"], "rotation_euler", f(5.5), (0, 0, 0))
         abre(f(4.2), f(5.8), -80)
+        walk(ela, f(4.4), f(5.9), (0.15, 5.6), (0.12, 5.2), arms=False)  # acompanha a porta abrindo
         look(ela, 1, 0.3, 0.1); look(ela, f(3.6), 0.0, 0.0); sorri(ela, f(3.7))
         aim_dof(cam, (1.7, 6.4, 1.6), (0.25, 5.25, 1.25), 1, 2.6)
         aim_dof(cam, (1.55, 6.2, 1.55), (0.25, 5.25, 1.25), N, 2.6)
