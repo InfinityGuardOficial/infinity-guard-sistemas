@@ -138,9 +138,28 @@ def trilha_piano(dur, sr=SR):
     return _norm(out, 0.09)
 
 
+def miau(dur=0.7):
+    """miado curto (tom que sobe e desce, com harmônicos)"""
+    n = int(dur * SR); t = np.arange(n) / SR
+    f0 = 520 + 380 * np.sin(np.pi * np.minimum(1, t / (dur * 0.85))) ** 1.5
+    fase = 2 * np.pi * np.cumsum(f0) / SR
+    x = np.sin(fase) + 0.5 * np.sin(2 * fase) + 0.25 * np.sin(3 * fase)
+    return _norm(x * np.sin(np.pi * np.minimum(1, t / dur)) ** 0.7, 0.16)
+
+
+def vaso(dur=0.8):
+    """vaso de barro caindo: baque grave + cacos"""
+    n = int(dur * SR); x = np.zeros(n, np.float32)
+    m = int(0.25 * SR); x[:m] += _norm(_banda(RNG.standard_normal(m), 60, 400) * _env(m, 0.002, 0.08), 0.35)
+    for k in range(6):
+        j = int((0.03 + k * 0.05) * SR); q = int(0.04 * SR)
+        x[j:j + q] += _norm(_banda(RNG.standard_normal(q), 2500, 8000) * _env(q, 0.001, 0.015), 0.12 * (1 - k / 7))
+    return x
+
+
 TIPOS = {"ambiente_rua": ambiente_rua, "ambiente_loja": ambiente_loja, "passos": passos, "porta_enrolar": porta_enrolar,
          "sino": sino, "caixa": caixa, "sacola": sacola, "transicao": transicao,
-         "bip": bip, "fechadura": fechadura}
+         "bip": bip, "fechadura": fechadura, "miau": miau, "vaso": vaso}
 
 
 def trilha_sons(lista, duracao, sr=SR):

@@ -1,0 +1,9 @@
+# Roteiro de cenas — O mistério das plantas
+
+| Tempo | Tomada 3D | O que acontece | Fala | Tela |
+|---|---|---|---|---|
+| 0–5 s | J1 | Manhã no jardim da casa com garagem: três vasos de barro derrubados junto ao muro. Ele sai de casa, vê o estrago e olha desconfiado para o muro do vizinho. | 0.15 s **narrador**: Três manhãs. Três vasos no chão. E ele tinha certeza de quem era o culpado. | 0.4 s Terceira manhã seguida... |
+| 5–17 s | J2, J3 | Ele recolhe a terra; a esposa chega com o café e conversa. Ela sugere observar antes de acusar e aponta para a quina da casa. | 5.6 s **narrador**: Antes de reclamar com o vizinho, a esposa teve uma ideia: observar a área de um jeito diferente. |  |
+| 17–35 s | J4, J5 | A câmera ASECAM PTZ aparece na quina da casa, voltada para o jardim e a garagem; a cabeça gira para um lado e para o outro. Depois, a visão ilustrativa no aplicativo: o jardim, o muro com os vasos e a garagem. | 17.6 s **narrador**: Eles escolheram uma câmera PTZ para acompanhar o espaço. Com enquadramento ajustável e recursos inteligentes, conforme a configuração do modelo. | 19.6 s Giro motorizado (cerca de 355°)<br>21.2 s Para área externa<br>26.0 s Câmera do jardim |
+| 35–45 s | J6, J7 | Na imagem da câmera, um gato laranja anda pelo muro atrás de uma borboleta dourada, pula e derruba um vaso. Corte: ele, sem graça, com a mão na testa; ela ri. | 35.8 s **narrador**: O vizinho era inocente. O verdadeiro responsável tinha quatro patas. | 35.0 s Câmera do jardim |
+| 45–55 s | — | Packshot: logo original, foto real da câmera ASECAM PTZ, nome, recursos da página do produto, preço, Pix, parcelas sem juros, frete grátis, requisitos e CTA. | 45.2 s **narrador**: Antes de imaginar, veja. Conheça a Câmera ASECAM PTZ 4K 8MP na Infinity Guard. Acesse infinityguard.com.br. | 45.0 s packshot |

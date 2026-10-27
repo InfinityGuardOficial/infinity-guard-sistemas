@@ -1,0 +1,375 @@
+{
+ "id": "ep20",
+ "titulo": "A primeira porta",
+ "duracao": 60.0,
+ "formato": "1080x1920 (9:16), 24 fps",
+ "produto": "fechadura-ig001",
+ "sku_informado": "IG-LOCK-003",
+ "foto_produto": "foto-fechadura-ig001.png",
+ "nao_destacar": [
+  "impressão digital",
+  "interface e voz em português",
+  "registro de acessos no app"
+ ],
+ "mostrar_frete": true,
+ "logo": "circular",
+ "cores": {
+  "navy": "#0E1A2B",
+  "dourado": "#C9A24D",
+  "navy2": "#17283f",
+  "dourado_claro": "#E2C27A"
+ },
+ "trilha": "piano",
+ "simulacao": [
+  [
+   30,
+   44
+  ]
+ ],
+ "site": "infinityguard.com.br",
+ "cta": "Acesse agora o link da bio",
+ "capa": {
+  "titulo": "ELA ESPEROU 7 ANOS... POR ESTE MOMENTO!",
+  "tomada": "Q9",
+  "quadro": 50
+ },
+ "qualidade": {
+  "samples": 12,
+  "resolucao_3d": "720x1280"
+ },
+ "vozes": {
+  "narrador": {
+   "pedida": "dave",
+   "provisoria": "pm_alex",
+   "velocidade": 0.97
+  }
+ },
+ "personagens": {
+  "Ela": "mulher adulta, pele parda, cabelo castanho, blusa terracota (fictícia)",
+  "Técnico": "homem adulto, uniforme cinza sem marca (fictício)"
+ },
+ "segmentos": [
+  {
+   "ini": 0,
+   "fim": 5,
+   "tomada": "Q1",
+   "titulo": "Gancho: sete anos",
+   "storyboard": "Corredor do prédio no fim da tarde. Ela caminha de costas para a câmera e para diante da porta 302, numa parede azul-marinho com friso dourado.",
+   "camera": "Atrás dela, lente baixa, aproximação lenta.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 0.2,
+     "texto": "Ela esperou sete anos por aquela porta. Mas não era só um apartamento."
+    }
+   ],
+   "tela": []
+  },
+  {
+   "ini": 5,
+   "fim": 18,
+   "titulo": "Lembranças: estudo, trabalho e planos",
+   "tomadas": [
+    {
+     "tomada": "Q2",
+     "ini": 5,
+     "fim": 9.5
+    },
+    {
+     "tomada": "Q3",
+     "ini": 9.5,
+     "fim": 13.5
+    },
+    {
+     "tomada": "Q4",
+     "ini": 13.5,
+     "fim": 16
+    },
+    {
+     "tomada": "Q5",
+     "ini": 16,
+     "fim": 18
+    }
+   ],
+   "storyboard": "Em tom sépia: ela estudando à noite com livros e abajur; trabalhando no notebook de dia; anotando contas e guardando moedas no pote, com o calendário riscado. Volta ao presente: as chaves com a etiqueta 302 balançam diante da porta.",
+   "camera": "Planos médios na escrivaninha com fundo desfocado; close macro nas chaves.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 5.5,
+     "texto": "Foram anos de escolhas, trabalho e planos adiados. Até que aquele endereço finalmente passou a ser dela."
+    }
+   ],
+   "tela": []
+  },
+  {
+   "ini": 18,
+   "fim": 38,
+   "titulo": "A escolha e a demonstração",
+   "tomadas": [
+    {
+     "tomada": "Q6",
+     "ini": 18,
+     "fim": 24
+    },
+    {
+     "tomada": "Q7",
+     "ini": 24,
+     "fim": 30
+    },
+    {
+     "tomada": "Q8",
+     "ini": 30,
+     "fim": 38
+    }
+   ],
+   "storyboard": "Sala vazia com caixas de mudança: ela mede a porta e a fechadura antiga antes de escolher. Um técnico troca a maçaneta antiga pela fechadura preta de alavanca; o teclado acende. Simulação: o cartão encosta no teclado, bipe e a lingueta recolhe; depois um dedo digita a senha.",
+   "camera": "Plano médio na sala; plano da porta pelo corredor; close macro no painel.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 18.4,
+     "texto": "E quando chegou a hora de transformar aquele espaço em lar, ela escolheu começar pela entrada."
+    },
+    {
+     "quem": "narrador",
+     "ini": 27.4,
+     "texto": "Uma fechadura inteligente, com design moderno e diferentes formas de acesso."
+    }
+   ],
+   "tela": [
+    {
+     "ini": 18.8,
+     "fim": 24,
+     "texto": "Antes: meça a fechadura atual",
+     "aviso": true
+    },
+    {
+     "ini": 31.0,
+     "fim": 38,
+     "texto": "Cartão"
+    },
+    {
+     "ini": 34.3,
+     "fim": 38,
+     "texto": "Senha"
+    }
+   ]
+  },
+  {
+   "ini": 38,
+   "fim": 48,
+   "titulo": "A primeira entrada",
+   "tomadas": [
+    {
+     "tomada": "Q9",
+     "ini": 38,
+     "fim": 44
+    },
+    {
+     "tomada": "Q10",
+     "ini": 44,
+     "fim": 48
+    }
+   ],
+   "storyboard": "Ela digita a senha, o teclado confirma, ela abaixa a alavanca e a porta abre. De dentro, ela entra sorrindo na sala com luz de fim de tarde.",
+   "camera": "Plano médio pelo corredor; contraplano de dentro da sala.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 38.4,
+     "texto": "Porque conquistar o próprio espaço é especial. E escolher cada detalhe dele também."
+    }
+   ],
+   "tela": []
+  },
+  {
+   "ini": 48,
+   "fim": 60,
+   "titulo": "Packshot",
+   "storyboard": "Fundo azul-marinho com partículas douradas: logo original com o slogan, foto real da fechadura (sem a marca do fornecedor), nome, recursos da página, preço, Pix, parcelas sem juros, frete grátis, medida da porta e CTA.",
+   "camera": "Cartela com entrada suave.",
+   "falas": [
+    {
+     "quem": "narrador",
+     "ini": 48.2,
+     "texto": "Fechadura Inteligente Infinity Guard. Mais praticidade para a sua rotina. Conheça o modelo e as condições de pagamento. Acesse agora o link da bio.",
+     "fala": "Fechadura Inteligente Infíniti Gárd. Mais praticidade para a sua rotina. Conheça o modelo e as condições de pagamento. Acesse agora o link da bio."
+    }
+   ],
+   "tela": [
+    {
+     "ini": 48.0,
+     "tipo": "packshot"
+    }
+   ]
+  }
+ ],
+ "sons": [
+  {
+   "t": 0.3,
+   "tipo": "passos",
+   "dur": 2.8,
+   "ritmo": 0.5
+  },
+  {
+   "t": 4.8,
+   "tipo": "transicao"
+  },
+  {
+   "t": 9.3,
+   "tipo": "transicao",
+   "volume": 0.5
+  },
+  {
+   "t": 13.3,
+   "tipo": "transicao",
+   "volume": 0.5
+  },
+  {
+   "t": 15.8,
+   "tipo": "transicao",
+   "volume": 0.6
+  },
+  {
+   "t": 16.4,
+   "tipo": "sacola",
+   "dur": 0.4,
+   "volume": 0.5
+  },
+  {
+   "t": 17.8,
+   "tipo": "transicao"
+  },
+  {
+   "t": 23.8,
+   "tipo": "transicao",
+   "volume": 0.6
+  },
+  {
+   "t": 27.2,
+   "tipo": "bip",
+   "volume": 0.5
+  },
+  {
+   "t": 29.8,
+   "tipo": "transicao",
+   "volume": 0.6
+  },
+  {
+   "t": 31.05,
+   "tipo": "bip"
+  },
+  {
+   "t": 31.3,
+   "tipo": "fechadura"
+  },
+  {
+   "t": 34.2,
+   "tipo": "bip",
+   "volume": 0.3
+  },
+  {
+   "t": 34.62,
+   "tipo": "bip",
+   "volume": 0.3
+  },
+  {
+   "t": 35.04,
+   "tipo": "bip",
+   "volume": 0.3
+  },
+  {
+   "t": 35.46,
+   "tipo": "bip",
+   "volume": 0.3
+  },
+  {
+   "t": 35.88,
+   "tipo": "bip",
+   "volume": 0.3
+  },
+  {
+   "t": 36.3,
+   "tipo": "bip",
+   "volume": 0.3
+  },
+  {
+   "t": 36.8,
+   "tipo": "bip"
+  },
+  {
+   "t": 36.9,
+   "tipo": "fechadura"
+  },
+  {
+   "t": 37.8,
+   "tipo": "transicao",
+   "volume": 0.6
+  },
+  {
+   "t": 39.0,
+   "tipo": "bip",
+   "volume": 0.3
+  },
+  {
+   "t": 39.4,
+   "tipo": "bip",
+   "volume": 0.3
+  },
+  {
+   "t": 39.8,
+   "tipo": "bip",
+   "volume": 0.3
+  },
+  {
+   "t": 40.2,
+   "tipo": "bip",
+   "volume": 0.3
+  },
+  {
+   "t": 40.6,
+   "tipo": "bip",
+   "volume": 0.3
+  },
+  {
+   "t": 41.0,
+   "tipo": "bip",
+   "volume": 0.3
+  },
+  {
+   "t": 41.4,
+   "tipo": "bip"
+  },
+  {
+   "t": 41.5,
+   "tipo": "fechadura"
+  },
+  {
+   "t": 43.8,
+   "tipo": "transicao",
+   "volume": 0.6
+  },
+  {
+   "t": 44.2,
+   "tipo": "passos",
+   "dur": 2.0,
+   "ritmo": 0.5
+  },
+  {
+   "t": 47.8,
+   "tipo": "transicao"
+  }
+ ],
+ "descricao": "Sete anos de estudo, trabalho e planos adiados. Até que aquele endereço passou a ser dela. 🔑\n\nE ela escolheu começar pela entrada: Fechadura Inteligente Infinity Guard, com acesso por senha e cartão de aproximação, chave mecânica reserva e app Tuya Smart Life (recursos conforme a página do produto).\n\nAntes de escolher, meça a fechadura atual da sua porta (guia de medidas na página).\n\nConheça o modelo e as condições de pagamento: link na bio · infinityguard.com.br\n\nPersonagens fictícios · animação 3D · demonstração ilustrativa\n\n#primeiroape #casanova #fechaduradigital #infinityguard",
+ "regras_do_episodio": [
+  "Personagens fictícios; sem rosto, foto ou avatar do proprietário; só o narrador fala.",
+  "Recursos só da página do produto IG-LOCK-001 lida em 27/10/2026; o briefing citava IG-LOCK-003 (outra página do catálogo, 'Bluetooth, App e Impressão Digital'): confirmar qual SKU vai no post.",
+  "Demonstrados só cartão e senha (simulação ilustrativa, selo de 30 a 44 s). A biometria aparece no produto (anel na alavanca), mas não é usada nem destacada.",
+  "Sem abertura remota por Wi-Fi; o app é citado só no packshot, como na página.",
+  "Câmera, tela e campainha que aparecem na foto do fornecedor não estão na página: não são citadas. A marca do fornecedor foi retirada da foto.",
+  "Compatibilidade: a faixa de 38 a 55 mm do briefing não está na página; o vídeo pede para medir a fechadura atual (guia de medidas).",
+  "O vídeo não diz quem faz a instalação (a loja não oferece o serviço).",
+  "Preço, Pix, 12x sem juros e frete grátis conferidos na página em 27/10/2026; estoque de 9 unidades não é citado (sem escassez)."
+ ]
+}

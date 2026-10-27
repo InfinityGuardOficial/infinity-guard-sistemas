@@ -12,7 +12,8 @@ brasileiro, formato vertical 1080x1920 e CTA para **infinityguard.com.br**. Usa 
 | `ep16-o-cliente-chegou-antes/` | O cliente chegou antes de todo mundo! (50 s, loja de bairro) | pronto, com efeitos sonoros, cortes de câmera e personagens mais expressivos; narração **provisória** (sem Dave) |
 | `ep17-o-presente-que-ninguem-esperava/` | O presente que ninguém esperava (55 s, fechadura preta) | pronto, com capa 9:16, packshot com a foto real e preço falado do catálogo; narração **provisória** (sem Dave) |
 | `ep18-o-primeiro-presente-da-loja/` | O primeiro presente da loja (55 s, câmera dome ASECAM) | pronto, com capa, descrição do post e arquivo de projeto; selo Black Friday sem oferta; narração **provisória** (sem Dave) |
-| `ep19-o-misterio-das-plantas/` | O mistério das plantas (55 s, Câmera ASECAM PTZ 4K 8MP) | pronto, com capa, descrição e arquivo de projeto; app ilustrativo; narração **provisória** (sem Dave) | aguardando `episodios.md` (não existe no repositório) |
+| `ep19-o-misterio-das-plantas/` | O mistério das plantas (55 s, Câmera ASECAM PTZ 4K 8MP) | pronto, com capa, descrição e arquivo de projeto; app ilustrativo; narração **provisória** (sem Dave) |
+| `ep20-a-primeira-porta/` | A primeira porta (60 s, fechadura IG-LOCK-001, primeiro apartamento) | cenário `porta` (apartamento novo + fechadura de alavanca) e `lembranca` (flashbacks); narração **provisória** (sem Dave) |
 
 Cenários prontos: `varanda` (casa térrea com porta, encomenda e vizinho), `loja` (comércio de bairro com porta de
 enrolar, caixa e área privada) e `kit_dupla` (o produto no pedestal). Efeitos sonoros e ambiente saem de `sons.py`

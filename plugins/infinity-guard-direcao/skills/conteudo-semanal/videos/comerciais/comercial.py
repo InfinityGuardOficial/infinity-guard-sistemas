@@ -133,6 +133,13 @@ def cartao_produto(cv, t, lt):
                       100, y + 176, fs, P(CREAM, 200))
     cv.restore()
 
+LOGO_A = None
+def logo_arquivo():
+    global LOGO_A
+    if LOGO_A is None:
+        LOGO_A = base.load_img(np.array(Image.open(os.path.join(base.VIDEO, EP["logo_arquivo"])).convert("RGBA")))
+    return LOGO_A
+
 LOGO_H = None
 def logo_original():
     global LOGO_H
@@ -201,7 +208,10 @@ def packshot(cv, t, lt):
     fundo_marca(cv, t)
     k = eout(lt / 0.7)
     cv.saveLayerAlpha(None, int(255 * k))
-    if EP.get("logo") == "horizontal":  # logo original fornecido (preto sobre branco), sem alterar
+    if EP.get("logo") == "arquivo":  # logo original fornecido no episódio (fundo transparente), sem alterar
+        img = logo_arquivo(); lw = 560; lh = lw * img.height() / img.width()
+        cv.drawImageRect(img, skia.Rect.MakeXYWH(W / 2 - lw / 2, 95, lw, lh), SAMP)
+    elif EP.get("logo") == "horizontal":  # logo original fornecido (preto sobre branco), sem alterar
         img = logo_original(); lw = 500; lh = lw * img.height() / img.width()
         cv.drawRRect(rrect(W / 2 - lw / 2 - 24, 70, lw + 48, lh + 40, 26), P("#ffffff"))
         cv.drawImageRect(img, skia.Rect.MakeXYWH(W / 2 - lw / 2, 90, lw, lh), SAMP)
@@ -209,11 +219,13 @@ def packshot(cv, t, lt):
         logo_circular(cv, W / 2, 170, 105)
         text_c(cv, CAT["slogan"], W / 2, 328, font("pf", 38), P(GOLD2))
     img = foto_produto(); fw = 500; fh = fw * img.height() / img.width()
-    y0 = (420 if EP.get("logo") == "horizontal" else 375) + 30 * (1 - k)
+    if fh > 410:  # foto vertical: limita a altura para o preço e o CTA caberem acima da legenda
+        fh = 410; fw = fh * img.width() / img.height()
+    y0 = (420 if EP.get("logo") in ("horizontal", "arquivo") else 375) + 30 * (1 - k)
     cv.drawRRect(rrect(W / 2 - fw / 2 - 20, y0 - 20, fw + 40, fh + 40, 32), P("#ffffff"))
     cv.drawRRect(rrect(W / 2 - fw / 2 - 20, y0 - 20, fw + 40, fh + 40, 32), P(GOLD, stroke=4))
     cv.drawImageRect(img, skia.Rect.MakeXYWH(W / 2 - fw / 2, y0, fw, fh), SAMP)
-    cv.drawString("Imagem do produto", W / 2 + fw / 2 - 210, y0 + fh + 8, font("m5", 22), P("#8a8a92"))
+    text_c(cv, "Imagem do produto", W / 2, y0 + fh + 8, font("m5", 22), P("#8a8a92"))
     y = y0 + fh + 78
     fn = font("m8", 36)
     for ln in wrap(NOME_PRODUTO, fn, W - 160):
@@ -300,7 +312,10 @@ def capa():
     f = font("m8", 92); lines = wrap(c["titulo"], f, W - 140); y = c.get("y_titulo", 1240 - (len(lines) - 1) * 60)
     for ln in lines:
         text_c(cv, ln, W / 2, y, f, P(GOLD2 if ln == lines[-1] else CREAM), outline=P("#000000", 160, stroke=10)); y += 106
-    if EP.get("logo") == "horizontal":  # só o logo original fornecido
+    if EP.get("logo") == "arquivo":
+        img = logo_arquivo(); lw = 440; lh = lw * img.height() / img.width()
+        cv.drawImageRect(img, skia.Rect.MakeXYWH(W / 2 - lw / 2, 1640, lw, lh), SAMP)
+    elif EP.get("logo") == "horizontal":  # só o logo original fornecido
         img = logo_original(); lw = 380; lh = lw * img.height() / img.width()
         cv.drawRRect(rrect(W / 2 - lw / 2 - 18, 1655, lw + 36, lh + 30, 20), P("#ffffff"))
         cv.drawImageRect(img, skia.Rect.MakeXYWH(W / 2 - lw / 2, 1670, lw, lh), SAMP)
