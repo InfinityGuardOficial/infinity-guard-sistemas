@@ -1,6 +1,6 @@
 # Campanha 11.11 e Black Friday · Infinity Guard
 
-Gerado em 2026-10-26 com os preços do catálogo. Desconto do kit: 10% sobre a soma dos preços atuais.
+Gerado em 2026-10-27 com os preços do catálogo. Desconto do kit: 10% sobre a soma dos preços atuais.
 
 ## Antes de lançar
 
@@ -15,8 +15,8 @@ Gerado em 2026-10-26 com os preços do catálogo. Desconto do kit: 10% sobre a s
 |---|---|---|---|---|---|---|
 | Kit Apartamento Tranquilo | apartamento ou casa pequena, quem trabalha fora | 1× Kit 2 câmeras Wi-Fi dupla lente | R$ 392,35 | R$ 353,12 | R$ 317,81 | 11x R$ 32,10 |
 | Kit Casa Vigiada | casa que fica vazia de dia ou em viagem | 1× Kit 2 câmeras Wi-Fi dupla lente + 1× Alarme IKerui Wi-Fi/GSM | R$ 1.267,85 | R$ 1.141,07 | R$ 1.026,96 | 12x R$ 95,09 |
-| Kit Porta Inteligente | quem quer acabar com chave copiada ou perdida | 1× Kit 2 câmeras Wi-Fi dupla lente + 1× Fechadura com biometria | R$ 1.610,89 | R$ 1.449,80 | R$ 1.304,82 | 12x R$ 120,82 |
-| Kit Casa Completa | casa grande, sítio com Wi-Fi ou quem viaja muito | 1× Kit 2 câmeras Wi-Fi dupla lente + 1× Alarme IKerui Wi-Fi/GSM + 1× Fechadura com biometria + 1× Lâmpada com sensor de presença | R$ 2.558,37 | R$ 2.302,53 | R$ 2.072,28 | 12x R$ 191,88 |
+| Kit Porta Inteligente | quem quer acabar com chave copiada ou perdida | 1× Kit 2 câmeras Wi-Fi dupla lente + 1× Fechadura com biometria | R$ 1.544,87 | R$ 1.390,38 | R$ 1.251,34 | 12x R$ 115,87 |
+| Kit Casa Completa | casa grande, sítio com Wi-Fi ou quem viaja muito | 1× Kit 2 câmeras Wi-Fi dupla lente + 1× Alarme IKerui Wi-Fi/GSM + 1× Fechadura com biometria + 1× Lâmpada com sensor de presença | R$ 2.492,35 | R$ 2.243,11 | R$ 2.018,80 | 12x R$ 186,93 |
 
 Promessa de todos os kits: passo a passo de configuração segura e acompanhamento de 7 dias no WhatsApp. Sem instalação no local.
 
@@ -55,8 +55,8 @@ Oi {nome}! Aqui é da Infinity Guard. No 11.11 vou separar kits montados pra cad
 {nome}, começou o 11.11 da Infinity Guard com o cupom IG1111:
 • Kit Apartamento Tranquilo: R$ 353,12 ou R$ 317,81 no Pix (11x de R$ 32,10)
 • Kit Casa Vigiada: R$ 1.141,07 ou R$ 1.026,96 no Pix (12x de R$ 95,09)
-• Kit Porta Inteligente: R$ 1.449,80 ou R$ 1.304,82 no Pix (12x de R$ 120,82)
-• Kit Casa Completa: R$ 2.302,53 ou R$ 2.072,28 no Pix (12x de R$ 191,88)
+• Kit Porta Inteligente: R$ 1.390,38 ou R$ 1.251,34 no Pix (12x de R$ 115,87)
+• Kit Casa Completa: R$ 2.243,11 ou R$ 2.018,80 no Pix (12x de R$ 186,93)
 Todos vão com o passo a passo de configuração segura e suporte aqui no WhatsApp. Quer que eu te ajude a ver qual serve pra sua casa? https://infinityguard.com.br
 Se não quiser mais receber, responda SAIR.
 ```
@@ -110,8 +110,8 @@ Oi {nome}! Aqui é da Infinity Guard. Na Black Friday vou separar kits montados 
 {nome}, começou a Black Friday da Infinity Guard com o cupom IGBLACK:
 • Kit Apartamento Tranquilo: R$ 353,12 ou R$ 317,81 no Pix (11x de R$ 32,10)
 • Kit Casa Vigiada: R$ 1.141,07 ou R$ 1.026,96 no Pix (12x de R$ 95,09)
-• Kit Porta Inteligente: R$ 1.449,80 ou R$ 1.304,82 no Pix (12x de R$ 120,82)
-• Kit Casa Completa: R$ 2.302,53 ou R$ 2.072,28 no Pix (12x de R$ 191,88)
+• Kit Porta Inteligente: R$ 1.390,38 ou R$ 1.251,34 no Pix (12x de R$ 115,87)
+• Kit Casa Completa: R$ 2.243,11 ou R$ 2.018,80 no Pix (12x de R$ 186,93)
 Todos vão com o passo a passo de configuração segura e suporte aqui no WhatsApp. Quer que eu te ajude a ver qual serve pra sua casa? https://infinityguard.com.br
 Se não quiser mais receber, responda SAIR.
 ```

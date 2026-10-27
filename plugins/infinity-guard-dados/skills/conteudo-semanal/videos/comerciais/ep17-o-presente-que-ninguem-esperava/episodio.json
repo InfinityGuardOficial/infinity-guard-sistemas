@@ -4,20 +4,11 @@
  "duracao": 55.0,
  "formato": "1080x1920 (9:16), 24 fps",
  "produto": "fechadura-bio",
- "sku_informado": "IG-LOCK-003",
- "foto_produto": "foto-fechadura-preta.png",
- "foto_recorte": [
-  100,
-  160,
-  735,
-  870
- ],
- "recursos_informados": [
-  "cartão",
-  "senha"
- ],
+ "foto_produto": "foto-fechadura-ig001.png",
  "nao_destacar": [
-  "impressão digital"
+  "impressão digital",
+  "interface e voz em português",
+  "registro de acessos no app"
  ],
  "mostrar_frete": true,
  "logo": "circular",
@@ -250,8 +241,8 @@
   "A abertura por cartão é simulação ilustrativa (selo na tela de 18 a 45 s).",
   "Não mostrar abertura remota pelo celular nem por Wi-Fi; aplicativo só citado.",
   "Biometria não é demonstrada (o produto aparece como é, com o leitor, mas ninguém usa).",
-  "Cartão e senha foram informados pelo dono e não estão nos destaques do catálogo: conferir na página do produto.",
-  "Sem 'sem juros' e sem 'frete grátis' (não confirmados no catálogo); frete pelo CEP.",
-  "Compatibilidade da porta: o catálogo pede confirmar as medidas com a loja (a faixa de 38 a 55 mm do briefing não está no catálogo)."
+  "Compatibilidade da porta: o catálogo pede confirmar as medidas com a loja (a faixa de 38 a 55 mm do briefing não está no catálogo).",
+  "Produto atualizado em 27/10/2026 para a IG-LOCK-001 (confirmada pelo dono): preço, Pix, 12x sem juros e frete grátis conferidos na página; foto do packshot sem a marca do fornecedor.",
+  "O modelo 3D da fechadura neste episódio é o da primeira versão (fechadura de embutir com puxador redondo); a foto real no packshot é a da IG-LOCK-001."
  ]
 }

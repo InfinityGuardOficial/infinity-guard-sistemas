@@ -54,7 +54,7 @@ Narrador: kokoro:pm_alex — **PROVISÓRIA**: voz Dave não disponível: nenhuma
 ## Regras do episódio
 
 - Personagens fictícios; sem rosto, foto ou avatar do proprietário; só o narrador fala.
-- Recursos só da página do produto IG-LOCK-001 lida em 27/10/2026; o briefing citava IG-LOCK-003 (outra página do catálogo, 'Bluetooth, App e Impressão Digital'): confirmar qual SKU vai no post.
+- Recursos só da página do produto IG-LOCK-001 lida em 27/10/2026 (SKU confirmado pelo dono).
 - Demonstrados só cartão e senha (simulação ilustrativa, selo de 30 a 44 s). A biometria aparece no produto (anel na alavanca), mas não é usada nem destacada.
 - Sem abertura remota por Wi-Fi; o app é citado só no packshot, como na página.
 - Câmera, tela e campainha que aparecem na foto do fornecedor não estão na página: não são citadas. A marca do fornecedor foi retirada da foto.

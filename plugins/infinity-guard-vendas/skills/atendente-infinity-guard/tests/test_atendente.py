@@ -33,7 +33,7 @@ class Recomendacao(unittest.TestCase):
         r = recomendar("casa", pontos=5, viaja=True, porta="digital")
         self.assertEqual(ids(r["ideal"]), {"cam-asecam-ptz": 1, "kit-cam-2": 2, "alarme-ikerui": 1,
                                            "fechadura-bio": 1, "sensor-presenca": 1})
-        esperado = 407.17 + 2 * 392.35 + 875.50 + 1218.54 + 71.98
+        esperado = 407.17 + 2 * 392.35 + 875.50 + 1152.52 + 71.98
         self.assertAlmostEqual(r["ideal"]["total"], esperado, places=2)
 
     def test_sitio_sem_wifi_nao_vende_camera(self):

@@ -1,6 +1,6 @@
 # Storyboard — O presente que ninguém esperava
 
-1080x1920 (9:16), 24 fps · 55 s · produto: Fechadura Inteligente Infinity Guard — Bluetooth, App e Impressão Digital · CTA: Conheça em infinityguard.com.br · infinityguard.com.br
+1080x1920 (9:16), 24 fps · 55 s · produto: Fechadura Inteligente Infinity Guard — Biometria, Senha, Cartão e App · CTA: Conheça em infinityguard.com.br · infinityguard.com.br
 
 Personagens fictícios: **Ela** — mulher adulta, pele morena, cabelo castanho longo, blusa dourada (fictícia); **Ele** — marido, pele parda, cabelo curto, camisa branca (fictício)
 
@@ -49,6 +49,7 @@ Narrador: kokoro:pm_alex — **PROVISÓRIA**: voz Dave não disponível: nenhuma
 - **Ação:** Fundo azul-marinho com partículas douradas: logo original, slogan, foto real da fechadura preta, nome do produto, destaques e oferta do catálogo, site.
 - **Câmera:** Cartela com entrada suave.
 - **narrador** (44.2 s): "Fechadura Inteligente Infinity Guard. {preco} ou {pix} no Pix. Conheça em infinityguard.com.br."
+- **Tela** (44.0 s): packshot com a foto do produto, logo original, preço e condições do catálogo e o CTA "Conheça em infinityguard.com.br"
 
 ## Regras do episódio
 
@@ -56,6 +57,6 @@ Narrador: kokoro:pm_alex — **PROVISÓRIA**: voz Dave não disponível: nenhuma
 - A abertura por cartão é simulação ilustrativa (selo na tela de 18 a 45 s).
 - Não mostrar abertura remota pelo celular nem por Wi-Fi; aplicativo só citado.
 - Biometria não é demonstrada (o produto aparece como é, com o leitor, mas ninguém usa).
-- Cartão e senha foram informados pelo dono e não estão nos destaques do catálogo: conferir na página do produto.
-- Sem 'sem juros' e sem 'frete grátis' (não confirmados no catálogo); frete pelo CEP.
 - Compatibilidade da porta: o catálogo pede confirmar as medidas com a loja (a faixa de 38 a 55 mm do briefing não está no catálogo).
+- Produto atualizado em 27/10/2026 para a IG-LOCK-001 (confirmada pelo dono): preço, Pix, 12x sem juros e frete grátis conferidos na página; foto do packshot sem a marca do fornecedor.
+- O modelo 3D da fechadura neste episódio é o da primeira versão (fechadura de embutir com puxador redondo); a foto real no packshot é a da IG-LOCK-001.

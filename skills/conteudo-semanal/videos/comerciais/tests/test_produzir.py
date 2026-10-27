@@ -66,13 +66,21 @@ class RecursosInformados(unittest.TestCase):
         json.dump(d, open(os.path.join(tmp, "episodio.json"), "w"), ensure_ascii=False)
         return produzir.validar(tmp, quieto=True)
 
-    def test_ep17_passa_com_avisos(self):
-        erros, avisos = produzir.validar(EP17, quieto=True)
+    def test_ep17_passa(self):
+        erros, _ = produzir.validar(EP17, quieto=True)
         self.assertEqual(erros, [])
-        self.assertTrue(any("cartão" in a for a in avisos))
 
-    def test_sem_informar_cartao_bloqueia(self):
-        self.assertTrue(self.episodio(lambda d: d.update(recursos_informados=[]))[0])
+    def bluetooth(self, d, informados):
+        d["segmentos"][2]["falas"][1].update(texto="Uma fechadura inteligente com acesso por Bluetooth.")
+        d["recursos_informados"] = informados
+
+    def test_recurso_fora_do_catalogo_bloqueia(self):
+        self.assertTrue(self.episodio(lambda d: self.bluetooth(d, []))[0])
+
+    def test_recurso_informado_passa_com_aviso(self):
+        erros, avisos = self.episodio(lambda d: self.bluetooth(d, ["bluetooth"]))
+        self.assertEqual(erros, [])
+        self.assertTrue(any("bluetooth" in a.lower() for a in avisos))
 
     def test_wifi_e_campo_desconhecido_bloqueiam(self):
         self.assertTrue(self.episodio(lambda d: d["segmentos"][2]["falas"][1].update(texto="Abre pelo Wi-Fi de qualquer lugar."))[0])
