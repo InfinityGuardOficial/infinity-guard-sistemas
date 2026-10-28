@@ -1,22 +1,44 @@
 """Cenário "barbearia": barbearia brasileira moderna (piso xadrez, espelhos com moldura dourada, três cadeiras
-de barbeiro, balcão com monitor, sofá de espera, parede azul-marinho com friso dourado) e a câmera dome ASECAM
-no teto, cobrindo só a área de atendimento. Dois barbeiros fictícios: Toninho (grisalho, bigode) e Lucas.
+de barbeiro, balcão com monitor, sofá de espera, parede azul-marinho com friso dourado) e a câmera bullet ASECAM
+DualLight Pro na parede do fundo, cobrindo só a área de atendimento. Dois barbeiros fictícios: Toninho (grisalho, bigode) e Lucas.
 
 Planta (metros): salão de x -4 a 4 e y 0 a 6; vitrine em y=0; espelhos e cadeiras na parede esquerda (x=-4),
-cadeiras viradas para -X; balcão com monitor à direita, perto da entrada; dome no canto do fundo à direita.
+cadeiras viradas para -X; balcão com monitor à direita, perto da entrada; câmera bullet na parede do fundo, à direita.
 """
 import math, random
 import lib3d as L
 from lib3d import bpy, mat, emat, box, cyl, sphere, ico, empty, setmat, M, camera
 from cenarios import make_person, talk, hold, look, key, vida, walk, aim_dof
 from cenarios_ape import texto3d
-from cenarios_inauguracao import dome
 
 NAVY_IG, GOLD_IG = (14, 26, 43), (201, 162, 77)
 CADEIRAS_Y = (1.6, 3.2, 4.8)
 ALINHADA = (-3.0, 3.2, -90.0)       # cadeira do meio no lugar (x, y, rotação em graus)
 DESLOCADA = (-2.45, 3.6, -52.0)     # cadeira do meio fora do lugar
-DOME = (3.55, 5.6, 2.98)
+CAM = (3.08, 5.75, 2.74)    # frente da câmera bullet (o suporte fica na parede do fundo, y=6)
+
+
+def bullet(loc, yaw_deg, pitch_deg):
+    """câmera bullet ASECAM DualLight Pro (branca, viseira, face preta com lente e três LEDs) com suporte de parede;
+    loc é o ponto do suporte na parede do fundo; o corpo aponta para yaw/pitch"""
+    branco = mat("bullet_branco", (244, 244, 242), rough=0.35)
+    preto = mat("bullet_preto", (16, 16, 20), rough=0.15)
+    base = empty(loc)
+    box((0, -0.008, 0), (0.11, 0.016, 0.11), branco, 0.008, base)
+    for dx, dz in ((-0.038, 0.038), (0.038, -0.038)): sphere((dx, -0.017, dz), 0.006, mat("bullet_parafuso", (150, 150, 150)), base, 8)
+    cyl((0, -0.07, 0), 0.016, 0.11, branco, rot=(math.pi / 2, 0, 0), verts=16, parent=base)
+    sphere((0, -0.13, 0), 0.024, branco, base, 16)
+    corpo = empty((0, -0.13, -0.035)); corpo.parent = base
+    corpo.rotation_euler = (math.radians(pitch_deg), 0, math.radians(yaw_deg))
+    box((0, 0.01, 0), (0.09, 0.2, 0.08), branco, 0.016, corpo)                  # corpo
+    box((0, -0.035, 0.045), (0.1, 0.17, 0.012), branco, 0.004, corpo)            # viseira
+    box((0, -0.092, 0), (0.084, 0.012, 0.074), preto, 0.012, corpo)              # face preta
+    box((0, -0.0985, 0.012), (0.044, 0.002, 0.03), mat("bullet_janela", (34, 34, 42), rough=0.05), 0.003, corpo)
+    sphere((0.004, -0.1, 0.012), 0.009, mat("bullet_lente", (40, 30, 60), rough=0.05), corpo, 16)
+    led, led_s = emat("bullet_led", (255, 236, 200), 1.0)
+    for dx in (-0.016, 0.0, 0.016):
+        cyl((dx, -0.099, -0.018), 0.0065, 0.003, led, rot=(math.pi / 2, 0, 0), verts=16, parent=corpo)
+    return base, led_s
 
 
 def cadeira_barbeiro(loc, rot_deg):
@@ -121,8 +143,8 @@ def barbearia(kind):
     vl.data.energy = 180; vl.data.size = 6; vl.data.color = (0.92, 0.96, 1)
     w = bpy.data.worlds.new("barbearia"); bpy.context.scene.world = w; w.use_nodes = True
     w.node_tree.nodes["Background"].inputs[0].default_value = (0.05, 0.05, 0.06, 1); w.node_tree.nodes["Background"].inputs[1].default_value = 0.5
-    # a câmera dome no canto do fundo, mirando as cadeiras (área de atendimento)
-    d, led = dome(DOME, rot=(0, 0, math.radians(-67)), s=1.8)
+    # a câmera bullet na parede do fundo, mirando as cadeiras (área de atendimento)
+    d, led = bullet((3.3, 5.99, 2.85), -63, 17)
     # personagens fictícios
     toninho = barbeiro("toninho", "negra", "grisalho", (44, 44, 52), (110, 72, 46))
     lucas = barbeiro("lucas", "parda", "preto", (240, 240, 244), (24, 24, 28), height=1.03)
@@ -187,7 +209,7 @@ def barbearia(kind):
         aim_dof(cam, (-1.2, 0.45, 1.62), (-1.32, 2.55, 1.5), 1, 2.2)
         aim_dof(cam, (-1.25, 0.75, 1.6), (-1.32, 2.55, 1.5), N, 2.2)
         lens(22)
-    elif kind == "camera":       # 18–24 s: a dome no teto; Lucas vai ao monitor do balcão
+    elif kind == "camera":       # 18–24 s: a câmera na parede; Lucas vai ao monitor do balcão
         cadeira_em(1, DESLOCADA)
         poe(lucas, 2.1, 2.2, 160)
         walk(lucas, f(2.0), f(3.6), (2.1, 2.2), (2.2, 1.25))
@@ -195,11 +217,11 @@ def barbearia(kind):
         look(lucas, f(4.2), 0.2, 0)
         for t_, e in ((0, 0.6), (4.0, 0.6), (4.4, 2.0)):
             tela_s.default_value = e; tela_s.keyframe_insert("default_value", frame=int(f(t_)))
-        aim_dof(cam, (2.75, 4.55, 2.35), (DOME[0], DOME[1], DOME[2] - 0.08), 1, 1.8)
-        aim_dof(cam, (2.65, 4.4, 2.3), (DOME[0], DOME[1], DOME[2] - 0.08), int(f(1.8)), 1.8)
+        aim_dof(cam, (2.92, 5.3, 2.6), (3.24, 5.83, 2.8), 1, 1.6)
+        aim_dof(cam, (2.85, 5.2, 2.56), (3.24, 5.83, 2.8), int(f(1.8)), 1.6)
         aim_dof(cam, (0.6, 2.4, 1.75), (2.6, 1.25, 1.35), N, 2.6)
         lens(35)
-    elif kind == "pov":          # 24–31 s: imagem da dome (ao vivo): Toninho varre e empurra a cadeira sem perceber
+    elif kind == "pov":          # 24–31 s: imagem da câmera (ao vivo): Toninho varre e empurra a cadeira sem perceber
         cadeira_em(1, ALINHADA)
         poe(toninho, -1.7, 1.2, 0); vassoura(toninho["root"])
         key(toninho["armL"], "rotation_euler", 1, (-0.6, 0, -0.15)); key(toninho["armR"], "rotation_euler", 1, (-0.6, 0, 0.15))
@@ -210,7 +232,7 @@ def barbearia(kind):
         cadeira_em(f(2.9), ALINHADA); cadeira_em(f(3.6), DESLOCADA)  # o quadril bate na cadeira
         poe(lucas, 2.2, 1.25, 90)
         cam.data.lens = 30
-        aim_dof(cam, (DOME[0] - 0.12, DOME[1] - 0.12, DOME[2] - 0.12), (-2.3, 3.0, 0.8), 1, 16.0)
+        aim_dof(cam, CAM, (-2.3, 3.0, 0.8), 1, 16.0)
     elif kind == "flagra":       # 31–36 s: Lucas se vira do monitor e flagra Toninho com a vassoura ao lado da cadeira
         cadeira_em(1, DESLOCADA)
         poe(toninho, -2.25, 4.1, 170); vassoura(toninho["root"])
@@ -244,7 +266,7 @@ def barbearia(kind):
         aim_dof(cam, (-1.25, 0.55, 1.62), (-1.3, 2.55, 1.48), 1, 2.4)
         aim_dof(cam, (-1.28, 0.8, 1.6), (-1.3, 2.55, 1.48), N, 2.4)
         lens(22)
-    elif kind == "final":        # 42–46 s: Lucas devolve a cadeira ao lugar; o salão em plano aberto, a dome no teto
+    elif kind == "final":        # 42–46 s: Lucas devolve a cadeira ao lugar; o salão em plano aberto
         poe(lucas, -2.2, 3.0, -60)
         cadeira_em(1, DESLOCADA); cadeira_em(f(0.4), DESLOCADA); cadeira_em(f(1.6), ALINHADA)
         hold(lucas, f(0.2), True); hold(lucas, f(1.8), False)

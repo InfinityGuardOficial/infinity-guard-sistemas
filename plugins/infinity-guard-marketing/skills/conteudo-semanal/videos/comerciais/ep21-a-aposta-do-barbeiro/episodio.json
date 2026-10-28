@@ -3,8 +3,8 @@
  "titulo": "A aposta do barbeiro",
  "duracao": 60.0,
  "formato": "1080x1920 (9:16), 24 fps",
- "produto": "cam-dome-asecam-8mp",
- "foto_produto": "foto-camera-dome.png",
+ "produto": "cam-bullet-asecam-duallight",
+ "foto_produto": "foto-camera-bullet.png",
  "mostrar_frete": true,
  "logo": "circular",
  "cores": {
@@ -107,8 +107,8 @@
      "fim": 36
     }
    ],
-   "storyboard": "A câmera dome ASECAM no teto, voltada só para a área de atendimento. Lucas vai ao monitor do balcão. Na imagem ao vivo, Toninho varre o chão e, sem perceber, empurra a cadeira com o quadril. Lucas se vira e flagra Toninho com a vassoura ao lado da cadeira.",
-   "camera": "De baixo para a dome; descida até o balcão; imagem da câmera em tela cheia; plano por cima do ombro de Lucas.",
+   "storyboard": "A câmera bullet ASECAM DualLight Pro na parede do fundo, voltada só para a área de atendimento. Lucas vai ao monitor do balcão (NVR). Na imagem ao vivo, Toninho varre o chão e, sem perceber, empurra a cadeira com o quadril. Lucas se vira e flagra Toninho com a vassoura ao lado da cadeira.",
+   "camera": "Close na câmera na parede; descida até o balcão; imagem da câmera em tela cheia; plano por cima do ombro de Lucas.",
    "falas": [
     {
      "quem": "narrador",
@@ -146,7 +146,7 @@
      "fim": 46
     }
    ],
-   "storyboard": "Os dois caem na risada; Toninho põe a mão na testa, admite e entrega a nota a Lucas. Lucas devolve a cadeira ao lugar; plano aberto do salão com a dome no teto.",
+   "storyboard": "Os dois caem na risada; Toninho põe a mão na testa, admite e entrega a nota a Lucas. Lucas devolve a cadeira ao lugar; plano aberto do salão.",
    "camera": "Plano médio dos dois; recuo para o plano aberto.",
    "falas": [
     {
@@ -161,7 +161,7 @@
    "ini": 46,
    "fim": 60,
    "titulo": "Encerramento comercial",
-   "storyboard": "Packshot: logo original com o slogan, foto real da Câmera Dome ASECAM 8MP, nome, recursos da página, preço, Pix, parcelas sem juros, frete grátis, requisito do cabo PoE e CTA.",
+   "storyboard": "Packshot: logo original com o slogan, foto real da Câmera ASECAM DualLight Pro, nome, recursos da página, preço, Pix, parcelas sem juros, frete grátis, equipamentos não inclusos e CTA.",
    "camera": "Cartela com entrada suave.",
    "falas": [
     {
@@ -250,14 +250,18 @@
    "tipo": "transicao"
   }
  ],
- "descricao": "Ele apostou que ninguém mexia na cadeira. Perdeu a aposta... e ganhou um jeito útil de acompanhar o salão. 💈😂\n\nCâmera Dome ASECAM 8MP 4K com alimentação PoE (cabo de rede), ONVIF e H.265 (recursos conforme a página do produto). Requer cabo de rede com equipamento PoE compatível.\n\nConheça as câmeras de segurança da Infinity Guard e escolha a opção ideal para o seu espaço: link na bio · infinityguard.com.br\n\nE aí, quem da sua equipe seria o \"Toninho\"? 👇\n\nPersonagens fictícios · animação 3D · imagem do monitor ilustrativa\n\n#barbearia #pequenosnegocios #cameradeseguranca #infinityguard",
+ "descricao": "Ele apostou que ninguém mexia na cadeira. Perdeu a aposta... e ganhou um jeito útil de acompanhar o salão. 💈😂\n\nCâmera ASECAM DualLight Pro: 8MP (4K), visão noturna colorida e infravermelho, PoE (cabo de rede), ONVIF e proteção IP67 (recursos conforme a página do produto). Câmera IP cabeada: NVR, armazenamento e switch ou fonte PoE não inclusos.\n\nConheça as câmeras de segurança da Infinity Guard e escolha a opção ideal para o seu espaço: link na bio · infinityguard.com.br\n\nE aí, quem da sua equipe seria o \"Toninho\"? 👇\n\nPersonagens fictícios · animação 3D · imagem do monitor ilustrativa\n\n#barbearia #pequenosnegocios #cameradeseguranca #infinityguard",
  "regras_do_episodio": [
   "Personagens fictícios; sem rosto, foto ou avatar do proprietário; só o narrador fala.",
-  "Produto do catálogo: Câmera Dome ASECAM 8MP (ASC-DM8-POE236-BR). A câmera bullet da imagem de referência não está no catálogo, por isso não aparece com preço.",
-  "Gravação e reprodução não estão confirmadas para o produto: a revelação é a imagem ao vivo no monitor do balcão (ilustrativa, selo de 24 a 31 s).",
+  "Produto do catálogo: Câmera ASECAM DualLight Pro (IG-ASC-DL8-P60), página lida em 28/10/2026; a página indica uso interno e externo. Preço da variante 8MP lente 6 mm.",
+  "Sem armazenamento interno informado (gravação exige NVR): a revelação é a imagem ao vivo no monitor do balcão (ilustrativa, selo de 24 a 31 s), sem mostrar gravação nem reprodução.",
   "A câmera cobre só a área de atendimento; nada de banheiro, copa ou outro espaço privado.",
-  "Sem resolução, zoom, rastreamento ou áudio na narração; os recursos aparecem só no packshot, como na página.",
+  "Sem áudio, detecção de movimento ou presença humana na narração (a página cita, mas o vídeo não usa); recursos só no packshot, como na página.",
   "Logo circular original com o slogan 'Segurança onde você estiver', como pede o briefing (o logo horizontal enviado traz outro slogan).",
-  "Preço, Pix, 8x sem juros e frete grátis conferidos na página em 25/10/2026: reconferir antes de publicar."
+  "Preço, Pix, 9x sem juros e frete grátis conferidos na página em 28/10/2026; estoque não citado."
+ ],
+ "nao_destacar": [
+  "estrutura metálica",
+  "H.265"
  ]
 }
