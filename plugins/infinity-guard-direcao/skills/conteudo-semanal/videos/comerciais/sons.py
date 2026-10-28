@@ -157,9 +157,26 @@ def vaso(dur=0.8):
     return x
 
 
+def vassoura(dur=3.0, ritmo=0.4):
+    """varrer: chiados curtos de cerdas no piso"""
+    n = int(dur * SR); x = np.zeros(n, np.float32); m = int(0.25 * SR)
+    for k in np.arange(0, dur - 0.26, ritmo):
+        j = int(k * SR); s = _banda(RNG.standard_normal(m), 1500, 7000) * np.sin(np.pi * np.arange(m) / m) ** 2
+        x[j:j + m] += _norm(s, 0.07)
+    return x
+
+
+def cadeira(dur=0.7):
+    """cadeira pesada arrastando no piso"""
+    n = int(dur * SR); t = np.arange(n) / SR
+    x = _banda(RNG.standard_normal(n), 120, 900) * (0.6 + 0.4 * np.sin(2 * np.pi * 31 * t))
+    return _norm(x * np.sin(np.pi * t / dur), 0.2)
+
+
 TIPOS = {"ambiente_rua": ambiente_rua, "ambiente_loja": ambiente_loja, "passos": passos, "porta_enrolar": porta_enrolar,
          "sino": sino, "caixa": caixa, "sacola": sacola, "transicao": transicao,
-         "bip": bip, "fechadura": fechadura, "miau": miau, "vaso": vaso}
+         "bip": bip, "fechadura": fechadura, "miau": miau, "vaso": vaso,
+         "vassoura": vassoura, "cadeira": cadeira}
 
 
 def trilha_sons(lista, duracao, sr=SR):
