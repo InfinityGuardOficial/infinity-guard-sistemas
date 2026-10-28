@@ -209,16 +209,20 @@ def barbearia(kind):
         aim_dof(cam, (-1.2, 0.45, 1.62), (-1.32, 2.55, 1.5), 1, 2.2)
         aim_dof(cam, (-1.25, 0.75, 1.6), (-1.32, 2.55, 1.5), N, 2.2)
         lens(22)
-    elif kind == "camera":       # 18–24 s: a câmera na parede; Lucas vai ao monitor do balcão
+    elif kind == "camera":       # 18–21 s: close na câmera bullet na parede do fundo
         cadeira_em(1, DESLOCADA)
-        poe(lucas, 2.1, 2.2, 160)
-        walk(lucas, f(2.0), f(3.6), (2.1, 2.2), (2.2, 1.25))
-        key(lucas["root"], "rotation_euler", f(3.4), (0, 0, math.radians(160))); key(lucas["root"], "rotation_euler", f(4.0), (0, 0, math.radians(90)))
-        look(lucas, f(4.2), 0.2, 0)
-        for t_, e in ((0, 0.6), (4.0, 0.6), (4.4, 2.0)):
-            tela_s.default_value = e; tela_s.keyframe_insert("default_value", frame=int(f(t_)))
         aim_dof(cam, (2.92, 5.3, 2.6), (3.24, 5.83, 2.8), 1, 1.6)
-        aim_dof(cam, (2.85, 5.2, 2.56), (3.24, 5.83, 2.8), int(f(1.8)), 1.6)
+        aim_dof(cam, (2.82, 5.18, 2.55), (3.24, 5.83, 2.8), N, 1.6)
+        lens(35)
+    elif kind == "balcao":       # 21–24 s: Lucas vai ao monitor do balcão
+        cadeira_em(1, DESLOCADA)
+        poe(lucas, 2.15, 2.1, 175)
+        walk(lucas, 1, f(1.4), (2.15, 2.1), (2.2, 1.25))
+        key(lucas["root"], "rotation_euler", f(1.2), (0, 0, math.radians(175))); key(lucas["root"], "rotation_euler", f(1.8), (0, 0, math.radians(90)))
+        look(lucas, f(2.0), 0.2, 0)
+        for t_, e in ((0, 0.6), (1.8, 0.6), (2.2, 2.0)):
+            tela_s.default_value = e; tela_s.keyframe_insert("default_value", frame=max(1, int(f(t_))))
+        aim_dof(cam, (0.75, 2.3, 1.75), (2.5, 1.35, 1.35), 1, 2.6)
         aim_dof(cam, (0.6, 2.4, 1.75), (2.6, 1.25, 1.35), N, 2.6)
         lens(35)
     elif kind == "pov":          # 24–31 s: imagem da câmera (ao vivo): Toninho varre e empurra a cadeira sem perceber
@@ -271,7 +275,7 @@ def barbearia(kind):
         cadeira_em(1, DESLOCADA); cadeira_em(f(0.4), DESLOCADA); cadeira_em(f(1.6), ALINHADA)
         hold(lucas, f(0.2), True); hold(lucas, f(1.8), False)
         walk(lucas, f(0.4), f(1.6), (-2.2, 3.0), (-2.45, 3.05), arms=False)
-        poe(toninho, -0.9, 2.0, 50); sorri(toninho, 1); sorri(lucas, f(1.8))
+        poe(toninho, 0.05, 3.1, -80); sorri(toninho, 1); sorri(lucas, f(1.8))
         key(lucas["root"], "rotation_euler", f(1.8), (0, 0, math.radians(-60))); key(lucas["root"], "rotation_euler", f(2.4), (0, 0, math.radians(-110)))
         aim_dof(cam, (1.4, 0.9, 1.7), (-2.0, 3.2, 1.2), 1, 5.0)
         aim_dof(cam, (2.2, 0.5, 2.1), (-1.6, 3.4, 1.4), N, 5.0)

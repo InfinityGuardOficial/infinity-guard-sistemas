@@ -8,7 +8,7 @@ Narrador: kokoro:pm_alex — **PROVISÓRIA**: voz Dave não disponível: nenhuma
 
 ## 1. Gancho: a aposta (0–5 s · tomada R1)
 
-_(quadro gerado após o render)_
+![seg1](storyboard/seg1.png)
 
 - **Ação:** Barbearia moderna com piso xadrez e espelhos dourados. Toninho e Lucas discutem sorrindo diante da cadeira do meio, torta e fora da fila. Lucas mostra uma nota: a aposta.
 - **Câmera:** Plano médio dos dois, aproximação lenta, fundo desfocado.
@@ -16,15 +16,15 @@ _(quadro gerado após o render)_
 
 ## 2. Início: todo dia a mesma cadeira (5–18 s · tomada R2 (5–11 s), R3 (11–18 s))
 
-_(quadro gerado após o render)_
+![seg2](storyboard/seg2.png)
 
 - **Ação:** De manhã, Lucas entra e encontra a cadeira fora do lugar outra vez, mãos na cintura. Toninho aponta para a cadeira, põe a mão no peito e balança a cabeça: não foi ele. Lucas desconfia.
 - **Câmera:** Por trás das cadeiras, Lucas entrando; depois dois planos dos barbeiros.
 - **narrador** (5.5 s): "Toda manhã, a cadeira aparecia fora do lugar. E ninguém assumia ter mexido nela."
 
-## 3. Desenvolvimento: a resposta nas imagens (18–36 s · tomada R4 (18–24 s), R5 (24–31 s), R6 (31–36 s))
+## 3. Desenvolvimento: a resposta nas imagens (18–36 s · tomada R4 (18–21 s), R4B (21–24 s), R5 (24–31 s), R6 (31–36 s))
 
-_(quadro gerado após o render)_
+![seg3](storyboard/seg3.png)
 
 - **Ação:** A câmera bullet ASECAM DualLight Pro na parede do fundo, voltada só para a área de atendimento. Lucas vai ao monitor do balcão (NVR). Na imagem ao vivo, Toninho varre o chão e, sem perceber, empurra a cadeira com o quadril. Lucas se vira e flagra Toninho com a vassoura ao lado da cadeira.
 - **Câmera:** Close na câmera na parede; descida até o balcão; imagem da câmera em tela cheia; plano por cima do ombro de Lucas.
@@ -34,7 +34,7 @@ _(quadro gerado após o render)_
 
 ## 4. Reviravolta: aposta paga (36–46 s · tomada R7 (36–42 s), R8 (42–46 s))
 
-_(quadro gerado após o render)_
+![seg4](storyboard/seg4.png)
 
 - **Ação:** Os dois caem na risada; Toninho põe a mão na testa, admite e entrega a nota a Lucas. Lucas devolve a cadeira ao lugar; plano aberto do salão.
 - **Câmera:** Plano médio dos dois; recuo para o plano aberto.
@@ -42,7 +42,7 @@ _(quadro gerado após o render)_
 
 ## 5. Encerramento comercial (46–60 s · tomada cartela)
 
-_(quadro gerado após o render)_
+![seg5](storyboard/seg5.png)
 
 - **Ação:** Packshot: logo original com o slogan, foto real da Câmera ASECAM DualLight Pro, nome, recursos da página, preço, Pix, parcelas sem juros, frete grátis, equipamentos não inclusos e CTA.
 - **Câmera:** Cartela com entrada suave.
