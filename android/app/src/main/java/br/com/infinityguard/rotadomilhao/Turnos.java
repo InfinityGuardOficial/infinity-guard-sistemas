@@ -14,7 +14,7 @@ final class Turnos {
         "Zerar o WhatsApp, ler o radar da equipe e 1 story.",
         "Missão de conteúdo do dia.",
         "Módulo da semana e números do dia no Placar.",
-        "Pacote da semana no Planejador e prova do módulo.",
+        "Posts saem sozinhos pela esteira; grave os vídeos da semana (opcional) e a prova do módulo.",
         "15 minutos de revisão: execução, meta e 1 decisão."
     };
     static final int[][] HORA = {{6, 0}, {12, 10}, {20, 0}, {9, 0}, {19, 0}};
