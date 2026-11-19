@@ -39,7 +39,7 @@ arq(){ local f; f="$(mktemp "$TMP/tXXXXXXXX.txt")"; printf '%s' "$1" > "$f"; fx 
 quebra(){ echo "$1" | fold -s -w "$2" | sed 's/ *$//'; }
 # Texto que entra subindo e aparecendo: anim fonte texto tamanho cor y atraso
 anim(){ local a="min(1\\,max(0\\,(t-$6)/0.35))"
-  printf "drawtext=fontfile='%s':textfile='%s':fontsize=%s:fontcolor=%s:x=(w-text_w)/2:y=%s+36*(1-%s):alpha='%s':shadowcolor=black@0.55:shadowx=0:shadowy=4" "$1" "$(arq "$2")" "$3" "$4" "$5" "$a" "$a"; }
+  printf "drawtext=fontfile='%s':textfile='%s':expansion=none:fontsize=%s:fontcolor=%s:x=(w-text_w)/2:y=%s+36*(1-%s):alpha='%s':shadowcolor=black@0.55:shadowx=0:shadowy=4" "$1" "$(arq "$2")" "$3" "$4" "$5" "$a" "$a"; }
 # Bloco centralizado linha a linha; devolve filtro em BLOCO_F e altura em BLOCO_H
 bloco(){ local t="$1" max="$2" tam="$3" cor="$4" y0="$5" at="$6" i=0 out="" alt=$(( $3 * 118 / 100 ))
   while IFS= read -r linha; do [ -z "$linha" ] && continue
