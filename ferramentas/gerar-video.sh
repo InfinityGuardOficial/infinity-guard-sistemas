@@ -65,7 +65,7 @@ for k in "${!telas[@]}"; do
   if [ "$k" -eq 0 ]; then d=2.6; tam=84; mx=20; else d=2.4; tam=72; mx=23; fi
   if [ $((k % 2)) -eq 0 ]; then z="1+0.06*t/$d"; else z="1.08-0.06*t/$d"; fi
   bloco "$txt" "$mx" "$tam" white 1360 0.18
-  kf=""; [ -n "$kick" ] && kf="$(anim "$FK" "$(echo "$kick" | tr '[:lower:]' '[:upper:]')" 40 "$OURO" 1290 0.05),"
+  kf=""; [ -n "$kick" ] && kf="$(anim "$FK" "$(echo "$kick" | tr '[:lower:]' '[:upper:]')" 40 "$OURO" 1290 0.05):box=1:boxcolor=0x06121F@0.82:boxborderw=14,"
   fc="[0:v]split[a][b];[a]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=30:2,eq=brightness=-0.5:saturation=0.8[bg];"
   fc+="[b]scale=w='trunc(1080*($z)/2)*2':h=-2:eval=frame[ph];[bg][ph]overlay=x=(W-w)/2:y=260+(1080-h)/2[v1];"
   fc+="[1:v]format=rgba[gr];[v1][gr]overlay=0:920[v2];[v2]${kf}${BLOCO_F},"
