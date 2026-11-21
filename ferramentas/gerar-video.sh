@@ -28,12 +28,14 @@ FH="$(fx "$FH")"; FK="$(fx "$FK")"; FR="$(fx "$FR")"
 LOGO="$AQUI/acervo/marca/logo.png"
 ENC=(-c:v libx264 -preset medium -crf 19 -pix_fmt yuv420p -r 30)
 
-fotos=(); telas=(); produto=""; preco=""; parcelas=""; cta="Compre pelo site"
+fotos=(); telas=(); produto=""; preco=""; parcelas=""; cta="Compre pelo site"; capa=""; paleta="ouro"
 while IFS= read -r l || [ -n "$l" ]; do
   l="${l%$'\r'}"; k="${l%%=*}"; v="${l#*=}"
-  case "$k" in foto) fotos+=("$v");; tela) telas+=("$v");; produto) produto="$v";; preco) preco="$v";; parcelas) parcelas="$v";; cta) cta="$v";; esac
+  case "$k" in foto) fotos+=("$v");; tela) telas+=("$v");; produto) produto="$v";; preco) preco="$v";; parcelas) parcelas="$v";; cta) cta="$v";; capa) capa="$v";; paleta) paleta="$v";; esac
 done < "$ROT"
 [ ${#telas[@]} -gt 0 ] || { echo "sem telas" >&2; exit 1; }
+# Paleta de destaque (varia a cara dos vídeos): ouro, alerta, dica, ciano, laranja
+case "$paleta" in alerta) OURO=0xFF4D4D;; dica) OURO=0x2ED8A3;; ciano) OURO=0x22D3EE;; laranja) OURO=0xFF9F1C;; *) OURO=0xD4AF5F;; esac
 
 arq(){ local f; f="$(mktemp "$TMP/tXXXXXXXX.txt")"; printf '%s' "$1" > "$f"; fx "$f"; }
 quebra(){ echo "$1" | fold -s -w "$2" | sed 's/ *$//'; }
@@ -58,10 +60,31 @@ done
 "$FF" -hide_banner -loglevel error -y -f lavfi -i "color=black:s=1080x1000,format=rgba" -vf "geq=r=0:g=0:b=0:a='255*pow(Y/H\,1.3)*0.92'" -frames:v 1 "$(win "$TMP/grad.png")"
 
 segs=(); durs=()
+
+# CAPA que para o dedo: foto forte, frase curta enorme em faixa colorida. Sai como <saida>-capa.jpg e abre o vídeo.
+[ -n "$capa" ] || { capa="${telas[0]#*|}"; }
+CAPA_JPG="${SAIDA%.*}-capa.jpg"; mkdir -p "$(dirname "$SAIDA")"
+cf="[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,eq=brightness=-0.18:saturation=1.15[bg];[1:v]format=rgba[gr];[bg][gr]overlay=0:920[c0];[c0]"
+nl=$(quebra "$capa" 13 | grep -c .); y=$(( 1080 - nl*150/2 )); i=0
+while IFS= read -r linha; do [ -z "$linha" ] && continue
+  cf+="drawtext=fontfile='$FH':textfile='$(arq "$(echo "$linha" | tr '[:lower:]' '[:upper:]')")':expansion=none:fontsize=124:fontcolor=${NAVY}:box=1:boxcolor=${OURO}:boxborderw=22:x=(w-text_w)/2:y=$((y + i*150)),"
+  i=$((i+1))
+done < <(quebra "$capa" 13)
+cf+="drawtext=fontfile='$FK':text='INFINITY GUARD':fontsize=34:fontcolor=white:x=(w-text_w)/2:y=1800,format=yuv420p[v]"
+"$FF" -hide_banner -loglevel error -y -i "$(win "${fs[0]}")" -i "$(win "$TMP/grad.png")" -filter_complex "$cf" -map '[v]' -frames:v 1 -q:v 2 "$(win "$CAPA_JPG")"
+"$FF" -hide_banner -loglevel error -y -loop 1 -t 0.7 -i "$(win "$CAPA_JPG")" -vf "scale=1080:1920,format=yuv420p" "${ENC[@]}" "$(win "$TMP/capa.mp4")"
+segs+=("$TMP/capa.mp4"); durs+=(0.7)
+
 for k in "${!telas[@]}"; do
   [ "$k" -ge 6 ] && break
   kick="${telas[$k]%%|*}"; txt="${telas[$k]#*|}"; [ "$kick" = "${telas[$k]}" ] && kick=""
   foto="${fs[$(( k % ${#fs[@]} ))]}"
+  # Nunca a mesma imagem duas vezes: se faltar foto, usa um enquadramento diferente (recorte de 65% em outro canto)
+  if [ "$k" -ge "${#fs[@]}" ]; then
+    case $(( k % 4 )) in 0) px=0; py=0;; 1) px="iw*0.35"; py=0;; 2) px=0; py="ih*0.35";; *) px="iw*0.35"; py="ih*0.35";; esac
+    "$FF" -hide_banner -loglevel error -y -i "$(win "$foto")" -vf "crop=iw*0.65:ih*0.65:$px:$py,scale=1080:1080" "$(win "$TMP/v$k.jpg")" && foto="$TMP/v$k.jpg"
+    echo "aviso: faltou foto para a tela $((k+1)); usei outro enquadramento. Prefira uma foto diferente por tela." >&2
+  fi
   if [ "$k" -eq 0 ]; then d=2.6; tam=84; mx=20; else d=2.4; tam=72; mx=23; fi
   if [ $((k % 2)) -eq 0 ]; then z="1+0.06*t/$d"; else z="1.08-0.06*t/$d"; fi
   bloco "$txt" "$mx" "$tam" white 1360 0.18
@@ -97,7 +120,7 @@ fc+="$(anim "$FR" 'Segurança para quem você ama' 38 0x9AA7B8 $((1010+hc+210)) 
 "$FF" -hide_banner -loglevel error -y -loop 1 -t "$d" -i "$(win "$LOGO")" -filter_complex "$fc" -map '[v]' "${ENC[@]}" "$(win "$TMP/fim.mp4")"
 segs+=("$TMP/fim.mp4"); durs+=("$d")
 
-x=0.3; trans=(smoothup slideleft smoothup slideleft smoothup slideleft smoothup slideleft)
+x=0.3; trans=(fade smoothup slideleft smoothup slideleft smoothup slideleft smoothup slideleft)
 ins=(); for s in "${segs[@]}"; do ins+=(-i "$(win "$s")"); done
 total=$(printf '%s\n' "${durs[@]}" | awk -v x=$x -v n=${#segs[@]} '{s+=$1} END{printf "%.2f", s-x*(n-1)}')
 chain=""; prev="[0:v]"; off=0
@@ -114,4 +137,4 @@ else
 fi
 mkdir -p "$(dirname "$SAIDA")"
 "$FF" -hide_banner -loglevel error -y "${ins[@]}" "${aud[@]}" -filter_complex "${chain}${afc}" -map '[v]' -map '[a]' "${ENC[@]}" -c:a aac -b:a 128k -shortest -movflags +faststart "$(win "$SAIDA")"
-echo "OK $SAIDA"
+echo "OK $SAIDA (capa: $CAPA_JPG)"
