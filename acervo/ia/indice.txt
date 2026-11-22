@@ -1,0 +1,41 @@
+# Acervo de cenas geradas por IA (sem marca, sem texto). Use em vídeos de conteúdo e como abertura. Marque o post como feito com IA.
+# arquivo | o que mostra | bom para
+noite-varanda.jpg | varanda de casa à noite com encomenda na porta | encomendas, Black Friday, porta de casa
+noite-rua.jpg | rua residencial vazia à noite | bairro, segurança à noite, ganchos de suspense
+noite-garagem.jpg | portão de garagem iluminado por luz com sensor | iluminação com sensor, garagem
+noite-quintal.jpg | quintal à noite com luz externa | iluminação, quintal, casa
+noite-corredor.jpg | corredor lateral de casa à noite | pontos cegos, iluminação, suspense
+comercio-padaria.jpg | fachada de padaria ao entardecer | pequeno comércio, fachada
+comercio-loja-fechando.jpg | dono fechando a porta de aço da loja à noite | fechamento do comércio, rotina do lojista
+comercio-estacionamento.jpg | estacionamento grande visto de cima | área externa grande, PTZ
+comercio-deposito.jpg | depósito com prateleiras | estoque, depósito, galpão
+comercio-revenda-carros.jpg | pátio de revenda de carros à noite | revenda de veículos, pátio
+comercio-posto.jpg | posto de combustível à noite | comércio 24 h
+comercio-caixa.jpg | balcão de loja com maquininha | comércio, pagamento
+chacara-portao.jpg | porteira de chácara ao pôr do sol | chácara, área rural
+chacara-casa.jpg | casa de campo ao entardecer | chácara, casa de veraneio
+condominio-portaria.jpg | portaria de condomínio à noite | condomínio, portaria
+condominio-corredor.jpg | corredor de prédio | apartamento, condomínio
+familia-sala.jpg | sala aconchegante com família de costas | família, casa, tranquilidade
+familia-viagem.jpg | mala pronta na porta de casa | viagem, casa vazia, férias
+familia-idosos.jpg | casal de idosos tomando café | pais idosos, cuidado com a família
+familia-pet.jpg | cachorro sozinho na sala | pet em casa, ver de longe
+familia-criancas-quintal.jpg | quintal com brinquedos, sem pessoas | crianças, quintal
+celular-alerta.jpg | mão segurando celular à noite | alerta no celular, ver de longe
+celular-trabalho.jpg | pessoa no escritório olhando o celular | ver a casa do trabalho
+entrega-caixas.jpg | caixas de encomenda na entrada | encomendas, compras online
+entrega-motoboy.jpg | moto de entrega em frente ao portão | entregas, delivery
+blackfriday-compras.jpg | sacolas e caixas com notebook | Black Friday, compras
+blackfriday-notebook.jpg | notebook à noite com loja online | compra online, Black Friday
+golpe-pix.jpg | pessoa preocupada com o celular, luz vermelha | golpes, Pix, alerta
+golpe-site.jpg | tela de notebook com site suspeito | site falso, golpe
+tecnologia-rede.jpg | cabos de rede em switch | PoE, rede, instalação de câmera IP
+tecnologia-wifi.jpg | roteador Wi-Fi à noite | Wi-Fi, conexão
+tecnologia-smart-home.jpg | sala moderna com luz automática | casa inteligente, automação
+chuva-tempestade.jpg | chuva forte na fachada à noite | temporal, câmera resistente
+chuva-apagao.jpg | rua escura em apagão | queda de energia
+cidade-noite.jpg | cidade à noite vista de cima | abertura, cidade, contexto
+cidade-amanhecer.jpg | bairro ao amanhecer com névoa | abertura, rotina, manhã
+lampada-sensor.jpg | lâmpada acesa em corredor escuro | sensor de presença, lâmpada
+porta-chave.jpg | mão girando a chave na porta | chegar em casa, segurança
+olhar-janela.jpg | pessoa olhando pela janela à noite | preocupação, vigilância
