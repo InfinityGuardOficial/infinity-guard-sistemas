@@ -7,10 +7,12 @@
 #   produto=Câmera ASECAM PTZ 4K 8MP        (opcional; sem preço não há tela de oferta)
 #   preco=R$ 1.899,06 no Pix
 #   parcelas=ou R$ 2.110,07 em até 12x
+#   fotooferta=acervo/loja/ip-8/1.jpg   (opcional; foto do produto na tela de oferta)
 #   cta=Compre pelo site
 # Visual: gancho no 1º segundo, kicker dourado + frase forte, texto com movimento, foto com movimento de câmera,
 # barra de progresso, transições deslizando, tela de oferta e fechamento com logo, site e slogan.
 set -euo pipefail
+export LC_ALL="${LC_ALL:-C.UTF-8}"
 ROT="$1"; SAIDA="$2"
 AQUI="$(cd "$(dirname "$0")/.." && pwd)"
 FF="${FFMPEG:-ffmpeg}"
@@ -28,10 +30,10 @@ FH="$(fx "$FH")"; FK="$(fx "$FK")"; FR="$(fx "$FR")"
 LOGO="$AQUI/acervo/marca/logo.png"
 ENC=(-c:v libx264 -preset medium -crf 19 -pix_fmt yuv420p -r 30)
 
-fotos=(); telas=(); produto=""; preco=""; parcelas=""; cta="Compre pelo site"; capa=""; paleta="ouro"
+fotos=(); telas=(); produto=""; preco=""; parcelas=""; cta="Compre pelo site"; capa=""; paleta="ouro"; fotooferta=""
 while IFS= read -r l || [ -n "$l" ]; do
   l="${l%$'\r'}"; k="${l%%=*}"; v="${l#*=}"
-  case "$k" in foto) fotos+=("$v");; tela) telas+=("$v");; produto) produto="$v";; preco) preco="$v";; parcelas) parcelas="$v";; cta) cta="$v";; capa) capa="$v";; paleta) paleta="$v";; esac
+  case "$k" in foto) fotos+=("$v");; tela) telas+=("$v");; produto) produto="$v";; preco) preco="$v";; parcelas) parcelas="$v";; cta) cta="$v";; capa) capa="$v";; paleta) paleta="$v";; fotooferta) fotooferta="$v";; esac
 done < "$ROT"
 [ ${#telas[@]} -gt 0 ] || { echo "sem telas" >&2; exit 1; }
 # Paleta de destaque (varia a cara dos vídeos): ouro, alerta, dica, ciano, laranja
@@ -67,7 +69,7 @@ CAPA_JPG="${SAIDA%.*}-capa.jpg"; mkdir -p "$(dirname "$SAIDA")"
 cf="[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,eq=brightness=-0.18:saturation=1.15[bg];[1:v]format=rgba[gr];[bg][gr]overlay=0:920[c0];[c0]"
 nl=$(quebra "$capa" 13 | grep -c .); y=$(( 1080 - nl*150/2 )); i=0
 while IFS= read -r linha; do [ -z "$linha" ] && continue
-  cf+="drawtext=fontfile='$FH':textfile='$(arq "$(echo "$linha" | tr '[:lower:]' '[:upper:]')")':expansion=none:fontsize=124:fontcolor=${NAVY}:box=1:boxcolor=${OURO}:boxborderw=22:x=(w-text_w)/2:y=$((y + i*150)),"
+  cf+="drawtext=fontfile='$FH':textfile='$(arq "${linha^^}")':expansion=none:fontsize=124:fontcolor=${NAVY}:box=1:boxcolor=${OURO}:boxborderw=22:x=(w-text_w)/2:y=$((y + i*150)),"
   i=$((i+1))
 done < <(quebra "$capa" 13)
 cf+="drawtext=fontfile='$FK':text='INFINITY GUARD':fontsize=34:fontcolor=white:x=(w-text_w)/2:y=1800,format=yuv420p[v]"
@@ -88,7 +90,7 @@ for k in "${!telas[@]}"; do
   if [ "$k" -eq 0 ]; then d=2.6; tam=84; mx=20; else d=2.4; tam=72; mx=23; fi
   if [ $((k % 2)) -eq 0 ]; then z="1+0.06*t/$d"; else z="1.08-0.06*t/$d"; fi
   bloco "$txt" "$mx" "$tam" white 1360 0.18
-  kf=""; [ -n "$kick" ] && kf="$(anim "$FK" "$(echo "$kick" | tr '[:lower:]' '[:upper:]')" 40 "$OURO" 1290 0.05):box=1:boxcolor=0x06121F@0.82:boxborderw=14,"
+  kf=""; [ -n "$kick" ] && kf="$(anim "$FK" "${kick^^}" 40 "$OURO" 1290 0.05):box=1:boxcolor=0x06121F@0.82:boxborderw=14,"
   fc="[0:v]split[a][b];[a]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=30:2,eq=brightness=-0.5:saturation=0.8[bg];"
   fc+="[b]scale=w='trunc(1080*($z)/2)*2':h=-2:eval=frame[ph];[bg][ph]overlay=x=(W-w)/2:y=260+(1080-h)/2[v1];"
   fc+="[1:v]format=rgba[gr];[v1][gr]overlay=0:920[v2];[v2]${kf}${BLOCO_F},"
@@ -100,6 +102,9 @@ done
 
 if [ -n "$preco" ]; then
   d=2.8; bloco "$produto" 22 58 white 1290 0.15
+  OF="${fs[0]}"
+  if [ -n "$fotooferta" ]; then src="$fotooferta"; [ -f "$src" ] || src="$AQUI/$fotooferta"
+    [ -f "$src" ] && "$FF" -hide_banner -loglevel error -y -i "$(win "$src")" -vf "crop='min(iw\,ih)':'min(iw\,ih)',scale=1080:1080" "$(win "$TMP/of.jpg")" && OF="$TMP/of.jpg"; fi
   fc="[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=34:2,eq=brightness=-0.55[bg];"
   fc+="[1:v]scale=w='trunc(760*(1+0.04*t/$d)/2)*2':h=-2:eval=frame[ph];[bg][ph]overlay=x=(W-w)/2:y=330[v1];"
   fc+="[v1]$(anim "$FK" 'OFERTA INFINITY GUARD' 40 "$OURO" 1210 0.05),${BLOCO_F},"
@@ -107,7 +112,7 @@ if [ -n "$preco" ]; then
   fc+="drawtext=fontfile='$FH':textfile='$(arq "$preco")':fontsize=72:fontcolor=${NAVY}:x=(w-text_w)/2:y=$((1290+BLOCO_H+52)):enable='gte(t\,0.4)',"
   [ -n "$parcelas" ] && fc+="drawtext=fontfile='$FR':textfile='$(arq "$parcelas")':fontsize=42:fontcolor=white:x=(w-text_w)/2:y=$((1290+BLOCO_H+190)):enable='gte(t\,0.55)',"
   fc+="format=yuv420p[v]"
-  "$FF" -hide_banner -loglevel error -y -loop 1 -t "$d" -i "$(win "${fs[0]}")" -loop 1 -t "$d" -i "$(win "${fs[0]}")" -filter_complex "$fc" -map '[v]' "${ENC[@]}" "$(win "$TMP/oferta.mp4")"
+  "$FF" -hide_banner -loglevel error -y -loop 1 -t "$d" -i "$(win "$OF")" -loop 1 -t "$d" -i "$(win "$OF")" -filter_complex "$fc" -map '[v]' "${ENC[@]}" "$(win "$TMP/oferta.mp4")"
   segs+=("$TMP/oferta.mp4"); durs+=("$d")
 fi
 
