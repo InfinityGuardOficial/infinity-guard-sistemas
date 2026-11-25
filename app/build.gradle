@@ -1,0 +1,24 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'br.rumocaixa.app'
+    compileSdk 34
+    defaultConfig {
+        applicationId 'br.rumocaixa.app'
+        minSdk 24
+        targetSdk 34
+        versionCode Integer.parseInt(System.getenv('VERSION_CODE') ?: '1')
+        versionName '1.' + (System.getenv('VERSION_CODE') ?: '1')
+    }
+    signingConfigs {
+        rel {
+            storeFile file('rumo.keystore')
+            storePassword 'rumocaixa2027'
+            keyAlias 'rumo'
+            keyPassword 'rumocaixa2027'
+        }
+    }
+    buildTypes {
+        release { minifyEnabled false; signingConfig signingConfigs.rel }
+    }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+}
