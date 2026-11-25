@@ -26,12 +26,12 @@ public class TurnoReceiver extends BroadcastReceiver {
         if (Build.VERSION.SDK_INT >= 26 && nm.getNotificationChannel(CANAL) == null) {
             nm.createNotificationChannel(new NotificationChannel(CANAL, "Turnos de estudo", NotificationManager.IMPORTANCE_HIGH));
         }
-        PendingIntent abrir = PendingIntent.getActivity(ctx, 100 + i, new Intent(ctx, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent abrir = PendingIntent.getActivity(ctx, 100 + i, new Intent(ctx, MainActivity.class).putExtra("tela", Turnos.TELA[i]), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         Notification.Builder b = Build.VERSION.SDK_INT >= 26 ? new Notification.Builder(ctx, CANAL) : new Notification.Builder(ctx);
         b.setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
-         .setContentTitle(Turnos.NOME[i] + " começa já")
+         .setContentTitle(Turnos.exato(i) ? Turnos.NOME[i] : Turnos.NOME[i] + " começa já")
          .setContentText(txt)
-         .setStyle(new Notification.BigTextStyle().bigText(txt + " Abra o app e registre a prova."))
+         .setStyle(new Notification.BigTextStyle().bigText(Turnos.exato(i) ? txt : txt + " Abra o app e registre a prova."))
          .setContentIntent(abrir)
          .setAutoCancel(true);
         try { nm.notify(200 + i, b.build()); } catch (SecurityException e) { /* sem permissão de notificação */ }

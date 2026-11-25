@@ -34,15 +34,23 @@ public class MainActivity extends Activity {
         abrir();
     }
 
+    private String url() {
+        String t = getIntent() != null ? getIntent().getStringExtra("tela") : null;
+        return (t != null && t.startsWith("#")) ? URL_APP + t : URL_APP;
+    }
+
+    @Override
+    protected void onNewIntent(Intent i) { super.onNewIntent(i); setIntent(i); abrir(); }
+
     private void abrir() {
         CustomTabsIntent aba = new CustomTabsIntent.Builder()
             .setDefaultColorSchemeParams(new CustomTabColorSchemeParams.Builder().setToolbarColor(0xFF0B3D91).build())
             .setShowTitle(true)
             .build();
         try {
-            aba.launchUrl(this, Uri.parse(URL_APP));
+            aba.launchUrl(this, Uri.parse(url()));
         } catch (Exception e) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(URL_APP)));
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url())));
         }
         finish();
     }
