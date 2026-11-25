@@ -1,5 +1,5 @@
 # Rumo à Caixa 2027 (Android)
 
-App de estudos para o concurso Caixa Técnico Bancário, empacotado como app Android (WebView).
-O conteúdo fica em `app/src/main/assets/index.html`. A cada push neste ramo, o GitHub Actions gera o `RumoCaixa.apk` e publica em Releases.
-O progresso fica salvo no próprio celular. Use Backup no app para copiar os dados antes de desinstalar.
+App Android no mesmo formato do Rota do Milhão: abre a página do Rumo à Caixa no claude.ai numa aba do Chrome integrada
+e avisa nos turnos de estudo. O progresso fica na conta Claude, então o app e o link mostram sempre o mesmo.
+A cada push neste ramo, o GitHub Actions gera o `RumoCaixa.apk` e publica em Releases.
